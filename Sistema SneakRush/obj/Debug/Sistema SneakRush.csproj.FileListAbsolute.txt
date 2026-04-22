@@ -2,9 +2,9 @@ C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema Sne
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Sistema SneakRush.exe
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Sistema SneakRush.pdb
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.csproj.AssemblyReference.cache
-C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.Form1.resources
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.Properties.Resources.resources
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.csproj.GenerateResource.cache
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.csproj.CoreCompileInputs.cache
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.exe
 C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.pdb
+C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.MenuPrincipal.resources

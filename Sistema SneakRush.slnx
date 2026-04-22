@@ -1,7 +1,7 @@
 <Solution>
-  <Project Path="BE/BE.csproj" />
-  <Project Path="BLL/BLL.csproj" />
-  <Project Path="DAL/DAL.csproj" />
-  <Project Path="Services/Services.csproj" />
-  <Project Path="Sistema SneakRush/Sistema SneakRush.csproj" />
+  <Project Path="BE/BE.csproj" Id="12ef56b5-b91a-4933-b082-be29d8d8cdc7" />
+  <Project Path="BLL/BLL.csproj" Id="bb39e7ec-2014-4ad0-b3ed-94ffc8940596" />
+  <Project Path="DAL/DAL.csproj" Id="455635ab-1f34-4a20-9127-29c2f04c6f8e" />
+  <Project Path="Services/Services.csproj" Id="8d60589e-7c80-47b6-86d4-71d1f5dff4fd" />
+  <Project Path="Sistema SneakRush/Sistema SneakRush.csproj" Id="995be689-a09a-4013-8702-af2d34fc814c" />
 </Solution>

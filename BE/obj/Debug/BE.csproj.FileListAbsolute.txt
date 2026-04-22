@@ -1,0 +1,6 @@
+C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\BE\bin\Debug\BE.dll
+C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\BE\bin\Debug\BE.pdb
+C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\BE\obj\Debug\BE.csproj.AssemblyReference.cache
+C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\BE\obj\Debug\BE.csproj.CoreCompileInputs.cache
+C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\BE\obj\Debug\BE.dll
+C:\Users\lauch\OneDrive\Desktop\Proyecto SneakRush\Sistema SneakRush\BE\obj\Debug\BE.pdb
