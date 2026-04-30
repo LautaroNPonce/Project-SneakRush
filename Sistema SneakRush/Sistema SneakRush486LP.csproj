@@ -46,16 +46,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MenuPrincipal.cs">
+    <Compile Include="FrmLogIn486LP.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MenuPrincipal.Designer.cs">
-      <DependentUpon>MenuPrincipal.cs</DependentUpon>
+    <Compile Include="FrmLogIn486LP.Designer.cs">
+      <DependentUpon>FrmLogIn486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionUsuarios486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionUsuarios486LP.Designer.cs">
+      <DependentUpon>FrmGestionUsuarios486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmIniciarSesionLP486.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmIniciarSesionLP486.Designer.cs">
+      <DependentUpon>FrmIniciarSesionLP486.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMenuPrincipal486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMenuPrincipal486LP.Designer.cs">
+      <DependentUpon>FrmMenuPrincipal486LP.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MenuPrincipal.resx">
-      <DependentUpon>MenuPrincipal.cs</DependentUpon>
+    <EmbeddedResource Include="FrmGestionUsuarios486LP.resx">
+      <DependentUpon>FrmGestionUsuarios486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmIniciarSesionLP486.resx">
+      <DependentUpon>FrmIniciarSesionLP486.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMenuPrincipal486LP.resx">
+      <DependentUpon>FrmMenuPrincipal486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -65,6 +89,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -78,6 +103,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BE\BE486LP.csproj">
+      <Project>{12ef56b5-b91a-4933-b082-be29d8d8cdc7}</Project>
+      <Name>BE486LP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BLL\BLL486LP.csproj">
+      <Project>{bb39e7ec-2014-4ad0-b3ed-94ffc8940596}</Project>
+      <Name>BLL486LP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services486LP.csproj">
+      <Project>{8d60589e-7c80-47b6-86d4-71d1f5dff4fd}</Project>
+      <Name>Services486LP</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

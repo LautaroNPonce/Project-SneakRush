@@ -1,0 +1,9 @@
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\bin\Debug\Services.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\bin\Debug\Services.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\bin\Debug\BE.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\bin\Debug\BE.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\obj\Debug\Services486LP.csproj.AssemblyReference.cache
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\obj\Debug\Services486LP.csproj.CoreCompileInputs.cache
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\obj\Debug\Services.441E2D0D.Up2Date
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\obj\Debug\Services.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Services\obj\Debug\Services.pdb

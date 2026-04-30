@@ -10,12 +10,11 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class MenuPrincipal : Form
+    public partial class FrmCierreSesion486LP : Form
     {
-        public MenuPrincipal()
+        public FrmCierreSesion486LP()
         {
             InitializeComponent();
         }
-
     }
 }

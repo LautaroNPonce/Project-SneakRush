@@ -1,0 +1,13 @@
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\BLL.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\BLL.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\BE.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\DAL.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Services.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\BE.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\DAL.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Services.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL.csproj.AssemblyReference.cache
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL.csproj.Up2Date
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL.pdb
