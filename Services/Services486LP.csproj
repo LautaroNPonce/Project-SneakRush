@@ -41,12 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Encriptacion486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionManager486LP.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE486LP.csproj">
-      <Project>{12ef56b5-b91a-4933-b082-be29d8d8cdc7}</Project>
+      <Project>{12EF56B5-B91A-4933-B082-BE29D8D8CDC7}</Project>
       <Name>BE486LP</Name>
     </ProjectReference>
   </ItemGroup>
