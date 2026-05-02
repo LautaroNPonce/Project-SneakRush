@@ -1,6 +1,6 @@
 ﻿namespace Sistema_SneakRush
 {
-    partial class FrmCierreSesion486LP
+    partial class FrmCerrarSesion486LP
     {
         /// <summary>
         /// Required designer variable.
@@ -43,7 +43,6 @@
             this.btnCancelar.TabIndex = 0;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = false;
-
             // 
             // btnAceptar
             // 
@@ -55,7 +54,6 @@
             this.btnAceptar.TabIndex = 1;
             this.btnAceptar.Text = "Aceptar";
             this.btnAceptar.UseVisualStyleBackColor = false;
-
             // 
             // label1
             // 
@@ -67,16 +65,17 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "¿Seguro que quieres cerrar la sesion?";
             // 
-            // FrmCierreSesion486LP
+            // FrmCerrarSesion486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.btnCancelar);
-            this.Name = "FrmCierreSesion486LP";
+            this.Name = "FrmCerrarSesion486LP";
             this.Text = "FrmCierreSesion486LP";
             this.ResumeLayout(false);
             this.PerformLayout();

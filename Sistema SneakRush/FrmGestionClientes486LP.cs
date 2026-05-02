@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmCierreSesion486LP : Form
+    public partial class FrmGestionClientes486LP : Form
     {
-        public FrmCierreSesion486LP()
+        public FrmGestionClientes486LP()
         {
             InitializeComponent();
         }

@@ -58,17 +58,89 @@
     <Compile Include="FrmCambiarContraseña486LP.Designer.cs">
       <DependentUpon>FrmCambiarContraseña486LP.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmCierreSesion486LP.cs">
+    <Compile Include="FrmCerrarSesion486LP.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmCierreSesion486LP.Designer.cs">
-      <DependentUpon>FrmCierreSesion486LP.cs</DependentUpon>
+    <Compile Include="FrmCerrarSesion486LP.Designer.cs">
+      <DependentUpon>FrmCerrarSesion486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmConsultarAnaliticas486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultarAnaliticas486LP.Designer.cs">
+      <DependentUpon>FrmConsultarAnaliticas486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmConsultarProducto486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmConsultarProducto486LP.Designer.cs">
+      <DependentUpon>FrmConsultarProducto486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmDocumentacion486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDocumentacion486LP.Designer.cs">
+      <DependentUpon>FrmDocumentacion486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGenerarSolicitud486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGenerarSolicitud486LP.Designer.cs">
+      <DependentUpon>FrmGenerarSolicitud486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionCarrito486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionCarrito486LP.Designer.cs">
+      <DependentUpon>FrmGestionCarrito486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionCategoriasMarcas486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionCategoriasMarcas486LP.Designer.cs">
+      <DependentUpon>FrmGestionCategoriasMarcas486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionClientes486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionClientes486LP.Designer.cs">
+      <DependentUpon>FrmGestionClientes486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionPerfiles486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionPerfiles486LP.Designer.cs">
+      <DependentUpon>FrmGestionPerfiles486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionProductos486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionProductos486LP.Designer.cs">
+      <DependentUpon>FrmGestionProductos486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionProveedores486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionProveedores486LP.Designer.cs">
+      <DependentUpon>FrmGestionProveedores486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGestionRespaldo486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionRespaldo486LP.Designer.cs">
+      <DependentUpon>FrmGestionRespaldo486LP.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmGestionUsuarios486LP.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmGestionUsuarios486LP.Designer.cs">
       <DependentUpon>FrmGestionUsuarios486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmGuiaUSuarios486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGuiaUSuarios486LP.Designer.cs">
+      <DependentUpon>FrmGuiaUSuarios486LP.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmIniciarSesionLP486.cs">
       <SubType>Form</SubType>
@@ -82,6 +154,42 @@
     <Compile Include="FrmMenuPrincipal486LP.Designer.cs">
       <DependentUpon>FrmMenuPrincipal486LP.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmRegistrarOperacion486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRegistrarOperacion486LP.Designer.cs">
+      <DependentUpon>FrmRegistrarOperacion486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRegistrarOrden486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRegistrarOrden486LP.Designer.cs">
+      <DependentUpon>FrmRegistrarOrden486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmRegistrarRecepcion486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRegistrarRecepcion486LP.Designer.cs">
+      <DependentUpon>FrmRegistrarRecepcion486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmReporteCompras486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmReporteCompras486LP.Designer.cs">
+      <DependentUpon>FrmReporteCompras486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmReporteStock486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmReporteStock486LP.Designer.cs">
+      <DependentUpon>FrmReporteStock486LP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmReporteVenta486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmReporteVenta486LP.Designer.cs">
+      <DependentUpon>FrmReporteVenta486LP.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmBitacoraEvento486LP.resx">
@@ -90,17 +198,62 @@
     <EmbeddedResource Include="FrmCambiarContraseña486LP.resx">
       <DependentUpon>FrmCambiarContraseña486LP.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmCierreSesion486LP.resx">
-      <DependentUpon>FrmCierreSesion486LP.cs</DependentUpon>
+    <EmbeddedResource Include="FrmCerrarSesion486LP.resx">
+      <DependentUpon>FrmCerrarSesion486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmConsultarAnaliticas486LP.resx">
+      <DependentUpon>FrmConsultarAnaliticas486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmConsultarProducto486LP.resx">
+      <DependentUpon>FrmConsultarProducto486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmDocumentacion486LP.resx">
+      <DependentUpon>FrmDocumentacion486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGenerarSolicitud486LP.resx">
+      <DependentUpon>FrmGenerarSolicitud486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGestionCarrito486LP.resx">
+      <DependentUpon>FrmGestionCarrito486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGestionClientes486LP.resx">
+      <DependentUpon>FrmGestionClientes486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGestionPerfiles486LP.resx">
+      <DependentUpon>FrmGestionPerfiles486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGestionProductos486LP.resx">
+      <DependentUpon>FrmGestionProductos486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGestionProveedores486LP.resx">
+      <DependentUpon>FrmGestionProveedores486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGestionRespaldo486LP.resx">
+      <DependentUpon>FrmGestionRespaldo486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmGestionUsuarios486LP.resx">
       <DependentUpon>FrmGestionUsuarios486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGuiaUSuarios486LP.resx">
+      <DependentUpon>FrmGuiaUSuarios486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmIniciarSesionLP486.resx">
       <DependentUpon>FrmIniciarSesionLP486.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMenuPrincipal486LP.resx">
       <DependentUpon>FrmMenuPrincipal486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRegistrarOrden486LP.resx">
+      <DependentUpon>FrmRegistrarOrden486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReporteCompras486LP.resx">
+      <DependentUpon>FrmReporteCompras486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReporteStock486LP.resx">
+      <DependentUpon>FrmReporteStock486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReporteVenta486LP.resx">
+      <DependentUpon>FrmReporteVenta486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -133,6 +286,10 @@
     <ProjectReference Include="..\BLL\BLL486LP.csproj">
       <Project>{bb39e7ec-2014-4ad0-b3ed-94ffc8940596}</Project>
       <Name>BLL486LP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services486LP.csproj">
+      <Project>{8D60589E-7C80-47B6-86D4-71D1F5DFF4FD}</Project>
+      <Name>Services486LP</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

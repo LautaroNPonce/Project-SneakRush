@@ -75,7 +75,6 @@
             this.label1.Size = new System.Drawing.Size(286, 32);
             this.label1.TabIndex = 1;
             this.label1.Text = "Gestion de usuarios";
-
             // 
             // rbtnActivos
             // 
@@ -88,7 +87,6 @@
             this.rbtnActivos.TabStop = true;
             this.rbtnActivos.Text = "Activos";
             this.rbtnActivos.UseVisualStyleBackColor = true;
-  
             // 
             // rbtnTodos
             // 
@@ -311,12 +309,13 @@
             this.cmbRol.Size = new System.Drawing.Size(188, 24);
             this.cmbRol.TabIndex = 25;
             // 
-            // GestionUsuarios486LP
+            // FrmGestionUsuarios486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(1239, 734);
+            this.ControlBox = false;
             this.Controls.Add(this.cmbRol);
             this.Controls.Add(this.rbtnActivoNo);
             this.Controls.Add(this.rbtnActivoSi);
@@ -342,7 +341,7 @@
             this.Controls.Add(this.rbtnActivos);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dgtGestionUsuario);
-            this.Name = "GestionUsuarios486LP";
+            this.Name = "FrmGestionUsuarios486LP";
             this.Text = "GestionUsuarios";
             ((System.ComponentModel.ISupportInitialize)(this.dgtGestionUsuario)).EndInit();
             this.ResumeLayout(false);

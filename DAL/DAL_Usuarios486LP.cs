@@ -115,9 +115,6 @@ namespace DAL
             return lista;
         }
 
-        // Devuelve el Usuario que coincide con el NombreUsuario.
-        // Devuelve null si no existe.
-
         public Usuario486LP ObtenerPorNombreUsuario(string nombreUsuario)
         {
             Usuario486LP usuario = null;
@@ -169,6 +166,51 @@ namespace DAL
 
             return usuario;
         }
+
+        //public Usuario486LP ObtenerPorNombreUsuario(string nombreUsuario)
+        //{
+        //    Usuario486LP usuario = null;
+
+        //    using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
+        //    {
+        //        string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, 
+        //                        NombreUsuario, Contraseña, Activo, Bloqueado, 
+        //                        IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma
+        //                 FROM Usuarios
+        //                 WHERE NombreUsuario = @NombreUsuario";
+
+        //        SqlCommand cmd = new SqlCommand(query, con);
+        //        cmd.Parameters.AddWithValue("@NombreUsuario", nombreUsuario);
+        //        cmd.CommandType = CommandType.Text;
+        //        con.Open();
+
+        //        using (SqlDataReader dr = cmd.ExecuteReader())
+        //        {
+        //            if (dr.Read())
+        //            {
+        //                usuario = new Usuario486LP()
+        //                {
+        //                    IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
+        //                    DNI = dr["DNI"].ToString(),
+        //                    Nombre = dr["Nombre"].ToString(),
+        //                    Apellido = dr["Apellido"].ToString(),
+        //                    Email = dr["Email"].ToString(),
+        //                    NombreUsuario = dr["NombreUsuario"].ToString(),
+        //                    Contraseña = dr["Contraseña"].ToString(),
+        //                    Activo = Convert.ToBoolean(dr["Activo"]),
+        //                    Bloqueado = Convert.ToBoolean(dr["Bloqueado"]),
+        //                    IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
+        //                    Rol = dr["Rol"].ToString(),
+        //                    DV = dr["DV"].ToString(),
+        //                    IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
+        //                    NombreIdioma = dr["NombreIdioma"].ToString()
+        //                };
+        //            }
+        //        }
+        //    }
+
+        //    return usuario;
+        //}
 
         public bool Agregar(Usuario486LP obj, out string Mensaje)
         {

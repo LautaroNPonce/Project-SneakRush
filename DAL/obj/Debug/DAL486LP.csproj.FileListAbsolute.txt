@@ -1,9 +1,7 @@
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\DAL.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\DAL.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\BE.dll
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\Services.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\BE.pdb
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\Services.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\obj\Debug\DAL486LP.csproj.AssemblyReference.cache
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\obj\Debug\DAL486LP.csproj.CoreCompileInputs.cache
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\obj\Debug\DAL486LP.csproj.Up2Date

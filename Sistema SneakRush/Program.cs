@@ -13,7 +13,7 @@ namespace Sistema_SneakRush
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMenuPrincipal486LP());
+            Application.Run(new FrmIniciarSesionLP486());
         }
     }
 }

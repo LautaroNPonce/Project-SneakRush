@@ -93,28 +93,28 @@
             // txtNombreUsuario
             // 
             this.txtNombreUsuario.Cursor = System.Windows.Forms.Cursors.SizeAll;
-            this.txtNombreUsuario.Location = new System.Drawing.Point(344, 117);
+            this.txtNombreUsuario.Location = new System.Drawing.Point(357, 117);
             this.txtNombreUsuario.Name = "txtNombreUsuario";
             this.txtNombreUsuario.Size = new System.Drawing.Size(191, 22);
             this.txtNombreUsuario.TabIndex = 5;
             // 
             // txtContraseña
             // 
-            this.txtContraseña.Location = new System.Drawing.Point(344, 155);
+            this.txtContraseña.Location = new System.Drawing.Point(357, 155);
             this.txtContraseña.Name = "txtContraseña";
             this.txtContraseña.Size = new System.Drawing.Size(191, 22);
             this.txtContraseña.TabIndex = 6;
             // 
             // txtNuevaContraseña
             // 
-            this.txtNuevaContraseña.Location = new System.Drawing.Point(344, 194);
+            this.txtNuevaContraseña.Location = new System.Drawing.Point(357, 194);
             this.txtNuevaContraseña.Name = "txtNuevaContraseña";
             this.txtNuevaContraseña.Size = new System.Drawing.Size(191, 22);
             this.txtNuevaContraseña.TabIndex = 7;
             // 
             // txtConfirmarContraseña
             // 
-            this.txtConfirmarContraseña.Location = new System.Drawing.Point(344, 231);
+            this.txtConfirmarContraseña.Location = new System.Drawing.Point(357, 231);
             this.txtConfirmarContraseña.Name = "txtConfirmarContraseña";
             this.txtConfirmarContraseña.Size = new System.Drawing.Size(191, 22);
             this.txtConfirmarContraseña.TabIndex = 8;
@@ -137,6 +137,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ControlBox = false;
             this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.txtConfirmarContraseña);
             this.Controls.Add(this.txtNuevaContraseña);
