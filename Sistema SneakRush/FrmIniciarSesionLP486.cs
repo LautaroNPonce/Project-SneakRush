@@ -1,5 +1,6 @@
 ﻿using BE;
 using BLL;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -46,6 +47,7 @@ namespace Sistema_SneakRush
             {
                 case 1:
                     // Login exitoso = abrir Menú Principal
+                    SessionManager486LP.ObtenerInstancia().LogIN(usuario);
                     FrmMenuPrincipal486LP menu = new FrmMenuPrincipal486LP();
                     menu.Show();
                     this.Hide();

@@ -79,7 +79,7 @@
             this.ayudaToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(800, 28);
+            this.Menu.Size = new System.Drawing.Size(818, 28);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
             // 
@@ -327,7 +327,7 @@
             // 
             this.lblEstado.AutoSize = true;
             this.lblEstado.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEstado.Location = new System.Drawing.Point(603, 410);
+            this.lblEstado.Location = new System.Drawing.Point(621, 429);
             this.lblEstado.Name = "lblEstado";
             this.lblEstado.Size = new System.Drawing.Size(0, 18);
             this.lblEstado.TabIndex = 1;
@@ -337,7 +337,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(818, 467);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.Menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
