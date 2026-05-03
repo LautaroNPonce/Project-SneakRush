@@ -102,5 +102,10 @@ namespace Sistema_SneakRush
             txtContraseña.Clear();
             txtUsuario.Focus();
         }
+
+        private void btnVerContraseña_Click(object sender, EventArgs e)
+        {
+            txtContraseña.PasswordChar = txtContraseña.PasswordChar == '*' ? '\0' : '*';
+        }
     }
 }

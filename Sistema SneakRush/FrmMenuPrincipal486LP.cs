@@ -40,13 +40,13 @@ namespace Sistema_SneakRush
         // Oculto items de menú según perfil (Lo hice pero no es para la primera entrega)
         private void AjustarMenuSegunPerfil()
         {
+            // Ejemplo: solo el Administrador ve el menú Administrador
+            // Ajustá los nombres según cómo los llamaste en el Designer
+;
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuario == null) return;
 
-            // Ejemplo: solo el Administrador ve el menú Administrador
-            // Ajustá los nombres según cómo los llamaste en el Designer
-            adminToolStripMenuItem.Visible = usuario.Rol == "Administrador"
-                                          || usuario.Rol == "Analista Programador";
+            adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
         }
 
         // ---Menu Usuario---

@@ -35,6 +35,7 @@
             this.txtUsuario = new System.Windows.Forms.TextBox();
             this.txtContraseña = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnVerContraseña = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -98,12 +99,29 @@
             this.pictureBox1.TabIndex = 5;
             this.pictureBox1.TabStop = false;
             // 
+            // btnVerContraseña
+            // 
+            this.btnVerContraseña.BackColor = System.Drawing.Color.Transparent;
+            this.btnVerContraseña.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnVerContraseña.FlatAppearance.BorderSize = 0;
+            this.btnVerContraseña.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVerContraseña.Font = new System.Drawing.Font("Segoe UI Emoji", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVerContraseña.ForeColor = System.Drawing.SystemColors.InactiveCaptionText;
+            this.btnVerContraseña.Location = new System.Drawing.Point(516, 385);
+            this.btnVerContraseña.Name = "btnVerContraseña";
+            this.btnVerContraseña.Size = new System.Drawing.Size(30, 31);
+            this.btnVerContraseña.TabIndex = 13;
+            this.btnVerContraseña.Text = "👁";
+            this.btnVerContraseña.UseVisualStyleBackColor = false;
+            this.btnVerContraseña.Click += new System.EventHandler(this.btnVerContraseña_Click);
+            // 
             // FrmIniciarSesionLP486
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(800, 583);
+            this.Controls.Add(this.btnVerContraseña);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.txtContraseña);
             this.Controls.Add(this.txtUsuario);
@@ -129,5 +147,6 @@
         private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.TextBox txtContraseña;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button btnVerContraseña;
     }
 }
