@@ -32,7 +32,32 @@ namespace BLL
         // Genera una contraseña temporal de 8 caracteres (para crear usuarios).
         public static string GenerarContraseñaTemporal()
         {
-            return Guid.NewGuid().ToString("N").Substring(0, 8);
+            const string mayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string minusculas = "abcdefghijklmnopqrstuvwxyz";
+            const string numeros = "0123456789";
+            const string todos = mayusculas + minusculas + numeros;
+
+            Random rng = new Random();
+            char[] pass = new char[8];
+
+            // Al menos 1 de cada tipo para cumplir la política
+            pass[0] = mayusculas[rng.Next(mayusculas.Length)];
+            pass[1] = minusculas[rng.Next(minusculas.Length)];
+            pass[2] = numeros[rng.Next(numeros.Length)];
+
+            for (int i = 3; i < 8; i++)
+                pass[i] = todos[rng.Next(todos.Length)];
+
+            // Mezclar posiciones para que no sea predecible
+            for (int i = 7; i > 0; i--)
+            {
+                int j = rng.Next(i + 1);
+                char tmp = pass[i];
+                pass[i] = pass[j];
+                pass[j] = tmp;
+            }
+
+            return new string(pass);
         }
 
         // Valida que la contraseña cumpla la política de seguridad (mínimo 8 caracteres, al menos una mayúscula y una minúscula).
