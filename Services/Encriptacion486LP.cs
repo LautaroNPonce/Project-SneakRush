@@ -33,7 +33,7 @@ namespace Services
         }
 
 
-        //  AES-256 — para correos de clientes (con vuelta)
+        //  AES-256 — lo uso para el correo de los clientes (con vuelta)
         public static string EncriptarAES(string textoPlano)
         {
             if (string.IsNullOrEmpty(textoPlano))
@@ -41,7 +41,7 @@ namespace Services
 
             using (Aes aes = Aes.Create())
             {
-                // PadRight + Substring → garantiza el largo exacto sin romperse
+                // PadRight + Substring = garantiza el largo exacto sin romperse
                 aes.Key = Encoding.UTF8.GetBytes(ClaveAES.PadRight(32).Substring(0, 32));
                 aes.IV = Encoding.UTF8.GetBytes(VectorIV.PadRight(16).Substring(0, 16));
 
@@ -76,7 +76,7 @@ namespace Services
                 }
             }
         }
-        //  Validación de Base64 (helper)
+        //  Validación de Base64
         public static bool EsBase64(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto))

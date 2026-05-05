@@ -21,10 +21,8 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, 
-                                            NombreUsuario, Contraseña, Activo, Bloqueado, 
-                                            IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma
-                                     FROM Usuarios";
+                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado,IntentosFallidos, Rol, IdPerfil, NombreIdioma
+                    FROM Usuarios";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.CommandType = CommandType.Text;
@@ -47,7 +45,6 @@ namespace DAL
                                 Bloqueado = Convert.ToBoolean(dr["Bloqueado"]),
                                 IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
                                 Rol = dr["Rol"].ToString(),
-                                DV = dr["DV"].ToString(),
                                 IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
                                 NombreIdioma = dr["NombreIdioma"].ToString()
                             });
@@ -72,11 +69,8 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, 
-                                            NombreUsuario, Contraseña, Activo, Bloqueado, 
-                                            IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma
-                                     FROM Usuarios
-                                     WHERE Activo = 1";
+                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, IdPerfil, NombreIdioma
+                    FROM Usuarios WHERE Activo = 1";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.CommandType = CommandType.Text;
@@ -99,7 +93,6 @@ namespace DAL
                                 Bloqueado = Convert.ToBoolean(dr["Bloqueado"]),
                                 IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
                                 Rol = dr["Rol"].ToString(),
-                                DV = dr["DV"].ToString(),
                                 IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
                                 NombreIdioma = dr["NombreIdioma"].ToString()
                             });
@@ -123,11 +116,8 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, 
-                                            NombreUsuario, Contraseña, Activo, Bloqueado, 
-                                            IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma
-                                     FROM Usuarios
-                                     WHERE NombreUsuario = @NombreUsuario";
+                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma
+                    FROM Usuarios WHERE NombreUsuario = @NombreUsuario";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@NombreUsuario", nombreUsuario);
@@ -151,7 +141,6 @@ namespace DAL
                                 Bloqueado = Convert.ToBoolean(dr["Bloqueado"]),
                                 IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
                                 Rol = dr["Rol"].ToString(),
-                                DV = dr["DV"].ToString(),
                                 IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
                                 NombreIdioma = dr["NombreIdioma"].ToString()
                             };
@@ -176,14 +165,8 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"INSERT INTO Usuarios 
-                                        (DNI, Nombre, Apellido, Email, NombreUsuario, 
-                                         Contraseña, Activo, Bloqueado, IntentosFallidos, 
-                                         Rol, DV, IdPerfil, NombreIdioma)
-                                     VALUES 
-                                        (@DNI, @Nombre, @Apellido, @Email, @NombreUsuario, 
-                                         @Contraseña, @Activo, @Bloqueado, @IntentosFallidos, 
-                                         @Rol, @DV, @IdPerfil, @NombreIdioma)";
+                    string query = @"INSERT INTO Usuarios (DNI, Nombre, Apellido, Email, NombreUsuario,Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, IdPerfil, NombreIdioma)
+                    VALUES (@DNI, @Nombre, @Apellido, @Email, @NombreUsuario, @Contraseña, @Activo, @Bloqueado, @IntentosFallidos, @Rol, @IdPerfil, @NombreIdioma)";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@DNI", obj.DNI);
@@ -196,7 +179,6 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Bloqueado", obj.Bloqueado);
                     cmd.Parameters.AddWithValue("@IntentosFallidos", obj.IntentosFallidos);
                     cmd.Parameters.AddWithValue("@Rol", obj.Rol);
-                    cmd.Parameters.AddWithValue("@DV", obj.DV);
                     cmd.Parameters.AddWithValue("@IdPerfil", (object)obj.IdPerfil ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@NombreIdioma", (object)obj.NombreIdioma ?? DBNull.Value);
                     cmd.CommandType = CommandType.Text;
@@ -223,15 +205,8 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"UPDATE Usuarios SET
-                                        Nombre       = @Nombre,
-                                        Apellido     = @Apellido,
-                                        Email        = @Email,
-                                        Rol          = @Rol,
-                                        Activo       = @Activo,
-                                        IdPerfil     = @IdPerfil,
-                                        NombreIdioma = @NombreIdioma
-                                     WHERE IdUsuario = @IdUsuario";
+                    string query = @"UPDATE Usuarios SET Nombre = @Nombre, Apellido = @Apellido, Email = @Email, Rol = @Rol, Activo = @Activo, IdPerfil = @IdPerfil,
+                    NombreIdioma = @NombreIdioma WHERE IdUsuario = @IdUsuario";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@IdUsuario", obj.IdUsuario);
@@ -267,9 +242,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"UPDATE Usuarios SET Bloqueado = 0,
-                                        IntentosFallidos = 0
-                                     WHERE DNI = @DNI";
+                    string query = @"UPDATE Usuarios SET Bloqueado = 0, IntentosFallidos = 0 WHERE DNI = @DNI";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@DNI", dni);
@@ -376,36 +349,6 @@ namespace DAL
             return resultado;
         }
 
-        // Se llama tras cada UPDATE 
-        public bool ActualizarDV(int idUsuario, string dv, out string Mensaje)
-        {
-            bool resultado = false;
-            Mensaje = string.Empty;
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
-                {
-                    string query = @"UPDATE Usuarios SET DV = @DV WHERE IdUsuario = @IdUsuario";
-
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-                    cmd.Parameters.AddWithValue("@DV", dv);
-                    cmd.CommandType = CommandType.Text;
-
-                    con.Open();
-                    resultado = cmd.ExecuteNonQuery() > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                resultado = false;
-                Mensaje = ex.Message;
-            }
-
-            return resultado;
-        }
-
         public bool ActualizarIntentos(string nombreUsuario, int intentos, out string Mensaje)
         {
             bool resultado = false;
@@ -490,5 +433,35 @@ namespace DAL
 
             return resultado;
         }
+
+        //public bool ActualizarDV(int idUsuario, string dv, out string Mensaje)
+        //{
+        //    bool resultado = false;
+        //    Mensaje = string.Empty;
+
+        //    try
+        //    {
+        //        using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
+        //        {
+        //            string query = @"UPDATE Usuarios SET DV = @DV WHERE IdUsuario = @IdUsuario";
+
+        //            SqlCommand cmd = new SqlCommand(query, con);
+        //            cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+        //            cmd.Parameters.AddWithValue("@DV", dv);
+        //            cmd.CommandType = CommandType.Text;
+
+        //            con.Open();
+        //            resultado = cmd.ExecuteNonQuery() > 0;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        resultado = false;
+        //        Mensaje = ex.Message;
+        //    }
+
+        //    return resultado;
+        //}
+
     }
 }

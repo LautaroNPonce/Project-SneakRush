@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGuiaUSuarios486LP : Form
+    public partial class FrmGuiaUsuarios486LP : Form
     {
-        public FrmGuiaUSuarios486LP()
+        public FrmGuiaUsuarios486LP()
         {
             InitializeComponent();
         }

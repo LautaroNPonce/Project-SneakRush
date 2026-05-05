@@ -24,7 +24,9 @@ namespace Sistema_SneakRush
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuario != null)
+            {
                 txtNombreUsuario.Text = usuario.NombreUsuario;
+            }
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)

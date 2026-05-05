@@ -1,6 +1,6 @@
 ﻿namespace Sistema_SneakRush
 {
-    partial class FrmGuiaUSuarios486LP
+    partial class FrmGuiaUsuarios486LP
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // FrmGuiaUSuarios486LP
+            // FrmGuiaUsuarios486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.ControlBox = false;
-            this.Name = "FrmGuiaUSuarios486LP";
-            this.Text = "FrmGuiaUSuarios486LP";
+            this.Name = "FrmGuiaUsuarios486LP";
+            this.Text = "FrmGuiaUsuarios486LP";
             this.ResumeLayout(false);
 
         }

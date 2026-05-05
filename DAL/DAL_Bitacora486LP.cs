@@ -19,13 +19,12 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"INSERT INTO BitacoraEvento (Fecha, Modulo, Descripcion, Criticidad, DNI)
-                                     VALUES (@Fecha, @Modulo, @Descripcion, @Criticidad, @DNI)";
+                    string query = @"INSERT INTO BitacoraEvento (Fecha, Modulo, Descripcion, Criticidad, DNI) VALUES (@Fecha, @Modulo, @Descripcion, @Criticidad, @DNI)";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.CommandType = CommandType.Text;
 
-                    // Si la fecha viene vacía o inválida, usamos DateTime.Now (igual que tu proyecto)
+                    // Si la fecha viene vacía o inválida, usamos DateTime
                     cmd.Parameters.AddWithValue("@Fecha", registro.Fecha < new DateTime(1753, 1, 1) ? DateTime.Now : registro.Fecha);
                     cmd.Parameters.AddWithValue("@Modulo", registro.Modulo);
                     cmd.Parameters.AddWithValue("@Descripcion", registro.Descripcion);
@@ -52,9 +51,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT Numero, Fecha, Modulo, Descripcion, Criticidad, DNI
-                                     FROM BitacoraEvento
-                                     ORDER BY Fecha DESC";
+                    string query = @"SELECT Numero, Fecha, Modulo, Descripcion, Criticidad, DNI FROM BitacoraEvento ORDER BY Fecha DESC";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     con.Open();
@@ -92,14 +89,9 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT Numero, Fecha, Modulo, Descripcion, Criticidad, DNI
-                             FROM BitacoraEvento
-                             WHERE (@DNI         IS NULL OR DNI        = @DNI)
-                               AND (@Modulo      IS NULL OR Modulo     = @Modulo)
-                               AND (@Criticidad  IS NULL OR Criticidad = @Criticidad)
-                               AND (@FechaInicio IS NULL OR Fecha     >= @FechaInicio)
-                               AND (@FechaFin    IS NULL OR Fecha     <= @FechaFin)
-                             ORDER BY Fecha DESC";
+                    string query = @"SELECT Numero, Fecha, Modulo, Descripcion, Criticidad, DNI FROM BitacoraEvento WHERE (@DNI IS NULL OR DNI = @DNI)
+                    AND (@Modulo IS NULL OR Modulo = @Modulo) AND (@Criticidad  IS NULL OR Criticidad = @Criticidad) AND (@FechaInicio IS NULL OR Fecha >= @FechaInicio)
+                    AND (@FechaFin IS NULL OR Fecha <= @FechaFin) ORDER BY Fecha DESC";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.CommandType = CommandType.Text;

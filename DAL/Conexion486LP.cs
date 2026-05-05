@@ -31,7 +31,6 @@ namespace DAL
         }
 
         //Ejecuta una consulta de escritura (INSERT, UPDATE, DELETE).
-        // Devuelve true si afectó al menos una fila.
         public bool Escribir(string consulta, bool esProcedimiento = false, List<SqlParameter> parametros = null)
         {
             using (SqlConnection con = new SqlConnection(BD))

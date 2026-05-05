@@ -140,18 +140,20 @@ namespace Sistema_SneakRush
         private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
         {
             if (dgvUsuarios.CurrentRow == null) return;
-
+            
             Usuario486LP u = dgvUsuarios.CurrentRow.DataBoundItem as Usuario486LP;
+
             if (u == null) return;
 
             _idUsuarioSeleccionado = u.IdUsuario;
             _dniUsuarioSeleccionado = u.DNI;
-
             btnDesbloquear.Text = u.Bloqueado ? "Desbloquear" : "Bloquear";
 
             // Si ya estamos en Modificar o Eliminar, sincronizar campos con la nueva fila
             if (_modo == "Modificar" || _modo == "Eliminar")
+            {
                 CargarCamposDesdeUsuario(u);
+            }
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -234,17 +236,25 @@ namespace Sistema_SneakRush
             {
                 bool resultado = _bll.Desbloquear(_dniUsuarioSeleccionado, out msg);
                 if (resultado)
+                {
                     MessageBox.Show("Usuario desbloqueado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                else
+                }
+                else 
+                {
                     MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
                 bool resultado = _bll.BloquearPorDNI(_dniUsuarioSeleccionado, out msg);
                 if (resultado)
+                {
                     MessageBox.Show("Usuario bloqueado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
                 else
+                {
                     MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             CargarDgv();
@@ -285,12 +295,9 @@ namespace Sistema_SneakRush
             else if (_modo == "Modificar")
             {
                 Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-                if (usuarioActual != null &&
-                    usuarioActual.IdUsuario == _idUsuarioSeleccionado &&
-                    !rbtnActivoSi.Checked)
+                if (usuarioActual != null && usuarioActual.IdUsuario == _idUsuarioSeleccionado && !rbtnActivoSi.Checked)
                 {
-                    MessageBox.Show(
-                        "No puede desactivar su propia cuenta mientras está en uso.","Acción no permitida",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show("No puede desactivar su propia cuenta mientras está en uso.","Acción no permitida",MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return;
                 }
 
@@ -310,8 +317,7 @@ namespace Sistema_SneakRush
 
                 if (resultado)
                 {
-                    MessageBox.Show("Usuario modificado correctamente.", "Éxito",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Usuario modificado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Resetear();
                     CargarDgv();
                 }
@@ -322,11 +328,7 @@ namespace Sistema_SneakRush
             }
             else if (_modo == "Eliminar")
             {
-                DialogResult confirm = MessageBox.Show(
-                    $"¿Está seguro que desea eliminar al usuario '{txtNombreUsuario.Text}'?",
-                    "Confirmar eliminación",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning);
+                DialogResult confirm = MessageBox.Show($"¿Está seguro que desea eliminar al usuario '{txtNombreUsuario.Text}'?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (confirm == DialogResult.Yes)
                 {
@@ -334,8 +336,7 @@ namespace Sistema_SneakRush
 
                     if (resultado)
                     {
-                        MessageBox.Show("Usuario eliminado correctamente.", "Éxito",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Usuario eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Resetear();
                         CargarDgv();
                     }
@@ -347,17 +348,20 @@ namespace Sistema_SneakRush
             }
             else
             {
-                MessageBox.Show("Seleccione una operación primero (Agregar, Modificar o Eliminar).",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Seleccione una operación primero (Agregar, Modificar o Eliminar).", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
             if (btnSalir.Text == "Cancelar")
+            {
                 Resetear();
+            }
             else
+            {
                 this.Close();
+            }
         }
 
         private void rbtnActivos_CheckedChanged(object sender, EventArgs e)

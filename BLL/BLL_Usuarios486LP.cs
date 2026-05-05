@@ -13,15 +13,6 @@ namespace BLL
         private DAL_Usuarios486LP ObjetoDAL = new DAL_Usuarios486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        private string CalcularDV(Usuario486LP u)
-        {
-            string datos = $"{u.IdUsuario}{u.DNI}{u.NombreUsuario}{u.Rol}";
-            int suma = 0;
-            foreach (char c in datos)
-                suma += c;
-            return (suma % 10).ToString();
-        }
-
         // Genera una contraseña temporal de 8 caracteres (para crear usuarios).
         public static string GenerarContraseñaTemporal()
         {
@@ -186,7 +177,6 @@ namespace BLL
 
             try
             {
-                // Validaciones 
                 if (string.IsNullOrEmpty(obj.DNI))
                 {
                     Mensaje = "El DNI es obligatorio.";
@@ -238,7 +228,6 @@ namespace BLL
                 obj.Activo = true;
                 obj.Bloqueado = false;
                 obj.IntentosFallidos = 0;
-                obj.DV = "0";  // se recalcula tras el INSERT
 
                 bool resultado = ObjetoDAL.Agregar(obj, out Mensaje);
 
@@ -390,7 +379,6 @@ namespace BLL
         public bool CambiarContraseña(int idUsuario, string contraseñaActual, string contraseñaNueva, string contraseñaConfirmar, string dniUsuario, out string Mensaje)
         {
             Mensaje = string.Empty;
-
             try
             {
                 // Validar coincidencia 
@@ -406,7 +394,6 @@ namespace BLL
                     return false;
                 }
 
-                // Validar política 
                 if (!ValidarContraseña(contraseñaNueva, out Mensaje))
                     return false;
 

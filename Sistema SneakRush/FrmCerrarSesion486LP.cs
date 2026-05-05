@@ -25,7 +25,7 @@ namespace Sistema_SneakRush
         {
             Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
 
-            // Bitácora PRIMERO, después LogOut() — el orden lo garantiza BLL internamente
+            // Bitácora PRIMERO, después LogOut() — el orden lo garantiza la BLL internamente
             _bll.Logout(usuarioActual.NombreUsuario);
 
             Form menu = this.MdiParent;

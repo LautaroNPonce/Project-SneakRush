@@ -31,7 +31,7 @@ namespace Services
             get { return _idiomaActual; }
             set
             {
-                _idiomaActual = value; // Se activa cuando implementemos el patrón Observer de idioma
+                _idiomaActual = value; // Se activa cuando implemento el patrón Observer de idioma
             }
         }
  

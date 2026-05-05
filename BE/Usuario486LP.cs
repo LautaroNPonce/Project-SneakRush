@@ -28,7 +28,7 @@ namespace BE
         public string NombreIdioma { get; set; }
 
         //Dígito verificador
-        public string DV { get; set; }
+        //public string DV { get; set; }
 
         // Constructores
         public Usuario486LP() { }
@@ -46,7 +46,7 @@ namespace BE
             Bloqueado = bloqueado;
             IntentosFallidos = intentosFallidos;
             Rol = rol;
-            DV = dv;
+            //DV = dv;
             IdPerfil = idPerfil;
             NombreIdioma = nombreIdioma;
         }

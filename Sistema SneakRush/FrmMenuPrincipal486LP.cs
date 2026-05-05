@@ -34,7 +34,9 @@ namespace Sistema_SneakRush
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuario != null)
+            {
                 lblEstado.Text = $"Usuario: {usuario.Nombre} {usuario.Apellido}  |  Rol: {usuario.Rol}";
+            }
         }
 
         // Oculto items de menú según perfil (Lo hice pero no es para la primera entrega)
@@ -45,8 +47,9 @@ namespace Sistema_SneakRush
 ;
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuario == null) return;
-
-            adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
+            {
+                adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
+            }
         }
 
         // ---Menu Usuario---
