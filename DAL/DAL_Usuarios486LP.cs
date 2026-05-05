@@ -167,51 +167,6 @@ namespace DAL
             return usuario;
         }
 
-        //public Usuario486LP ObtenerPorNombreUsuario(string nombreUsuario)
-        //{
-        //    Usuario486LP usuario = null;
-
-        //    using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
-        //    {
-        //        string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, 
-        //                        NombreUsuario, Contraseña, Activo, Bloqueado, 
-        //                        IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma
-        //                 FROM Usuarios
-        //                 WHERE NombreUsuario = @NombreUsuario";
-
-        //        SqlCommand cmd = new SqlCommand(query, con);
-        //        cmd.Parameters.AddWithValue("@NombreUsuario", nombreUsuario);
-        //        cmd.CommandType = CommandType.Text;
-        //        con.Open();
-
-        //        using (SqlDataReader dr = cmd.ExecuteReader())
-        //        {
-        //            if (dr.Read())
-        //            {
-        //                usuario = new Usuario486LP()
-        //                {
-        //                    IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
-        //                    DNI = dr["DNI"].ToString(),
-        //                    Nombre = dr["Nombre"].ToString(),
-        //                    Apellido = dr["Apellido"].ToString(),
-        //                    Email = dr["Email"].ToString(),
-        //                    NombreUsuario = dr["NombreUsuario"].ToString(),
-        //                    Contraseña = dr["Contraseña"].ToString(),
-        //                    Activo = Convert.ToBoolean(dr["Activo"]),
-        //                    Bloqueado = Convert.ToBoolean(dr["Bloqueado"]),
-        //                    IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
-        //                    Rol = dr["Rol"].ToString(),
-        //                    DV = dr["DV"].ToString(),
-        //                    IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
-        //                    NombreIdioma = dr["NombreIdioma"].ToString()
-        //                };
-        //            }
-        //        }
-        //    }
-
-        //    return usuario;
-        //}
-
         public bool Agregar(Usuario486LP obj, out string Mensaje)
         {
             bool resultado = false;
@@ -273,6 +228,7 @@ namespace DAL
                                         Apellido     = @Apellido,
                                         Email        = @Email,
                                         Rol          = @Rol,
+                                        Activo       = @Activo,
                                         IdPerfil     = @IdPerfil,
                                         NombreIdioma = @NombreIdioma
                                      WHERE IdUsuario = @IdUsuario";
@@ -283,6 +239,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@Apellido", obj.Apellido);
                     cmd.Parameters.AddWithValue("@Email", obj.Email);
                     cmd.Parameters.AddWithValue("@Rol", obj.Rol);
+                    cmd.Parameters.AddWithValue("@Activo", obj.Activo);
                     cmd.Parameters.AddWithValue("@IdPerfil", (object)obj.IdPerfil ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@NombreIdioma", (object)obj.NombreIdioma ?? DBNull.Value);
                     cmd.CommandType = CommandType.Text;
@@ -313,6 +270,35 @@ namespace DAL
                     string query = @"UPDATE Usuarios SET Bloqueado = 0,
                                         IntentosFallidos = 0
                                      WHERE DNI = @DNI";
+
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@DNI", dni);
+                    cmd.CommandType = CommandType.Text;
+
+                    con.Open();
+                    resultado = cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                resultado = false;
+                Mensaje = ex.Message;
+            }
+
+            return resultado;
+        }
+
+        // Bloquear manual por el Administrador (usa DNI, consistente con Desbloquear)
+        public bool BloquearPorDNI(string dni, out string Mensaje)
+        {
+            bool resultado = false;
+            Mensaje = string.Empty;
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
+                {
+                    string query = @"UPDATE Usuarios SET Bloqueado = 1, IntentosFallidos = 0 WHERE DNI = @DNI";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@DNI", dni);

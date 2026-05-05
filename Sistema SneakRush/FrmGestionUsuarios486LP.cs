@@ -1,5 +1,6 @@
 ﻿using BE;
 using BLL;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -146,6 +147,8 @@ namespace Sistema_SneakRush
             _idUsuarioSeleccionado = u.IdUsuario;
             _dniUsuarioSeleccionado = u.DNI;
 
+            btnDesbloquear.Text = u.Bloqueado ? "Desbloquear" : "Bloquear";
+
             // Si ya estamos en Modificar o Eliminar, sincronizar campos con la nueva fila
             if (_modo == "Modificar" || _modo == "Eliminar")
                 CargarCamposDesdeUsuario(u);
@@ -211,19 +214,38 @@ namespace Sistema_SneakRush
 
         private void btnDesbloquear_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(_dniUsuarioSeleccionado))
+            Usuario486LP u = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
+            if (u == null)
             {
-                MessageBox.Show("Seleccione un usuario para desbloquear.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Seleccione un usuario.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string msg;
-            bool resultado = _bll.Desbloquear(_dniUsuarioSeleccionado, out msg);
+            _dniUsuarioSeleccionado = u.DNI;
 
-            if (resultado)
-                MessageBox.Show("Usuario desbloqueado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string accion = u.Bloqueado ? "desbloquear" : "bloquear";
+            DialogResult confirm = MessageBox.Show($"¿Está seguro que desea {accion} al usuario '{u.NombreUsuario}'?","Confirmar acción",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes) return;
+
+            string msg;
+
+            if (u.Bloqueado)
+            {
+                bool resultado = _bll.Desbloquear(_dniUsuarioSeleccionado, out msg);
+                if (resultado)
+                    MessageBox.Show("Usuario desbloqueado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             else
-                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            {
+                bool resultado = _bll.BloquearPorDNI(_dniUsuarioSeleccionado, out msg);
+                if (resultado)
+                    MessageBox.Show("Usuario bloqueado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             CargarDgv();
         }
@@ -249,13 +271,8 @@ namespace Sistema_SneakRush
 
                 if (resultado)
                 {
-                    MessageBox.Show(
-                        $"Usuario creado exitosamente.\n\n" +
-                        $"Contraseña temporal: {contraseñaTemporal}\n\n" +
-                        $"Comuníquela al usuario en persona.",
-                        "Usuario creado",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    FrmContraseñaTemporal486LP frmTemp = new FrmContraseñaTemporal486LP(contraseñaTemporal);
+                    frmTemp.ShowDialog(this);
 
                     Resetear();
                     CargarDgv();
@@ -267,6 +284,16 @@ namespace Sistema_SneakRush
             }
             else if (_modo == "Modificar")
             {
+                Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+                if (usuarioActual != null &&
+                    usuarioActual.IdUsuario == _idUsuarioSeleccionado &&
+                    !rbtnActivoSi.Checked)
+                {
+                    MessageBox.Show(
+                        "No puede desactivar su propia cuenta mientras está en uso.","Acción no permitida",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    return;
+                }
+
                 Usuario486LP mod = new Usuario486LP
                 {
                     IdUsuario = _idUsuarioSeleccionado,

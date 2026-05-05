@@ -22,13 +22,6 @@ namespace BLL
             return (suma % 10).ToString();
         }
 
-        private void RecalcularDV(Usuario486LP u)
-        {
-            string dv = CalcularDV(u);
-            string msg;
-            ObjetoDAL.ActualizarDV(u.IdUsuario, dv, out msg);
-        }
-
         // Genera una contraseña temporal de 8 caracteres (para crear usuarios).
         public static string GenerarContraseñaTemporal()
         {
@@ -219,6 +212,25 @@ namespace BLL
                     Mensaje = "El correo es obligatorio.";
                     return false;
                 }
+                if (!obj.Email.Contains("@") || !obj.Email.Contains("."))
+                {
+                    Mensaje = "El formato del correo no es válido.";
+                    return false;
+                }
+                List<Usuario486LP> todos = ObjetoDAL.Listar();
+
+                if (todos.Any(u => u.DNI == obj.DNI))
+                {
+                    Mensaje = "El DNI ingresado ya se encuentra registrado.";
+                    return false;
+                }
+
+                if (todos.Any(u => u.NombreUsuario.ToLower() == obj.NombreUsuario.ToLower()))
+                {
+                    Mensaje = "El nombre de usuario ya se encuentra registrado.";
+                    return false;
+                }
+
 
                 //  Generar contraseña temporal y hashearla
                 contraseñaTemporal = GenerarContraseñaTemporal();
@@ -232,8 +244,6 @@ namespace BLL
 
                 if (resultado)
                 {
-                    RecalcularDV(obj);
-
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario creado: {obj.NombreUsuario} (DNI: {obj.DNI}).", "INFO", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
                 }
 
@@ -268,12 +278,16 @@ namespace BLL
                     Mensaje = "El correo es obligatorio.";
                     return false;
                 }
+                if (!obj.Email.Contains("@") || !obj.Email.Contains("."))
+                {
+                    Mensaje = "El formato del correo no es válido.";
+                    return false;
+                }
 
                 bool resultado = ObjetoDAL.Modificar(obj, out Mensaje);
 
                 if (resultado)
                 {
-                    RecalcularDV(obj);
 
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario modificado: {obj.NombreUsuario} (DNI: {obj.DNI}).", "INFO", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
                 }
@@ -326,6 +340,27 @@ namespace BLL
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Desbloquear(): {ex.Message}", "ERROR", "Sistema"));
                 Mensaje = "Ocurrió un error al desbloquear el usuario.";
+                return false;
+            }
+        }
+
+        public bool BloquearPorDNI(string dni, out string Mensaje)
+        {
+            try
+            {
+                bool resultado = ObjetoDAL.BloquearPorDNI(dni, out Mensaje);
+
+                if (resultado)
+                {
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario bloqueado manualmente. DNI: {dni}.", "ADVERTENCIA", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
+                }
+
+                return resultado;
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.BloquearPorDNI(): {ex.Message}", "ERROR", "Sistema"));
+                Mensaje = "Ocurrió un error al bloquear el usuario.";
                 return false;
             }
         }
@@ -400,7 +435,6 @@ namespace BLL
                 if (resultado)
                 {
                     u.Contraseña = hashNueva;
-                    RecalcularDV(u);
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña", "Contraseña cambiada exitosamente.", "INFO", dniUsuario));
                 }
 
