@@ -82,7 +82,7 @@
             // 
             this.rbtnActivos.AutoSize = true;
             this.rbtnActivos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbtnActivos.Location = new System.Drawing.Point(806, 475);
+            this.rbtnActivos.Location = new System.Drawing.Point(984, 457);
             this.rbtnActivos.Name = "rbtnActivos";
             this.rbtnActivos.Size = new System.Drawing.Size(84, 22);
             this.rbtnActivos.TabIndex = 2;
@@ -95,7 +95,7 @@
             // 
             this.rbtnTodos.AutoSize = true;
             this.rbtnTodos.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbtnTodos.Location = new System.Drawing.Point(806, 503);
+            this.rbtnTodos.Location = new System.Drawing.Point(984, 485);
             this.rbtnTodos.Name = "rbtnTodos";
             this.rbtnTodos.Size = new System.Drawing.Size(77, 22);
             this.rbtnTodos.TabIndex = 3;

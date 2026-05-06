@@ -22,7 +22,7 @@ namespace Sistema_SneakRush
 
         private void FrmIniciarSesionLP486_Load(object sender, EventArgs e)
         {
-            txtUsuario.Focus();                  // cursor directo en Usuario
+            txtUsuario.Focus(); // cursor directo en Usuario
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)

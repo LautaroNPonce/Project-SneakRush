@@ -1,6 +1,6 @@
 ﻿namespace Sistema_SneakRush
 {
-    partial class FrmContraseñaTemporal486LP
+    partial class FrmContraseñaUsuarioNuevo486LP
     {
         /// <summary>
         /// Required designer variable.
@@ -58,9 +58,9 @@
             this.btnCopiar.FlatAppearance.BorderSize = 0;
             this.btnCopiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCopiar.Font = new System.Drawing.Font("Segoe UI Emoji", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCopiar.Location = new System.Drawing.Point(315, 40);
+            this.btnCopiar.Location = new System.Drawing.Point(304, 41);
             this.btnCopiar.Name = "btnCopiar";
-            this.btnCopiar.Size = new System.Drawing.Size(34, 35);
+            this.btnCopiar.Size = new System.Drawing.Size(89, 32);
             this.btnCopiar.TabIndex = 2;
             this.btnCopiar.Text = "📋";
             this.btnCopiar.UseVisualStyleBackColor = false;
@@ -78,7 +78,7 @@
             this.btnAceptar.UseVisualStyleBackColor = false;
             this.btnAceptar.Click += new System.EventHandler(this.btnAceptar_Click);
             // 
-            // FrmContraseñaTemporal486LP
+            // FrmContraseñaUsuarioNuevo486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -88,8 +88,8 @@
             this.Controls.Add(this.btnCopiar);
             this.Controls.Add(this.txtContraseña);
             this.Controls.Add(this.lblContraseña);
-            this.Name = "FrmContraseñaTemporal486LP";
-            this.Text = "Contraseña Temporal";
+            this.Name = "FrmContraseñaUsuarioNuevo486LP";
+            this.Text = "Contraseña Usuario";
             this.ResumeLayout(false);
             this.PerformLayout();
 

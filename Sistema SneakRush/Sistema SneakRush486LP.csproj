@@ -76,11 +76,11 @@
     <Compile Include="FrmConsultarProducto486LP.Designer.cs">
       <DependentUpon>FrmConsultarProducto486LP.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmContraseñaTemporal486LP.cs">
+    <Compile Include="FrmContraseñaUsuarioNuevo486LP.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmContraseñaTemporal486LP.Designer.cs">
-      <DependentUpon>FrmContraseñaTemporal486LP.cs</DependentUpon>
+    <Compile Include="FrmContraseñaUsuarioNuevo486LP.Designer.cs">
+      <DependentUpon>FrmContraseñaUsuarioNuevo486LP.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmDocumentacion486LP.cs">
       <SubType>Form</SubType>
@@ -213,8 +213,8 @@
     <EmbeddedResource Include="FrmConsultarProducto486LP.resx">
       <DependentUpon>FrmConsultarProducto486LP.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmContraseñaTemporal486LP.resx">
-      <DependentUpon>FrmContraseñaTemporal486LP.cs</DependentUpon>
+    <EmbeddedResource Include="FrmContraseñaUsuarioNuevo486LP.resx">
+      <DependentUpon>FrmContraseñaUsuarioNuevo486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmDocumentacion486LP.resx">
       <DependentUpon>FrmDocumentacion486LP.cs</DependentUpon>

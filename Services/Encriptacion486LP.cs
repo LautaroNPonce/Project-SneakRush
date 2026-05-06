@@ -14,7 +14,7 @@ namespace Services
         private static readonly string ClaveAES = "SneakRush2026LP_ClaveSegura_AES256";
         private static readonly string VectorIV = "SneakRushIV_2026"; // 16 chars
 
-        //  SHA-256 — para contraseñas (sin vuelta)
+        //  SHA-256 — para contraseñas (irreversible)
         public static string GenerarHash(string texto)
         {
             if (string.IsNullOrEmpty(texto))
@@ -33,7 +33,7 @@ namespace Services
         }
 
 
-        //  AES-256 — lo uso para el correo de los clientes (con vuelta)
+        //  AES-256 — lo uso para el correo de los clientes (reversible)
         public static string EncriptarAES(string textoPlano)
         {
             if (string.IsNullOrEmpty(textoPlano))

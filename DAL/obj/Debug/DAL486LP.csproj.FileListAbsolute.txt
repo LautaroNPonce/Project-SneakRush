@@ -7,3 +7,5 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\obj\D
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\obj\Debug\DAL486LP.csproj.Up2Date
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\obj\Debug\DAL.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\obj\Debug\DAL.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\Services.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\DAL\bin\Debug\Services.pdb

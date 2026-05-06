@@ -281,7 +281,7 @@ namespace Sistema_SneakRush
 
                 if (resultado)
                 {
-                    FrmContraseñaTemporal486LP frmTemp = new FrmContraseñaTemporal486LP(contraseñaTemporal);
+                    FrmContraseñaUsuarioNuevo486LP frmTemp = new FrmContraseñaUsuarioNuevo486LP(contraseñaTemporal);
                     frmTemp.ShowDialog(this);
 
                     Resetear();

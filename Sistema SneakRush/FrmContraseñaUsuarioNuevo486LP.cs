@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmContraseñaTemporal486LP : Form
+    public partial class FrmContraseñaUsuarioNuevo486LP : Form
     {
-        public FrmContraseñaTemporal486LP(string contraseña)
+        public FrmContraseñaUsuarioNuevo486LP(string contraseña)
         {
             InitializeComponent();
             txtContraseña.Text = contraseña;
