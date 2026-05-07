@@ -1,5 +1,6 @@
 ﻿using BE;
 using DAL;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,9 @@ namespace BLL
             return Dal.Listar();
         }
 
-        public List<BitacoraEvento486LP> Filtrar(string dni, string modulo, string criticidad, string fechaInicio, string fechaFin)
+        public List<BitacoraEvento486LP> Filtrar(string dni, string nombreUsuario, string modulo, string criticidad, string fechaInicio, string fechaFin)
         {
-            return Dal.Filtrar(dni, modulo, criticidad, fechaInicio, fechaFin);
+            return Dal.Filtrar(dni, nombreUsuario, modulo, criticidad, fechaInicio, fechaFin);
         }
     }
 }

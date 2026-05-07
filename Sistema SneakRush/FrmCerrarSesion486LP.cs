@@ -25,8 +25,11 @@ namespace Sistema_SneakRush
         {
             Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
 
-            // Bitácora PRIMERO, después LogOut() — el orden lo garantiza la BLL internamente
-            _bll.Logout(usuarioActual.NombreUsuario);
+            string mensaje;
+            _bll.Logout(usuarioActual.DNI, out mensaje);
+
+            if (!string.IsNullOrEmpty(mensaje))
+                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             Form menu = this.MdiParent;
             FrmIniciarSesionLP486 login = new FrmIniciarSesionLP486();

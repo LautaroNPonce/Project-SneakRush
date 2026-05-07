@@ -52,7 +52,6 @@ namespace BLL
         {
             usuarioLogueado = null;
             Mensaje = string.Empty;
-
             try
             {
                 Usuario486LP u = ObjetoDAL.ObtenerPorNombreUsuario(nombreUsuario);
@@ -87,12 +86,12 @@ namespace BLL
                     {
                         ObjetoDAL.Bloquear(nombreUsuario, out msg);
 
-                        ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Usuario {nombreUsuario} bloqueado por 3 intentos fallidos.", "ADVERTENCIA", u.DNI));
+                        ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Usuario {nombreUsuario} bloqueado por 3 intentos fallidos.", "ADVERTENCIA", u.DNI, u.NombreUsuario));
                         Mensaje = "Usuario bloqueado por 3 intentos fallidos. Contacte al administrador.";
                         return -3;
                     }
 
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Intento fallido {intentos}/3 para {nombreUsuario}.", "ADVERTENCIA", u.DNI));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Intento fallido {intentos}/3 para {nombreUsuario}.", "ADVERTENCIA", u.DNI, u.NombreUsuario));
                     Mensaje = $"Contraseña incorrecta. Intentos fallidos: {intentos}/3.";
                     return -1;
                 }
@@ -100,13 +99,13 @@ namespace BLL
                 // Login exitoso — se reinician intentos
                 string mensaje;
                 ObjetoDAL.ActualizarIntentos(nombreUsuario, 0, out mensaje);
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Inicio de sesión exitoso: {nombreUsuario}.", "INFO", u.DNI));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Inicio de sesión exitoso: {nombreUsuario}.", "INFO", u.DNI, u.NombreUsuario));
                 usuarioLogueado = u;
                 return 1;
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Error en BLL_Usuarios.Login(): {ex.Message}", "ERROR", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Error en BLL_Usuarios.Login(): {ex.Message}", "ERROR", "Sistema", "Sistema"));
                 Mensaje = "Ocurrió un error inesperado al iniciar sesión.";
                 return 0;
             }
@@ -404,15 +403,33 @@ namespace BLL
             }
         }
 
-        public void Logout(string dni)
+        public void Logout(string dni, out string mensaje)
         {
+            mensaje = string.Empty;
             try
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Logout", "Cierre de sesión exitoso.", "INFO", dni)); SessionManager486LP.ObtenerInstancia().LogOut();
+                Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+
+                // Bitácora antes de cerrar sesión
+                BitacoraEvento486LP evento = new BitacoraEvento486LP()
+                {
+                    Fecha = DateTime.Now,
+                    Modulo = "Logout",
+                    Descripcion = "Cierre de sesión exitoso.",
+                    Criticidad = "INFO",
+                    DNI = usuarioActual.DNI,
+                    NombreUsuario = usuarioActual.NombreUsuario
+                };
+
+                DAL_Bitacora486LP dalBitacora = new DAL_Bitacora486LP();
+                dalBitacora.Registrar(evento);
+
+                // Cerrar sesión despues de registrar el evento para asegurar que la información del usuario esté disponible para la bitácora
+                SessionManager486LP.ObtenerInstancia().LogOut();
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Logout", $"Error en BLL_Usuarios.Logout(): {ex.Message}", "ERROR", dni));
+                mensaje = "Error al cerrar sesión: " + ex.Message;
             }
         }
     }

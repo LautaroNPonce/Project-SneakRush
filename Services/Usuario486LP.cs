@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BE
+namespace Services
 {
     public class Usuario486LP
     {
@@ -27,13 +27,10 @@ namespace BE
         public int? IdPerfil { get; set; }
         public string NombreIdioma { get; set; }
 
-        //Dígito verificador
-        //public string DV { get; set; }
-
         // Constructores
         public Usuario486LP() { }
 
-        public Usuario486LP(int idUsuario, string dni, string nombre, string apellido, string email, string nombreUsuario, string contraseña,bool activo, bool bloqueado, int intentosFallidos,string rol, string dv, int? idPerfil, string nombreIdioma)
+        public Usuario486LP(int idUsuario, string dni, string nombre, string apellido, string email, string nombreUsuario, string contraseña, bool activo, bool bloqueado, int intentosFallidos, string rol, string dv, int? idPerfil, string nombreIdioma)
         {
             IdUsuario = idUsuario;
             DNI = dni;
@@ -46,12 +43,10 @@ namespace BE
             Bloqueado = bloqueado;
             IntentosFallidos = intentosFallidos;
             Rol = rol;
-            //DV = dv;
             IdPerfil = idPerfil;
             NombreIdioma = nombreIdioma;
         }
 
-        // Es medio innecesario pero puede ayudar a la hora de debuggear o mostrar información del usuario en la UI
         public override string ToString()
         {
             return $"{NombreUsuario} — {Nombre} {Apellido} ({Rol})";

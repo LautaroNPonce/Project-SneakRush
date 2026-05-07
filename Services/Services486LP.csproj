@@ -41,9 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitacoraEvento486LP.cs" />
     <Compile Include="Encriptacion486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionManager486LP.cs" />
+    <Compile Include="Usuario486LP.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BE\BE486LP.csproj">
