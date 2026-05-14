@@ -27,7 +27,7 @@ namespace Services
             Descripcion = descripcion;
             Criticidad = criticidad;
             DNI = dni;
-            NombreUsuario = nombreUsuario;
+            NombreUsuario = nombreUsuario; 
         }
 
         // Constructor cuando creás un evento nuevo para insertar en la BD

@@ -62,16 +62,18 @@ namespace Sistema_SneakRush
 
             cmbCriticidad.Items.Clear();
             cmbCriticidad.Items.Add("");
-            cmbCriticidad.Items.Add("INFO");
-            cmbCriticidad.Items.Add("ADVERTENCIA");
-            cmbCriticidad.Items.Add("ALTO");
-            cmbCriticidad.Items.Add("MUY ALTO");
+            cmbCriticidad.Items.Add("Bajo");
+            cmbCriticidad.Items.Add("Medio");
+            cmbCriticidad.Items.Add("Alto");
+            cmbCriticidad.Items.Add("Muy Alto");
             cmbCriticidad.SelectedIndex = 0;
         }
 
         private void CargarGrilla()
         {
-            List<BitacoraEvento486LP> lista = _bll.Listar();
+            string fechaInicio = DateTime.Today.AddDays(-3).ToString("yyyy-MM-dd");
+            string fechaFin = DateTime.Today.ToString("yyyy-MM-dd") + " 23:59:59";
+            List<BitacoraEvento486LP> lista = _bll.Filtrar("", "", "", "", fechaInicio, fechaFin);
             ActualizarGrilla(lista);
         }
 
@@ -125,6 +127,8 @@ namespace Sistema_SneakRush
             txtDNI.Clear();
             cmbModulo.SelectedIndex = 0;
             cmbCriticidad.SelectedIndex = 0;
+            dtpFechaDesde.Checked = false;
+            dtpFechaHasta.Checked = false;
             dtpFechaDesde.Value = DateTime.Today;
             dtpFechaHasta.Value = DateTime.Today;
             btnCancelar.Text = "Salir";

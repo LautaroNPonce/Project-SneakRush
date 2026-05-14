@@ -8,6 +8,7 @@ namespace BE
 {
     public class Idioma486LP
     {
+        
         public string NombreIdioma { get; set; }
         public string Tipo { get; set; } // Ejemplo: "Nativo", "Fluido", "Intermedio", etc.
 
