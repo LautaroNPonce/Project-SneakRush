@@ -58,9 +58,9 @@
             this.btnCopiar.FlatAppearance.BorderSize = 0;
             this.btnCopiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCopiar.Font = new System.Drawing.Font("Segoe UI Emoji", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCopiar.Location = new System.Drawing.Point(304, 41);
+            this.btnCopiar.Location = new System.Drawing.Point(290, 41);
             this.btnCopiar.Name = "btnCopiar";
-            this.btnCopiar.Size = new System.Drawing.Size(89, 32);
+            this.btnCopiar.Size = new System.Drawing.Size(117, 32);
             this.btnCopiar.TabIndex = 2;
             this.btnCopiar.Text = "📋";
             this.btnCopiar.UseVisualStyleBackColor = false;

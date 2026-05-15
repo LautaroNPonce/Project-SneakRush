@@ -37,8 +37,10 @@ namespace DAL
                     respuesta = cmd.ExecuteNonQuery() > 0;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                // Es temporal para encontrar errores, luego se puede eliminar o reemplazar por un log adecuado
+                System.Diagnostics.Debug.WriteLine("ERROR DAL Registrar: " + ex.Message);
                 respuesta = false;
             }
 
