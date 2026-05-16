@@ -187,7 +187,7 @@ namespace BLL
                     Mensaje = "El nombre de usuario ya se encuentra registrado.";
                     return false;
                 }
-                //  Generar contraseña temporal y hashearla
+
                 contraseñaTemporal = obj.Apellido + obj.DNI;
                 obj.Contraseña = Encriptacion486LP.GenerarHash(contraseñaTemporal);
                 obj.Activo = true;
@@ -198,14 +198,15 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario creado: {obj.NombreUsuario} (DNI: {obj.DNI}).", "Alto", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Usuario creado: {obj.NombreUsuario} (DNI: {obj.DNI}).","Alto",SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Agregar(): {ex.Message}", "Muy Alto", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Error en BLL_Usuarios.Agregar(): {ex.Message}","Muy Alto","Sistema","Sistema"));
                 Mensaje = "Ocurrió un error inesperado al agregar el usuario.";
                 return false;
             }
@@ -242,14 +243,15 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario modificado: {obj.NombreUsuario} (DNI: {obj.DNI}).", "Medio", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Usuario modificado: {obj.NombreUsuario} (DNI: {obj.DNI}).","Medio",SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Modificar(): {ex.Message}", "Muy Alto", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Error en BLL_Usuarios.Modificar(): {ex.Message}","Muy Alto","Sistema","Sistema"));
                 Mensaje = "Ocurrió un error inesperado al modificar el usuario.";
                 return false;
             }
@@ -263,14 +265,15 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario eliminado. IdUsuario: {idUsuario}.", "Alto", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Usuario eliminado. IdUsuario: {idUsuario}.","Alto",SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Eliminar(): {ex.Message}", "Muy Alto", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Error en BLL_Usuarios.Eliminar(): {ex.Message}","Muy Alto","Sistema","Sistema"));
                 Mensaje = "Ocurrió un error al eliminar el usuario.";
                 return false;
             }
@@ -284,14 +287,15 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario desbloqueado. DNI: {dni}.", "Muy Alto", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Usuario desbloqueado. DNI: {dni}.","Muy Alto",SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Desbloquear(): {ex.Message}", "Muy Alto", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Error en BLL_Usuarios.Desbloquear(): {ex.Message}","Muy Alto","Sistema","Sistema"));
                 Mensaje = "Ocurrió un error al desbloquear el usuario.";
                 return false;
             }
@@ -317,6 +321,7 @@ namespace BLL
                 return false;
             }
         }
+
         //  Activar / Desactivar
         public bool InvertirActivo(string dni, out string Mensaje)
         {
@@ -326,14 +331,15 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Estado Activo invertido. DNI: {dni}.", "Medio", SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema"));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Estado Activo invertido. DNI: {dni}.","Medio",SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema")); // ← agregado
                 }
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.InvertirActivo(): {ex.Message}", "Muy Alto", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios",$"Error en BLL_Usuarios.InvertirActivo(): {ex.Message}","Muy Alto","Sistema","Sistema"));
                 Mensaje = "Ocurrió un error al cambiar el estado del usuario.";
                 return false;
             }
@@ -372,7 +378,8 @@ namespace BLL
 
                 if (hashActual != u.Contraseña)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña", "Intento fallido: contraseña actual incorrecta.", "Muy Alto", dniUsuario));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña","Intento fallido: contraseña actual incorrecta.","Muy Alto",dniUsuario,
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                     Mensaje = "La contraseña actual es incorrecta.";
                     return false;
                 }
@@ -383,14 +390,15 @@ namespace BLL
                 if (resultado)
                 {
                     u.Contraseña = hashNueva;
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña", "Contraseña cambiada exitosamente.", "Muy Alto", dniUsuario));
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña","Contraseña cambiada exitosamente.","Muy Alto",dniUsuario,
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema")); 
                 }
 
                 return resultado;
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña", $"Error en BLL_Usuarios.CambiarContraseña(): {ex.Message}", "Muy Alto", dniUsuario));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña",$"Error en BLL_Usuarios.CambiarContraseña(): {ex.Message}","Muy Alto",dniUsuario,"Sistema")); 
                 Mensaje = "Ocurrió un error inesperado al cambiar la contraseña.";
                 return false;
             }

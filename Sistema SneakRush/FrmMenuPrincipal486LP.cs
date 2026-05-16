@@ -23,7 +23,7 @@ namespace Sistema_SneakRush
             }
 
             MostrarUsuarioActual();
-            AjustarMenuSegunPerfil();
+            //AjustarMenuSegunPerfil();
 
             cmbIdioma.Items.AddRange(new object[] { "Español", "Inglés", "Português" });
             cmbIdioma.SelectedIndex = 0;
@@ -39,18 +39,18 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Oculto items de menú según perfil (Lo hice pero no es para la primera entrega)
-        private void AjustarMenuSegunPerfil()
-        {
-            // Ejemplo: solo el Administrador ve el menú Administrador
-            // Ajustá los nombres según cómo los llamaste en el Designer
-;
-            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-            if (usuario == null) return;
-            {
-                adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
-            }
-        }
+        // (Lo hice pero no es para la primera entrega)
+//        private void AjustarMenuSegunPerfil()
+//        {
+//            // Ejemplo: solo el Administrador ve el menú Administrador
+//            // Ajustá los nombres según cómo los llamaste en el Designer
+//;
+//            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+//            if (usuario == null) return;
+//            {
+//                adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
+//            }
+//        }
 
         // ---Menu Usuario---
         private void cambiarContraseñaToolStripMenuItem_Click(object sender, System.EventArgs e)

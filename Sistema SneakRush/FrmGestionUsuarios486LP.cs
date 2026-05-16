@@ -328,6 +328,17 @@ namespace Sistema_SneakRush
             }
             else if (_modo == "Eliminar")
             {
+                Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+                if (usuarioActual != null && usuarioActual.IdUsuario == _idUsuarioSeleccionado)
+                {
+                    MessageBox.Show(
+                        "No puede eliminar su propia cuenta mientras está en uso.",
+                        "Acción no permitida",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+
                 DialogResult confirm = MessageBox.Show($"¿Está seguro que desea eliminar al usuario '{txtNombreUsuario.Text}'?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (confirm == DialogResult.Yes)
