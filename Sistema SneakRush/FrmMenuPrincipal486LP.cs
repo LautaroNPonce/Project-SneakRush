@@ -39,12 +39,10 @@ namespace Sistema_SneakRush
             }
         }
 
-        // (Lo hice pero no es para la primera entrega)
+        // Acceso a los menus según el rol del usuario. Solo el Administrador y el Analista ven el menú Administrador.
 //        private void AjustarMenuSegunPerfil()
 //        {
-//            // Ejemplo: solo el Administrador ve el menú Administrador
-//            // Ajustá los nombres según cómo los llamaste en el Designer
-//;
+//            // Solo el Administrador ve el menú Administrador
 //            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
 //            if (usuario == null) return;
 //            {

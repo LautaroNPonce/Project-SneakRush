@@ -55,7 +55,8 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT Numero, Fecha, Modulo, Descripcion, Criticidad, DNI, NombreUsuario FROM BitacoraEvento ORDER BY Fecha DESC";
+                    string query = @"SELECT b.Numero, b.Fecha, b.Modulo, b.Descripcion, b.Criticidad, b.DNI, b.NombreUsuario,ISNULL(u.Nombre,'') 
+                    AS Nombre,ISNULL(u.Apellido,'') AS ApellidoFROM BitacoraEvento b LEFT JOIN Usuarios u ON b.DNI = u.DNI ORDER BY b.Fecha DESC";
                     SqlCommand cmd = new SqlCommand(query, con);
                     con.Open();
 
@@ -71,7 +72,9 @@ namespace DAL
                                 Descripcion = dr["Descripcion"].ToString(),
                                 Criticidad = dr["Criticidad"].ToString(),
                                 DNI = dr["DNI"].ToString(),
-                                NombreUsuario = dr["NombreUsuario"].ToString()
+                                NombreUsuario = dr["NombreUsuario"].ToString(),
+                                Nombre = dr["Nombre"].ToString(),  
+                                Apellido = dr["Apellido"].ToString()
                             });
                         }
                     }
@@ -98,9 +101,10 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT Numero, Fecha, Modulo, Descripcion, Criticidad, DNI, NombreUsuario FROM BitacoraEvento WHERE (@DNI IS NULL OR DNI = @DNI)
-                    AND (@NombreUsuario IS NULL OR NombreUsuario LIKE @NombreUsuario) AND (@Modulo IS NULL OR Modulo = @Modulo) AND (@Criticidad IS NULL OR Criticidad = @Criticidad)
-                    AND (@FechaInicio IS NULL OR Fecha >= @FechaInicio) AND (@FechaFin IS NULL OR Fecha <= @FechaFin) ORDER BY Fecha DESC";
+                    string query = @"SELECT b.Numero, b.Fecha, b.Modulo, b.Descripcion, b.Criticidad, b.DNI, b.NombreUsuario, ISNULL(u.Nombre, '') AS Nombre,
+                    ISNULL(u.Apellido, '') AS Apellido FROM BitacoraEvento b LEFT JOIN Usuarios u ON b.DNI = u.DNI WHERE (@DNI IS NULL OR b.DNI = @DNI) AND (@NombreUsuario IS NULL OR b.NombreUsuario LIKE @NombreUsuario)
+                    AND (@Modulo IS NULL OR b.Modulo = @Modulo) AND (@Criticidad IS NULL OR b.Criticidad = @Criticidad) AND (@FechaInicio IS NULL OR b.Fecha >= @FechaInicio)
+                    AND (@FechaFin IS NULL OR b.Fecha <= @FechaFin) ORDER BY b.Fecha DESC";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.CommandType = CommandType.Text;
@@ -126,7 +130,9 @@ namespace DAL
                                 Descripcion = dr["Descripcion"].ToString(),
                                 Criticidad = dr["Criticidad"].ToString(),
                                 DNI = dr["DNI"].ToString(),
-                                NombreUsuario = dr["NombreUsuario"].ToString()
+                                NombreUsuario = dr["NombreUsuario"].ToString(),
+                                Nombre = dr["Nombre"].ToString(),
+                                Apellido = dr["Apellido"].ToString()
                             });
                         }
                     }

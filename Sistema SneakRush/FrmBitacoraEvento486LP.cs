@@ -337,7 +337,7 @@ namespace Sistema_SneakRush
 
             txtDetNumero.Text = ev.Numero.ToString();
             txtDetFecha.Text = ev.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
-            txtDetUsuario.Text = ev.NombreUsuario;
+            txtDetUsuario.Text = !string.IsNullOrEmpty(ev.Nombre) ? $"{ev.Nombre} {ev.Apellido}" : ev.NombreUsuario;
             txtDetDNI.Text = ev.DNI;
             txtDetModulo.Text = ev.Modulo;
             txtDetCriticidad.Text = ev.Criticidad;
