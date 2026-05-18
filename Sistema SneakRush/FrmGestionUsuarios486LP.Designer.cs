@@ -54,6 +54,7 @@
             this.rbtnActivoNo = new System.Windows.Forms.RadioButton();
             this.cmbRol = new System.Windows.Forms.ComboBox();
             this.lblModo = new System.Windows.Forms.Label();
+            this.btnCancelar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.SuspendLayout();
             // 
@@ -174,7 +175,7 @@
             this.btnSalir.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSalir.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSalir.Location = new System.Drawing.Point(1161, 430);
+            this.btnSalir.Location = new System.Drawing.Point(1161, 496);
             this.btnSalir.Name = "btnSalir";
             this.btnSalir.Size = new System.Drawing.Size(171, 49);
             this.btnSalir.TabIndex = 9;
@@ -209,6 +210,7 @@
             this.txtApellido.Name = "txtApellido";
             this.txtApellido.Size = new System.Drawing.Size(188, 22);
             this.txtApellido.TabIndex = 14;
+            this.txtApellido.TextChanged += new System.EventHandler(this.txtApellido_TextChanged);
             // 
             // txtNombre
             // 
@@ -216,6 +218,7 @@
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(188, 22);
             this.txtNombre.TabIndex = 13;
+            this.txtNombre.TextChanged += new System.EventHandler(this.txtNombre_TextChanged);
             // 
             // label2
             // 
@@ -328,6 +331,20 @@
             this.lblModo.Size = new System.Drawing.Size(0, 20);
             this.lblModo.TabIndex = 26;
             // 
+            // btnCancelar
+            // 
+            this.btnCancelar.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnCancelar.Enabled = false;
+            this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancelar.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnCancelar.Location = new System.Drawing.Point(1161, 430);
+            this.btnCancelar.Name = "btnCancelar";
+            this.btnCancelar.Size = new System.Drawing.Size(171, 49);
+            this.btnCancelar.TabIndex = 27;
+            this.btnCancelar.Text = "Cancelar";
+            this.btnCancelar.UseVisualStyleBackColor = false;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
             // FrmGestionUsuarios486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -335,6 +352,7 @@
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(1395, 734);
             this.ControlBox = false;
+            this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.lblModo);
             this.Controls.Add(this.cmbRol);
             this.Controls.Add(this.rbtnActivoNo);
@@ -398,5 +416,6 @@
         private System.Windows.Forms.RadioButton rbtnActivoNo;
         private System.Windows.Forms.ComboBox cmbRol;
         private System.Windows.Forms.Label lblModo;
+        private System.Windows.Forms.Button btnCancelar;
     }
 }
