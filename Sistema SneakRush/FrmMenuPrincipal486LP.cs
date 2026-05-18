@@ -23,7 +23,7 @@ namespace Sistema_SneakRush
             }
 
             MostrarUsuarioActual();
-            //AjustarMenuSegunPerfil();
+            AjustarMenuSegunPerfil();
 
             cmbIdioma.Items.AddRange(new object[] { "Español", "Inglés", "Português" });
             cmbIdioma.SelectedIndex = 0;
@@ -39,16 +39,16 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Acceso a los menus según el rol del usuario. Solo el Administrador y el Analista ven el menú Administrador.
-//        private void AjustarMenuSegunPerfil()
-//        {
-//            // Solo el Administrador ve el menú Administrador
-//            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-//            if (usuario == null) return;
-//            {
-//                adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
-//            }
-//        }
+       // Acceso a los menus según el rol del usuario.Solo el Administrador y el Analista ven el menú Administrador.
+        private void AjustarMenuSegunPerfil()
+        {
+            // Solo el Administrador y analista ve el menú Administrador
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+            {
+                adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
+            }
+        }
 
         // ---Menu Usuario---
         private void cambiarContraseñaToolStripMenuItem_Click(object sender, System.EventArgs e)
