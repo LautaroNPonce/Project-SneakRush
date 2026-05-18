@@ -23,7 +23,7 @@ namespace BLL
             return Dal.Listar();
         }
 
-        public List<BitacoraEvento486LP> Filtrar(string dni, string nombreUsuario, string modulo, string criticidad, string fechaInicio, string fechaFin)
+        public List<BitacoraEvento486LP> Filtrar(string dni, string nombreUsuario, string modulo, int? criticidad, string fechaInicio, string fechaFin)
         {
             return Dal.Filtrar(dni, nombreUsuario, modulo, criticidad, fechaInicio, fechaFin);
         }

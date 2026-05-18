@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitacoraEvento486LP.cs" />
+    <Compile Include="Criticidad486LP.cs" />
     <Compile Include="Encriptacion486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionManager486LP.cs" />

@@ -124,6 +124,7 @@ namespace Sistema_SneakRush
                 case "Modificar": lblModo.Text = "Modo Modificar"; break;
                 case "Eliminar": lblModo.Text = "Modo Eliminar"; break;
                 case "Desbloquear": lblModo.Text = "Modo Desbloquear"; break;
+                case "Bloquear": lblModo.Text = "Modo Bloquear"; break;
                 default: lblModo.Text = string.Empty; break;
             }
         }
@@ -140,7 +141,7 @@ namespace Sistema_SneakRush
             _dniUsuarioSeleccionado = u.DNI;
             btnDesbloquear.Text = u.Bloqueado ? "Desbloquear" : "Bloquear";
 
-            if (_modo == "Modificar" || _modo == "Eliminar" || _modo == "Desbloquear")
+            if (_modo == "Modificar" || _modo == "Eliminar" || _modo == "Desbloquear" || _modo == "Bloquear")
             {
                 CargarCamposDesdeUsuario(u);
             }
@@ -214,22 +215,19 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            SetModo("Desbloquear");
-
-            // Mostrar datos del usuario seleccionado en campos (solo lectura)
             Usuario486LP u = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
-            if (u != null)
-            {
-                DeshabilitarCampos();
-                txtDNI.Text = u.DNI;
-                txtNombre.Text = u.Nombre;
-                txtApellido.Text = u.Apellido;
-                txtNombreUsuario.Text = u.NombreUsuario;
-                txtCorreo.Text = u.Email;
-                cmbRol.SelectedItem = u.Rol;
-                rbtnActivoSi.Checked = u.Activo;
-                rbtnActivoNo.Checked = !u.Activo;
-            }
+            if (u == null) return;
+
+            SetModo(u.Bloqueado ? "Desbloquear" : "Bloquear");
+            DeshabilitarCampos();
+            txtDNI.Text = u.DNI;
+            txtNombre.Text = u.Nombre;
+            txtApellido.Text = u.Apellido;
+            txtNombreUsuario.Text = u.NombreUsuario;
+            txtCorreo.Text = u.Email;
+            cmbRol.SelectedItem = u.Rol;
+            rbtnActivoSi.Checked = u.Activo;
+            rbtnActivoNo.Checked = !u.Activo;
 
             // Deshabilitar botones de acción y marcadores
             btnAgregar.Enabled = false;
@@ -345,7 +343,7 @@ namespace Sistema_SneakRush
                 {
                     FiltrarDgv();
                 }
-                else if (_modo == "Desbloquear")
+                else if (_modo == "Desbloquear" || _modo == "Bloquear")
                 {
                     Usuario486LP u = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
                     if (u == null) return;

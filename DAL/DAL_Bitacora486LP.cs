@@ -37,10 +37,8 @@ namespace DAL
                     respuesta = cmd.ExecuteNonQuery() > 0;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                // Es temporal para encontrar errores, luego se puede eliminar o reemplazar por un log adecuado
-                System.Diagnostics.Debug.WriteLine("ERROR DAL Registrar: " + ex.Message);
                 respuesta = false;
             }
 
@@ -70,7 +68,7 @@ namespace DAL
                                 Fecha = Convert.ToDateTime(dr["Fecha"]),
                                 Modulo = dr["Modulo"].ToString(),
                                 Descripcion = dr["Descripcion"].ToString(),
-                                Criticidad = dr["Criticidad"].ToString(),
+                                Criticidad = Convert.ToInt32(dr["Criticidad"]),
                                 DNI = dr["DNI"].ToString(),
                                 NombreUsuario = dr["NombreUsuario"].ToString(),
                                 Nombre = dr["Nombre"].ToString(),  
@@ -87,13 +85,7 @@ namespace DAL
 
             return lista;
         }
-        public List<BitacoraEvento486LP> Filtrar(
-            string dni,
-            string nombreUsuario,
-            string modulo,
-            string criticidad,
-            string fechaInicio,
-            string fechaFin)
+        public List<BitacoraEvento486LP> Filtrar(string dni, string nombreUsuario, string modulo, int? criticidad, string fechaInicio, string fechaFin)
         {
             List<BitacoraEvento486LP> lista = new List<BitacoraEvento486LP>();
 
@@ -112,7 +104,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@DNI", string.IsNullOrEmpty(dni) ? (object)DBNull.Value : dni);
                     cmd.Parameters.AddWithValue("@NombreUsuario", string.IsNullOrEmpty(nombreUsuario) ? (object)DBNull.Value : "%" + nombreUsuario + "%");
                     cmd.Parameters.AddWithValue("@Modulo", string.IsNullOrEmpty(modulo) ? (object)DBNull.Value : modulo);
-                    cmd.Parameters.AddWithValue("@Criticidad", string.IsNullOrEmpty(criticidad) ? (object)DBNull.Value : criticidad);
+                    cmd.Parameters.AddWithValue("@Criticidad", criticidad.HasValue ? (object)criticidad.Value : DBNull.Value);
                     cmd.Parameters.AddWithValue("@FechaInicio", string.IsNullOrEmpty(fechaInicio) ? (object)DBNull.Value : (object)fechaInicio);
                     cmd.Parameters.AddWithValue("@FechaFin", string.IsNullOrEmpty(fechaFin) ? (object)DBNull.Value : (object)fechaFin);
 
@@ -128,7 +120,7 @@ namespace DAL
                                 Fecha = Convert.ToDateTime(dr["Fecha"]),
                                 Modulo = dr["Modulo"].ToString(),
                                 Descripcion = dr["Descripcion"].ToString(),
-                                Criticidad = dr["Criticidad"].ToString(),
+                                Criticidad = Convert.ToInt32(dr["Criticidad"]),
                                 DNI = dr["DNI"].ToString(),
                                 NombreUsuario = dr["NombreUsuario"].ToString(),
                                 Nombre = dr["Nombre"].ToString(),

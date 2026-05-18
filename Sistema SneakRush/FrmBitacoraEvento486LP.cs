@@ -21,10 +21,10 @@ namespace Sistema_SneakRush
     {
 
         private BLL_Bitacora486LP _bll = new BLL_Bitacora486LP();
+
         public FrmBitacoraEvento486LP()
         {
             InitializeComponent();
-            //this.WindowState = FormWindowState.Maximized;
         }
 
         private void FrmBitacoraEvento486LP_Load(object sender, EventArgs e)
@@ -41,10 +41,9 @@ namespace Sistema_SneakRush
             dgtBitacoraEvento.AllowUserToAddRows = false;
             dgtBitacoraEvento.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgtBitacoraEvento.MultiSelect = false;
-
             dgtBitacoraEvento.Columns.Clear();
 
-            dgtBitacoraEvento.Columns.Add(new DataGridViewTextBoxColumn { Name = "colNumero", DataPropertyName = "Numero", HeaderText = "N°", Width = 60 });
+            dgtBitacoraEvento.Columns.Add(new DataGridViewTextBoxColumn { Name = "colNumero", DataPropertyName = "Numero", HeaderText = "N°", Width = 60  });
             dgtBitacoraEvento.Columns.Add(new DataGridViewTextBoxColumn { Name = "colFecha", DataPropertyName = "Fecha", HeaderText = "Fecha y Hora", Width = 160, DefaultCellStyle = { Format = "dd/MM/yyyy HH:mm:ss" } });
             dgtBitacoraEvento.Columns.Add(new DataGridViewTextBoxColumn { Name = "colNombreUsuario", DataPropertyName = "NombreUsuario", HeaderText = "Usuario", Width = 120 });
             dgtBitacoraEvento.Columns.Add(new DataGridViewTextBoxColumn { Name = "colDNI", DataPropertyName = "DNI", HeaderText = "DNI", Width = 100 });
@@ -64,21 +63,21 @@ namespace Sistema_SneakRush
             cmbModulo.Items.Add("Cambiar Contraseña");
             cmbModulo.Items.Add("Gestión Usuarios");
             cmbModulo.SelectedIndex = 0;
-
             cmbCriticidad.Items.Clear();
             cmbCriticidad.Items.Add("");
-            cmbCriticidad.Items.Add("Bajo");
-            cmbCriticidad.Items.Add("Medio");
-            cmbCriticidad.Items.Add("Alto");
-            cmbCriticidad.Items.Add("Muy Alto");
+            cmbCriticidad.Items.Add("1 - Muy Alta");
+            cmbCriticidad.Items.Add("2 - Alta");
+            cmbCriticidad.Items.Add("3 - Media");
+            cmbCriticidad.Items.Add("4 - Baja");
+            cmbCriticidad.Items.Add("5 - Muy Baja");
             cmbCriticidad.SelectedIndex = 0;
         }
 
         private void CargarGrilla()
         {
             string fechaInicio = DateTime.Today.AddDays(-3).ToString("yyyy-MM-dd");
-            string fechaFin = DateTime.Today.ToString("yyyy-MM-dd") + " 23:59:59";
-            List<BitacoraEvento486LP> lista = _bll.Filtrar("", "", "", "", fechaInicio, fechaFin);
+            string fechaFin    = DateTime.Today.ToString("yyyy-MM-dd") + " 23:59:59";
+            List<BitacoraEvento486LP> lista = _bll.Filtrar("", "", "", null, fechaInicio, fechaFin);
             ActualizarGrilla(lista);
         }
 
@@ -91,12 +90,13 @@ namespace Sistema_SneakRush
 
         private void btnAplicar_Click(object sender, EventArgs e)
         {
-            string dni = txtDNI.Text.Trim();
-            string modulo = cmbModulo.SelectedItem?.ToString() ?? "";
-            string criticidad = cmbCriticidad.SelectedItem?.ToString() ?? "";
+            string dni       = txtDNI.Text.Trim();
+            string modulo    = cmbModulo.SelectedItem?.ToString() ?? "";
             string fechaInicio = dtpFechaDesde.Checked ? dtpFechaDesde.Value.ToString("yyyy-MM-dd") : "";
+            string fechaFin    = dtpFechaHasta.Checked ? dtpFechaHasta.Value.ToString("yyyy-MM-dd") + " 23:59:59" : "";
 
-            string fechaFin = dtpFechaHasta.Checked ? dtpFechaHasta.Value.ToString("yyyy-MM-dd") + " 23:59:59" : "";
+            // El índice del combo coincide directamente con el número de criticidad
+            int? criticidad = cmbCriticidad.SelectedIndex > 0 ? cmbCriticidad.SelectedIndex : (int?)null;
 
             if (dtpFechaDesde.Checked && dtpFechaHasta.Checked && dtpFechaDesde.Value.Date > dtpFechaHasta.Value.Date)
             {
@@ -105,14 +105,13 @@ namespace Sistema_SneakRush
             }
 
             List<BitacoraEvento486LP> lista = _bll.Filtrar(dni, "", modulo, criticidad, fechaInicio, fechaFin);
-
             ActualizarGrilla(lista);
             btnCancelar.Text = "Cancelar";
 
-            if (lista.Count == 0)
+            if (lista.Count == 0) 
             {
-                MessageBox.Show("No se encontraron registros con los filtros aplicados.","Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+                MessageBox.Show("No se encontraron registros con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }   
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
@@ -121,7 +120,7 @@ namespace Sistema_SneakRush
             {
                 Resetear();
             }
-            else
+            else 
             {
                 this.Close();
             }
@@ -130,7 +129,7 @@ namespace Sistema_SneakRush
         private void Resetear()
         {
             txtDNI.Clear();
-            cmbModulo.SelectedIndex = 0;
+            cmbModulo.SelectedIndex     = 0;
             cmbCriticidad.SelectedIndex = 0;
             dtpFechaDesde.Checked = false;
             dtpFechaHasta.Checked = false;
@@ -147,19 +146,34 @@ namespace Sistema_SneakRush
             txtDetDescripcion.Clear();
         }
 
+        private void dgtBitacoraEvento_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgtBitacoraEvento.CurrentRow == null) return;
+
+            BitacoraEvento486LP ev = dgtBitacoraEvento.CurrentRow.DataBoundItem as BitacoraEvento486LP;
+            if (ev == null) return;
+
+            txtDetNumero.Text     = ev.Numero.ToString();
+            txtDetFecha.Text      = ev.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
+            txtDetUsuario.Text    = !string.IsNullOrEmpty(ev.Nombre) ? $"{ev.Nombre} {ev.Apellido}" : ev.NombreUsuario;
+            txtDetDNI.Text        = ev.DNI;
+            txtDetModulo.Text     = ev.Modulo;
+            txtDetDescripcion.Text = ev.Descripcion;
+            txtDetCriticidad.Text = $"{ev.Criticidad} - {Criticidad486LP.ATexto(ev.Criticidad)}";
+        }
+
         private void btnExportarPDF_Click(object sender, EventArgs e)
         {
             if (dgtBitacoraEvento.Rows.Count == 0)
             {
-                MessageBox.Show("No hay registros para exportar.", "Exportar PDF",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No hay registros para exportar.", "Exportar PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
-                sfd.Title = "Guardar reporte de bitácora";
-                sfd.Filter = "Archivo PDF (*.pdf)|*.pdf";
+                sfd.Title    = "Guardar reporte de bitácora";
+                sfd.Filter   = "Archivo PDF (*.pdf)|*.pdf";
                 sfd.FileName = $"Bitacora_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 
                 if (sfd.ShowDialog() != DialogResult.OK) return;
@@ -170,69 +184,53 @@ namespace Sistema_SneakRush
                     PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
                     doc.Open();
 
-                    // ── Fuentes ──
-                    PdfFont fuenteTitulo = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.WHITE);
+                    PdfFont fuenteTitulo    = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.WHITE);
                     PdfFont fuenteSubtitulo = FontFactory.GetFont(FontFactory.HELVETICA, 9f, new BaseColor(80, 80, 80));
-                    PdfFont fuenteHeader = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8f, BaseColor.WHITE);
-                    PdfFont fuenteDato = FontFactory.GetFont(FontFactory.HELVETICA, 7f, BaseColor.BLACK);
+                    PdfFont fuenteHeader    = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8f, BaseColor.WHITE);
+                    PdfFont fuenteDato      = FontFactory.GetFont(FontFactory.HELVETICA, 7f, BaseColor.BLACK);
 
-                    // ── Encabezado ──
                     PdfPTable encabezado = new PdfPTable(1) { WidthPercentage = 100 };
-
-                    PdfPCell celdaTitulo = new PdfPCell(new Phrase("SneakRush — Bitácora de Eventos", fuenteTitulo))
+                    encabezado.AddCell(new PdfPCell(new Phrase("SneakRush — Bitácora de Eventos", fuenteTitulo))
                     {
                         BackgroundColor = new BaseColor(33, 90, 160),
                         HorizontalAlignment = Element.ALIGN_CENTER,
-                        Padding = 8f,
-                        Border = PdfRectangle.NO_BORDER
-                    };
-                    encabezado.AddCell(celdaTitulo);
+                        Padding = 8f, Border = PdfRectangle.NO_BORDER
+                    });
 
-                    string usuario = Services.SessionManager486LP.ObtenerInstancia().UsuarioActual().NombreUsuario;
+                    string usuario  = SessionManager486LP.ObtenerInstancia().UsuarioActual().NombreUsuario;
                     string subtexto = $"Generado: {DateTime.Now:dd/MM/yyyy HH:mm}    |    Usuario: {usuario}    |    Registros: {dgtBitacoraEvento.Rows.Count}";
-
-                    PdfPCell celdaSub = new PdfPCell(new Phrase(subtexto, fuenteSubtitulo))
+                    encabezado.AddCell(new PdfPCell(new Phrase(subtexto, fuenteSubtitulo))
                     {
                         BackgroundColor = new BaseColor(220, 230, 245),
                         HorizontalAlignment = Element.ALIGN_CENTER,
-                        Padding = 5f,
-                        Border = PdfRectangle.NO_BORDER
-                    };
-                    encabezado.AddCell(celdaSub);
-
+                        Padding = 5f, Border = PdfRectangle.NO_BORDER
+                    });
                     doc.Add(encabezado);
                     doc.Add(new Paragraph(" "));
 
-                    // ── Tabla de datos ──
                     float[] anchos = { 4f, 13f, 11f, 9f, 10f, 12f, 41f };
-                    PdfPTable tabla = new PdfPTable(anchos.Length)
-                    {
-                        WidthPercentage = 100,
-                        SpacingBefore = 4f
-                    };
+                    PdfPTable tabla = new PdfPTable(anchos.Length) { WidthPercentage = 100, SpacingBefore = 4f };
                     tabla.SetWidths(anchos);
 
-                    BaseColor colorMuyAlto = new BaseColor(220, 53, 69);
-                    BaseColor colorAlto = new BaseColor(255, 140, 0);
-                    BaseColor colorMedio = new BaseColor(255, 193, 7);
-                    BaseColor colorBajo = new BaseColor(40, 167, 69);
-                    BaseColor bgClaro = new BaseColor(245, 248, 255);
+                    BaseColor colorMuyAlta = new BaseColor(220, 53,  69);
+                    BaseColor colorAlta    = new BaseColor(255, 140,  0);
+                    BaseColor colorMedia   = new BaseColor(255, 193,  7);
+                    BaseColor colorBaja    = new BaseColor(40,  167, 69);
+                    BaseColor colorMuyBaja = new BaseColor(108, 117, 125);
+                    BaseColor bgClaro      = new BaseColor(245, 248, 255);
 
-                    // ── Headers ──
                     string[] headers = { "N°", "Fecha y Hora", "Módulo", "Criticidad", "DNI", "Usuario", "Descripción" };
                     foreach (string h in headers)
                     {
-                        PdfPCell cell = new PdfPCell(new Phrase(h, fuenteHeader))
+                        tabla.AddCell(new PdfPCell(new Phrase(h, fuenteHeader))
                         {
                             BackgroundColor = new BaseColor(33, 90, 160),
                             HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            VerticalAlignment   = Element.ALIGN_MIDDLE,
                             Padding = 5f
-                        };
-                        tabla.AddCell(cell);
+                        });
                     }
 
-                    // ── Filas ──
                     bool filaAlterna = false;
 
                     foreach (DataGridViewRow fila in dgtBitacoraEvento.Rows)
@@ -243,79 +241,71 @@ namespace Sistema_SneakRush
                         string numero = fila.Cells["colNumero"].Value?.ToString() ?? "";
                         string fecha = fila.Cells["colFecha"].Value?.ToString() ?? "";
                         string modulo = fila.Cells["colModulo"].Value?.ToString() ?? "";
-                        string criticidad = fila.Cells["colCriticidad"].Value?.ToString() ?? "";
                         string dni = fila.Cells["colDNI"].Value?.ToString() ?? "";
                         string nombreUsr = fila.Cells["colNombreUsuario"].Value?.ToString() ?? "";
                         string descripcion = fila.Cells["colDescripcion"].Value?.ToString() ?? "";
 
-                        // Color según criticidad — sin switch expression (C# 7.3)
+                        // Criticidad es int y se convierte a texto para el PDF 
+                        int critValor = 0;
+                        int.TryParse(fila.Cells["colCriticidad"].Value?.ToString(), out critValor);
+                        string critTexto = Criticidad486LP.ATexto(critValor);
+
                         BaseColor bgCrit;
                         BaseColor fuenteCritColor;
 
-                        if (criticidad == "Muy Alto")
+                        if (critValor == Criticidad486LP.MuyAlta)
                         {
-                            bgCrit = colorMuyAlto;
-                            fuenteCritColor = BaseColor.WHITE;
+                            { bgCrit = colorMuyAlta; fuenteCritColor = BaseColor.WHITE; }
                         }
-                        else if (criticidad == "Alto")
+                        else if (critValor == Criticidad486LP.Alta) 
                         {
-                            bgCrit = colorAlto;
-                            fuenteCritColor = BaseColor.WHITE;
+                            { bgCrit = colorAlta; fuenteCritColor = BaseColor.WHITE; }
                         }
-                        else if (criticidad == "Medio")
+                        else if (critValor == Criticidad486LP.Media) 
                         {
-                            bgCrit = colorMedio;
-                            fuenteCritColor = BaseColor.BLACK;
+                            { bgCrit = colorMedia; fuenteCritColor = BaseColor.BLACK; }
                         }
-                        else if (criticidad == "Bajo")
+                        else if (critValor == Criticidad486LP.Baja) 
                         {
-                            bgCrit = colorBajo;
-                            fuenteCritColor = BaseColor.WHITE;
+                            { bgCrit = colorBaja; fuenteCritColor = BaseColor.WHITE; }
                         }
-                        else
+                        else 
                         {
-                            bgCrit = bgFila;
-                            fuenteCritColor = BaseColor.BLACK;
-                        }
+                            { bgCrit = colorMuyBaja; fuenteCritColor = BaseColor.WHITE; }
+                        }                                        
 
                         PdfFont fuenteCrit = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 7f, fuenteCritColor);
 
                         AgregarCelda(tabla, numero, fuenteDato, bgFila, Element.ALIGN_CENTER);
                         AgregarCelda(tabla, fecha, fuenteDato, bgFila, Element.ALIGN_CENTER);
                         AgregarCelda(tabla, modulo, fuenteDato, bgFila, Element.ALIGN_LEFT);
-                        AgregarCelda(tabla, criticidad, fuenteCrit, bgCrit, Element.ALIGN_CENTER);
+                        AgregarCelda(tabla, critTexto, fuenteCrit, bgCrit, Element.ALIGN_CENTER);
                         AgregarCelda(tabla, dni, fuenteDato, bgFila, Element.ALIGN_CENTER);
                         AgregarCelda(tabla, nombreUsr, fuenteDato, bgFila, Element.ALIGN_LEFT);
                         AgregarCelda(tabla, descripcion, fuenteDato, bgFila, Element.ALIGN_LEFT);
                     }
 
                     doc.Add(tabla);
-
                     doc.Add(new Paragraph(" "));
-                    Paragraph pie = new Paragraph(
-                        "SneakRush © 2026 — Universidad Abierta Interamericana — Ingeniería de Software",
-                        FontFactory.GetFont(FontFactory.HELVETICA, 7f, new BaseColor(150, 150, 150)));
+
+                    Paragraph pie = new Paragraph("SneakRush 2026 — Universidad Abierta Interamericana — Ingeniería de Software",FontFactory.GetFont(FontFactory.HELVETICA, 7f, new BaseColor(150, 150, 150)));
                     pie.Alignment = Element.ALIGN_CENTER;
                     doc.Add(pie);
-
                     doc.Close();
 
-                    MessageBox.Show($"PDF exportado correctamente:\n{sfd.FileName}",
-                        "Exportar PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    MessageBox.Show($"PDF exportado correctamente:\n{sfd.FileName}", "Exportar PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     System.Diagnostics.Process.Start(sfd.FileName);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error al exportar PDF:\n{ex.Message}",
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error al exportar PDF:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void AgregarCelda(PdfPTable tabla, string texto, PdfFont fuente, BaseColor fondo, int alineacion)
         {
-            PdfPCell cell = new PdfPCell(new Phrase(texto, fuente))
+            tabla.AddCell(new PdfPCell(new Phrase(texto, fuente))
             {
                 BackgroundColor = fondo,
                 HorizontalAlignment = alineacion,
@@ -323,25 +313,12 @@ namespace Sistema_SneakRush
                 Padding = 4f,
                 BorderColor = new BaseColor(200, 210, 230),
                 BorderWidth = 0.5f
-            };
-            tabla.AddCell(cell);
+            });
         }
 
-        private void dgtBitacoraEvento_SelectionChanged(object sender, EventArgs e)
+        private void dgtBitacoraEvento_SelectionChanged_1(object sender, EventArgs e) 
         {
-            if (dgtBitacoraEvento.CurrentRow == null) return;
 
-            BitacoraEvento486LP ev = dgtBitacoraEvento.CurrentRow.DataBoundItem as BitacoraEvento486LP;
-
-            if (ev == null) return;
-
-            txtDetNumero.Text = ev.Numero.ToString();
-            txtDetFecha.Text = ev.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
-            txtDetUsuario.Text = !string.IsNullOrEmpty(ev.Nombre) ? $"{ev.Nombre} {ev.Apellido}" : ev.NombreUsuario;
-            txtDetDNI.Text = ev.DNI;
-            txtDetModulo.Text = ev.Modulo;
-            txtDetCriticidad.Text = ev.Criticidad;
-            txtDetDescripcion.Text = ev.Descripcion;
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
