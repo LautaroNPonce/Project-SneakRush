@@ -9,7 +9,6 @@ namespace Services
 {
     public class SessionManager486LP
     {
-        // Patron Singleton 
         private SessionManager486LP() { }
  
         public static SessionManager486LP Instancia { get; private set; } = null;
@@ -25,15 +24,16 @@ namespace Services
         // Estado de sesión 
         private Usuario486LP _usuario;
         private string _idiomaActual;
- 
-        public string IdiomaActual
-        {
-            get { return _idiomaActual; }
-            set
-            {
-                _idiomaActual = value; // Se activa cuando implemento el patrón Observer de idioma
-            }
-        }
+
+        //Esto es parte de la segunda entrega
+        //public string IdiomaActual
+        //{
+        //    get { return _idiomaActual; }
+        //    set
+        //    {
+        //        _idiomaActual = value;
+        //    }
+        //}
  
         // Devuelve el usuario actualmente logueado.
         public Usuario486LP UsuarioActual()
@@ -41,20 +41,17 @@ namespace Services
             return _usuario;
         }
  
-        // Inicia sesión guardando el usuario en la instancia
         public void LogIN(Usuario486LP usuario)
         {
             _usuario = usuario;
         }
  
-        // Cierra sesión destruyendo la instancia.
         public void LogOut()
         {
             _usuario  = null;
             Instancia = null;
         }
- 
-        // Indica si hay un usuario logueado actualmente
+
         public bool IsLogged()
         {
             return _usuario != null;

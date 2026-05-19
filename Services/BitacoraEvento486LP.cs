@@ -12,7 +12,7 @@ namespace Services
         public DateTime Fecha { get; set; }
         public string Modulo { get; set; }
         public string Descripcion { get; set; }
-        public int Criticidad { get; set; }  // 1=Muy Alta · 2=Alta · 3=Media · 4=Baja · 5=Muy Baja
+        public int Criticidad { get; set; }
         public string DNI { get; set; }
         public string NombreUsuario { get; set; }
         public string Nombre { get; set; }
@@ -21,7 +21,7 @@ namespace Services
         // Constructores
         public BitacoraEvento486LP() { }
 
-        // Constructor cuando creás un evento nuevo para insertar en la BD
+        // Lo uso para REGISTRAR un evento nuevo en la BD (En BLL_Usuarios)
         public BitacoraEvento486LP(string modulo, string descripcion, int criticidad, string dni, string nombreUsuario = "")
         {
             Fecha = DateTime.Now;
@@ -32,7 +32,7 @@ namespace Services
             NombreUsuario = nombreUsuario;
         }
 
-        // Constructor cuando creás un evento nuevo para insertar en la BD
+        // Lo uso para LEER un evento desde la BD (En DAL_Bitacora — Listar y Filtrar)
         public BitacoraEvento486LP(int numero, DateTime fecha, string modulo, string descripcion, int criticidad, string dni, string nombreUsuario = "")
         {
             Numero = numero;
@@ -44,7 +44,6 @@ namespace Services
             NombreUsuario = nombreUsuario;
         }
 
-        // Método para mostrar el evento en formato legible
         public override string ToString()
         {
             return $"[{Criticidad486LP.ATexto(Criticidad)}] {Fecha:dd/MM/yyyy HH:mm} — {Modulo}: {Descripcion}";

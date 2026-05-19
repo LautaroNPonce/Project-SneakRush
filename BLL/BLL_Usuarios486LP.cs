@@ -13,7 +13,7 @@ namespace BLL
         private DAL_Usuarios486LP ObjetoDAL = new DAL_Usuarios486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Valida que la contraseña cumpla la política de seguridad (mínimo 8 caracteres, al menos una mayúscula y una minúscula).
+        // Valida que la contraseña cumpla la política de seguridad (mínimo 8 caracteres, al menos una mayúscula y una minúscula)
         public bool ValidarContraseña(string contraseña, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -142,17 +142,42 @@ namespace BLL
 
             try
             {
-                if (string.IsNullOrEmpty(obj.DNI)) { Mensaje = "El DNI es obligatorio."; return false; }
-                if (string.IsNullOrEmpty(obj.Nombre)) { Mensaje = "El nombre es obligatorio."; return false; }
-                if (string.IsNullOrEmpty(obj.Apellido)) { Mensaje = "El apellido es obligatorio."; return false; }
-                if (string.IsNullOrEmpty(obj.NombreUsuario)) { Mensaje = "El nombre de usuario es obligatorio."; return false; }
-                if (string.IsNullOrEmpty(obj.Email)) { Mensaje = "El correo es obligatorio."; return false; }
-                if (!obj.Email.Contains("@") || !obj.Email.Contains(".")) { Mensaje = "El formato del correo no es válido."; return false; }
+                if (string.IsNullOrEmpty(obj.DNI))
+                {
+                    { Mensaje = "El DNI es obligatorio."; return false; }
+                }
+
+                if (string.IsNullOrEmpty(obj.Nombre)) 
+                { 
+                    { Mensaje = "El nombre es obligatorio."; return false; } 
+                }
+                if (string.IsNullOrEmpty(obj.Apellido)) 
+                { 
+                    { Mensaje = "El apellido es obligatorio."; return false; } 
+                }
+                if (string.IsNullOrEmpty(obj.NombreUsuario)) 
+                { 
+                    { Mensaje = "El nombre de usuario es obligatorio."; return false; } 
+                }
+                if (string.IsNullOrEmpty(obj.Email)) 
+                { 
+                    { Mensaje = "El correo es obligatorio."; return false; } 
+                }
+                if (!obj.Email.Contains("@") || !obj.Email.Contains(".")) 
+                { 
+                    { Mensaje = "El formato del correo no es válido."; return false; } 
+                }
 
                 List<Usuario486LP> todos = ObjetoDAL.Listar();
 
-                if (todos.Any(u => u.DNI == obj.DNI)) { Mensaje = "El DNI ingresado ya se encuentra registrado."; return false; }
-                if (todos.Any(u => u.NombreUsuario.ToLower() == obj.NombreUsuario.ToLower())) { Mensaje = "El nombre de usuario ya se encuentra registrado."; return false; }
+                if (todos.Any(u => u.DNI == obj.DNI)) 
+                { 
+                    { Mensaje = "El DNI ingresado ya se encuentra registrado."; return false; } 
+                }
+                if (todos.Any(u => u.NombreUsuario.ToLower() == obj.NombreUsuario.ToLower())) 
+                { 
+                    { Mensaje = "El nombre de usuario ya se encuentra registrado."; return false; } 
+                }
 
                 contraseñaTemporal = obj.Apellido + obj.DNI;
                 obj.Contraseña = Encriptacion486LP.GenerarHash(contraseñaTemporal);
@@ -164,8 +189,7 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario creado: {obj.NombreUsuario} (DNI: {obj.DNI}).", Criticidad486LP.Alta,
-                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario creado: {obj.NombreUsuario} (DNI: {obj.DNI}).", Criticidad486LP.Alta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
@@ -185,17 +209,28 @@ namespace BLL
 
             try
             {
-                if (string.IsNullOrEmpty(obj.Nombre)) { Mensaje = "El nombre es obligatorio."; return false; }
-                if (string.IsNullOrEmpty(obj.Apellido)) { Mensaje = "El apellido es obligatorio."; return false; }
-                if (string.IsNullOrEmpty(obj.Email)) { Mensaje = "El correo es obligatorio."; return false; }
-                if (!obj.Email.Contains("@") || !obj.Email.Contains(".")) { Mensaje = "El formato del correo no es válido."; return false; }
+                if (string.IsNullOrEmpty(obj.Nombre)) 
+                { 
+                    { Mensaje = "El nombre es obligatorio."; return false; } 
+                }
+                if (string.IsNullOrEmpty(obj.Apellido)) 
+                { 
+                    { Mensaje = "El apellido es obligatorio."; return false; } 
+                }
+                if (string.IsNullOrEmpty(obj.Email)) 
+                { 
+                    { Mensaje = "El correo es obligatorio."; return false; } 
+                }
+                if (!obj.Email.Contains("@") || !obj.Email.Contains(".")) 
+                { 
+                    { Mensaje = "El formato del correo no es válido."; return false; } 
+                }
 
                 bool resultado = ObjetoDAL.Modificar(obj, out Mensaje);
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario modificado: {obj.NombreUsuario} (DNI: {obj.DNI}).", Criticidad486LP.Media,
-                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario modificado: {obj.NombreUsuario} (DNI: {obj.DNI}).", Criticidad486LP.Media, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
@@ -217,8 +252,7 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario eliminado. IdUsuario: {idUsuario}.", Criticidad486LP.Alta,
-                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario eliminado. IdUsuario: {idUsuario}.", Criticidad486LP.Alta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
@@ -240,8 +274,7 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario desbloqueado. DNI: {dni}.", Criticidad486LP.MuyAlta,
-                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario desbloqueado. DNI: {dni}.", Criticidad486LP.MuyAlta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
@@ -263,8 +296,7 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario bloqueado manualmente. DNI: {dni}.", Criticidad486LP.MuyAlta,
-                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario bloqueado manualmente. DNI: {dni}.", Criticidad486LP.MuyAlta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
@@ -286,8 +318,7 @@ namespace BLL
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Estado Activo invertido. DNI: {dni}.", Criticidad486LP.Media,
-                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Estado Activo invertido. DNI: {dni}.", Criticidad486LP.Media, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
@@ -306,13 +337,25 @@ namespace BLL
             Mensaje = string.Empty;
             try
             {
-                if (contraseñaNueva != contraseñaConfirmar) { Mensaje = "La nueva contraseña y la confirmación no coinciden."; return false; }
-                if (contraseñaNueva == contraseñaActual) { Mensaje = "La nueva contraseña no puede ser igual a la actual."; return false; }
-                if (!ValidarContraseña(contraseñaNueva, out Mensaje)) return false;
+                if (contraseñaNueva != contraseñaConfirmar) 
+                { 
+                    { Mensaje = "La nueva contraseña y la confirmación no coinciden."; return false; } 
+                }
+                if (contraseñaNueva == contraseñaActual) 
+                { 
+                    { Mensaje = "La nueva contraseña no puede ser igual a la actual."; return false; } 
+                }
+                if (!ValidarContraseña(contraseñaNueva, out Mensaje)) 
+                { 
+                    return false; 
+                }
 
                 Usuario486LP u = ObjetoDAL.ObtenerPorNombreUsuario(SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "");
 
-                if (u == null) { Mensaje = "No se pudo obtener el usuario de la sesión."; return false; }
+                if (u == null) 
+                { 
+                    { Mensaje = "No se pudo obtener el usuario de la sesión."; return false; } 
+                }
 
                 string hashActual = Encriptacion486LP.GenerarHash(contraseñaActual);
 

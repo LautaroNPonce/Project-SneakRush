@@ -22,7 +22,7 @@ namespace Sistema_SneakRush
 
         private void FrmIniciarSesionLP486_Load(object sender, EventArgs e)
         {
-            txtUsuario.Focus(); // cursor directo en Usuario
+            txtUsuario.Focus();
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)
@@ -30,7 +30,6 @@ namespace Sistema_SneakRush
             string nombreUsuario = txtUsuario.Text.Trim();
             string contraseña = txtContraseña.Text;
 
-            // Validación básica de campos vacíos
             if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(contraseña))
             {
                 MessageBox.Show("Por favor completá todos los campos.","SneakRush — Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -46,7 +45,6 @@ namespace Sistema_SneakRush
             switch (resultado)
             {
                 case 1:
-                    // Login exitoso = abrir Menú Principal
                     SessionManager486LP.ObtenerInstancia().LogIN(usuario);
                     FrmMenuPrincipal486LP menu = new FrmMenuPrincipal486LP();
                     menu.Show();

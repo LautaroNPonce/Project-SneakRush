@@ -24,7 +24,6 @@ namespace BE
             Telefono = telefono;
         }
 
-        // Sobrescribe el método ToString para mostrar la información del cliente de manera legible
         public override string ToString()
         {
             return $"{Nombre} {Apellido} (DNI: {DNI})";

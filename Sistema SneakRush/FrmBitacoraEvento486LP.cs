@@ -76,7 +76,7 @@ namespace Sistema_SneakRush
         private void CargarGrilla()
         {
             string fechaInicio = DateTime.Today.AddDays(-3).ToString("yyyy-MM-dd");
-            string fechaFin    = DateTime.Today.ToString("yyyy-MM-dd") + " 23:59:59";
+            string fechaFin = DateTime.Today.ToString("yyyy-MM-dd") + " 23:59:59";
             List<BitacoraEvento486LP> lista = _bll.Filtrar("", "", "", null, fechaInicio, fechaFin);
             ActualizarGrilla(lista);
         }
@@ -90,10 +90,10 @@ namespace Sistema_SneakRush
 
         private void btnAplicar_Click(object sender, EventArgs e)
         {
-            string dni       = txtDNI.Text.Trim();
-            string modulo    = cmbModulo.SelectedItem?.ToString() ?? "";
+            string dni = txtDNI.Text.Trim();
+            string modulo = cmbModulo.SelectedItem?.ToString() ?? "";
             string fechaInicio = dtpFechaDesde.Checked ? dtpFechaDesde.Value.ToString("yyyy-MM-dd") : "";
-            string fechaFin    = dtpFechaHasta.Checked ? dtpFechaHasta.Value.ToString("yyyy-MM-dd") + " 23:59:59" : "";
+            string fechaFin = dtpFechaHasta.Checked ? dtpFechaHasta.Value.ToString("yyyy-MM-dd") + " 23:59:59" : "";
 
             // El índice del combo coincide directamente con el número de criticidad
             int? criticidad = cmbCriticidad.SelectedIndex > 0 ? cmbCriticidad.SelectedIndex : (int?)null;
@@ -153,11 +153,11 @@ namespace Sistema_SneakRush
             BitacoraEvento486LP ev = dgtBitacoraEvento.CurrentRow.DataBoundItem as BitacoraEvento486LP;
             if (ev == null) return;
 
-            txtDetNumero.Text     = ev.Numero.ToString();
-            txtDetFecha.Text      = ev.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
-            txtDetUsuario.Text    = !string.IsNullOrEmpty(ev.Nombre) ? $"{ev.Nombre} {ev.Apellido}" : ev.NombreUsuario;
-            txtDetDNI.Text        = ev.DNI;
-            txtDetModulo.Text     = ev.Modulo;
+            txtDetNumero.Text = ev.Numero.ToString();
+            txtDetFecha.Text = ev.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
+            txtDetUsuario.Text = !string.IsNullOrEmpty(ev.Nombre) ? $"{ev.Nombre} {ev.Apellido}" : ev.NombreUsuario;
+            txtDetDNI.Text = ev.DNI;
+            txtDetModulo.Text = ev.Modulo;
             txtDetDescripcion.Text = ev.Descripcion;
             txtDetCriticidad.Text = $"{ev.Criticidad} - {Criticidad486LP.ATexto(ev.Criticidad)}";
         }
@@ -172,8 +172,8 @@ namespace Sistema_SneakRush
 
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
-                sfd.Title    = "Guardar reporte de bitácora";
-                sfd.Filter   = "Archivo PDF (*.pdf)|*.pdf";
+                sfd.Title = "Guardar reporte de bitácora";
+                sfd.Filter = "Archivo PDF (*.pdf)|*.pdf";
                 sfd.FileName = $"Bitacora_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 
                 if (sfd.ShowDialog() != DialogResult.OK) return;
@@ -184,10 +184,10 @@ namespace Sistema_SneakRush
                     PdfWriter.GetInstance(doc, new FileStream(sfd.FileName, FileMode.Create));
                     doc.Open();
 
-                    PdfFont fuenteTitulo    = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.WHITE);
+                    PdfFont fuenteTitulo = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.WHITE);
                     PdfFont fuenteSubtitulo = FontFactory.GetFont(FontFactory.HELVETICA, 9f, new BaseColor(80, 80, 80));
-                    PdfFont fuenteHeader    = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8f, BaseColor.WHITE);
-                    PdfFont fuenteDato      = FontFactory.GetFont(FontFactory.HELVETICA, 7f, BaseColor.BLACK);
+                    PdfFont fuenteHeader = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8f, BaseColor.WHITE);
+                    PdfFont fuenteDato = FontFactory.GetFont(FontFactory.HELVETICA, 7f, BaseColor.BLACK);
 
                     PdfPTable encabezado = new PdfPTable(1) { WidthPercentage = 100 };
                     encabezado.AddCell(new PdfPCell(new Phrase("SneakRush — Bitácora de Eventos", fuenteTitulo))
@@ -197,8 +197,8 @@ namespace Sistema_SneakRush
                         Padding = 8f, Border = PdfRectangle.NO_BORDER
                     });
 
-                    string usuario  = SessionManager486LP.ObtenerInstancia().UsuarioActual().NombreUsuario;
-                    string subtexto = $"Generado: {DateTime.Now:dd/MM/yyyy HH:mm}    |    Usuario: {usuario}    |    Registros: {dgtBitacoraEvento.Rows.Count}";
+                    string usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual().NombreUsuario;
+                    string subtexto = $"Generado: {DateTime.Now:dd/MM/yyyy HH:mm} | Usuario: {usuario} | Registros: {dgtBitacoraEvento.Rows.Count}";
                     encabezado.AddCell(new PdfPCell(new Phrase(subtexto, fuenteSubtitulo))
                     {
                         BackgroundColor = new BaseColor(220, 230, 245),
@@ -213,11 +213,11 @@ namespace Sistema_SneakRush
                     tabla.SetWidths(anchos);
 
                     BaseColor colorMuyAlta = new BaseColor(220, 53,  69);
-                    BaseColor colorAlta    = new BaseColor(255, 140,  0);
-                    BaseColor colorMedia   = new BaseColor(255, 193,  7);
-                    BaseColor colorBaja    = new BaseColor(40,  167, 69);
+                    BaseColor colorAlta = new BaseColor(255, 140,  0);
+                    BaseColor colorMedia = new BaseColor(255, 193,  7);
+                    BaseColor colorBaja = new BaseColor(40,  167, 69);
                     BaseColor colorMuyBaja = new BaseColor(108, 117, 125);
-                    BaseColor bgClaro      = new BaseColor(245, 248, 255);
+                    BaseColor bgClaro = new BaseColor(245, 248, 255);
 
                     string[] headers = { "N°", "Fecha y Hora", "Módulo", "Criticidad", "DNI", "Usuario", "Descripción" };
                     foreach (string h in headers)
@@ -226,7 +226,7 @@ namespace Sistema_SneakRush
                         {
                             BackgroundColor = new BaseColor(33, 90, 160),
                             HorizontalAlignment = Element.ALIGN_CENTER,
-                            VerticalAlignment   = Element.ALIGN_MIDDLE,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
                             Padding = 5f
                         });
                     }

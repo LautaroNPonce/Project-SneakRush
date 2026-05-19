@@ -13,14 +13,12 @@ namespace BE
 
         public Perfil486LP() { }
 
-        // Constructor para inicializar el perfil con un ID y un nombre
         public Perfil486LP(int idPerfil, string nombre)
         {
             IdPerfil = idPerfil;
             Nombre = nombre;
         }
 
-        // Sobrescribir el método ToString para mostrar el nombre del perfil
         public override string ToString()
         {
             return Nombre;

@@ -41,6 +41,7 @@
             this.btnVerContraseña = new System.Windows.Forms.Button();
             this.btnVerNueva = new System.Windows.Forms.Button();
             this.btnVerConfirmar = new System.Windows.Forms.Button();
+            this.btnSalir = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -133,7 +134,7 @@
             this.btnAceptar.BackColor = System.Drawing.SystemColors.HotTrack;
             this.btnAceptar.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAceptar.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnAceptar.Location = new System.Drawing.Point(344, 291);
+            this.btnAceptar.Location = new System.Drawing.Point(189, 285);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(191, 59);
             this.btnAceptar.TabIndex = 9;
@@ -189,6 +190,19 @@
             this.btnVerConfirmar.UseVisualStyleBackColor = false;
             this.btnVerConfirmar.Click += new System.EventHandler(this.btnVerConfirmar_Click);
             // 
+            // btnSalir
+            // 
+            this.btnSalir.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.btnSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSalir.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnSalir.Location = new System.Drawing.Point(430, 285);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(191, 59);
+            this.btnSalir.TabIndex = 13;
+            this.btnSalir.Text = "Salir";
+            this.btnSalir.UseVisualStyleBackColor = false;
+            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
+            // 
             // FrmCambiarContraseña486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -196,6 +210,7 @@
             this.BackColor = System.Drawing.SystemColors.Highlight;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.ControlBox = false;
+            this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.btnVerConfirmar);
             this.Controls.Add(this.btnVerNueva);
             this.Controls.Add(this.btnVerContraseña);
@@ -232,5 +247,6 @@
         private System.Windows.Forms.Button btnVerContraseña;
         private System.Windows.Forms.Button btnVerNueva;
         private System.Windows.Forms.Button btnVerConfirmar;
+        private System.Windows.Forms.Button btnSalir;
     }
 }

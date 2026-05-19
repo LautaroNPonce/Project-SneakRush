@@ -13,7 +13,7 @@ namespace DAL
     {
         public static string BD = ConfigurationManager.ConnectionStrings["ConexionBD"].ToString();
 
-        // Ejecuta una consulta SELECT y devuelve los resultados en un DataTable.
+        // Ejecuto una consulta SELECT y devuelve los resultados en un DataTable.
         public DataTable Leer(string consulta, bool esProcedimiento = false, List<SqlParameter> parametros = null)
         {
             using (SqlConnection con = new SqlConnection(BD))
@@ -21,7 +21,9 @@ namespace DAL
             {
                 cmd.CommandType = esProcedimiento ? CommandType.StoredProcedure : CommandType.Text;
                 if (parametros != null)
-                    cmd.Parameters.AddRange(parametros.ToArray());
+                { 
+                    cmd.Parameters.AddRange(parametros.ToArray()); 
+                }
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -30,7 +32,7 @@ namespace DAL
             }
         }
 
-        //Ejecuta una consulta de escritura (INSERT, UPDATE, DELETE).
+        //Ejecuto una consulta de escritura (INSERT, UPDATE, DELETE).
         public bool Escribir(string consulta, bool esProcedimiento = false, List<SqlParameter> parametros = null)
         {
             using (SqlConnection con = new SqlConnection(BD))
@@ -38,14 +40,16 @@ namespace DAL
             {
                 cmd.CommandType = esProcedimiento ? CommandType.StoredProcedure : CommandType.Text;
                 if (parametros != null)
+                { 
                     cmd.Parameters.AddRange(parametros.ToArray());
+                }
 
                 con.Open();
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
 
-        // Ejecuta una consulta que devuelve un único valor (COUNT, MAX, etc).
+        // Ejecuto una consulta que devuelve un único valor (COUNT, MAX, etc).
         public object LeerScalar(string consulta, bool esProcedimiento = false, List<SqlParameter> parametros = null)
         {
             using (SqlConnection con = new SqlConnection(BD))
@@ -53,7 +57,9 @@ namespace DAL
             {
                 cmd.CommandType = esProcedimiento ? CommandType.StoredProcedure : CommandType.Text;
                 if (parametros != null)
+                {
                     cmd.Parameters.AddRange(parametros.ToArray());
+                }
 
                 con.Open();
                 return cmd.ExecuteScalar();

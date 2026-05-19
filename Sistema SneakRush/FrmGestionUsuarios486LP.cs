@@ -17,8 +17,8 @@ namespace Sistema_SneakRush
     {
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
         private string _modo = "Ninguno";
-        private int _idUsuarioSeleccionado = -1; // Variable para almacenar el ID del usuario seleccionado
-        private string _dniUsuarioSeleccionado = string.Empty; // Variable para almacenar el DNI del usuario seleccionado
+        private int _idUsuarioSeleccionado = -1; 
+        private string _dniUsuarioSeleccionado = string.Empty; 
 
         public FrmGestionUsuarios486LP()
         {
@@ -168,13 +168,11 @@ namespace Sistema_SneakRush
 
             SetModo("Modificar");
 
-            // Cargar datos del usuario seleccionado en los campos
             Usuario486LP u = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
             if (u != null) CargarCamposDesdeUsuario(u);
-
             HabilitarCampos();
-            txtDNI.Enabled = false; // DNI no se modifica
-            txtNombreUsuario.Enabled = false; // NombreUsuario no se modifica
+            txtDNI.Enabled = false;
+            txtNombreUsuario.Enabled = false;
             btnCancelar.Enabled = true;
         }
 
@@ -192,8 +190,7 @@ namespace Sistema_SneakRush
             Usuario486LP u = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
             if (u != null)
             {
-                DeshabilitarCampos(); // limpia y deshabilita
-                // Repoblar manualmente en modo solo lectura
+                DeshabilitarCampos();
                 txtDNI.Text = u.DNI;
                 txtNombre.Text = u.Nombre;
                 txtApellido.Text = u.Apellido;
@@ -228,8 +225,6 @@ namespace Sistema_SneakRush
             cmbRol.SelectedItem = u.Rol;
             rbtnActivoSi.Checked = u.Activo;
             rbtnActivoNo.Checked = !u.Activo;
-
-            // Deshabilitar botones de acción y marcadores
             btnAgregar.Enabled = false;
             btnModificar.Enabled = false;
             btnEliminar.Enabled = false;
@@ -242,7 +237,7 @@ namespace Sistema_SneakRush
         {
             string msg;
 
-            if (_modo == "Añadir") 
+            if (_modo == "Añadir")
             {
                 if (!ValidarCampos()) return;
                 Usuario486LP nuevo = new Usuario486LP
@@ -273,7 +268,10 @@ namespace Sistema_SneakRush
             }
             else if (_modo == "Modificar")
             {
-                if (!ValidarCampos()) return;
+                if (!ValidarCampos())
+                {
+                    return;
+                }
                 Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
                 if (usuarioActual != null && usuarioActual.IdUsuario == _idUsuarioSeleccionado && !rbtnActivoSi.Checked)
                 {
@@ -311,11 +309,7 @@ namespace Sistema_SneakRush
                 Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
                 if (usuarioActual != null && usuarioActual.IdUsuario == _idUsuarioSeleccionado)
                 {
-                    MessageBox.Show(
-                        "No puede eliminar su propia cuenta mientras está en uso.",
-                        "Acción no permitida",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    MessageBox.Show("No puede eliminar su propia cuenta mientras está en uso.", "Acción no permitida",MessageBoxButtons.OK,MessageBoxIcon.Error);
                     return;
                 }
 
@@ -346,9 +340,12 @@ namespace Sistema_SneakRush
                 else if (_modo == "Desbloquear" || _modo == "Bloquear")
                 {
                     Usuario486LP u = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
-                    if (u == null) return;
+                    if (u == null) 
+                    { 
+                        return; 
+                    }
 
-                    // Anti-autobloqueo
+                    // Esto lo utilizo para el Anti-autobloqueo
                     Usuario486LP usuarioSesion = SessionManager486LP.ObtenerInstancia().UsuarioActual();
                     if (usuarioSesion != null && usuarioSesion.IdUsuario == u.IdUsuario && !u.Bloqueado)
                     {
@@ -359,11 +356,12 @@ namespace Sistema_SneakRush
                     string accion = u.Bloqueado ? "desbloquear" : "bloquear";
                     DialogResult confirm = MessageBox.Show($"¿Desea {accion} al usuario '{u.NombreUsuario}'?", "Confirmar acción", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                    if (confirm != DialogResult.Yes) return;
+                    if (confirm != DialogResult.Yes) 
+                    { 
+                        return; 
+                    }
 
-                    bool resultado = u.Bloqueado
-                        ? _bll.Desbloquear(_dniUsuarioSeleccionado, out msg)
-                        : _bll.BloquearPorDNI(_dniUsuarioSeleccionado, out msg);
+                    bool resultado = u.Bloqueado ? _bll.Desbloquear(_dniUsuarioSeleccionado, out msg) : _bll.BloquearPorDNI(_dniUsuarioSeleccionado, out msg);
 
                     if (resultado)
                     {
@@ -483,10 +481,15 @@ namespace Sistema_SneakRush
 
         private void ConfigurarColumnas()
         {
-            if (dgvUsuarios.Columns.Count == 0) return;
+            if (dgvUsuarios.Columns.Count == 0)
+            {
+                return;
+            }
 
             foreach (DataGridViewColumn col in dgvUsuarios.Columns)
+            {
                 col.Visible = false;
+            }
 
             MostrarColumna("NombreUsuario", "NombreUsuario");
             MostrarColumna("Nombre", "Nombre");

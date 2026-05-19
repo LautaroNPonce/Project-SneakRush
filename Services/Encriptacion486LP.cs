@@ -17,8 +17,11 @@ namespace Services
         //  SHA-256 — para contraseñas (irreversible)
         public static string GenerarHash(string texto)
         {
-            if (string.IsNullOrEmpty(texto))
+            if (string.IsNullOrEmpty(texto)) 
+            {
                 return texto;
+            }
+                
 
             StringBuilder br = new StringBuilder();
 
@@ -29,7 +32,7 @@ namespace Services
                 foreach (byte b in result)
                     br.Append(b.ToString("X2"));   // Hex MAYÚSCULA
             }
-            return br.ToString();   // siempre 64 chars
+            return br.ToString();
         }
 
 
@@ -57,7 +60,7 @@ namespace Services
             }
         }
 
-        // Descifra un texto cifrado en Base64 con AES-256.
+        // Descifro un texto cifrado en Base64 con AES-256.
         public static string DesencriptarAES(string textoCifrado)
         {
             if (string.IsNullOrEmpty(textoCifrado))

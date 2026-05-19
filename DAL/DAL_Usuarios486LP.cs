@@ -232,7 +232,6 @@ namespace DAL
             return resultado;
         }
 
-        //  Desbloquear Usuario)
         public bool Desbloquear(string dni, out string Mensaje)
         {
             bool resultado = false;
@@ -290,7 +289,7 @@ namespace DAL
             return resultado;
         }
 
-        //  (Activar / Desactivar)
+        //  Activar / Desactivar
         public bool InvertirActivo(string dni, out string Mensaje)
         {
             bool resultado = false;
@@ -300,7 +299,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    // Invierte el bit directamente en la BD — sin leer primero
+                    // Invierto el bit directamente en la BD — sin leer primero
                     string query = @"UPDATE Usuarios SET Activo = ~Activo WHERE DNI = @DNI";
 
                     SqlCommand cmd = new SqlCommand(query, con);

@@ -62,17 +62,26 @@ namespace Sistema_SneakRush
 
         private void txtContraseña_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) txtNuevaContraseña.Focus();
+            if (e.KeyCode == Keys.Enter) 
+            {
+                txtNuevaContraseña.Focus();
+            }
         }
 
         private void txtNuevaContraseña_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) txtConfirmarContraseña.Focus();
+            if (e.KeyCode == Keys.Enter) 
+            {
+                txtConfirmarContraseña.Focus();
+            }
         }
 
         private void txtConfirmarContraseña_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter) btnAceptar_Click(sender, e);
+            if (e.KeyCode == Keys.Enter) 
+            { 
+                btnAceptar_Click(sender, e); 
+            }
         }
 
         private void btnVerContraseña_Click(object sender, EventArgs e)
@@ -88,6 +97,11 @@ namespace Sistema_SneakRush
         private void btnVerConfirmar_Click(object sender, EventArgs e)
         {
             txtConfirmarContraseña.PasswordChar = txtConfirmarContraseña.PasswordChar == '*' ? '\0' : '*';
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
