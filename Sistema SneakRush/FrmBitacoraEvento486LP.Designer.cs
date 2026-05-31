@@ -79,6 +79,7 @@
             this.dgtBitacoraEvento.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgtBitacoraEvento.Location = new System.Drawing.Point(30, 73);
             this.dgtBitacoraEvento.Name = "dgtBitacoraEvento";
+            this.dgtBitacoraEvento.ReadOnly = true;
             this.dgtBitacoraEvento.RowHeadersWidth = 51;
             this.dgtBitacoraEvento.RowTemplate.Height = 24;
             this.dgtBitacoraEvento.Size = new System.Drawing.Size(1284, 367);
@@ -361,6 +362,7 @@
             this.txtDetUsuario.Name = "txtDetUsuario";
             this.txtDetUsuario.Size = new System.Drawing.Size(166, 22);
             this.txtDetUsuario.TabIndex = 2;
+            this.txtDetUsuario.TextChanged += new System.EventHandler(this.txtDetUsuario_TextChanged);
             // 
             // txtDetFecha
             // 

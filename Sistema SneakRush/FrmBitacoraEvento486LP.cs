@@ -148,10 +148,18 @@ namespace Sistema_SneakRush
 
         private void dgtBitacoraEvento_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgtBitacoraEvento.CurrentRow == null) return;
+            if (dgtBitacoraEvento.CurrentRow == null)
+            { 
+                return; 
+            }
+
 
             BitacoraEvento486LP ev = dgtBitacoraEvento.CurrentRow.DataBoundItem as BitacoraEvento486LP;
-            if (ev == null) return;
+            if (ev == null) 
+            { 
+                return; 
+            }
+
 
             txtDetNumero.Text = ev.Numero.ToString();
             txtDetFecha.Text = ev.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
@@ -316,14 +324,14 @@ namespace Sistema_SneakRush
             });
         }
 
-        private void dgtBitacoraEvento_SelectionChanged_1(object sender, EventArgs e) 
-        {
-
-        }
-
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             Resetear();
+        }
+
+        private void txtDetUsuario_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
     

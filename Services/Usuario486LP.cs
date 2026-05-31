@@ -21,6 +21,7 @@ namespace Services
         public bool Activo { get; set; }
         public bool Bloqueado { get; set; }
         public int IntentosFallidos { get; set; }
+        public bool DebeCambiarContraseña { get; set; }
 
         // Perfil y rol
         public string Rol { get; set; }

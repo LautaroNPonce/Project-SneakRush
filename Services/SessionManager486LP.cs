@@ -15,9 +15,11 @@ namespace Services
  
         public static SessionManager486LP ObtenerInstancia()
         {
-            if (Instancia == null)
+            if (Instancia == null) 
+            {
                 Instancia = new SessionManager486LP();
- 
+            }
+
             return Instancia;
         }
  

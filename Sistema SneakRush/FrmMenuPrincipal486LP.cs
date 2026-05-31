@@ -50,7 +50,7 @@ namespace Sistema_SneakRush
             }
         }
 
-        // ---Menu Usuario---
+        //  Menu Usuario      
         private void cambiarContraseñaToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             AbrirFormulario(new FrmCambiarContraseña486LP());
@@ -60,7 +60,7 @@ namespace Sistema_SneakRush
             AbrirFormulario(new FrmCerrarSesion486LP());
         }
 
-        // ---Menu Administrador---
+        // Menu Administrador
         private void gestiónDeUsuariosToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             AbrirFormulario(new FrmGestionUsuarios486LP());
@@ -78,7 +78,7 @@ namespace Sistema_SneakRush
             MensajeEnDesarrollo("Gestión de Respaldos");
         }
 
-        // ---Menu Maestro---
+        // Menu Maestro
         private void clientesToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             MensajeEnDesarrollo("Clientes");
@@ -96,7 +96,7 @@ namespace Sistema_SneakRush
             MensajeEnDesarrollo("Proveedores");
         }
 
-        // ---Menu Compra---
+        // Menu Compra
         private void generarSolicitudDeCompraToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             MensajeEnDesarrollo("Generar Solicitud");
@@ -110,7 +110,7 @@ namespace Sistema_SneakRush
             MensajeEnDesarrollo("Registrar Recepción de Mercadería");
         }
 
-        // ---Menu Venta---
+        // Menu Venta
         private void gestionarCarritoToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             MensajeEnDesarrollo("Gestionar Carrito");
@@ -181,17 +181,17 @@ namespace Sistema_SneakRush
             );
         }
 
-        private void cmbIdioma_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            switch (cmbIdioma.SelectedIndex)
-            {
-                case 0: SessionManager486LP.ObtenerInstancia().IdiomaActual = "es"; 
-                    break;
-                case 1: SessionManager486LP.ObtenerInstancia().IdiomaActual = "en"; 
-                    break;
-                case 2: SessionManager486LP.ObtenerInstancia().IdiomaActual = "pt"; 
-                    break;
-            }
-        }
+        //private void cmbIdioma_SelectedIndexChanged(object sender, System.EventArgs e)
+        //{
+        //    switch (cmbIdioma.SelectedIndex)
+        //    {
+        //        case 0: SessionManager486LP.ObtenerInstancia().IdiomaActual = "es"; 
+        //            break;
+        //        case 1: SessionManager486LP.ObtenerInstancia().IdiomaActual = "en"; 
+        //            break;
+        //        case 2: SessionManager486LP.ObtenerInstancia().IdiomaActual = "pt"; 
+        //            break;
+        //    }
+        //}
     }
 }

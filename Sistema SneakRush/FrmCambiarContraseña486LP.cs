@@ -26,6 +26,7 @@ namespace Sistema_SneakRush
             if (usuario != null)
             {
                 txtNombreUsuario.Text = usuario.NombreUsuario;
+                txtNombreUsuario.Enabled = false;
             }
         }
 

@@ -163,9 +163,9 @@ namespace BLL
                 { 
                     { Mensaje = "El correo es obligatorio."; return false; } 
                 }
-                if (!obj.Email.Contains("@") || !obj.Email.Contains(".")) 
-                { 
-                    { Mensaje = "El formato del correo no es válido."; return false; } 
+                if (!System.Text.RegularExpressions.Regex.IsMatch(obj.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    Mensaje = "El formato del correo no es válido."; return false;
                 }
 
                 List<Usuario486LP> todos = ObjetoDAL.Listar();
@@ -177,6 +177,10 @@ namespace BLL
                 if (todos.Any(u => u.NombreUsuario.ToLower() == obj.NombreUsuario.ToLower())) 
                 { 
                     { Mensaje = "El nombre de usuario ya se encuentra registrado."; return false; } 
+                }
+                if (todos.Any(u => u.Email.ToLower() == obj.Email.ToLower()))
+                {
+                    Mensaje = "El correo electrónico ya se encuentra registrado."; return false;
                 }
 
                 contraseñaTemporal = obj.Apellido + obj.DNI;
@@ -221,9 +225,16 @@ namespace BLL
                 { 
                     { Mensaje = "El correo es obligatorio."; return false; } 
                 }
-                if (!obj.Email.Contains("@") || !obj.Email.Contains(".")) 
-                { 
-                    { Mensaje = "El formato del correo no es válido."; return false; } 
+                if (!System.Text.RegularExpressions.Regex.IsMatch(obj.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+                {
+                    Mensaje = "El formato del correo no es válido."; return false;
+                }
+
+                List<Usuario486LP> todos = ObjetoDAL.Listar();
+
+                if (todos.Any(u => u.Email.ToLower() == obj.Email.ToLower() && u.IdUsuario != obj.IdUsuario))
+                {
+                    Mensaje = "El correo electrónico ya se encuentra registrado por otro usuario."; return false;
                 }
 
                 bool resultado = ObjetoDAL.Modificar(obj, out Mensaje);

@@ -21,7 +21,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado,IntentosFallidos, Rol, IdPerfil, NombreIdioma
+                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, IdPerfil, NombreIdioma, DebeCambiarContraseña
                     FROM Usuarios";
 
                     SqlCommand cmd = new SqlCommand(query, con);
@@ -46,7 +46,8 @@ namespace DAL
                                 IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
                                 Rol = dr["Rol"].ToString(),
                                 IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
-                                NombreIdioma = dr["NombreIdioma"].ToString()
+                                NombreIdioma = dr["NombreIdioma"].ToString(),
+                                DebeCambiarContraseña = Convert.ToBoolean(dr["DebeCambiarContraseña"])
                             });
                         }
                     }
@@ -69,7 +70,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, IdPerfil, NombreIdioma
+                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, IdPerfil, NombreIdioma, DebeCambiarContraseña
                     FROM Usuarios WHERE Activo = 1";
 
                     SqlCommand cmd = new SqlCommand(query, con);
@@ -94,7 +95,8 @@ namespace DAL
                                 IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
                                 Rol = dr["Rol"].ToString(),
                                 IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
-                                NombreIdioma = dr["NombreIdioma"].ToString()
+                                NombreIdioma = dr["NombreIdioma"].ToString(),
+                                DebeCambiarContraseña = Convert.ToBoolean(dr["DebeCambiarContraseña"])
                             });
                         }
                     }
@@ -116,7 +118,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma
+                    string query = @"SELECT IdUsuario, DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, DV, IdPerfil, NombreIdioma, DebeCambiarContraseña
                     FROM Usuarios WHERE NombreUsuario = @NombreUsuario";
 
                     SqlCommand cmd = new SqlCommand(query, con);
@@ -142,7 +144,8 @@ namespace DAL
                                 IntentosFallidos = Convert.ToInt32(dr["IntentosFallidos"]),
                                 Rol = dr["Rol"].ToString(),
                                 IdPerfil = dr["IdPerfil"] == DBNull.Value ? (int?)null : Convert.ToInt32(dr["IdPerfil"]),
-                                NombreIdioma = dr["NombreIdioma"].ToString()
+                                NombreIdioma = dr["NombreIdioma"].ToString(),
+                                DebeCambiarContraseña = Convert.ToBoolean(dr["DebeCambiarContraseña"])
                             };
                         }
                     }
@@ -165,8 +168,8 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"INSERT INTO Usuarios (DNI, Nombre, Apellido, Email, NombreUsuario,Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, IdPerfil, NombreIdioma)
-                    VALUES (@DNI, @Nombre, @Apellido, @Email, @NombreUsuario, @Contraseña, @Activo, @Bloqueado, @IntentosFallidos, @Rol, @IdPerfil, @NombreIdioma)";
+                    string query = @"INSERT INTO Usuarios (DNI, Nombre, Apellido, Email, NombreUsuario, Contraseña, Activo, Bloqueado, IntentosFallidos, Rol, IdPerfil, NombreIdioma, DebeCambiarContraseña)
+                    VALUES (@DNI, @Nombre, @Apellido, @Email, @NombreUsuario, @Contraseña, @Activo, @Bloqueado, @IntentosFallidos, @Rol, @IdPerfil, @NombreIdioma, @DebeCambiarContraseña)";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@DNI", obj.DNI);
@@ -182,6 +185,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@IdPerfil", (object)obj.IdPerfil ?? DBNull.Value);
                     cmd.Parameters.AddWithValue("@NombreIdioma", (object)obj.NombreIdioma ?? DBNull.Value);
                     cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@DebeCambiarContraseña", true);
 
                     con.Open();
                     resultado = cmd.ExecuteNonQuery() > 0;
@@ -241,7 +245,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"UPDATE Usuarios SET Bloqueado = 0, IntentosFallidos = 0 WHERE DNI = @DNI";
+                    string query = @"UPDATE Usuarios SET Bloqueado = 0, IntentosFallidos = 0, DebeCambiarContraseña = 1 WHERE DNI = @DNI";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@DNI", dni);
@@ -328,7 +332,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"UPDATE Usuarios SET Contraseña = @Contraseña WHERE IdUsuario = @IdUsuario";
+                    string query = @"UPDATE Usuarios SET Contraseña = @Contraseña, DebeCambiarContraseña = 0 WHERE IdUsuario = @IdUsuario";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
@@ -387,7 +391,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"UPDATE Usuarios SET Bloqueado = 1 WHERE NombreUsuario = @NombreUsuario";
+                    string query = @"UPDATE Usuarios SET Bloqueado = 1, DebeCambiarContraseña = 1 WHERE NombreUsuario = @NombreUsuario";
 
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.Parameters.AddWithValue("@NombreUsuario", nombreUsuario);
@@ -432,35 +436,5 @@ namespace DAL
 
             return resultado;
         }
-
-        //public bool ActualizarDV(int idUsuario, string dv, out string Mensaje)
-        //{
-        //    bool resultado = false;
-        //    Mensaje = string.Empty;
-
-        //    try
-        //    {
-        //        using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
-        //        {
-        //            string query = @"UPDATE Usuarios SET DV = @DV WHERE IdUsuario = @IdUsuario";
-
-        //            SqlCommand cmd = new SqlCommand(query, con);
-        //            cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
-        //            cmd.Parameters.AddWithValue("@DV", dv);
-        //            cmd.CommandType = CommandType.Text;
-
-        //            con.Open();
-        //            resultado = cmd.ExecuteNonQuery() > 0;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        resultado = false;
-        //        Mensaje = ex.Message;
-        //    }
-
-        //    return resultado;
-        //}
-
     }
 }

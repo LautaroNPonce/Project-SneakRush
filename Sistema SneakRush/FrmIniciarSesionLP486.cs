@@ -46,6 +46,12 @@ namespace Sistema_SneakRush
             {
                 case 1:
                     SessionManager486LP.ObtenerInstancia().LogIN(usuario);
+                    if (usuario.DebeCambiarContraseña)
+                    {
+                        MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
+                        frmCambiar.ShowDialog();
+                    }
                     FrmMenuPrincipal486LP menu = new FrmMenuPrincipal486LP();
                     menu.Show();
                     this.Hide();

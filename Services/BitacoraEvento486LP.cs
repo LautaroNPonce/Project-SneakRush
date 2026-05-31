@@ -22,7 +22,7 @@ namespace Services
         public BitacoraEvento486LP() { }
 
         // Lo uso para REGISTRAR un evento nuevo en la BD (En BLL_Usuarios)
-        public BitacoraEvento486LP(string modulo, string descripcion, int criticidad, string dni, string nombreUsuario = "")
+        public BitacoraEvento486LP(string modulo, string descripcion, int criticidad, string dni, string nombreUsuario = "") 
         {
             Fecha = DateTime.Now;
             Modulo = modulo;

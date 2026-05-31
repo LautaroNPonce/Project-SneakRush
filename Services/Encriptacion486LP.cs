@@ -79,16 +79,21 @@ namespace Services
                 }
             }
         }
+
         //  Validación de Base64
         public static bool EsBase64(string texto)
         {
-            if (string.IsNullOrWhiteSpace(texto))
-                return false;
+            if (string.IsNullOrWhiteSpace(texto)) 
+            {  
+                return false; 
+            }
 
             texto = texto.Trim();
 
-            if (texto.Length % 4 != 0)
-                return false;
+            if (texto.Length % 4 != 0) 
+            { 
+                return false; 
+            }
 
             foreach (char c in texto)
             {

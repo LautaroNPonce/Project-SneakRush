@@ -77,7 +77,7 @@ namespace Sistema_SneakRush
             rbtnActivoNo.Enabled = true;
         }
 
-        private void DeshabilitarCampos()
+        private void DeshabilitarCampos(bool limpiar = true)
         {
             txtDNI.Enabled = false;
             txtNombre.Enabled = false;
@@ -87,7 +87,7 @@ namespace Sistema_SneakRush
             cmbRol.Enabled = false;
             rbtnActivoSi.Enabled = false;
             rbtnActivoNo.Enabled = false;
-            LimpiarCampos();
+            if (limpiar) LimpiarCampos();
         }
 
         private void LimpiarCampos()
@@ -119,23 +119,37 @@ namespace Sistema_SneakRush
             _modo = modo;
             switch (modo)
             {
-                case "Consulta": lblModo.Text = "Modo Consulta"; break;
-                case "Añadir": lblModo.Text = "Modo Añadir"; break;
-                case "Modificar": lblModo.Text = "Modo Modificar"; break;
-                case "Eliminar": lblModo.Text = "Modo Eliminar"; break;
-                case "Desbloquear": lblModo.Text = "Modo Desbloquear"; break;
-                case "Bloquear": lblModo.Text = "Modo Bloquear"; break;
-                default: lblModo.Text = string.Empty; break;
+                case "Consulta": lblModo.Text = "Modo Consulta";
+                    DeshabilitarCampos(limpiar: false);
+                    break;
+                case "Añadir": lblModo.Text = "Modo Añadir";
+                    break;
+                case "Modificar": lblModo.Text = "Modo Modificar";
+                    break;
+                case "Eliminar": lblModo.Text = "Modo Eliminar";
+                    break;
+                case "Desbloquear": lblModo.Text = "Modo Desbloquear";
+                    break;
+                case "Bloquear": lblModo.Text = "Modo Bloquear";
+                    break;
+                default: lblModo.Text = string.Empty;
+                    break;
             }
         }
 
         private void dgvUsuarios_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvUsuarios.CurrentRow == null) return;
+            if (dgvUsuarios.CurrentRow == null)
+            { 
+                return; 
+            }
 
             Usuario486LP u = dgvUsuarios.CurrentRow.DataBoundItem as Usuario486LP;
 
-            if (u == null) return;
+            if (u == null)
+            { 
+                return; 
+            }
 
             _idUsuarioSeleccionado = u.IdUsuario;
             _dniUsuarioSeleccionado = u.DNI;
@@ -255,9 +269,7 @@ namespace Sistema_SneakRush
 
                 if (resultado)
                 {
-                    FrmContraseñaUsuarioNuevo486LP frmTemp = new FrmContraseñaUsuarioNuevo486LP(contraseñaTemporal);
-                    frmTemp.ShowDialog(this);
-
+                    MessageBox.Show("Usuario creado correctamente.\nLa contraseña temporal es: Apellido + DNI", "Usuario creado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Resetear();
                     CargarDgv();
                 }
@@ -526,12 +538,12 @@ namespace Sistema_SneakRush
             { 
                 { MessageBox.Show("El Login es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
             }
-         
-            if (string.IsNullOrWhiteSpace(txtCorreo.Text) || !txtCorreo.Text.Contains("@") || !txtCorreo.Text.Contains(".")) 
-            { 
-                { MessageBox.Show("El Email no tiene un formato válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
+
+            if (string.IsNullOrWhiteSpace(txtCorreo.Text) || !System.Text.RegularExpressions.Regex.IsMatch(txtCorreo.Text.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                MessageBox.Show("El Email no tiene un formato válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false;
             }
-            
+
             if (cmbRol.SelectedIndex == -1) 
             { 
                 { MessageBox.Show("Debe seleccionar un Rol.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
@@ -574,5 +586,6 @@ namespace Sistema_SneakRush
                 AutoGenerarLogin();
             }
         }
+
     }
 }
