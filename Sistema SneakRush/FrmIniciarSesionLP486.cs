@@ -45,16 +45,53 @@ namespace Sistema_SneakRush
             switch (resultado)
             {
                 case 1:
-                    SessionManager486LP.ObtenerInstancia().LogIN(usuario);
-                    if (usuario.DebeCambiarContraseña)
+
+                    if (this.MdiParent is FrmMenuPrincipal486LP menu)
                     {
-                        MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
-                        frmCambiar.ShowDialog();
+                        // Re-Login — validar si es el mismo usuario
+                        var usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+                        if (usuarioActual != null && usuarioActual.NombreUsuario == usuario.NombreUsuario)
+                        {
+                            MessageBox.Show(
+                                $"Ya tenés una sesión activa como {usuario.Nombre} {usuario.Apellido}.",
+                                "SneakRush — Sesión activa",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                            LimpiarCampos();
+                            return;
+                        }
+
+                        SessionManager486LP.ObtenerInstancia().LogOut();
+                        SessionManager486LP.ObtenerInstancia().LogIN(usuario);
+
+                        if (usuario.DebeCambiarContraseña)
+                        {
+                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
+                            frmCambiar.ShowDialog();
+                        }
+
+                        menu.ActualizarEstado();
+                        MessageBox.Show("Re-Login exitoso. Sesión verificada correctamente.", "SneakRush — Re-Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.Close();
                     }
-                    FrmMenuPrincipal486LP menu = new FrmMenuPrincipal486LP();
-                    menu.Show();
-                    this.Hide();
+                    else
+                    {
+                        // Login normal
+                        SessionManager486LP.ObtenerInstancia().LogOut();
+                        SessionManager486LP.ObtenerInstancia().LogIN(usuario);
+
+                        if (usuario.DebeCambiarContraseña)
+                        {
+                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
+                            frmCambiar.ShowDialog();
+                        }
+
+                        FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP();
+                        menuPrincipal.Show();
+                        this.Hide();
+                    }
                     break;
 
                 case 0:
@@ -95,9 +132,18 @@ namespace Sistema_SneakRush
             if (e.KeyCode == Keys.Enter) btnIngresar_Click(sender, e);
         }
 
-        private void FrmIniciarSesionLP486_FormClosed(object sender, FormClosedEventArgs e)
+        private void FrmIniciarSesionLP486_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (this.MdiParent == null)
+                    Application.Exit(); // login normal → cierra la app
+                else
+                {
+                    e.Cancel = true;
+                    this.Hide(); // re-login → se oculta nomás
+                }
+            }
         }
 
         private void LimpiarCampos()
@@ -111,5 +157,6 @@ namespace Sistema_SneakRush
         {
             txtContraseña.PasswordChar = txtContraseña.PasswordChar == '*' ? '\0' : '*';
         }
+
     }
 }

@@ -380,6 +380,7 @@
             this.Controls.Add(this.rbtnActivos);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dgvUsuarios);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FrmGestionUsuarios486LP";
             this.Text = "GestionUsuarios";
             this.Load += new System.EventHandler(this.FrmGestionUsuarios486LP_Load);

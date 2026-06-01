@@ -403,6 +403,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dgtBitacoraEvento);
             this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FrmBitacoraEvento486LP";
             this.Text = "FrmBitacoraEvento486LP";
             this.Load += new System.EventHandler(this.FrmBitacoraEvento486LP_Load);

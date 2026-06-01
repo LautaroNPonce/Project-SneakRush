@@ -22,7 +22,7 @@ namespace Sistema_SneakRush
                 }
             }
 
-            MostrarUsuarioActual();
+            ActualizarEstado();
             AjustarMenuSegunPerfil();
 
             cmbIdioma.Items.AddRange(new object[] { "Español", "Inglés", "Português" });
@@ -30,16 +30,16 @@ namespace Sistema_SneakRush
             cmbIdioma.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
-        private void MostrarUsuarioActual()
+        public void ActualizarEstado()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-            if (usuario != null)
-            {
-                lblEstado.Text = $"Usuario: {usuario.Nombre} {usuario.Apellido}  |  Rol: {usuario.Rol}";
+            if (usuario != null) 
+            { 
+                lblEstado.Text = $"Usuario: {usuario.Nombre} {usuario.Apellido}  |  Rol: {usuario.Rol}"; 
             }
         }
 
-       // Acceso a los menus según el rol del usuario.Solo el Administrador y el Analista ven el menú Administrador.
+        // Acceso a los menus según el rol del usuario.Solo el Administrador y el Analista ven el menú Administrador.
         private void AjustarMenuSegunPerfil()
         {
             // Solo el Administrador y analista ve el menú Administrador
@@ -179,6 +179,13 @@ namespace Sistema_SneakRush
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );
+        }
+
+        private void iniciarSesionToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            FrmIniciarSesionLP486 frm = new FrmIniciarSesionLP486();
+            frm.MdiParent = this;
+            frm.Show();
         }
 
         //private void cmbIdioma_SelectedIndexChanged(object sender, System.EventArgs e)
