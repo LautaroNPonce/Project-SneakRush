@@ -42,12 +42,17 @@ namespace Services
         {
             return _usuario;
         }
- 
+
         public void LogIN(Usuario486LP usuario)
         {
+            if (_usuario != null) 
+            { 
+                throw new InvalidOperationException("Ya hay una sesión activa. Cerrá la sesión antes de iniciar otra."); 
+            }
+
             _usuario = usuario;
         }
- 
+
         public void LogOut()
         {
             _usuario  = null;

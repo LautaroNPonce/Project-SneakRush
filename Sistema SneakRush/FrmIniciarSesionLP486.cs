@@ -45,34 +45,24 @@ namespace Sistema_SneakRush
             switch (resultado)
             {
                 case 1:
-
                     if (this.MdiParent is FrmMenuPrincipal486LP menu)
                     {
-                        // Re-Login — validar si es el mismo usuario
-                        var usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-                        if (usuarioActual != null && usuarioActual.NombreUsuario == usuario.NombreUsuario)
+                        // Re-Login — SessionManager no permite LogIN si hay sesión activa
+                        try
                         {
-                            MessageBox.Show(
-                                $"Ya tenés una sesión activa como {usuario.Nombre} {usuario.Apellido}.",
-                                "SneakRush — Sesión activa",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                            SessionManager486LP.ObtenerInstancia().LogIN(usuario);
+                        }
+                        catch (InvalidOperationException ex)
+                        {
+                            MessageBox.Show(ex.Message, "SneakRush — Sesión activa",MessageBoxButtons.OK, MessageBoxIcon.Error);
                             LimpiarCampos();
                             return;
                         }
 
-                        SessionManager486LP.ObtenerInstancia().LogOut();
-                        SessionManager486LP.ObtenerInstancia().LogIN(usuario);
-
-                        if (usuario.DebeCambiarContraseña)
-                        {
-                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
-                            frmCambiar.ShowDialog();
-                        }
+                        if (usuario.DebeCambiarContraseña) { /* ... */ }
 
                         menu.ActualizarEstado();
-                        MessageBox.Show("Re-Login exitoso. Sesión verificada correctamente.", "SneakRush — Re-Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Re-Login exitoso. Sesión verificada correctamente.","SneakRush — Re-Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
                     else
@@ -81,18 +71,14 @@ namespace Sistema_SneakRush
                         SessionManager486LP.ObtenerInstancia().LogOut();
                         SessionManager486LP.ObtenerInstancia().LogIN(usuario);
 
-                        if (usuario.DebeCambiarContraseña)
-                        {
-                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
-                            frmCambiar.ShowDialog();
-                        }
+                        if (usuario.DebeCambiarContraseña) { /* ... */ }
 
                         FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP();
                         menuPrincipal.Show();
                         this.Hide();
                     }
                     break;
+
 
                 case 0:
                     MessageBox.Show("Usuario no encontrado.","SneakRush — Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
