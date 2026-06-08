@@ -109,6 +109,12 @@
     <Compile Include="FrmGestionClientes486LP.Designer.cs">
       <DependentUpon>FrmGestionClientes486LP.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmGestionFamilias486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmGestionFamilias486LP.Designer.cs">
+      <DependentUpon>FrmGestionFamilias486LP.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmGestionPerfiles486LP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -221,6 +227,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmGestionClientes486LP.resx">
       <DependentUpon>FrmGestionClientes486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmGestionFamilias486LP.resx">
+      <DependentUpon>FrmGestionFamilias486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmGestionPerfiles486LP.resx">
       <DependentUpon>FrmGestionPerfiles486LP.cs</DependentUpon>

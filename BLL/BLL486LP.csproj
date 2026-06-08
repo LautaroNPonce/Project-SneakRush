@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL_Bitacora486LP.cs" />
+    <Compile Include="BLL_Familia486LP.cs" />
+    <Compile Include="BLL_Patente486LP.cs" />
+    <Compile Include="BLL_Perfil486LP.cs" />
     <Compile Include="BLL_Usuarios486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

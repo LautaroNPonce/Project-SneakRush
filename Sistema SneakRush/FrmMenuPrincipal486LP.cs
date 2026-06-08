@@ -1,4 +1,6 @@
-﻿using Services;
+﻿using BLL;
+using Services;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Sistema_SneakRush
@@ -39,15 +41,34 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Acceso a los menus según el rol del usuario.Solo el Administrador y el Analista ven el menú Administrador.
         private void AjustarMenuSegunPerfil()
         {
-            // Solo el Administrador y analista ve el menú Administrador
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuario == null) return;
+
+            BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
+            List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);
+
+            // Usuario y Ayuda siempre visibles
+            usuarioToolStripMenuItem.Visible = true;
+            ayudaToolStripMenuItem.Visible = true;
+
+            // Todos los menús controlados por Composite
+            adminToolStripMenuItem.Visible = permisos.Contains("GESTION_USUARIOS");
+            gestionToolStripMenuItem.Visible = permisos.Contains("COMPRAS_PROVEEDORES");
+            compraToolStripMenuItem.Visible = permisos.Contains("COMPRAS_PROVEEDORES")
+                || permisos.Contains("DEPOSITO");
+
+            if (compraToolStripMenuItem.Visible)
             {
-                adminToolStripMenuItem.Visible = usuario.Rol == "Administrador" || usuario.Rol == "Analista";
+                generarSolicitudDeCompraToolStripMenuItem.Visible = permisos.Contains("COMPRAS_PROVEEDORES");
+                registrarOrdenDeCompraToolStripMenuItem.Visible = permisos.Contains("COMPRAS_PROVEEDORES");
+                registrarRecepciónDeMercaderíaToolStripMenuItem.Visible = permisos.Contains("DEPOSITO")
+                    || permisos.Contains("COMPRAS_PROVEEDORES");
             }
+
+            ventaToolStripMenuItem.Visible = permisos.Contains("VENTAS_POS");
+            reporteToolStripMenuItem.Visible = permisos.Contains("REPORTES");
         }
 
         //  Menu Usuario      
@@ -65,9 +86,14 @@ namespace Sistema_SneakRush
         {
             AbrirFormulario(new FrmGestionUsuarios486LP());
         }
-        private void gestiónDePerfilesToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void gestionDeFamiliasToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Gestión de Perfiles");
+            AbrirFormulario(new FrmGestionFamilias486LP());
+        }
+
+        private void gestionDeRolesToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            AbrirFormulario(new FrmGestionPerfiles486LP());
         }
         private void bitácoraDeEventosToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -174,11 +200,7 @@ namespace Sistema_SneakRush
         private void MensajeEnDesarrollo(string modulo)
         {
             MessageBox.Show(
-                $"El módulo \"{modulo}\" está en desarrollo.",
-                "SneakRush — En desarrollo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+                $"El módulo \"{modulo}\" está en desarrollo.","SneakRush — En desarrollo",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
         private void iniciarSesionToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -186,6 +208,11 @@ namespace Sistema_SneakRush
             FrmIniciarSesionLP486 frm = new FrmIniciarSesionLP486();
             frm.MdiParent = this;
             frm.Show();
+        }
+
+        private void adminToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+
         }
 
         //private void cmbIdioma_SelectedIndexChanged(object sender, System.EventArgs e)

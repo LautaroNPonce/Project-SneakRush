@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Cliente486LP.cs" />
     <Compile Include="Idioma486LP.cs" />
-    <Compile Include="Perfil486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,19 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BE
+namespace Services
 {
     public class Perfil486LP
     {
         public int IdPerfil { get; set; }
         public string Nombre { get; set; }
+        public List<Composite486LP> Componentes { get; set; }
 
-        public Perfil486LP() { }
-
-        public Perfil486LP(int idPerfil, string nombre)
+        public Perfil486LP()
         {
-            IdPerfil = idPerfil;
-            Nombre = nombre;
+            Componentes = new List<Composite486LP>();
         }
 
         public override string ToString()
