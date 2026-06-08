@@ -417,5 +417,10 @@ namespace Sistema_SneakRush
             dgvPermisosAsignados.Columns["colIdPermisoAsig"].Visible = false;
             dgvPermisosAsignados.Columns["colNombrePermisoAsig"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

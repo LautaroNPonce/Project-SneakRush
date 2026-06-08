@@ -80,6 +80,7 @@ namespace Sistema_SneakRush
             this.dgvAsignados = new System.Windows.Forms.DataGridView();
             this.btnQuitar = new System.Windows.Forms.Button();
             this.lblTitulo = new System.Windows.Forms.Label();
+            this.btnSalir = new System.Windows.Forms.Button();
             this.pnlFamilias.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFamilias)).BeginInit();
             this.pnlPatentes.SuspendLayout();
@@ -90,8 +91,6 @@ namespace Sistema_SneakRush
             // 
             // pnlFamilias
             // 
-            this.pnlFamilias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlFamilias.Controls.Add(this.txtNombre);
             this.pnlFamilias.Controls.Add(this.dgvFamilias);
             this.pnlFamilias.Controls.Add(this.btnCrear);
@@ -192,8 +191,6 @@ namespace Sistema_SneakRush
             // 
             // pnlPatentes
             // 
-            this.pnlPatentes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlPatentes.Controls.Add(this.dgvPatentes);
             this.pnlPatentes.Controls.Add(this.btnAgregar);
             this.pnlPatentes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -237,9 +234,6 @@ namespace Sistema_SneakRush
             // 
             // pnlAsignados
             // 
-            this.pnlAsignados.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlAsignados.Controls.Add(this.lblFamiliaSeleccionada);
             this.pnlAsignados.Controls.Add(this.dgvAsignados);
             this.pnlAsignados.Controls.Add(this.btnQuitar);
@@ -302,10 +296,26 @@ namespace Sistema_SneakRush
             this.lblTitulo.TabIndex = 4;
             this.lblTitulo.Text = "Gestión de Familias";
             // 
+            // btnSalir
+            // 
+            this.btnSalir.BackColor = System.Drawing.SystemColors.Highlight;
+            this.btnSalir.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSalir.ForeColor = System.Drawing.Color.Black;
+            this.btnSalir.Location = new System.Drawing.Point(1082, 10);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(125, 32);
+            this.btnSalir.TabIndex = 7;
+            this.btnSalir.Text = "Salir";
+            this.btnSalir.UseVisualStyleBackColor = false;
+            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
+            // 
             // FrmGestionFamilias486LP
             // 
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(1096, 703);
+            this.ClientSize = new System.Drawing.Size(1219, 703);
+            this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.pnlFamilias);
             this.Controls.Add(this.pnlPatentes);
@@ -314,7 +324,7 @@ namespace Sistema_SneakRush
             this.MinimumSize = new System.Drawing.Size(900, 600);
             this.Name = "FrmGestionFamilias486LP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SneakRush486LP — Gestión de Familias";
+            this.Text = "Gestión de Familias";
             this.Load += new System.EventHandler(this.FrmGestionFamilias486LP_Load);
             this.pnlFamilias.ResumeLayout(false);
             this.pnlFamilias.PerformLayout();
@@ -342,5 +352,6 @@ namespace Sistema_SneakRush
         private System.Windows.Forms.DataGridView dgvAsignados;
         private System.Windows.Forms.Button btnQuitar;
         private Label lblTitulo;
+        private Button btnSalir;
     }
 }

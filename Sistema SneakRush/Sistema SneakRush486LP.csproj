@@ -181,6 +181,12 @@
     <Compile Include="FrmRegistrarRecepcion486LP.Designer.cs">
       <DependentUpon>FrmRegistrarRecepcion486LP.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmReparacionBD486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmReparacionBD486LP.Designer.cs">
+      <DependentUpon>FrmReparacionBD486LP.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmReporteCompras486LP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -257,6 +263,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmRegistrarOrden486LP.resx">
       <DependentUpon>FrmRegistrarOrden486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmReparacionBD486LP.resx">
+      <DependentUpon>FrmReparacionBD486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmReporteCompras486LP.resx">
       <DependentUpon>FrmReporteCompras486LP.cs</DependentUpon>

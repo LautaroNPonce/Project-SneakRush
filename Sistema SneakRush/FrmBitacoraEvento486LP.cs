@@ -62,6 +62,8 @@ namespace Sistema_SneakRush
             cmbModulo.Items.Add("Logout");
             cmbModulo.Items.Add("Cambiar Contraseña");
             cmbModulo.Items.Add("Gestión Usuarios");
+            cmbModulo.Items.Add("Gestión Perfiles");
+            cmbModulo.Items.Add("Gestión Familias");
             cmbModulo.SelectedIndex = 0;
             cmbCriticidad.Items.Clear();
             cmbCriticidad.Items.Add("");

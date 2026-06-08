@@ -54,7 +54,7 @@ namespace Sistema_SneakRush
                         }
                         catch (InvalidOperationException ex)
                         {
-                            MessageBox.Show(ex.Message, "SneakRush — Sesión activa",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(ex.Message, "SneakRush — Sesión activa", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             LimpiarCampos();
                             return;
                         }
@@ -62,7 +62,7 @@ namespace Sistema_SneakRush
                         if (usuario.DebeCambiarContraseña) { /* ... */ }
 
                         menu.ActualizarEstado();
-                        MessageBox.Show("Re-Login exitoso. Sesión verificada correctamente.","SneakRush — Re-Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Re-Login exitoso. Sesión verificada correctamente.", "SneakRush — Re-Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
                     else
@@ -72,6 +72,20 @@ namespace Sistema_SneakRush
                         SessionManager486LP.ObtenerInstancia().LogIN(usuario);
 
                         if (usuario.DebeCambiarContraseña) { /* ... */ }
+
+                        // Verificar integridad de DV antes de abrir el menú
+                        BLL_DV486LP bllDV = new BLL_DV486LP();
+                        string tablaAfectada;
+
+                        if (!bllDV.VerificarIntegridad("Usuarios", out tablaAfectada))
+                        {
+                            this.Hide();
+                            DV486LP dv = new DV486LP(tablaAfectada, "", "");
+                            FrmReparacionBD486LP frmReparacion = new FrmReparacionBD486LP(dv);
+                            frmReparacion.ShowDialog();
+                            this.Show();
+                            return;
+                        }
 
                         FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP();
                         menuPrincipal.Show();

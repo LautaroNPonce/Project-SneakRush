@@ -303,5 +303,10 @@ namespace Sistema_SneakRush
             dgvAsignados.Columns["colIdAsignado"].Visible = false;
             dgvAsignados.Columns["colNombreAsignado"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

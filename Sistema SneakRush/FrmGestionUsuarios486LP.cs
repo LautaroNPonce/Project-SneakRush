@@ -38,11 +38,11 @@ namespace Sistema_SneakRush
         private void CargarComboRol()
         {
             cmbRol.Items.Clear();
-            cmbRol.Items.Add("Administrador");
-            cmbRol.Items.Add("Vendedor");
-            cmbRol.Items.Add("Cajero");
-            cmbRol.Items.Add("Encargado de Deposito");
-            cmbRol.Items.Add("Analista");
+            var perfiles = new BLL_Perfil486LP().ObtenerPerfiles();
+            foreach (var perfil in perfiles)
+            {
+                cmbRol.Items.Add(perfil.Nombre);
+            }
         }
 
         private void CargarDgv()
@@ -109,7 +109,14 @@ namespace Sistema_SneakRush
             txtApellido.Text = u.Apellido;
             txtNombreUsuario.Text = u.NombreUsuario;
             txtCorreo.Text = u.Email;
-            cmbRol.SelectedItem = u.Rol;
+            if (cmbRol.Items.Contains(u.Rol)) 
+            { 
+                cmbRol.SelectedItem = u.Rol; 
+            }
+            else
+            { 
+                cmbRol.SelectedIndex = -1; 
+            }
             rbtnActivoSi.Checked = u.Activo;
             rbtnActivoNo.Checked = !u.Activo;
         }
@@ -253,7 +260,14 @@ namespace Sistema_SneakRush
 
             if (_modo == "Añadir")
             {
-                if (!ValidarCampos()) return;
+                if (!ValidarCampos()) 
+                { 
+                    return; 
+                }
+
+                var perfiles = new BLL_Perfil486LP().ObtenerPerfiles();
+                var perfilEncontrado = perfiles.FirstOrDefault(p => p.Nombre == cmbRol.SelectedItem?.ToString());
+
                 Usuario486LP nuevo = new Usuario486LP
                 {
                     DNI = txtDNI.Text.Trim(),
@@ -261,7 +275,8 @@ namespace Sistema_SneakRush
                     Apellido = txtApellido.Text.Trim(),
                     NombreUsuario = txtNombreUsuario.Text.Trim(),
                     Email = txtCorreo.Text.Trim(),
-                    Rol = cmbRol.SelectedItem?.ToString() ?? string.Empty
+                    Rol = cmbRol.SelectedItem?.ToString() ?? string.Empty,
+                    IdPerfil = perfilEncontrado?.IdPerfil
                 };
 
                 string contraseñaTemporal;
@@ -290,6 +305,8 @@ namespace Sistema_SneakRush
                     MessageBox.Show("No puede desactivar su propia cuenta mientras está en uso.", "Acción no permitida", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+                var perfiles = new BLL_Perfil486LP().ObtenerPerfiles();
+                var perfilEncontrado = perfiles.FirstOrDefault(p => p.Nombre == cmbRol.SelectedItem?.ToString());
 
                 Usuario486LP mod = new Usuario486LP
                 {
@@ -300,7 +317,8 @@ namespace Sistema_SneakRush
                     Apellido = txtApellido.Text.Trim(),
                     Email = txtCorreo.Text.Trim(),
                     Rol = cmbRol.SelectedItem?.ToString() ?? string.Empty,
-                    Activo = rbtnActivoSi.Checked
+                    Activo = rbtnActivoSi.Checked,
+                    IdPerfil = perfilEncontrado?.IdPerfil
                 };
 
                 bool resultado = _bll.Modificar(mod, out msg);

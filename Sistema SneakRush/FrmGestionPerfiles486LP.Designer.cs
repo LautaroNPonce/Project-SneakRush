@@ -88,6 +88,7 @@ namespace Sistema_SneakRush
             this.dgvPermisosAsignados = new System.Windows.Forms.DataGridView();
             this.btnQuitarPermiso = new System.Windows.Forms.Button();
             this.lblTitulo = new System.Windows.Forms.Label();
+            this.btnSalir = new System.Windows.Forms.Button();
             this.pnlPerfiles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPerfiles)).BeginInit();
             this.pnlFamilias.SuspendLayout();
@@ -101,8 +102,6 @@ namespace Sistema_SneakRush
             // 
             // pnlPerfiles
             // 
-            this.pnlPerfiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlPerfiles.Controls.Add(this.txtNombre);
             this.pnlPerfiles.Controls.Add(this.dgvPerfiles);
             this.pnlPerfiles.Controls.Add(this.btnCrear);
@@ -204,8 +203,6 @@ namespace Sistema_SneakRush
             // 
             // pnlFamilias
             // 
-            this.pnlFamilias.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlFamilias.Controls.Add(this.dgvFamilias);
             this.pnlFamilias.Controls.Add(this.btnAsignarFamilia);
             this.pnlFamilias.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -249,8 +246,6 @@ namespace Sistema_SneakRush
             // 
             // pnlPatentes
             // 
-            this.pnlPatentes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.pnlPatentes.Controls.Add(this.dgvPatentes);
             this.pnlPatentes.Controls.Add(this.btnAsignarPermiso);
             this.pnlPatentes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -415,10 +410,26 @@ namespace Sistema_SneakRush
             this.lblTitulo.TabIndex = 5;
             this.lblTitulo.Text = "Gestion de Perfiles";
             // 
+            // btnSalir
+            // 
+            this.btnSalir.BackColor = System.Drawing.SystemColors.Highlight;
+            this.btnSalir.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSalir.ForeColor = System.Drawing.Color.Black;
+            this.btnSalir.Location = new System.Drawing.Point(1332, 10);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(125, 32);
+            this.btnSalir.TabIndex = 6;
+            this.btnSalir.Text = "Salir";
+            this.btnSalir.UseVisualStyleBackColor = false;
+            this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
+            // 
             // FrmGestionPerfiles486LP
             // 
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(1350, 686);
+            this.ClientSize = new System.Drawing.Size(1466, 686);
+            this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.pnlPerfiles);
             this.Controls.Add(this.pnlFamilias);
@@ -428,7 +439,7 @@ namespace Sistema_SneakRush
             this.MinimumSize = new System.Drawing.Size(1100, 620);
             this.Name = "FrmGestionPerfiles486LP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SneakRush486LP — Gestión de Perfiles";
+            this.Text = "Gestión de Perfiles";
             this.Load += new System.EventHandler(this.FrmGestionPerfiles486LP_Load);
             this.pnlPerfiles.ResumeLayout(false);
             this.pnlPerfiles.PerformLayout();
@@ -467,5 +478,6 @@ namespace Sistema_SneakRush
         private System.Windows.Forms.DataGridView dgvPermisosAsignados;
         private System.Windows.Forms.Button btnQuitarPermiso;
         private Label lblTitulo;
+        private Button btnSalir;
     }
 }
