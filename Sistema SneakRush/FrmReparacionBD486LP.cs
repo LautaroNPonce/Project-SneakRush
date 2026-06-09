@@ -30,17 +30,20 @@ namespace Sistema_SneakRush
 
         private void btnRecalcular_Click(object sender, EventArgs e)
         {
-            _bllDV.RecalcularDV(_dv.TablaAfectada);
-            MessageBox.Show("Dígitos verificadores recalculados correctamente.", "Éxito",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!_bllDV.RecalcularDV(_dv.TablaAfectada, out string mensaje))
+            {
+                MessageBox.Show($"Error al recalcular: {mensaje}", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show("Dígitos verificadores recalculados correctamente.", "Éxito",MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
         private void btnRestaurar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Funcionalidad de restauración pendiente de implementar.", "Aviso",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Funcionalidad de restauración pendiente de implementar.", "Aviso",MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnSalir_Click(object sender, EventArgs e)

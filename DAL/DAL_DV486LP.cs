@@ -26,7 +26,10 @@ namespace DAL
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al leer tabla '{nombreTabla}': {ex.Message}");
+            }
             return dt;
         }
 
@@ -43,7 +46,10 @@ namespace DAL
                     return resultado?.ToString() ?? "";
                 }
             }
-            catch { return ""; }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener DVV de tabla '{tabla}': {ex.Message}");
+            }
         }
 
         public string ObtenerDVH(string tabla)
@@ -59,7 +65,10 @@ namespace DAL
                     return resultado?.ToString() ?? "";
                 }
             }
-            catch { return ""; }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener DVH de tabla '{tabla}': {ex.Message}");
+            }
         }
 
         public void GuardarDV(string tabla, string dvh, string dvv)
@@ -76,7 +85,10 @@ namespace DAL
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al guardar DV de tabla '{tabla}': {ex.Message}");
+            }
         }
 
         public void RecalcularDVHPorFila(string tabla)
@@ -95,8 +107,7 @@ namespace DAL
                 {
                     using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                     {
-                        SqlCommand cmd = new SqlCommand(
-                            $"UPDATE {tabla} SET DV = @DV WHERE IdUsuario = @Id", con);
+                        SqlCommand cmd = new SqlCommand($"UPDATE {tabla} SET DV = @DV WHERE IdUsuario = @Id", con);
                         cmd.Parameters.AddWithValue("@DV", hash);
                         cmd.Parameters.AddWithValue("@Id", fila["IdUsuario"]);
                         con.Open();

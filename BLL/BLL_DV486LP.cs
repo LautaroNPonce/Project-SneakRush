@@ -26,7 +26,9 @@ namespace BLL
                 foreach (DataColumn col in dt.Columns)
                 {
                     if (!_columnasIgnorar.Contains(col.ColumnName))
-                        sb.Append(fila[col].ToString());
+                    { 
+                        sb.Append(fila[col].ToString()); 
+                    }
                 }
             }
 
@@ -52,42 +54,62 @@ namespace BLL
             return Encriptacion486LP.GenerarHash(sb.ToString());
         }
 
-        public void RecalcularDV(string tabla)
+        public bool RecalcularDV(string tabla, out string mensaje)
         {
-            string dvh = CalcularDVH(tabla);
-            string dvv = CalcularDVV(tabla);
-            _dal.GuardarDV(tabla, dvh, dvv);
-            _dal.RecalcularDVHPorFila(tabla);
-
-            string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
-            string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
-
-            _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador",$"Se recalcularon los dígitos verificadores de la tabla '{tabla}'.",Criticidad486LP.MuyAlta, dni, nombreUsuario));
-        }
-
-        public bool VerificarIntegridad(string tabla, out string tablaAfectada)
-        {
-            tablaAfectada = "";
-
-            string dvhCalculado = CalcularDVH(tabla);
-            string dvvCalculado = CalcularDVV(tabla);
-
-            string dvhGuardado = _dal.ObtenerDVH(tabla);
-            string dvvGuardado = _dal.ObtenerDVV(tabla);
-
-            if (dvhCalculado != dvhGuardado || dvvCalculado != dvvGuardado)
+            mensaje = "";
+            try
             {
-                tablaAfectada = tabla;
+                string dvh = CalcularDVH(tabla);
+                string dvv = CalcularDVV(tabla);
+                _dal.GuardarDV(tabla, dvh, dvv);
+                _dal.RecalcularDVHPorFila(tabla);
 
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador",$"Inconsistencia detectada en la tabla '{tabla}'.",Criticidad486LP.MuyAlta, dni, nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador",$"Se recalcularon los dígitos verificadores de la tabla '{tabla}'.",Criticidad486LP.MuyAlta, dni, nombreUsuario));
 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
                 return false;
             }
+        }
 
-            return true;
+        public bool VerificarIntegridad(string tabla, out string tablaAfectada, out string mensaje)
+        {
+            tablaAfectada = "";
+            mensaje = "";
+
+            try
+            {
+                string dvhCalculado = CalcularDVH(tabla);
+                string dvvCalculado = CalcularDVV(tabla);
+
+                string dvhGuardado = _dal.ObtenerDVH(tabla);
+                string dvvGuardado = _dal.ObtenerDVV(tabla);
+
+                if (dvhCalculado != dvhGuardado || dvvCalculado != dvvGuardado)
+                {
+                    tablaAfectada = tabla;
+
+                    string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
+                    string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
+
+                    _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador",$"Inconsistencia detectada en la tabla '{tabla}'.",Criticidad486LP.MuyAlta, dni, nombreUsuario));
+
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                return false;
+            }
         }
     }
 }

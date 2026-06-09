@@ -47,22 +47,33 @@ namespace Sistema_SneakRush
                 case 1:
                     if (this.MdiParent is FrmMenuPrincipal486LP menu)
                     {
-                        // Re-Login — SessionManager no permite LogIN si hay sesión activa
-                        try
+                        // Re-Login — validar si es el mismo usuario
+                        var usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+                        if (usuarioActual != null && usuarioActual.NombreUsuario == usuario.NombreUsuario)
                         {
-                            SessionManager486LP.ObtenerInstancia().LogIN(usuario);
-                        }
-                        catch (InvalidOperationException ex)
-                        {
-                            MessageBox.Show(ex.Message, "SneakRush — Sesión activa", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(
+                                $"Ya tenés una sesión activa como {usuario.Nombre} {usuario.Apellido}.",
+                                "SneakRush — Sesión activa",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
                             LimpiarCampos();
                             return;
                         }
 
-                        if (usuario.DebeCambiarContraseña) { /* ... */ }
+                        SessionManager486LP.ObtenerInstancia().LogOut();
+                        SessionManager486LP.ObtenerInstancia().LogIN(usuario);
+
+                        if (usuario.DebeCambiarContraseña)
+                        {
+                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.",
+                                "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
+                            frmCambiar.ShowDialog();
+                        }
 
                         menu.ActualizarEstado();
-                        MessageBox.Show("Re-Login exitoso. Sesión verificada correctamente.", "SneakRush — Re-Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Re-Login exitoso. Sesión verificada correctamente.",
+                            "SneakRush — Re-Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
                     else
@@ -71,14 +82,26 @@ namespace Sistema_SneakRush
                         SessionManager486LP.ObtenerInstancia().LogOut();
                         SessionManager486LP.ObtenerInstancia().LogIN(usuario);
 
-                        if (usuario.DebeCambiarContraseña) { /* ... */ }
+                        if (usuario.DebeCambiarContraseña)
+                        {
+                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.","SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
+                            frmCambiar.ShowDialog();
+                        }
 
                         // Verificar integridad de DV antes de abrir el menú
                         BLL_DV486LP bllDV = new BLL_DV486LP();
                         string tablaAfectada;
+                        string mensajeDV;
 
-                        if (!bllDV.VerificarIntegridad("Usuarios", out tablaAfectada))
+                        if (!bllDV.VerificarIntegridad("Usuarios", out tablaAfectada, out mensajeDV))
                         {
+                            if (!string.IsNullOrEmpty(mensajeDV))
+                            {
+                                MessageBox.Show($"Error al verificar integridad: {mensajeDV}","SneakRush — Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+
                             this.Hide();
                             DV486LP dv = new DV486LP(tablaAfectada, "", "");
                             FrmReparacionBD486LP frmReparacion = new FrmReparacionBD486LP(dv);
