@@ -2,59 +2,49 @@
 {
     partial class FrmReparacionBD486LP
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
             this.btnRecalcular = new System.Windows.Forms.Button();
             this.btnRestaurar = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lblTabla = new System.Windows.Forms.Label();
+            this.dgvInconsistencias = new System.Windows.Forms.DataGridView();
+            this.colID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colTabla = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colInconsistencia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInconsistencias)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(114, 27);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.label1.ForeColor = System.Drawing.Color.Black;
+            this.label1.Location = new System.Drawing.Point(70, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(582, 25);
+            this.label1.Size = new System.Drawing.Size(566, 25);
             this.label1.TabIndex = 0;
-            this.label1.Text = "\"INCONSISTENCIA PRESENTE EN LA BASE DE DATOS\"";
+            this.label1.Text = "INCONSISTENCIA PRESENTE EN LA BASE DE DATOS";
             // 
             // btnRecalcular
             // 
             this.btnRecalcular.BackColor = System.Drawing.SystemColors.Highlight;
-            this.btnRecalcular.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnRecalcular.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRecalcular.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnRecalcular.Location = new System.Drawing.Point(244, 185);
+            this.btnRecalcular.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold);
+            this.btnRecalcular.ForeColor = System.Drawing.Color.Black;
+            this.btnRecalcular.Location = new System.Drawing.Point(244, 290);
             this.btnRecalcular.Name = "btnRecalcular";
-            this.btnRecalcular.Size = new System.Drawing.Size(270, 56);
+            this.btnRecalcular.Size = new System.Drawing.Size(270, 50);
             this.btnRecalcular.TabIndex = 1;
             this.btnRecalcular.Text = "Recalcular dígito verificador";
             this.btnRecalcular.UseVisualStyleBackColor = false;
@@ -63,12 +53,11 @@
             // btnRestaurar
             // 
             this.btnRestaurar.BackColor = System.Drawing.SystemColors.Highlight;
-            this.btnRestaurar.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnRestaurar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRestaurar.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnRestaurar.Location = new System.Drawing.Point(244, 258);
+            this.btnRestaurar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold);
+            this.btnRestaurar.ForeColor = System.Drawing.Color.Black;
+            this.btnRestaurar.Location = new System.Drawing.Point(244, 355);
             this.btnRestaurar.Name = "btnRestaurar";
-            this.btnRestaurar.Size = new System.Drawing.Size(270, 56);
+            this.btnRestaurar.Size = new System.Drawing.Size(270, 50);
             this.btnRestaurar.TabIndex = 2;
             this.btnRestaurar.Text = "Restaurar base de datos";
             this.btnRestaurar.UseVisualStyleBackColor = false;
@@ -77,52 +66,75 @@
             // btnSalir
             // 
             this.btnSalir.BackColor = System.Drawing.SystemColors.Highlight;
-            this.btnSalir.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btnSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSalir.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnSalir.Location = new System.Drawing.Point(244, 331);
+            this.btnSalir.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold);
+            this.btnSalir.ForeColor = System.Drawing.Color.Black;
+            this.btnSalir.Location = new System.Drawing.Point(244, 420);
             this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(270, 56);
+            this.btnSalir.Size = new System.Drawing.Size(270, 50);
             this.btnSalir.TabIndex = 3;
             this.btnSalir.Text = "Salir";
             this.btnSalir.UseVisualStyleBackColor = false;
             this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
             // 
-            // label2
+            // dgvInconsistencias
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(299, 85);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(177, 20);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "TABLA AFECTADA:";
+            this.dgvInconsistencias.AllowUserToAddRows = false;
+            this.dgvInconsistencias.AllowUserToDeleteRows = false;
+            this.dgvInconsistencias.BackgroundColor = System.Drawing.Color.MintCream;
+            this.dgvInconsistencias.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvInconsistencias.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colID,
+            this.colTabla,
+            this.colInconsistencia});
+            this.dgvInconsistencias.Location = new System.Drawing.Point(75, 63);
+            this.dgvInconsistencias.Name = "dgvInconsistencias";
+            this.dgvInconsistencias.ReadOnly = true;
+            this.dgvInconsistencias.RowHeadersVisible = false;
+            this.dgvInconsistencias.RowHeadersWidth = 51;
+            this.dgvInconsistencias.Size = new System.Drawing.Size(590, 200);
+            this.dgvInconsistencias.TabIndex = 6;
             // 
-            // lblTabla
+            // colID
             // 
-            this.lblTabla.AutoSize = true;
-            this.lblTabla.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTabla.Location = new System.Drawing.Point(315, 121);
-            this.lblTabla.Name = "lblTabla";
-            this.lblTabla.Size = new System.Drawing.Size(0, 18);
-            this.lblTabla.TabIndex = 5;
+            this.colID.HeaderText = "ID";
+            this.colID.MinimumWidth = 6;
+            this.colID.Name = "colID";
+            this.colID.ReadOnly = true;
+            this.colID.Width = 60;
+            // 
+            // colTabla
+            // 
+            this.colTabla.HeaderText = "Tabla";
+            this.colTabla.MinimumWidth = 6;
+            this.colTabla.Name = "colTabla";
+            this.colTabla.ReadOnly = true;
+            this.colTabla.Width = 150;
+            // 
+            // colInconsistencia
+            // 
+            this.colInconsistencia.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colInconsistencia.HeaderText = "Inconsistencia";
+            this.colInconsistencia.MinimumWidth = 6;
+            this.colInconsistencia.Name = "colInconsistencia";
+            this.colInconsistencia.ReadOnly = true;
             // 
             // FrmReparacionBD486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.lblTabla);
-            this.Controls.Add(this.label2);
+            this.ClientSize = new System.Drawing.Size(800, 490);
+            this.Controls.Add(this.dgvInconsistencias);
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.btnRestaurar);
             this.Controls.Add(this.btnRecalcular);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MinimumSize = new System.Drawing.Size(800, 490);
             this.Name = "FrmReparacionBD486LP";
             this.Text = "FrmReparacionBD486LP";
             this.Load += new System.EventHandler(this.FrmReparacionBD486LP_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvInconsistencias)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,7 +146,9 @@
         private System.Windows.Forms.Button btnRecalcular;
         private System.Windows.Forms.Button btnRestaurar;
         private System.Windows.Forms.Button btnSalir;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lblTabla;
+        private System.Windows.Forms.DataGridView dgvInconsistencias;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colTabla;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colInconsistencia;
     }
 }

@@ -195,6 +195,10 @@ namespace BLL
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario creado: {obj.NombreUsuario} (DNI: {obj.DNI}).", Criticidad486LP.Alta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RecalcularDV("Usuarios", out mensajeDV);
                 }
 
                 return resultado;
@@ -243,6 +247,10 @@ namespace BLL
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario modificado: {obj.NombreUsuario} (DNI: {obj.DNI}).", Criticidad486LP.Media, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RecalcularDV("Usuarios", out mensajeDV);
                 }
 
                 return resultado;
@@ -265,6 +273,10 @@ namespace BLL
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario eliminado. IdUsuario: {idUsuario}.", Criticidad486LP.Alta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RecalcularDV("Usuarios", out mensajeDV);
                 }
 
                 return resultado;
@@ -287,6 +299,10 @@ namespace BLL
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario desbloqueado. DNI: {dni}.", Criticidad486LP.MuyAlta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RecalcularDV("Usuarios", out mensajeDV);
                 }
 
                 return resultado;
@@ -309,6 +325,10 @@ namespace BLL
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario bloqueado manualmente. DNI: {dni}.", Criticidad486LP.MuyAlta, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RecalcularDV("Usuarios", out mensajeDV);
                 }
 
                 return resultado;
@@ -331,6 +351,10 @@ namespace BLL
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Estado Activo invertido. DNI: {dni}.", Criticidad486LP.Media, SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RecalcularDV("Usuarios", out mensajeDV);
                 }
 
                 return resultado;
@@ -386,6 +410,10 @@ namespace BLL
                     u.Contraseña = hashNueva;
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña", "Contraseña cambiada exitosamente.", Criticidad486LP.MuyAlta, dniUsuario,
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RecalcularDV("Usuarios", out mensajeDV);
                 }
 
                 return resultado;

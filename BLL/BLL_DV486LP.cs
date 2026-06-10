@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Services.DV486LP;
 
 namespace BLL
 {
@@ -110,6 +111,75 @@ namespace BLL
                 mensaje = ex.Message;
                 return false;
             }
+        }
+
+        public List<InconsistenciaDV486LP> ObtenerInconsistencias(string tabla)
+        {
+            List<InconsistenciaDV486LP> lista = new List<InconsistenciaDV486LP>();
+
+            try
+            {
+                DataTable dt = _dal.LeerTabla(tabla);
+
+                foreach (DataRow fila in dt.Rows)
+                {
+                    string id = fila["IdUsuario"].ToString();
+
+                    StringBuilder sb = new StringBuilder();
+                    foreach (DataColumn col in dt.Columns)
+                    {
+                        if (!_columnasIgnorar.Contains(col.ColumnName))
+                            sb.Append(fila[col].ToString());
+                    }
+
+                    string hashRecalculado = Encriptacion486LP.GenerarHash(sb.ToString());
+                    string hashGuardado = fila["DV"]?.ToString() ?? "";
+
+                    if (string.IsNullOrEmpty(hashGuardado))
+                    {
+                        lista.Add(new InconsistenciaDV486LP
+                        {
+                            ID = id,
+                            Tabla = tabla,
+                            Inconsistencia = "Registro insertado directamente en la BD"
+                        });
+                    }
+                    else if (hashRecalculado != hashGuardado)
+                    {
+                        lista.Add(new InconsistenciaDV486LP
+                        {
+                            ID = id,
+                            Tabla = tabla,
+                            Inconsistencia = "Registro modificado directamente en la BD"
+                        });
+                    }
+                }
+
+                // Si no hay filas modificadas ni insertadas pero el DVV no coincide → se eliminó un registro
+                string dvvCalculado = CalcularDVV(tabla);
+                string dvvGuardado = _dal.ObtenerDVV(tabla);
+
+                if (dvvCalculado != dvvGuardado && lista.Count == 0)
+                {
+                    lista.Add(new InconsistenciaDV486LP
+                    {
+                        ID = "-",
+                        Tabla = tabla,
+                        Inconsistencia = "Registro eliminado directamente en la BD"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                lista.Add(new InconsistenciaDV486LP
+                {
+                    ID = "-",
+                    Tabla = tabla,
+                    Inconsistencia = $"Error al analizar inconsistencias: {ex.Message}"
+                });
+            }
+
+            return lista;
         }
     }
 }

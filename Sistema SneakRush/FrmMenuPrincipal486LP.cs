@@ -7,10 +7,13 @@ namespace Sistema_SneakRush
 {
     public partial class FrmMenuPrincipal486LP : Form
     {
-        public FrmMenuPrincipal486LP()
+        private bool _hayInconsistencia;
+
+        public FrmMenuPrincipal486LP(bool hayInconsistencia = false)
         {
             InitializeComponent();
             this.IsMdiContainer = true;
+            _hayInconsistencia = hayInconsistencia;
         }
 
         private void FrmMenuPrincipal486LP_Load(object sender, System.EventArgs e)
@@ -44,7 +47,22 @@ namespace Sistema_SneakRush
         private void AjustarMenuSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-            if (usuario == null) return;
+            if (usuario == null) 
+            {
+                return;
+            }
+
+            if (_hayInconsistencia)
+            {
+                usuarioToolStripMenuItem.Visible = true;
+                ayudaToolStripMenuItem.Visible = false;
+                adminToolStripMenuItem.Visible = false;
+                gestionToolStripMenuItem.Visible = false;
+                compraToolStripMenuItem.Visible = false;
+                ventaToolStripMenuItem.Visible = false;
+                reporteToolStripMenuItem.Visible = false;
+                return;
+            }
 
             BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
             List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);

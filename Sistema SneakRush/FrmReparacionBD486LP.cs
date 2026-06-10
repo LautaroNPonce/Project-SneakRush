@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Services.DV486LP;
 
 namespace Sistema_SneakRush
 {
@@ -25,7 +26,19 @@ namespace Sistema_SneakRush
 
         private void FrmReparacionBD486LP_Load(object sender, EventArgs e)
         {
-            lblTabla.Text = _dv.TablaAfectada;
+            CargarInconsistencias();
+        }
+
+        private void CargarInconsistencias()
+        {
+            dgvInconsistencias.Rows.Clear();
+
+            List<InconsistenciaDV486LP> lista = _bllDV.ObtenerInconsistencias(_dv.TablaAfectada);
+
+            foreach (InconsistenciaDV486LP inc in lista)
+            {
+                dgvInconsistencias.Rows.Add(inc.ID, inc.Tabla, inc.Inconsistencia);
+            }
         }
 
         private void btnRecalcular_Click(object sender, EventArgs e)
@@ -50,5 +63,6 @@ namespace Sistema_SneakRush
         {
             Application.Exit();
         }
+
     }
 }

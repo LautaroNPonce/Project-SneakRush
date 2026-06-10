@@ -251,9 +251,9 @@
             this.grpDetalle.Controls.Add(this.txtDetFecha);
             this.grpDetalle.Controls.Add(this.txtDetNumero);
             this.grpDetalle.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpDetalle.Location = new System.Drawing.Point(1381, 73);
+            this.grpDetalle.Location = new System.Drawing.Point(1359, 73);
             this.grpDetalle.Name = "grpDetalle";
-            this.grpDetalle.Size = new System.Drawing.Size(346, 375);
+            this.grpDetalle.Size = new System.Drawing.Size(482, 375);
             this.grpDetalle.TabIndex = 17;
             this.grpDetalle.TabStop = false;
             this.grpDetalle.Text = "Detalle del registro";
@@ -332,7 +332,7 @@
             // 
             this.txtDetDescripcion.Location = new System.Drawing.Point(6, 345);
             this.txtDetDescripcion.Name = "txtDetDescripcion";
-            this.txtDetDescripcion.Size = new System.Drawing.Size(334, 22);
+            this.txtDetDescripcion.Size = new System.Drawing.Size(470, 22);
             this.txtDetDescripcion.TabIndex = 6;
             // 
             // txtDetCriticidad
@@ -383,7 +383,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Highlight;
-            this.ClientSize = new System.Drawing.Size(1736, 673);
+            this.ClientSize = new System.Drawing.Size(1853, 673);
             this.ControlBox = false;
             this.Controls.Add(this.grpDetalle);
             this.Controls.Add(this.btnLimpiar);

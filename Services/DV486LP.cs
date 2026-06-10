@@ -20,5 +20,12 @@ namespace Services
             DVV = dvv;
             TablaAfectada = tabla;
         }
+
+        public class InconsistenciaDV486LP
+        {
+            public string ID { get; set; }
+            public string Tabla { get; set; }
+            public string Inconsistencia { get; set; }
+        }
     }
 }
