@@ -159,22 +159,30 @@ namespace Sistema_SneakRush
                 return;
             }
 
+            // Advertencia si está asignada a algún perfil
+            if (_bll.EstaAsignadaAPerfil(_idFamiliaSeleccionada))
+            {
+                DialogResult confirm = MessageBox.Show("La familia está asignada a uno o más perfiles. Si la elimina, se quitará de esos perfiles. ¿Desea continuar?","Advertencia", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.No) return;
+            }
+
+            // Advertencia si tiene permisos asignados
             if (_bll.TienePermisosAsignados(_idFamiliaSeleccionada))
             {
-                DialogResult confirm = MessageBox.Show("La familia tiene permisos asignados. Si la elimina, se quitarán todos los permisos asociados. ¿Desea continuar?",
-                    "Advertencia",MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
-
-                if (confirm == DialogResult.No)
-                {
-                    return;
+                DialogResult confirm = MessageBox.Show("La familia tiene permisos asignados. Si la elimina, se quitarán todos los permisos asociados. ¿Desea continuar?","Advertencia", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.No) 
+                { 
+                    return; 
                 }
             }
             else
             {
-                DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar la familia seleccionada?","Confirmar eliminación",
-                    MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+                DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar la familia seleccionada?","Confirmar eliminación", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                if (confirm == DialogResult.No)
+                if (confirm == DialogResult.No) 
                 { 
                     return; 
                 }

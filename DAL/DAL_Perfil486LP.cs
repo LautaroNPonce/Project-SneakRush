@@ -35,9 +35,9 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                lista = new List<Perfil486LP>();
+                throw new Exception("Error al listar perfiles: " + ex.Message);
             }
 
             return lista;
@@ -152,9 +152,9 @@ namespace DAL
                     return resultado > 0;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                throw new Exception("Error al verificar usuarios del perfil: " + ex.Message);
             }
         }
 
@@ -312,9 +312,9 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                lista = new List<Familia486LP>();
+                throw new Exception("Error al listar familias del perfil: " + ex.Message);
             }
 
             return lista;
@@ -346,9 +346,9 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                lista = new List<Permiso486LP>();
+                throw new Exception("Error al listar permisos del perfil: " + ex.Message);
             }
 
             return lista;
@@ -361,7 +361,7 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = @"SELECT DISTINCT p.Nombre FROM Permiso pINNER JOIN Perfil_Permiso pp ON p.IdPermiso = pp.IdPermiso WHERE pp.IdPerfil = @IdPerfil
+                    string query = @"SELECT DISTINCT p.Nombre FROM Permiso p INNER JOIN Perfil_Permiso pp ON p.IdPermiso = pp.IdPermiso WHERE pp.IdPerfil = @IdPerfil
                     UNION SELECT DISTINCT p.Nombre FROM Permiso p INNER JOIN Familia_Permiso fp ON p.IdPermiso = fp.IdPermiso INNER JOIN Perfil_Familia pf ON fp.IdFamilia = pf.IdFamilia
                     WHERE pf.IdPerfil = @IdPerfil2";
 
@@ -379,9 +379,9 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                permisos = new List<string>();
+                throw new Exception("Error al obtener nombres de permisos del perfil: " + ex.Message);
             }
 
             return permisos;
@@ -414,9 +414,9 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                permisos = new List<string>();
+                throw new Exception("Error al obtener permisos por rol: " + ex.Message);
             }
 
             return permisos;

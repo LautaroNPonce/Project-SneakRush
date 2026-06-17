@@ -164,6 +164,15 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
+                // Advertir si modificó su propio perfil — el Rol en sesión queda desactualizado
+                Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+                if (usuarioActual != null && usuarioActual.IdPerfil.HasValue
+                    && usuarioActual.IdPerfil.Value == _idPerfilSeleccionado)
+                {
+                    MessageBox.Show("Modificó el nombre de su propio perfil. Debe cerrar sesión e iniciar nuevamente para que el cambio tome efecto.","Aviso", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 MessageBox.Show(mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
@@ -180,33 +189,40 @@ namespace Sistema_SneakRush
                 return;
             }
 
+            // Bloquear solo si es el perfil del usuario logueado actualmente
             Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-            if (usuarioActual != null && usuarioActual.IdPerfil.HasValue && usuarioActual.IdPerfil.Value == _idPerfilSeleccionado)
+            if (usuarioActual != null && usuarioActual.IdPerfil.HasValue
+                && usuarioActual.IdPerfil.Value == _idPerfilSeleccionado)
             {
                 MessageBox.Show("No puede eliminar el perfil que está usando actualmente.", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            // Si tiene usuarios asignados — advertir pero dejar decidir al Admin
             if (_bll.TieneUsuariosAsignados(_idPerfilSeleccionado))
             {
-                MessageBox.Show("No se puede eliminar un Perfil con usuarios asignados.", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                DialogResult confirm = MessageBox.Show(
+                    "Hay usuarios asignados a este perfil. Al eliminarlo quedarán sin perfil asignado. ¿Desea continuar?",
+                    "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.No) return;
             }
 
+            // Si tiene familias o permisos asignados — advertir
             if (_bll.TieneFamiliasAsignadas(_idPerfilSeleccionado) || _bll.TienePermisosAsignados(_idPerfilSeleccionado))
             {
-                DialogResult confirm = MessageBox.Show("El perfil tiene familias o permisos asignados. Si lo elimina, se quitarán todas las asociaciones. ¿Desea continuar?",
-                    "Advertencia",MessageBoxButtons.YesNo,MessageBoxIcon.Warning);
+                DialogResult confirm = MessageBox.Show(
+                    "El perfil tiene familias o permisos asignados. Si lo elimina, se quitarán todas las asociaciones. ¿Desea continuar?",
+                    "Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-                if (confirm == DialogResult.No)
+                if (confirm == DialogResult.No) 
+                {
                     return;
+                }
             }
             else
             {
-                DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar el perfil seleccionado?","Confirmar eliminación",
-                    MessageBoxButtons.YesNo,MessageBoxIcon.Question);
-
-                if (confirm == DialogResult.No)
+                DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar el perfil seleccionado?","Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirm == DialogResult.No) 
                 { 
                     return; 
                 }
@@ -225,6 +241,7 @@ namespace Sistema_SneakRush
                 MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void btnAsignarFamilia_Click(object sender, EventArgs e)
         {
             if (_idPerfilSeleccionado <= 0)
@@ -265,6 +282,20 @@ namespace Sistema_SneakRush
             {
                 MessageBox.Show("Debe seleccionar una Familia para quitar.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            // Advertir si está quitando una familia de su propio perfil
+            Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+
+            if (usuarioActual != null && usuarioActual.IdPerfil.HasValue&& usuarioActual.IdPerfil.Value == _idPerfilSeleccionado)
+            {
+                DialogResult confirm = MessageBox.Show("Está quitando una familia de su propio perfil. Perderá acceso a sus funciones inmediatamente. " +
+                    "¿Desea continuar?","Advertencia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.No) 
+                { 
+                    return;
+                }
             }
 
             int idFamilia = Convert.ToInt32(dgvFamiliasAsignadas.CurrentRow.Cells[0].Value);
@@ -323,6 +354,20 @@ namespace Sistema_SneakRush
             {
                 MessageBox.Show("Debe seleccionar un Permiso para quitar.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            // Advertir si está quitando un permiso de su propio perfil
+            Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+
+            if (usuarioActual != null && usuarioActual.IdPerfil.HasValue&& usuarioActual.IdPerfil.Value == _idPerfilSeleccionado)
+            {
+                DialogResult confirm = MessageBox.Show("Está quitando un permiso de su propio perfil. Perderá acceso a esa función inmediatamente. ¿Desea continuar?","Advertencia", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (confirm == DialogResult.No) 
+                { 
+                    return;
+                }
             }
 
             int idPermiso = Convert.ToInt32(dgvPermisosAsignados.CurrentRow.Cells[0].Value);

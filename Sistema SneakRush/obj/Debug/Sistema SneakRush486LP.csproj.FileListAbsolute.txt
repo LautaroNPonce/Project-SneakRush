@@ -3,41 +3,46 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema S
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Sistema SneakRush.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\BE.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\BLL.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\itextsharp.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Services.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\DAL.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Newtonsoft.Json.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\BE.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\BLL.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Services.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\itextsharp.xml
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\DAL.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Newtonsoft.Json.xml
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush486LP.csproj.AssemblyReference.cache
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.Properties.Resources.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush486LP.csproj.GenerateResource.cache
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush486LP.csproj.CoreCompileInputs.cache
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema .7E4A9C49.Up2Date
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.exe
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmBitacoraEvento486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmCambiarContraseña486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmCerrarSesion486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionUsuarios486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmIniciarSesionLP486.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmMenuPrincipal486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\DAL.dll
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\DAL.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmConsultarAnaliticas486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmConsultarProducto486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmDocumentacion486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGenerarSolicitud486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionCarrito486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionClientes486LP.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionFamilias486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionPerfiles486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionProductos486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionProveedores486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionRespaldo486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGuiaUSuarios486LP.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionUsuarios486LP.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGuiaUsuarios486LP.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmIniciarSesionLP486.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmMenuPrincipal486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmRegistrarOrden486LP.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReparacionBD486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReporteCompras486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReporteStock486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReporteVenta486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\itextsharp.dll
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\itextsharp.xml
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGestionFamilias486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReparacionBD486LP.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.Properties.Resources.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush486LP.csproj.GenerateResource.cache
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush486LP.csproj.CoreCompileInputs.cache
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema .7E4A9C49.Up2Date
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.exe
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Idiomas\en.json
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Idiomas\es.json
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Idiomas\pt.json

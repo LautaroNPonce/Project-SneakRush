@@ -46,6 +46,7 @@
     <Compile Include="DAL_Bitacora486LP.cs" />
     <Compile Include="DAL_DV486LP.cs" />
     <Compile Include="DAL_Familia486LP.cs" />
+    <Compile Include="DAL_Idioma486LP.cs" />
     <Compile Include="DAL_Patente486LP.cs" />
     <Compile Include="DAL_Perfil486LP.cs" />
     <Compile Include="DAL_Usuarios486LP.cs" />

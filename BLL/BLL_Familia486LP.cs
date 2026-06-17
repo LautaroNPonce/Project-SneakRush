@@ -217,5 +217,10 @@ namespace BLL
             List<Permiso486LP> permisos = _dalFamilia.ListarPermisosDeFamilia(idFamilia);
             return permisos.Count > 0;
         }
+
+        public bool EstaAsignadaAPerfil(int idFamilia)
+        {
+            return _dalFamilia.EstaAsignadaAPerfil(idFamilia);
+        }
     }
 }

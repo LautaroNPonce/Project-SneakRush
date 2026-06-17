@@ -104,10 +104,11 @@ namespace BLL
                 return false;
             }
 
-            // Verificar si tiene usuarios asignados
-            if (_dalPerfil.TieneUsuarios(id))
+            // Bloquear solo si es el perfil del usuario logueado actualmente
+            Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuarioActual != null && usuarioActual.IdPerfil.HasValue && usuarioActual.IdPerfil.Value == id)
             {
-                mensaje = "No se puede eliminar un Perfil con usuarios asignados.";
+                mensaje = "No puede eliminar el perfil que está usando actualmente.";
                 return false;
             }
 
@@ -115,12 +116,10 @@ namespace BLL
 
             if (resultado)
             {
-                string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
-                string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
-
+                string dni = usuarioActual?.DNI ?? "";
+                string nombreUsuario = usuarioActual?.NombreUsuario ?? "Sistema";
                 _bllBitacora.Registrar(new BitacoraEvento486LP(
-                    "Gestión Perfiles",
-                    $"Se eliminó el perfil con id '{id}'.",Criticidad486LP.Alta,dni,nombreUsuario));
+                    "Gestión Perfiles",$"Se eliminó el perfil con id '{id}'.",Criticidad486LP.Alta, dni, nombreUsuario));
             }
 
             return resultado;

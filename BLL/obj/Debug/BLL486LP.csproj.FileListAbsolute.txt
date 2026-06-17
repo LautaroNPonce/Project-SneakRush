@@ -3,9 +3,11 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\D
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\BE.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\DAL.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Services.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Newtonsoft.Json.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\BE.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\DAL.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Services.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Newtonsoft.Json.xml
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL486LP.csproj.AssemblyReference.cache
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL486LP.csproj.CoreCompileInputs.cache
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL486LP.csproj.Up2Date

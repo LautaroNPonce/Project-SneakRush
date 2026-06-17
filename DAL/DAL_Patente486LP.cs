@@ -34,9 +34,9 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                lista = new List<Permiso486LP>();
+                throw new Exception("Error al listar patentes: " + ex.Message);
             }
 
             return lista;

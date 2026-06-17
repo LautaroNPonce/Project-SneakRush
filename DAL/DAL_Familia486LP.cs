@@ -35,9 +35,9 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                lista = new List<Familia486LP>();
+                throw new Exception("Error al listar familias: " + ex.Message);
             }
 
             return lista;
@@ -227,12 +227,31 @@ namespace DAL
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                lista = new List<Permiso486LP>();
+                throw new Exception("Error al listar permisos de familia: " + ex.Message);
             }
 
             return lista;
+        }
+
+        public bool EstaAsignadaAPerfil(int idFamilia)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
+                {
+                    string query = "SELECT COUNT(*) FROM Perfil_Familia WHERE IdFamilia = @IdFamilia";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@IdFamilia", idFamilia);
+                    con.Open();
+                    return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al verificar si la familia está asignada a un perfil: " + ex.Message);
+            }
         }
     }
 }

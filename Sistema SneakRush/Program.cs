@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services;
+using System;
 using System.Windows.Forms;
 
 namespace Sistema_SneakRush
@@ -8,11 +9,18 @@ namespace Sistema_SneakRush
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary>
+
+
+        public static LanguageManager486LP LanguageManager = new LanguageManager486LP();
+
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            LanguageManager.CargarJSON("es");
+
             Application.Run(new FrmIniciarSesionLP486());
         }
     }

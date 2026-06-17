@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,6 +50,9 @@
     <Compile Include="DV486LP.cs" />
     <Compile Include="Encriptacion486LP.cs" />
     <Compile Include="Familia486LP.cs" />
+    <Compile Include="IObserver486LP.cs" />
+    <Compile Include="ISubject486LP.cs" />
+    <Compile Include="LanguageManager486LP.cs" />
     <Compile Include="Perfil486LP.cs" />
     <Compile Include="Permiso486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,6 +64,9 @@
       <Project>{12EF56B5-B91A-4933-B082-BE29D8D8CDC7}</Project>
       <Name>BE486LP</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
