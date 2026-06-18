@@ -74,6 +74,7 @@ namespace Sistema_SneakRush
             this.btnCancelar = new System.Windows.Forms.Button();
             this.pnlPatentes = new System.Windows.Forms.GroupBox();
             this.dgvPatentes = new System.Windows.Forms.DataGridView();
+            this.cmbFiltroModulo = new System.Windows.Forms.ComboBox();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.pnlAsignados = new System.Windows.Forms.GroupBox();
             this.lblFamiliaSeleccionada = new System.Windows.Forms.Label();
@@ -191,6 +192,7 @@ namespace Sistema_SneakRush
             // 
             // pnlPatentes
             // 
+            this.pnlPatentes.Controls.Add(this.cmbFiltroModulo);
             this.pnlPatentes.Controls.Add(this.dgvPatentes);
             this.pnlPatentes.Controls.Add(this.btnAgregar);
             this.pnlPatentes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -206,16 +208,26 @@ namespace Sistema_SneakRush
             this.dgvPatentes.AllowUserToAddRows = false;
             this.dgvPatentes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvPatentes.ColumnHeadersHeight = 29;
-            this.dgvPatentes.Location = new System.Drawing.Point(10, 25);
+            this.dgvPatentes.Location = new System.Drawing.Point(10, 60);
             this.dgvPatentes.MultiSelect = false;
             this.dgvPatentes.Name = "dgvPatentes";
             this.dgvPatentes.ReadOnly = true;
             this.dgvPatentes.RowHeadersVisible = false;
             this.dgvPatentes.RowHeadersWidth = 51;
             this.dgvPatentes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPatentes.Size = new System.Drawing.Size(315, 559);
+            this.dgvPatentes.Size = new System.Drawing.Size(315, 524);
             this.dgvPatentes.TabIndex = 0;
             this.dgvPatentes.SelectionChanged += new System.EventHandler(this.dgvPatentes_SelectionChanged);
+            // 
+            // cmbFiltroModulo
+            // 
+            this.cmbFiltroModulo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroModulo.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmbFiltroModulo.Location = new System.Drawing.Point(10, 25);
+            this.cmbFiltroModulo.Name = "cmbFiltroModulo";
+            this.cmbFiltroModulo.Size = new System.Drawing.Size(315, 28);
+            this.cmbFiltroModulo.TabIndex = 2;
+            this.cmbFiltroModulo.SelectedIndexChanged += new System.EventHandler(this.cmbFiltroModulo_SelectedIndexChanged);
             // 
             // btnAgregar
             // 
@@ -346,6 +358,7 @@ namespace Sistema_SneakRush
         private System.Windows.Forms.Button btnCancelar;
         private System.Windows.Forms.GroupBox pnlPatentes;
         private System.Windows.Forms.DataGridView dgvPatentes;
+        private System.Windows.Forms.ComboBox cmbFiltroModulo;
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.GroupBox pnlAsignados;
         private System.Windows.Forms.Label lblFamiliaSeleccionada;

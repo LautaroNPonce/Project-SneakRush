@@ -25,6 +25,7 @@ namespace Sistema_SneakRush
         public FrmBitacoraEvento486LP()
         {
             InitializeComponent();
+            AjustarBotonesSegunPerfil();
         }
 
         private void FrmBitacoraEvento486LP_Load(object sender, EventArgs e)
@@ -146,6 +147,19 @@ namespace Sistema_SneakRush
             txtDetModulo.Clear();
             txtDetCriticidad.Clear();
             txtDetDescripcion.Clear();
+        }
+
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
+
+            btnAplicar.Enabled = permisos.Contains("BITACORA_APLICAR");
+            btnLimpiar.Enabled = permisos.Contains("BITACORA_LIMPIAR");
+            btnCancelar.Enabled = permisos.Contains("BITACORA_CANCELAR");
+            btnExportarPDF.Enabled = permisos.Contains("BITACORA_EXPORTAR");
         }
 
         private void dgtBitacoraEvento_SelectionChanged(object sender, EventArgs e)

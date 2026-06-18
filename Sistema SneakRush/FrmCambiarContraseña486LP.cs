@@ -28,6 +28,8 @@ namespace Sistema_SneakRush
                 txtNombreUsuario.Text = usuario.NombreUsuario;
                 txtNombreUsuario.Enabled = false;
             }
+
+            AjustarBotonesSegunPerfil();
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -103,6 +105,17 @@ namespace Sistema_SneakRush
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
+
+            btnAceptar.Enabled = permisos.Contains("CAMBIAR_CONTRASENA_ACEPTAR");
+            btnSalir.Enabled = permisos.Contains("CAMBIAR_CONTRASENA_SALIR");
         }
     }
 }

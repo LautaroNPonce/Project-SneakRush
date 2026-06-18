@@ -18,7 +18,14 @@ namespace Sistema_SneakRush
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
         private string _modo = "Ninguno";
         private int _idUsuarioSeleccionado = -1; 
-        private string _dniUsuarioSeleccionado = string.Empty; 
+        private string _dniUsuarioSeleccionado = string.Empty;
+        private bool _puedeAgregar;
+        private bool _puedeModificar;
+        private bool _puedeEliminar;
+        private bool _puedeDesbloquear;
+        private bool _puedeAplicar;
+        private bool _puedeCancelar;
+        private bool _puedeSalir;
 
         public FrmGestionUsuarios486LP()
         {
@@ -33,6 +40,9 @@ namespace Sistema_SneakRush
             HabilitarCampos();
             lblModo.Text = string.Empty;
             SetModo("Consulta");
+
+            AjustarBotonesSegunPerfil();
+            AplicarPermisosBotones();
         }
 
         private void CargarComboRol()
@@ -175,7 +185,7 @@ namespace Sistema_SneakRush
             HabilitarCampos();
             txtNombreUsuario.Enabled = false;
             rbtnActivoSi.Checked = true;
-            btnCancelar.Enabled = true;
+            btnCancelar.Enabled = _puedeCancelar;
 
         }
 
@@ -194,7 +204,7 @@ namespace Sistema_SneakRush
             HabilitarCampos();
             txtDNI.Enabled = false;
             txtNombreUsuario.Enabled = false;
-            btnCancelar.Enabled = true;
+            btnCancelar.Enabled = _puedeCancelar;
         }
 
         private void BtnEliminar_Click(object sender, EventArgs e)
@@ -222,7 +232,7 @@ namespace Sistema_SneakRush
                 rbtnActivoNo.Checked = !u.Activo;
             }
 
-            btnCancelar.Enabled = true;
+            btnCancelar.Enabled = _puedeCancelar;
         }
 
         private void btnDesbloquear_Click(object sender, EventArgs e)
@@ -251,7 +261,7 @@ namespace Sistema_SneakRush
             btnEliminar.Enabled = false;
             rbtnActivos.Enabled = false;
             rbtnTodos.Enabled = false;
-            btnCancelar.Enabled = true;
+            btnCancelar.Enabled = _puedeCancelar;
         }
 
         private void btnAplicar_Click(object sender, EventArgs e)
@@ -433,15 +443,39 @@ namespace Sistema_SneakRush
         {
             SetModo("Consulta");
             LimpiarCampos();
-            btnCancelar.Enabled = false;
-            btnAgregar.Enabled = true;
-            btnModificar.Enabled = true;
-            btnEliminar.Enabled = true;
-            btnDesbloquear.Enabled = true;
+            AplicarPermisosBotones();
             rbtnActivos.Enabled = true;
             rbtnTodos.Enabled = true;
             _idUsuarioSeleccionado = -1;
             _dniUsuarioSeleccionado = string.Empty;
+        }
+
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
+            List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);
+
+            _puedeAgregar = permisos.Contains("USUARIOS_AGREGAR");
+            _puedeModificar = permisos.Contains("USUARIOS_MODIFICAR");
+            _puedeEliminar = permisos.Contains("USUARIOS_ELIMINAR");
+            _puedeDesbloquear = permisos.Contains("USUARIOS_DESBLOQUEAR");
+            _puedeAplicar = permisos.Contains("USUARIOS_APLICAR");
+            _puedeCancelar = permisos.Contains("USUARIOS_CANCELAR");
+            _puedeSalir = permisos.Contains("USUARIOS_SALIR");
+        }
+
+        private void AplicarPermisosBotones()
+        {
+            btnAgregar.Enabled = _puedeAgregar;
+            btnModificar.Enabled = _puedeModificar;
+            btnEliminar.Enabled = _puedeEliminar;
+            btnDesbloquear.Enabled = _puedeDesbloquear;
+            btnAplicar.Enabled = _puedeAplicar;
+            btnCancelar.Enabled = false;
+            btnSalir.Enabled = _puedeSalir;
         }
 
         private void ColorearFilas()

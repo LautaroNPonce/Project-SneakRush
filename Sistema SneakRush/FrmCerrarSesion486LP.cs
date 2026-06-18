@@ -19,6 +19,7 @@ namespace Sistema_SneakRush
         public FrmCerrarSesion486LP()
         {
             InitializeComponent();
+            AjustarBotonesSegunPerfil();
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -40,6 +41,17 @@ namespace Sistema_SneakRush
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
+
+            btnAceptar.Enabled = permisos.Contains("CERRAR_SESION_ACEPTAR");
+            btnCancelar.Enabled = permisos.Contains("CERRAR_SESION_CANCELAR");
         }
     }
 }

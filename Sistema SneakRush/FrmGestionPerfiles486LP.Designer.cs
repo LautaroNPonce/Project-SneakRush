@@ -78,6 +78,7 @@ namespace Sistema_SneakRush
             this.btnAsignarFamilia = new System.Windows.Forms.Button();
             this.pnlPatentes = new System.Windows.Forms.GroupBox();
             this.dgvPatentes = new System.Windows.Forms.DataGridView();
+            this.cmbFiltroModulo = new System.Windows.Forms.ComboBox();
             this.btnAsignarPermiso = new System.Windows.Forms.Button();
             this.pnlComposicion = new System.Windows.Forms.GroupBox();
             this.lblPerfilSeleccionado = new System.Windows.Forms.Label();
@@ -246,6 +247,7 @@ namespace Sistema_SneakRush
             // 
             // pnlPatentes
             // 
+            this.pnlPatentes.Controls.Add(this.cmbFiltroModulo);
             this.pnlPatentes.Controls.Add(this.dgvPatentes);
             this.pnlPatentes.Controls.Add(this.btnAsignarPermiso);
             this.pnlPatentes.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -261,16 +263,26 @@ namespace Sistema_SneakRush
             this.dgvPatentes.AllowUserToAddRows = false;
             this.dgvPatentes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvPatentes.ColumnHeadersHeight = 29;
-            this.dgvPatentes.Location = new System.Drawing.Point(10, 25);
+            this.dgvPatentes.Location = new System.Drawing.Point(10, 60);
             this.dgvPatentes.MultiSelect = false;
             this.dgvPatentes.Name = "dgvPatentes";
             this.dgvPatentes.ReadOnly = true;
             this.dgvPatentes.RowHeadersVisible = false;
             this.dgvPatentes.RowHeadersWidth = 51;
             this.dgvPatentes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPatentes.Size = new System.Drawing.Size(255, 530);
+            this.dgvPatentes.Size = new System.Drawing.Size(255, 495);
             this.dgvPatentes.TabIndex = 0;
             this.dgvPatentes.SelectionChanged += new System.EventHandler(this.dgvPatentes_SelectionChanged);
+            // 
+            // cmbFiltroModulo
+            // 
+            this.cmbFiltroModulo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFiltroModulo.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.cmbFiltroModulo.Location = new System.Drawing.Point(10, 25);
+            this.cmbFiltroModulo.Name = "cmbFiltroModulo";
+            this.cmbFiltroModulo.Size = new System.Drawing.Size(255, 28);
+            this.cmbFiltroModulo.TabIndex = 2;
+            this.cmbFiltroModulo.SelectedIndexChanged += new System.EventHandler(this.cmbFiltroModulo_SelectedIndexChanged);
             // 
             // btnAsignarPermiso
             // 
@@ -328,7 +340,7 @@ namespace Sistema_SneakRush
             // dgvFamiliasAsignadas
             // 
             this.dgvFamiliasAsignadas.AllowUserToAddRows = false;
-            this.dgvFamiliasAsignadas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgvFamiliasAsignadas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvFamiliasAsignadas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvFamiliasAsignadas.ColumnHeadersHeight = 29;
@@ -468,6 +480,7 @@ namespace Sistema_SneakRush
         private System.Windows.Forms.Button btnAsignarFamilia;
         private System.Windows.Forms.GroupBox pnlPatentes;
         private System.Windows.Forms.DataGridView dgvPatentes;
+        private System.Windows.Forms.ComboBox cmbFiltroModulo;
         private System.Windows.Forms.Button btnAsignarPermiso;
         private System.Windows.Forms.GroupBox pnlComposicion;
         private System.Windows.Forms.Label lblPerfilSeleccionado;

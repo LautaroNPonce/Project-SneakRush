@@ -10,19 +10,19 @@ namespace Services
     public class SessionManager486LP
     {
         private SessionManager486LP() { }
- 
+
         public static SessionManager486LP Instancia { get; private set; } = null;
- 
+
         public static SessionManager486LP ObtenerInstancia()
         {
-            if (Instancia == null) 
+            if (Instancia == null)
             {
                 Instancia = new SessionManager486LP();
             }
 
             return Instancia;
         }
- 
+
         // Estado de sesión 
         private Usuario486LP _usuario;
         private string _idiomaActual;
@@ -36,8 +36,7 @@ namespace Services
         //        _idiomaActual = value;
         //    }
         //}
- 
-        // Devuelve el usuario actualmente logueado.
+
         public Usuario486LP UsuarioActual()
         {
             return _usuario;
@@ -45,9 +44,9 @@ namespace Services
 
         public void LogIN(Usuario486LP usuario)
         {
-            if (_usuario != null) 
-            { 
-                throw new InvalidOperationException("Ya hay una sesión activa. Cerrá la sesión antes de iniciar otra."); 
+            if (_usuario != null)
+            {
+                throw new InvalidOperationException("Ya hay una sesión activa. Cerrá la sesión antes de iniciar otra.");
             }
 
             _usuario = usuario;
@@ -55,8 +54,7 @@ namespace Services
 
         public void LogOut()
         {
-            _usuario  = null;
-            Instancia = null;
+            _usuario = null;
         }
 
         public bool IsLogged()

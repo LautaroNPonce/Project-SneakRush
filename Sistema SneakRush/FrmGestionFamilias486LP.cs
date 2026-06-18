@@ -15,8 +15,16 @@ namespace Sistema_SneakRush
     public partial class FrmGestionFamilias486LP : Form
     {
         private BLL_Familia486LP _bll = new BLL_Familia486LP();
+        private List<Permiso486LP> _todasLasPatentes = new List<Permiso486LP>();
         private int _idFamiliaSeleccionada = -1;
         private int _idPermisoSeleccionado = -1;
+        private bool _puedeCrear;
+        private bool _puedeModificar;
+        private bool _puedeEliminar;
+        private bool _puedeAsignarPatente;
+        private bool _puedeQuitarPatente;
+        private bool _puedeCancelar;
+        private bool _puedeSalir;
 
         public FrmGestionFamilias486LP()
         {
@@ -27,8 +35,11 @@ namespace Sistema_SneakRush
         private void FrmGestionFamilias486LP_Load(object sender, EventArgs e)
         {
             ConfigurarDGV();
+            CargarComboModulos();
             CargarFamilias();
             CargarPatentes();
+            AjustarBotonesSegunPerfil();
+            AplicarPermisosBotones();
         }
 
         private void CargarFamilias()
@@ -43,12 +54,56 @@ namespace Sistema_SneakRush
 
         private void CargarPatentes()
         {
-            dgvPatentes.Rows.Clear();
-            List<Permiso486LP> patentes = _bll.ObtenerPatentes();
-            foreach (Permiso486LP p in patentes)
+            _todasLasPatentes = _bll.ObtenerPatentes();
+            MostrarPatentes();
+        }
+
+        private void CargarComboModulos()
+        {
+            cmbFiltroModulo.Items.Clear();
+            cmbFiltroModulo.Items.AddRange(new object[]
             {
-                dgvPatentes.Rows.Add(p.Id, p.Nombre);
+                "Todos", "Usuarios", "Familias", "Perfiles", "Bitácora",
+                "Respaldos", "Maestro", "Compra", "Venta", "Reporte",
+                "Cierre de sesión", "Cambiar contraseña"
+            });
+            cmbFiltroModulo.SelectedIndex = 0;   // "Todos"
+        }
+
+        private void MostrarPatentes()
+        {
+            dgvPatentes.Rows.Clear();
+            string filtro = cmbFiltroModulo.SelectedItem?.ToString() ?? "Todos";
+
+            foreach (Permiso486LP p in _todasLasPatentes)
+            {
+                if (filtro == "Todos" || ObtenerModulo(p.Nombre) == filtro)
+                {
+                    dgvPatentes.Rows.Add(p.Id, p.Nombre);
+                }
             }
+        }
+
+        private void cmbFiltroModulo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MostrarPatentes();
+        }
+
+        // Deriva el módulo a partir del nombre de la patente (solo para el filtro visual).
+        private string ObtenerModulo(string patente)
+        {
+            if (patente == "GESTION_USUARIOS" || patente.StartsWith("USUARIOS_")) return "Usuarios";
+            if (patente == "GESTION_FAMILIAS" || patente.StartsWith("FAMILIAS_")) return "Familias";
+            if (patente == "GESTION_ROLES" || patente.StartsWith("PERFILES_")) return "Perfiles";
+            if (patente.StartsWith("BITACORA_")) return "Bitácora";
+            if (patente == "GESTION_RESPALDOS") return "Respaldos";
+            if (patente.StartsWith("MAESTRO_")) return "Maestro";
+            if (patente.StartsWith("COMPRA_")) return "Compra";
+            if (patente.StartsWith("VENTA_")) return "Venta";
+            if (patente.StartsWith("REPORTE_")) return "Reporte";
+            if (patente.StartsWith("CERRAR_SESION_")) return "Cierre de sesión";
+            if (patente.StartsWith("CAMBIAR_CONTRASENA_")) return "Cambiar contraseña";
+            return "Otros";
         }
 
         private void CargarPermisosAsignados(int idFamilia)
@@ -274,6 +329,34 @@ namespace Sistema_SneakRush
             lblFamiliaSeleccionada.Text = "Permisos de: (ninguna seleccionada)";
             CargarFamilias();
             CargarPatentes();
+        }
+
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
+            List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);
+
+            _puedeCrear = permisos.Contains("FAMILIAS_CREAR");
+            _puedeModificar = permisos.Contains("FAMILIAS_MODIFICAR");
+            _puedeEliminar = permisos.Contains("FAMILIAS_ELIMINAR");
+            _puedeAsignarPatente = permisos.Contains("FAMILIAS_ASIGNAR_PATENTE");
+            _puedeQuitarPatente = permisos.Contains("FAMILIAS_QUITAR_PATENTE");
+            _puedeCancelar = permisos.Contains("FAMILIAS_CANCELAR");
+            _puedeSalir = permisos.Contains("FAMILIAS_SALIR");
+        }
+
+        private void AplicarPermisosBotones()
+        {
+            btnCrear.Enabled = _puedeCrear;
+            btnModificar.Enabled = _puedeModificar;
+            btnEliminar.Enabled = _puedeEliminar;
+            btnAgregar.Enabled = _puedeAsignarPatente;   // "Agregar a familia"
+            btnQuitar.Enabled = _puedeQuitarPatente;    // "Quitar permiso seleccionado"
+            btnCancelar.Enabled = _puedeCancelar;
+            btnSalir.Enabled = _puedeSalir;
         }
 
         private void ConfigurarDGV()
