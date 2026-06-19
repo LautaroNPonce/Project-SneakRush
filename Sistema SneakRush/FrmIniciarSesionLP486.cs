@@ -13,16 +13,19 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmIniciarSesionLP486 : Form
+    public partial class FrmIniciarSesionLP486 : Form, IObserver486LP
     {
         public FrmIniciarSesionLP486()
         {
             InitializeComponent();
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmIniciarSesionLP486_FormClosing;
         }
 
         private void FrmIniciarSesionLP486_Load(object sender, EventArgs e)
         {
             txtUsuario.Focus();
+            ActualizarIdioma();
         }
 
         private void btnIngresar_Click(object sender, EventArgs e)
@@ -47,15 +50,23 @@ namespace Sistema_SneakRush
                 case 1:
                     if (this.MdiParent is FrmMenuPrincipal486LP menu)
                     {
-                        // Re-Login — el SessionManager ya tiene una instancia activa con usuario logueado
-                        // El Singleton no permite crear otra sesión mientras haya una activa
-                        var usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-
-                        if (usuarioActual != null)
+                        if (SessionManager486LP.ObtenerInstancia().IsLogged())
                         {
-                            MessageBox.Show(
-                                $"Ya hay una sesión activa como {usuarioActual.Nombre} {usuarioActual.Apellido}.\nCerrá la sesión antes de iniciar otra.",
-                                "SneakRush — Sesión activa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            // Re-Login — el SessionManager ya tiene una instancia activa con usuario logueado
+                            // El Singleton no permite crear otra sesión mientras haya una activa
+                            var usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+
+                            if (usuario.IdUsuario == usuarioActual.IdUsuario)
+                            {
+                                // Mismo usuario el Singleton rechaza una segunda instancia de la misma sesión
+                                MessageBox.Show("No se puede crear más de una instancia de la sesión: ya tenés esta misma cuenta en uso.",
+                                    "SneakRush — Sesión única", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                            else
+                            {
+                                MessageBox.Show($"Ya hay una sesión activa como {usuarioActual.Nombre} {usuarioActual.Apellido}.\nCerrá la sesión antes de iniciar otra.",
+                                    "SneakRush — Sesión activa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
                             LimpiarCampos();
                             return;
                         }
@@ -78,6 +89,10 @@ namespace Sistema_SneakRush
                         // Login normal
                         SessionManager486LP.ObtenerInstancia().LogOut();
                         SessionManager486LP.ObtenerInstancia().LogIN(usuario);
+
+                        // esto es lo que utilice para el cambio de idioma y que quede guarado cuando hago LogOut
+                        string nombreIdiomaUsuario = new BLL_Idioma486LP().ObtenerIdioma(usuario.IdUsuario);
+                        Program.LanguageManager.CambiarIdioma(Program.LanguageManager.MapearCodigo(nombreIdiomaUsuario));
 
                         if (usuario.DebeCambiarContraseña)
                         {
@@ -173,13 +188,18 @@ namespace Sistema_SneakRush
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 if (this.MdiParent == null)
-                    Application.Exit(); // login normal → cierra la app
+                {
+                    Application.Exit();
+                }
                 else
                 {
                     e.Cancel = true;
-                    this.Hide(); // re-login → se oculta nomás
+                    this.Hide();
+                    return;   // no desregistrar: el form sigue vivo, solo oculto
                 }
             }
+
+            Program.LanguageManager.Quitar(this);
         }
 
         private void LimpiarCampos()
@@ -193,6 +213,18 @@ namespace Sistema_SneakRush
         {
             txtContraseña.PasswordChar = txtContraseña.PasswordChar == '*' ? '\0' : '*';
         }
+
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmIniciarSesionLP486";
+
+            this.Text = lm.ObtenerTexto(f, "Title");
+            label1.Text = lm.ObtenerTexto(f, "lblUsuario");
+            label2.Text = lm.ObtenerTexto(f, "lblContraseña");
+            btnIngresar.Text = lm.ObtenerTexto(f, "btnIngresar");
+        }
+
 
     }
 }

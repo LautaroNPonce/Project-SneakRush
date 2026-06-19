@@ -362,7 +362,7 @@
             this.txtDetUsuario.Name = "txtDetUsuario";
             this.txtDetUsuario.Size = new System.Drawing.Size(166, 22);
             this.txtDetUsuario.TabIndex = 2;
-            this.txtDetUsuario.TextChanged += new System.EventHandler(this.txtDetUsuario_TextChanged);
+
             // 
             // txtDetFecha
             // 

@@ -18,9 +18,7 @@ namespace Sistema_SneakRush
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            LanguageManager.CargarJSON("es");
-
+            LanguageManager.CambiarIdioma(LanguageManager.ObtenerUltimoIdioma());
             Application.Run(new FrmIniciarSesionLP486());
         }
     }

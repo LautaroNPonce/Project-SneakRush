@@ -12,12 +12,14 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmCambiarContraseña486LP : Form
+    public partial class FrmCambiarContraseña486LP : Form, IObserver486LP
     {
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
         public FrmCambiarContraseña486LP()
         {
             InitializeComponent();
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmCambiarContraseña486LP_FormClosing;
         }
 
         private void FrmCambiarContraseña486LP_Load(object sender, EventArgs e)
@@ -30,6 +32,7 @@ namespace Sistema_SneakRush
             }
 
             AjustarBotonesSegunPerfil();
+            ActualizarIdioma();
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -116,6 +119,26 @@ namespace Sistema_SneakRush
 
             btnAceptar.Enabled = permisos.Contains("CAMBIAR_CONTRASENA_ACEPTAR");
             btnSalir.Enabled = permisos.Contains("CAMBIAR_CONTRASENA_SALIR");
+        }
+
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmCambiarContraseña486LP";
+
+            this.Text = lm.ObtenerTexto(f, "Title");
+            label3.Text = lm.ObtenerTexto(f, "Title");                
+            label5.Text = lm.ObtenerTexto(f, "lblNombreUsuario");
+            label2.Text = lm.ObtenerTexto(f, "lblContraseñaActual");
+            label1.Text = lm.ObtenerTexto(f, "lblNuevaContraseña");
+            label4.Text = lm.ObtenerTexto(f, "lblConfirmarContraseña");
+            btnAceptar.Text = lm.ObtenerTexto(f, "btnAceptar");
+            btnSalir.Text = lm.ObtenerTexto(f, "btnSalir");
+        }
+
+        private void FrmCambiarContraseña486LP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.LanguageManager.Quitar(this);
         }
     }
 }

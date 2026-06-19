@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGestionUsuarios486LP : Form
+    public partial class FrmGestionUsuarios486LP : Form, IObserver486LP
     {
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
         private string _modo = "Ninguno";
@@ -30,6 +30,9 @@ namespace Sistema_SneakRush
         public FrmGestionUsuarios486LP()
         {
             InitializeComponent();
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmGestionUsuarios486LP_FormClosing;
+
         }
 
         private void FrmGestionUsuarios486LP_Load(object sender, EventArgs e)
@@ -40,7 +43,7 @@ namespace Sistema_SneakRush
             HabilitarCampos();
             lblModo.Text = string.Empty;
             SetModo("Consulta");
-
+            ActualizarIdioma();
             AjustarBotonesSegunPerfil();
             AplicarPermisosBotones();
         }
@@ -134,22 +137,32 @@ namespace Sistema_SneakRush
         private void SetModo(string modo)
         {
             _modo = modo;
-            switch (modo)
+            ActualizarLabelModo();
+            if (modo == "Consulta")
+            { 
+                DeshabilitarCampos(limpiar: false); 
+            }
+        }
+
+        private void ActualizarLabelModo()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
+            switch (_modo)
             {
-                case "Consulta": lblModo.Text = "Modo Consulta";
-                    DeshabilitarCampos(limpiar: false);
+                case "Consulta": lblModo.Text = lm.ObtenerTexto(f, "lblModoConsulta"); 
                     break;
-                case "Añadir": lblModo.Text = "Modo Añadir";
+                case "Añadir": lblModo.Text = lm.ObtenerTexto(f, "lblModoAñadir"); 
                     break;
-                case "Modificar": lblModo.Text = "Modo Modificar";
+                case "Modificar": lblModo.Text = lm.ObtenerTexto(f, "lblModoModificar"); 
                     break;
-                case "Eliminar": lblModo.Text = "Modo Eliminar";
+                case "Eliminar": lblModo.Text = lm.ObtenerTexto(f, "lblModoEliminar"); 
                     break;
-                case "Desbloquear": lblModo.Text = "Modo Desbloquear";
+                case "Desbloquear": lblModo.Text = lm.ObtenerTexto(f, "lblModoDesbloquear"); 
                     break;
-                case "Bloquear": lblModo.Text = "Modo Bloquear";
+                case "Bloquear": lblModo.Text = lm.ObtenerTexto(f, "lblModoBloquear"); 
                     break;
-                default: lblModo.Text = string.Empty;
+                default: lblModo.Text = string.Empty; 
                     break;
             }
         }
@@ -170,12 +183,15 @@ namespace Sistema_SneakRush
 
             _idUsuarioSeleccionado = u.IdUsuario;
             _dniUsuarioSeleccionado = u.DNI;
-            btnDesbloquear.Text = u.Bloqueado ? "Desbloquear" : "Bloquear";
 
             if (_modo == "Modificar" || _modo == "Eliminar" || _modo == "Desbloquear" || _modo == "Bloquear")
             {
                 CargarCamposDesdeUsuario(u);
             }
+
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
+            btnDesbloquear.Text = u.Bloqueado ? lm.ObtenerTexto(f, "btnDesbloquear"): lm.ObtenerTexto(f, "btnBloquear");
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -191,9 +207,13 @@ namespace Sistema_SneakRush
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
+
             if (_idUsuarioSeleccionado == -1)
             {
-                MessageBox.Show("Seleccione un usuario para modificar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarModificar", "Seleccione un usuario para modificar."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarModificar.Title", "Aviso"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -209,15 +229,18 @@ namespace Sistema_SneakRush
 
         private void BtnEliminar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
+
             if (_idUsuarioSeleccionado == -1)
             {
-                MessageBox.Show("Seleccione un usuario para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarEliminar", "Seleccione un usuario para eliminar."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarEliminar.Title", "Aviso"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             SetModo("Eliminar");
 
-            // Mostrar datos del usuario en los campos (solo lectura)
             Usuario486LP u = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
             if (u != null)
             {
@@ -237,9 +260,13 @@ namespace Sistema_SneakRush
 
         private void btnDesbloquear_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
+
             if (_idUsuarioSeleccionado == -1)
             {
-                MessageBox.Show("Seleccione un usuario de la grilla.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarDesbloquear", "Seleccione un usuario de la grilla."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarDesbloquear.Title", "Aviso"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -266,6 +293,8 @@ namespace Sistema_SneakRush
 
         private void btnAplicar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
             string msg;
 
             if (_modo == "Añadir")
@@ -294,13 +323,15 @@ namespace Sistema_SneakRush
 
                 if (resultado)
                 {
-                    MessageBox.Show("Usuario creado correctamente.\nLa contraseña temporal es: Apellido + DNI", "Usuario creado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(lm.ObtenerTexto(f, "Msg.UsuarioCreado", "Usuario creado correctamente.\nLa contraseña temporal es: Apellido + DNI"),
+                        lm.ObtenerTexto(f, "Msg.UsuarioCreado.Title", "Usuario creado"),MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Resetear();
                     CargarDgv();
                 }
                 else
                 {
-                    MessageBox.Show(msg, "Error al agregar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.ErrorAgregar.Title", "Error al agregar"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else if (_modo == "Modificar")
@@ -312,7 +343,8 @@ namespace Sistema_SneakRush
                 Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
                 if (usuarioActual != null && usuarioActual.IdUsuario == _idUsuarioSeleccionado && !rbtnActivoSi.Checked)
                 {
-                    MessageBox.Show("No puede desactivar su propia cuenta mientras está en uso.", "Acción no permitida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(lm.ObtenerTexto(f, "Msg.NoDesactivarPropia", "No puede desactivar su propia cuenta mientras está en uso."),
+                        lm.ObtenerTexto(f, "Msg.NoDesactivarPropia.Title", "Acción no permitida"),MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 var perfiles = new BLL_Perfil486LP().ObtenerPerfiles();
@@ -335,13 +367,15 @@ namespace Sistema_SneakRush
 
                 if (resultado)
                 {
-                    MessageBox.Show("Usuario modificado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(lm.ObtenerTexto(f, "Msg.UsuarioModificado", "Usuario modificado correctamente."),
+                        lm.ObtenerTexto(f, "Msg.UsuarioModificado.Title", "Éxito"),MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Resetear();
                     CargarDgv();
                 }
                 else
                 {
-                    MessageBox.Show(msg, "Error al modificar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.ErrorModificar.Title", "Error al modificar"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else if (_modo == "Eliminar")
@@ -349,11 +383,13 @@ namespace Sistema_SneakRush
                 Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
                 if (usuarioActual != null && usuarioActual.IdUsuario == _idUsuarioSeleccionado)
                 {
-                    MessageBox.Show("No puede eliminar su propia cuenta mientras está en uso.", "Acción no permitida",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                    MessageBox.Show(lm.ObtenerTexto(f, "Msg.NoEliminarPropia", "No puede eliminar su propia cuenta mientras está en uso."),
+                        lm.ObtenerTexto(f, "Msg.NoEliminarPropia.Title", "Acción no permitida"),MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                DialogResult confirm = MessageBox.Show($"¿Está seguro que desea eliminar al usuario '{txtNombreUsuario.Text}'?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult confirm = MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.ConfirmarEliminar", "¿Está seguro que desea eliminar al usuario '{0}'?"), txtNombreUsuario.Text),
+                    lm.ObtenerTexto(f, "Msg.ConfirmarEliminar.Title", "Confirmar eliminación"),MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (confirm == DialogResult.Yes)
                 {
@@ -361,13 +397,15 @@ namespace Sistema_SneakRush
 
                     if (resultado)
                     {
-                        MessageBox.Show("Usuario eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(lm.ObtenerTexto(f, "Msg.UsuarioEliminado", "Usuario eliminado correctamente."),
+                            lm.ObtenerTexto(f, "Msg.UsuarioEliminado.Title", "Éxito"),MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Resetear();
                         CargarDgv();
                     }
                     else
                     {
-                        MessageBox.Show(msg, "Error al eliminar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.ErrorEliminar.Title", "Error al eliminar"),
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -389,12 +427,14 @@ namespace Sistema_SneakRush
                     Usuario486LP usuarioSesion = SessionManager486LP.ObtenerInstancia().UsuarioActual();
                     if (usuarioSesion != null && usuarioSesion.IdUsuario == u.IdUsuario && !u.Bloqueado)
                     {
-                        MessageBox.Show("No puede bloquear su propia cuenta mientras está en uso.", "Acción no permitida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(lm.ObtenerTexto(f, "Msg.NoBloquearPropia", "No puede bloquear su propia cuenta mientras está en uso."),
+                            lm.ObtenerTexto(f, "Msg.NoBloquearPropia.Title", "Acción no permitida"),MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
-                    string accion = u.Bloqueado ? "desbloquear" : "bloquear";
-                    DialogResult confirm = MessageBox.Show($"¿Desea {accion} al usuario '{u.NombreUsuario}'?", "Confirmar acción", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    string accion = u.Bloqueado ? lm.ObtenerTexto(f, "Msg.Accion.Desbloquear", "desbloquear") : lm.ObtenerTexto(f, "Msg.Accion.Bloquear", "bloquear");
+                    DialogResult confirm = MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.ConfirmarAccion", "¿Desea {0} al usuario '{1}'?"), accion, u.NombreUsuario),
+                        lm.ObtenerTexto(f, "Msg.ConfirmarAccion.Title", "Confirmar acción"),MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (confirm != DialogResult.Yes) 
                     { 
@@ -405,14 +445,15 @@ namespace Sistema_SneakRush
 
                     if (resultado)
                     {
-                        string textoExito = u.Bloqueado ? "Usuario desbloqueado correctamente." : "Usuario bloqueado correctamente.";
-                        MessageBox.Show(textoExito, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        string textoExito = u.Bloqueado ? lm.ObtenerTexto(f, "Msg.UsuarioDesbloqueado", "Usuario desbloqueado correctamente.") : lm.ObtenerTexto(f, "Msg.UsuarioBloqueado", "Usuario bloqueado correctamente.");
+                        string tituloExito = u.Bloqueado ? lm.ObtenerTexto(f, "Msg.UsuarioDesbloqueado.Title", "Éxito") : lm.ObtenerTexto(f, "Msg.UsuarioBloqueado.Title", "Éxito");
+                        MessageBox.Show(textoExito, tituloExito, MessageBoxButtons.OK, MessageBoxIcon.Information);
                         Resetear();
                         CargarDgv();
                     }
                     else
                     {
-                        MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"),MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -545,60 +586,78 @@ namespace Sistema_SneakRush
 
         private void ConfigurarColumnas()
         {
-            if (dgvUsuarios.Columns.Count == 0)
+            if (dgvUsuarios.Columns.Count == 0) 
             {
                 return;
             }
 
-            foreach (DataGridViewColumn col in dgvUsuarios.Columns)
-            {
-                col.Visible = false;
-            }
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
 
-            MostrarColumna("NombreUsuario", "NombreUsuario");
-            MostrarColumna("Nombre", "Nombre");
-            MostrarColumna("Apellido", "Apellido");
-            MostrarColumna("DNI", "DNI");
-            MostrarColumna("Rol", "Rol");
-            MostrarColumna("Email", "Email");
-            MostrarColumna("Bloqueado", "Bloqueado");
+            foreach (DataGridViewColumn col in dgvUsuarios.Columns)
+                col.Visible = false;
+
+            MostrarColumna("NombreUsuario", lm.ObtenerTexto(f, "col.NombreUsuario"));
+            MostrarColumna("Nombre", lm.ObtenerTexto(f, "col.Nombre"));
+            MostrarColumna("Apellido", lm.ObtenerTexto(f, "col.Apellido"));
+            MostrarColumna("DNI", lm.ObtenerTexto(f, "col.DNI"));
+            MostrarColumna("Rol", lm.ObtenerTexto(f, "col.Rol"));
+            MostrarColumna("Email", lm.ObtenerTexto(f, "col.Email"));
+            MostrarColumna("Bloqueado", lm.ObtenerTexto(f, "col.Bloqueado"));
         }
 
         private bool ValidarCampos()
         {
-            if (string.IsNullOrWhiteSpace(txtDNI.Text)) 
-            { 
-                { MessageBox.Show("El DNI es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
-            }
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
 
-            if (!System.Text.RegularExpressions.Regex.IsMatch(txtDNI.Text.Trim(), @"^\d{7,8}$")) 
+            if (string.IsNullOrWhiteSpace(txtDNI.Text))
             {
-                { MessageBox.Show("El DNI debe tener 7 u 8 dígitos numéricos.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; }
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Val.DNIObligatorio", "El DNI es obligatorio."),
+                    lm.ObtenerTexto(f, "Msg.Val.Title", "Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtNombre.Text)) 
-            { 
-                { MessageBox.Show("El Nombre es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
+            if (!System.Text.RegularExpressions.Regex.IsMatch(txtDNI.Text.Trim(), @"^\d{7,8}$"))
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Val.DNIFormato", "El DNI debe tener 7 u 8 dígitos numéricos."),
+                    lm.ObtenerTexto(f, "Msg.Val.Title", "Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtApellido.Text)) 
-            { 
-                { MessageBox.Show("El Apellido es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
+            if (string.IsNullOrWhiteSpace(txtNombre.Text))
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Val.NombreObligatorio", "El Nombre es obligatorio."),
+                    lm.ObtenerTexto(f, "Msg.Val.Title", "Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtNombreUsuario.Text)) 
-            { 
-                { MessageBox.Show("El Login es obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
+            if (string.IsNullOrWhiteSpace(txtApellido.Text))
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Val.ApellidoObligatorio", "El Apellido es obligatorio."),
+                    lm.ObtenerTexto(f, "Msg.Val.Title", "Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNombreUsuario.Text))
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Val.LoginObligatorio", "El Login es obligatorio."),
+                    lm.ObtenerTexto(f, "Msg.Val.Title", "Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtCorreo.Text) || !System.Text.RegularExpressions.Regex.IsMatch(txtCorreo.Text.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                MessageBox.Show("El Email no tiene un formato válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false;
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Val.EmailFormato", "El Email no tiene un formato válido."),
+                    lm.ObtenerTexto(f, "Msg.Val.Title", "Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
-            if (cmbRol.SelectedIndex == -1) 
-            { 
-                { MessageBox.Show("Debe seleccionar un Rol.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning); return false; } 
+            if (cmbRol.SelectedIndex == -1)
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Val.RolObligatorio", "Debe seleccionar un Rol."),
+                    lm.ObtenerTexto(f, "Msg.Val.Title", "Validación"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
             return true;
@@ -637,6 +696,44 @@ namespace Sistema_SneakRush
             {
                 AutoGenerarLogin();
             }
+        }
+
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionUsuarios486LP";
+
+            this.Text = lm.ObtenerTexto(f, "Title");
+            label1.Text = lm.ObtenerTexto(f, "Title"); 
+
+            label2.Text = lm.ObtenerTexto(f, "lblDNI");
+            label3.Text = lm.ObtenerTexto(f, "lblNombre");
+            label4.Text = lm.ObtenerTexto(f, "lblApellido");
+            label5.Text = lm.ObtenerTexto(f, "lblRol");
+            label6.Text = lm.ObtenerTexto(f, "lblNombreUsuario");
+            label7.Text = lm.ObtenerTexto(f, "lblCorreo");
+            label8.Text = lm.ObtenerTexto(f, "lblActivo");
+
+            btnAgregar.Text = lm.ObtenerTexto(f, "btnAgregar");
+            btnEliminar.Text = lm.ObtenerTexto(f, "btnEliminar");
+            btnModificar.Text = lm.ObtenerTexto(f, "btnModificar");
+            btnDesbloquear.Text = lm.ObtenerTexto(f, "btnDesbloquear");
+            btnAplicar.Text = lm.ObtenerTexto(f, "btnAplicar");
+            btnCancelar.Text = lm.ObtenerTexto(f, "btnCancelar");
+            btnSalir.Text = lm.ObtenerTexto(f, "btnSalir");
+
+            rbtnActivos.Text = lm.ObtenerTexto(f, "rbtnActivos");
+            rbtnTodos.Text = lm.ObtenerTexto(f, "rbtnTodos");
+            rbtnActivoSi.Text = lm.ObtenerTexto(f, "rbtnActivoSi");
+            rbtnActivoNo.Text = lm.ObtenerTexto(f, "rbtnActivoNo");
+
+            ConfigurarColumnas();
+            ActualizarLabelModo();
+        }
+
+        private void FrmGestionUsuarios486LP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.LanguageManager.Quitar(this);
         }
 
     }

@@ -12,10 +12,18 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGestionFamilias486LP : Form
+    public partial class FrmGestionFamilias486LP : Form, IObserver486LP
     {
         private BLL_Familia486LP _bll = new BLL_Familia486LP();
         private List<Permiso486LP> _todasLasPatentes = new List<Permiso486LP>();
+        // Códigos internos de los módulos (en español, los que usa ObtenerModulo).
+        // El orden DEBE coincidir con el orden en que se agregan al combo en CargarComboModulos.
+        private readonly string[] _codigosModulo =
+        {
+            "Todos", "Usuarios", "Familias", "Perfiles", "Bitácora", "Respaldos",
+            "Maestro", "Compra", "Venta", "Reporte", "Cierre de sesión", "Cambiar contraseña"
+        };
+        private string _nombreFamiliaSeleccionada = string.Empty;
         private int _idFamiliaSeleccionada = -1;
         private int _idPermisoSeleccionado = -1;
         private bool _puedeCrear;
@@ -30,6 +38,8 @@ namespace Sistema_SneakRush
         {
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmGestionFamilias486LP_FormClosing;
         }
 
         private void FrmGestionFamilias486LP_Load(object sender, EventArgs e)
@@ -40,6 +50,7 @@ namespace Sistema_SneakRush
             CargarPatentes();
             AjustarBotonesSegunPerfil();
             AplicarPermisosBotones();
+            ActualizarIdioma();
         }
 
         private void CargarFamilias()
@@ -60,20 +71,38 @@ namespace Sistema_SneakRush
 
         private void CargarComboModulos()
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
+            int indiceActual = cmbFiltroModulo.SelectedIndex;   // recordar la selección por índice
+
+            cmbFiltroModulo.SelectedIndexChanged -= cmbFiltroModulo_SelectedIndexChanged;
+
             cmbFiltroModulo.Items.Clear();
             cmbFiltroModulo.Items.AddRange(new object[]
             {
-                "Todos", "Usuarios", "Familias", "Perfiles", "Bitácora",
-                "Respaldos", "Maestro", "Compra", "Venta", "Reporte",
-                "Cierre de sesión", "Cambiar contraseña"
+                lm.ObtenerTexto(f, "mod.Todos"),
+                lm.ObtenerTexto(f, "mod.Usuarios"),
+                lm.ObtenerTexto(f, "mod.Familias"),
+                lm.ObtenerTexto(f, "mod.Perfiles"),
+                lm.ObtenerTexto(f, "mod.Bitacora"),
+                lm.ObtenerTexto(f, "mod.Respaldos"),
+                lm.ObtenerTexto(f, "mod.Maestro"),
+                lm.ObtenerTexto(f, "mod.Compra"),
+                lm.ObtenerTexto(f, "mod.Venta"),
+                lm.ObtenerTexto(f, "mod.Reporte"),
+                lm.ObtenerTexto(f, "mod.CierreSesion"),
+                lm.ObtenerTexto(f, "mod.CambiarContrasena")
             });
-            cmbFiltroModulo.SelectedIndex = 0;   // "Todos"
+
+            cmbFiltroModulo.SelectedIndexChanged += cmbFiltroModulo_SelectedIndexChanged;
+            cmbFiltroModulo.SelectedIndex = (indiceActual >= 0) ? indiceActual : 0;
         }
 
         private void MostrarPatentes()
         {
             dgvPatentes.Rows.Clear();
-            string filtro = cmbFiltroModulo.SelectedItem?.ToString() ?? "Todos";
+            string filtro = (cmbFiltroModulo.SelectedIndex >= 0) ? _codigosModulo[cmbFiltroModulo.SelectedIndex] : "Todos";
 
             foreach (Permiso486LP p in _todasLasPatentes)
             {
@@ -128,18 +157,20 @@ namespace Sistema_SneakRush
             if (f != null)
             {
                 _idFamiliaSeleccionada = f.Id;
+                _nombreFamiliaSeleccionada = f.Nombre;
                 txtNombre.Text = f.Nombre;
                 CargarPermisosAsignados(_idFamiliaSeleccionada);
-                lblFamiliaSeleccionada.Text = "Permisos de: " + f.Nombre;
+                ActualizarLabelFamilia();
             }
             else
             {
                 if (dgvFamilias.CurrentRow.Cells[0].Value != null)
                 {
                     _idFamiliaSeleccionada = Convert.ToInt32(dgvFamilias.CurrentRow.Cells[0].Value);
+                    _nombreFamiliaSeleccionada = dgvFamilias.CurrentRow.Cells[1].Value.ToString();
                     txtNombre.Text = dgvFamilias.CurrentRow.Cells[1].Value.ToString();
                     CargarPermisosAsignados(_idFamiliaSeleccionada);
-                    lblFamiliaSeleccionada.Text = "Permisos de: " + dgvFamilias.CurrentRow.Cells[1].Value.ToString();
+                    ActualizarLabelFamilia();
                 }
             }
         }
@@ -325,8 +356,9 @@ namespace Sistema_SneakRush
             txtNombre.Text = "";
             _idFamiliaSeleccionada = -1;
             _idPermisoSeleccionado = -1;
+            _nombreFamiliaSeleccionada = string.Empty;
             dgvAsignados.Rows.Clear();
-            lblFamiliaSeleccionada.Text = "Permisos de: (ninguna seleccionada)";
+            ActualizarLabelFamilia();
             CargarFamilias();
             CargarPatentes();
         }
@@ -353,8 +385,8 @@ namespace Sistema_SneakRush
             btnCrear.Enabled = _puedeCrear;
             btnModificar.Enabled = _puedeModificar;
             btnEliminar.Enabled = _puedeEliminar;
-            btnAgregar.Enabled = _puedeAsignarPatente;   // "Agregar a familia"
-            btnQuitar.Enabled = _puedeQuitarPatente;    // "Quitar permiso seleccionado"
+            btnAgregar.Enabled = _puedeAsignarPatente;   
+            btnQuitar.Enabled = _puedeQuitarPatente;    
             btnCancelar.Enabled = _puedeCancelar;
             btnSalir.Enabled = _puedeSalir;
         }
@@ -393,11 +425,67 @@ namespace Sistema_SneakRush
             dgvAsignados.Columns.Add("colNombreAsignado", "Permiso asignado");
             dgvAsignados.Columns["colIdAsignado"].Visible = false;
             dgvAsignados.Columns["colNombreAsignado"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            TraducirColumnas();
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
+            this.Text = lm.ObtenerTexto(f, "Title");
+            lblTitulo.Text = lm.ObtenerTexto(f, "Title");
+
+            pnlFamilias.Text = lm.ObtenerTexto(f, "pnlFamilias");
+            pnlPatentes.Text = lm.ObtenerTexto(f, "pnlPatentes");
+            pnlAsignados.Text = lm.ObtenerTexto(f, "pnlAsignados");
+
+            btnCrear.Text = lm.ObtenerTexto(f, "btnCrear");
+            btnModificar.Text = lm.ObtenerTexto(f, "btnModificar");
+            btnEliminar.Text = lm.ObtenerTexto(f, "btnEliminar");
+            btnCancelar.Text = lm.ObtenerTexto(f, "btnCancelar");
+            btnAgregar.Text = lm.ObtenerTexto(f, "btnAgregar");
+            btnQuitar.Text = lm.ObtenerTexto(f, "btnQuitar");
+            btnSalir.Text = lm.ObtenerTexto(f, "btnSalir");
+
+            TraducirColumnas();
+            ActualizarLabelFamilia();
+            CargarComboModulos();
+        }
+
+        private void TraducirColumnas()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
+            if (dgvFamilias.Columns.Contains("colNombreFamilia"))
+                dgvFamilias.Columns["colNombreFamilia"].HeaderText = lm.ObtenerTexto(f, "col.Familia");
+            if (dgvPatentes.Columns.Contains("colNombrePatente"))
+                dgvPatentes.Columns["colNombrePatente"].HeaderText = lm.ObtenerTexto(f, "col.PermisoDisponible");
+            if (dgvAsignados.Columns.Contains("colNombreAsignado"))
+                dgvAsignados.Columns["colNombreAsignado"].HeaderText = lm.ObtenerTexto(f, "col.PermisoAsignado");
+        }
+
+        private void ActualizarLabelFamilia()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
+            if (_idFamiliaSeleccionada > 0 && !string.IsNullOrEmpty(_nombreFamiliaSeleccionada))
+                lblFamiliaSeleccionada.Text = string.Format(lm.ObtenerTexto(f, "lbl.PermisosDe"), _nombreFamiliaSeleccionada);
+            else
+                lblFamiliaSeleccionada.Text = lm.ObtenerTexto(f, "lbl.PermisosDeNinguna");
+        }
+
+        private void FrmGestionFamilias486LP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.LanguageManager.Quitar(this);
         }
     }
 }

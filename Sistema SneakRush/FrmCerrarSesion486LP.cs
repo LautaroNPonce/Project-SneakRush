@@ -13,13 +13,16 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmCerrarSesion486LP : Form
+    public partial class FrmCerrarSesion486LP : Form, IObserver486LP
     {
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
         public FrmCerrarSesion486LP()
         {
             InitializeComponent();
             AjustarBotonesSegunPerfil();
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmCerrarSesion486LP_FormClosing;
+            ActualizarIdioma();
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
@@ -52,6 +55,22 @@ namespace Sistema_SneakRush
 
             btnAceptar.Enabled = permisos.Contains("CERRAR_SESION_ACEPTAR");
             btnCancelar.Enabled = permisos.Contains("CERRAR_SESION_CANCELAR");
+        }
+
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmCerrarSesion486LP";
+
+            this.Text = lm.ObtenerTexto(f, "Title");
+            label1.Text = lm.ObtenerTexto(f, "lblPregunta");
+            btnAceptar.Text = lm.ObtenerTexto(f, "btnAceptar");
+            btnCancelar.Text = lm.ObtenerTexto(f, "btnCancelar");
+        }
+
+        private void FrmCerrarSesion486LP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.LanguageManager.Quitar(this);
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Services
         private JObject _diccionario = new JObject();
         private List<IObserver486LP> _observers = new List<IObserver486LP>();
 
-        // ISubject486LP
         public void Agregar(IObserver486LP observer)
         {
             if (!_observers.Contains(observer))
@@ -32,13 +31,11 @@ namespace Services
                 observer.ActualizarIdioma();
         }
 
-        // Idioma actual
-        public string IdiomaActual => _idiomaActual;
-
         public void CambiarIdioma(string codigoIdioma)
         {
             _idiomaActual = codigoIdioma;
             CargarJSON(codigoIdioma);
+            GuardarUltimoIdioma(codigoIdioma);
             Notificar();
         }
 
@@ -85,6 +82,12 @@ namespace Services
             }
         }
 
+        public string ObtenerTexto(string form, string clave, string textoPorDefecto)
+        {
+            string resultado = ObtenerTexto(form, clave);
+            return resultado == clave ? textoPorDefecto : resultado;
+        }
+
         public string MapearCodigo(string nombreIdioma)
         {
             switch (nombreIdioma)
@@ -98,6 +101,38 @@ namespace Services
                 default: 
                     return "es";
             }
+        }
+
+        // Guarda el último idioma usado en un archivo, para recordarlo entre ejecuciones
+        private void GuardarUltimoIdioma(string codigoIdioma)
+        {
+            try
+            {
+                string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ultimoIdioma.txt");
+                File.WriteAllText(ruta, codigoIdioma);
+            }
+            catch
+            {
+                // si no se puede guardar no es crítico, el sistema sigue funcionando
+            }
+        }
+
+        // Lee el último idioma guardado, si no hay archivo o falla, devuelve "es"
+        public string ObtenerUltimoIdioma()
+        {
+            try
+            {
+                string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ultimoIdioma.txt");
+                if (File.Exists(ruta))
+                {
+                    string codigo = File.ReadAllText(ruta).Trim();
+                    if (codigo == "es" || codigo == "en" || codigo == "pt")
+                        return codigo;
+                }
+            }
+            catch { }
+
+            return "es";   // default si no hay archivo o algo falla
         }
     }
 }

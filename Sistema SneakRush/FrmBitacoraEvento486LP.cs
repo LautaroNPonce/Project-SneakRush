@@ -17,15 +17,23 @@ using PdfRectangle = iTextSharp.text.Rectangle;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmBitacoraEvento486LP : Form
+    public partial class FrmBitacoraEvento486LP : Form, IObserver486LP
     {
-
         private BLL_Bitacora486LP _bll = new BLL_Bitacora486LP();
+        private readonly string[] _codigosModulo =
+        {
+            "", "Login", "Logout", "Cambiar Contraseña",
+            "Gestión Usuarios", "Gestión Perfiles", "Gestión Familias"
+        };
+        private bool _filtroAplicado = true;   // arranca igual que el diseñador (botón = "Cancelar")
+        private int _ultimoTotal = 0;
 
         public FrmBitacoraEvento486LP()
         {
             InitializeComponent();
             AjustarBotonesSegunPerfil();
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmBitacoraEvento486LP_FormClosing;
         }
 
         private void FrmBitacoraEvento486LP_Load(object sender, EventArgs e)
@@ -33,6 +41,7 @@ namespace Sistema_SneakRush
             ConfigurarDgv();
             CargarCombos();
             CargarGrilla();
+            ActualizarIdioma();
         }
 
         private void ConfigurarDgv()
@@ -53,27 +62,42 @@ namespace Sistema_SneakRush
             dgtBitacoraEvento.Columns.Add(new DataGridViewTextBoxColumn { Name = "colCriticidad", DataPropertyName = "Criticidad", HeaderText = "Criticidad", Width = 110 });
 
             dgtBitacoraEvento.ShowCellToolTips = true;
+
+            TraducirColumnas();
         }
 
         private void CargarCombos()
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmBitacoraEvento486LP";
+
+            int idxModulo = cmbModulo.SelectedIndex;
+            int idxCrit = cmbCriticidad.SelectedIndex;
+
             cmbModulo.Items.Clear();
-            cmbModulo.Items.Add("");
-            cmbModulo.Items.Add("Login");
-            cmbModulo.Items.Add("Logout");
-            cmbModulo.Items.Add("Cambiar Contraseña");
-            cmbModulo.Items.Add("Gestión Usuarios");
-            cmbModulo.Items.Add("Gestión Perfiles");
-            cmbModulo.Items.Add("Gestión Familias");
-            cmbModulo.SelectedIndex = 0;
+            cmbModulo.Items.AddRange(new object[]
+            {
+                "",
+                lm.ObtenerTexto(f, "modBit.Login", "Login"),
+                lm.ObtenerTexto(f, "modBit.Logout", "Logout"),
+                lm.ObtenerTexto(f, "modBit.CambiarContrasena", "Cambiar Contraseña"),
+                lm.ObtenerTexto(f, "modBit.GestionUsuarios", "Gestión Usuarios"),
+                lm.ObtenerTexto(f, "modBit.GestionPerfiles", "Gestión Perfiles"),
+                lm.ObtenerTexto(f, "modBit.GestionFamilias", "Gestión Familias")
+            });
+            cmbModulo.SelectedIndex = (idxModulo >= 0) ? idxModulo : 0;
+
             cmbCriticidad.Items.Clear();
-            cmbCriticidad.Items.Add("");
-            cmbCriticidad.Items.Add("1 - Muy Alta");
-            cmbCriticidad.Items.Add("2 - Alta");
-            cmbCriticidad.Items.Add("3 - Media");
-            cmbCriticidad.Items.Add("4 - Baja");
-            cmbCriticidad.Items.Add("5 - Muy Baja");
-            cmbCriticidad.SelectedIndex = 0;
+            cmbCriticidad.Items.AddRange(new object[]
+            {
+                "",
+                lm.ObtenerTexto(f, "crit.MuyAlta", "1 - Muy Alta"),
+                lm.ObtenerTexto(f, "crit.Alta", "2 - Alta"),
+                lm.ObtenerTexto(f, "crit.Media", "3 - Media"),
+                lm.ObtenerTexto(f, "crit.Baja", "4 - Baja"),
+                lm.ObtenerTexto(f, "crit.MuyBaja", "5 - Muy Baja")
+            });
+            cmbCriticidad.SelectedIndex = (idxCrit >= 0) ? idxCrit : 0;
         }
 
         private void CargarGrilla()
@@ -88,13 +112,16 @@ namespace Sistema_SneakRush
         {
             dgtBitacoraEvento.DataSource = null;
             dgtBitacoraEvento.DataSource = lista;
-            lblTotal.Text = $"Registros: {lista.Count}";
+            _ultimoTotal = lista.Count;
+            ActualizarLabelTotal();
         }
 
         private void btnAplicar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmBitacoraEvento486LP";
             string dni = txtDNI.Text.Trim();
-            string modulo = cmbModulo.SelectedItem?.ToString() ?? "";
+            string modulo = (cmbModulo.SelectedIndex >= 0) ? _codigosModulo[cmbModulo.SelectedIndex] : "";
             string fechaInicio = dtpFechaDesde.Checked ? dtpFechaDesde.Value.ToString("yyyy-MM-dd") : "";
             string fechaFin = dtpFechaHasta.Checked ? dtpFechaHasta.Value.ToString("yyyy-MM-dd") + " 23:59:59" : "";
 
@@ -103,27 +130,30 @@ namespace Sistema_SneakRush
 
             if (dtpFechaDesde.Checked && dtpFechaHasta.Checked && dtpFechaDesde.Value.Date > dtpFechaHasta.Value.Date)
             {
-                MessageBox.Show("La fecha desde no puede ser mayor a la fecha hasta.", "Fechas inválidas", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.FechasInvalidas", "La fecha desde no puede ser mayor a la fecha hasta."),
+                    lm.ObtenerTexto(f, "Msg.FechasInvalidas.Title", "Fechas inválidas"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             List<BitacoraEvento486LP> lista = _bll.Filtrar(dni, "", modulo, criticidad, fechaInicio, fechaFin);
             ActualizarGrilla(lista);
-            btnCancelar.Text = "Cancelar";
+            _filtroAplicado = true;
+            ActualizarBotonCancelar();
 
-            if (lista.Count == 0) 
+            if (lista.Count == 0)
             {
-                MessageBox.Show("No se encontraron registros con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }   
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SinResultados", "No se encontraron registros con los filtros aplicados."),
+                    lm.ObtenerTexto(f, "Msg.SinResultados.Title", "Sin resultados"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            if (btnCancelar.Text == "Cancelar")
+            if (_filtroAplicado)
             {
                 Resetear();
             }
-            else 
+            else
             {
                 this.Close();
             }
@@ -132,13 +162,14 @@ namespace Sistema_SneakRush
         private void Resetear()
         {
             txtDNI.Clear();
-            cmbModulo.SelectedIndex     = 0;
+            cmbModulo.SelectedIndex = 0;
             cmbCriticidad.SelectedIndex = 0;
             dtpFechaDesde.Checked = false;
             dtpFechaHasta.Checked = false;
             dtpFechaDesde.Value = DateTime.Today;
             dtpFechaHasta.Value = DateTime.Today;
-            btnCancelar.Text = "Salir";
+            _filtroAplicado = false;
+            ActualizarBotonCancelar();
             CargarGrilla();
             txtDetNumero.Clear();
             txtDetFecha.Clear();
@@ -176,7 +207,6 @@ namespace Sistema_SneakRush
                 return; 
             }
 
-
             txtDetNumero.Text = ev.Numero.ToString();
             txtDetFecha.Text = ev.Fecha.ToString("dd/MM/yyyy HH:mm:ss");
             txtDetUsuario.Text = !string.IsNullOrEmpty(ev.Nombre) ? $"{ev.Nombre} {ev.Apellido}" : ev.NombreUsuario;
@@ -188,9 +218,13 @@ namespace Sistema_SneakRush
 
         private void btnExportarPDF_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmBitacoraEvento486LP";  
+
             if (dgtBitacoraEvento.Rows.Count == 0)
             {
-                MessageBox.Show("No hay registros para exportar.", "Exportar PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SinRegistrosPDF", "No hay registros para exportar."),
+                    lm.ObtenerTexto(f, "Msg.SinRegistrosPDF.Title", "Exportar PDF"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -317,12 +351,13 @@ namespace Sistema_SneakRush
                     doc.Add(pie);
                     doc.Close();
 
-                    MessageBox.Show($"PDF exportado correctamente:\n{sfd.FileName}", "Exportar PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.PDFExportado", "PDF exportado correctamente:\n{0}"), sfd.FileName),lm.ObtenerTexto(f, "Msg.PDFExportado.Title", "Exportar PDF"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     System.Diagnostics.Process.Start(sfd.FileName);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error al exportar PDF:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.ErrorPDF", "Error al exportar PDF:\n{0}"), ex.Message),
+                        lm.ObtenerTexto(f, "Msg.ErrorPDF.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -345,9 +380,82 @@ namespace Sistema_SneakRush
             Resetear();
         }
 
-        private void txtDetUsuario_TextChanged(object sender, EventArgs e)
+        public void ActualizarIdioma()
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmBitacoraEvento486LP";
 
+            this.Text = lm.ObtenerTexto(f, "Title");
+            label1.Text = lm.ObtenerTexto(f, "Title");
+
+            // filtros
+            label2.Text = lm.ObtenerTexto(f, "lblDNI");
+            label3.Text = lm.ObtenerTexto(f, "lblModulo");
+            label6.Text = lm.ObtenerTexto(f, "lblFechaDesde");
+            label4.Text = lm.ObtenerTexto(f, "lblFechaHasta");
+            label5.Text = lm.ObtenerTexto(f, "lblCriticidad");
+
+            // panel de detalle
+            grpDetalle.Text = lm.ObtenerTexto(f, "grpDetalle");
+            label7.Text = lm.ObtenerTexto(f, "lblDetNumero");
+            label8.Text = lm.ObtenerTexto(f, "lblDetFecha");
+            label9.Text = lm.ObtenerTexto(f, "lblDetUsuario");
+            label10.Text = lm.ObtenerTexto(f, "lblDetDNI");
+            label11.Text = lm.ObtenerTexto(f, "lblDetModulo");
+            label12.Text = lm.ObtenerTexto(f, "lblDetCriticidad");
+            label13.Text = lm.ObtenerTexto(f, "lblDetDescripcion");
+
+            // botones
+            btnAplicar.Text = lm.ObtenerTexto(f, "btnAplicar");
+            btnLimpiar.Text = lm.ObtenerTexto(f, "btnLimpiar");
+            btnExportarPDF.Text = lm.ObtenerTexto(f, "btnExportarPDF");
+
+            TraducirColumnas();
+            ActualizarBotonCancelar();
+            ActualizarLabelTotal();
+            CargarCombos();
+        }
+
+        private void TraducirColumnas()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmBitacoraEvento486LP";
+
+            if (dgtBitacoraEvento.Columns.Contains("colNumero"))
+                dgtBitacoraEvento.Columns["colNumero"].HeaderText = lm.ObtenerTexto(f, "col.Numero");
+            if (dgtBitacoraEvento.Columns.Contains("colFecha"))
+                dgtBitacoraEvento.Columns["colFecha"].HeaderText = lm.ObtenerTexto(f, "col.FechaHora");
+            if (dgtBitacoraEvento.Columns.Contains("colNombreUsuario"))
+                dgtBitacoraEvento.Columns["colNombreUsuario"].HeaderText = lm.ObtenerTexto(f, "col.Usuario");
+            if (dgtBitacoraEvento.Columns.Contains("colDNI"))
+                dgtBitacoraEvento.Columns["colDNI"].HeaderText = lm.ObtenerTexto(f, "col.DNI");
+            if (dgtBitacoraEvento.Columns.Contains("colModulo"))
+                dgtBitacoraEvento.Columns["colModulo"].HeaderText = lm.ObtenerTexto(f, "col.Modulo");
+            if (dgtBitacoraEvento.Columns.Contains("colDescripcion"))
+                dgtBitacoraEvento.Columns["colDescripcion"].HeaderText = lm.ObtenerTexto(f, "col.Descripcion");
+            if (dgtBitacoraEvento.Columns.Contains("colCriticidad"))
+                dgtBitacoraEvento.Columns["colCriticidad"].HeaderText = lm.ObtenerTexto(f, "col.Criticidad");
+        }
+
+        private void ActualizarBotonCancelar()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmBitacoraEvento486LP";
+            btnCancelar.Text = _filtroAplicado
+                ? lm.ObtenerTexto(f, "btnCancelar", "Cancelar")
+                : lm.ObtenerTexto(f, "btnSalir", "Salir");
+        }
+
+        private void ActualizarLabelTotal()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmBitacoraEvento486LP";
+            lblTotal.Text = string.Format(lm.ObtenerTexto(f, "lbl.Total", "Registros: {0}"), _ultimoTotal);
+        }
+
+        private void FrmBitacoraEvento486LP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.LanguageManager.Quitar(this);
         }
     }
     

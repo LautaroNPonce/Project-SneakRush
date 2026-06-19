@@ -42,6 +42,9 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Cambiar Idioma",$"Usuario cambió idioma a '{nombreIdioma}'.",
                     Criticidad486LP.Baja, dni, nombreUsuario));
+
+                string mensajeDV;
+                new BLL_DV486LP().RecalcularDV("Usuarios", out mensajeDV);
             }
 
             return resultado;

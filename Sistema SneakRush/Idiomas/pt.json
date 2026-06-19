@@ -61,7 +61,8 @@
     "consultasAnalíticasToolStripMenuItem": "Consultas analíticas",
     "ayudaToolStripMenuItem": "Ajuda",
     "verDocumentaciónToolStripMenuItem": "Ver documentação",
-    "guíaDeUsuarioToolStripMenuItem": "Guia do usuário"
+    "guíaDeUsuarioToolStripMenuItem": "Guia do usuário",
+    "lbl.BarraEstado": "Usuário: {0}  |  Perfil: {1}"
   },
 
   "FrmCambiarIdioma486LP": {
@@ -102,8 +103,8 @@
   "FrmCerrarSesion486LP": {
     "Title": "Encerrar Sessão",
     "lblPregunta": "Tem certeza que deseja encerrar a sessão?",
-    "btnSi": "Sim",
-    "btnNo": "Não"
+    "btnAceptar": "Aceitar",
+    "btnCancelar": "Cancelar"
   },
 
   "FrmGestionUsuarios486LP": {
@@ -186,7 +187,9 @@
     "Msg.BLL.ErrorInesperadoModificar": "Ocorreu um erro inesperado ao modificar o usuário.",
     "Msg.BLL.ErrorEliminar": "Ocorreu um erro ao excluir o usuário.",
     "Msg.BLL.ErrorDesbloquear": "Ocorreu um erro ao desbloquear o usuário.",
-    "Msg.BLL.ErrorBloquear": "Ocorreu um erro ao bloquear o usuário."
+    "Msg.BLL.ErrorBloquear": "Ocorreu um erro ao bloquear o usuário.",
+    "rbtnActivoSi": "Sim",
+    "rbtnActivoNo": "Não"
   },
 
   "FrmGestionFamilias486LP": {
@@ -227,7 +230,22 @@
     "Msg.FamiliaModificada": "Família modificada com sucesso.",
     "Msg.FamiliaEliminada": "Família excluída com sucesso.",
     "Msg.PermisoAsignado": "Permissão atribuída com sucesso.",
-    "Msg.PermisoQuitado": "Permissão removida com sucesso."
+    "Msg.PermisoQuitado": "Permissão removida com sucesso.",
+    "pnlFamilias": "Famílias",
+    "pnlPatentes": "Permissões disponíveis",
+    "pnlAsignados": "Permissões atribuídas",
+    "mod.Todos": "Todos",
+    "mod.Usuarios": "Usuários",
+    "mod.Familias": "Famílias",
+    "mod.Perfiles": "Perfis",
+    "mod.Bitacora": "Registro de eventos",
+    "mod.Respaldos": "Backups",
+    "mod.Maestro": "Mestre",
+    "mod.Compra": "Compra",
+    "mod.Venta": "Venda",
+    "mod.Reporte": "Relatório",
+    "mod.CierreSesion": "Encerrar sessão",
+    "mod.CambiarContrasena": "Alterar senha"
   },
 
   "FrmGestionPerfiles486LP": {
@@ -286,7 +304,25 @@
     "Msg.FamiliaAsignada": "Família atribuída com sucesso.",
     "Msg.FamiliaQuitada": "Família removida com sucesso.",
     "Msg.PermisoAsignado": "Permissão atribuída com sucesso.",
-    "Msg.PermisoQuitado": "Permissão removida com sucesso."
+    "Msg.PermisoQuitado": "Permissão removida com sucesso.",
+    "pnlPerfiles": "Perfis",
+    "pnlFamilias": "Famílias disponíveis",
+    "pnlPatentes": "Permissões diretas disponíveis",
+    "pnlComposicion": "Composição do perfil",
+    "lblFamiliasAsignadas": "Famílias atribuídas:",
+    "lblPermisosAsignados": "Permissões diretas atribuídas:",
+    "mod.Todos": "Todos",
+    "mod.Usuarios": "Usuários",
+    "mod.Familias": "Famílias",
+    "mod.Perfiles": "Perfis",
+    "mod.Bitacora": "Registro de eventos",
+    "mod.Respaldos": "Backups",
+    "mod.Maestro": "Mestre",
+    "mod.Compra": "Compra",
+    "mod.Venta": "Venda",
+    "mod.Reporte": "Relatório",
+    "mod.CierreSesion": "Encerrar sessão",
+    "mod.CambiarContrasena": "Alterar senha"
   },
 
   "FrmBitacoraEvento486LP": {
@@ -312,7 +348,32 @@
     "Msg.PDFExportado": "PDF exportado com sucesso:\n{0}",
     "Msg.PDFExportado.Title": "Exportar PDF",
     "Msg.ErrorPDF": "Erro ao exportar PDF:\n{0}",
-    "Msg.ErrorPDF.Title": "Erro"
+    "Msg.ErrorPDF.Title": "Erro",
+    "lblDNI": "CPF",
+    "lblModulo": "Módulo:",
+    "lblFechaDesde": "Data de:",
+    "lblFechaHasta": "Data até:",
+    "lblCriticidad": "Criticidade:",
+    "grpDetalle": "Detalhe do registro",
+    "lblDetNumero": "N°",
+    "lblDetFecha": "Data e hora",
+    "lblDetUsuario": "Nome e sobrenome",
+    "lblDetDNI": "CPF",
+    "lblDetModulo": "Módulo",
+    "lblDetCriticidad": "Criticidade",
+    "lblDetDescripcion": "Descrição",
+    "lbl.Total": "Registros: {0}",
+    "crit.MuyAlta": "1 - Muito Alta",
+    "crit.Alta": "2 - Alta",
+    "crit.Media": "3 - Média",
+    "crit.Baja": "4 - Baixa",
+    "crit.MuyBaja": "5 - Muito Baixa",
+    "modBit.Login": "Login",
+    "modBit.Logout": "Logout",
+    "modBit.CambiarContrasena": "Alterar Senha",
+    "modBit.GestionUsuarios": "Gestão de Usuários",
+    "modBit.GestionPerfiles": "Gestão de Perfis",
+    "modBit.GestionFamilias": "Gestão de Famílias"
   },
 
   "FrmReparacionBD486LP": {

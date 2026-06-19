@@ -24,7 +24,8 @@
     "Msg.ErrorIntegridad": "Error al verificar integridad: {0}",
     "Msg.ErrorIntegridad.Title": "SneakRush — Error",
     "Msg.InconsistenciaSistema": "Se detectó un Error en el Sistema.\nContacte al Administrador para resolver el problema.",
-    "Msg.InconsistenciaSistema.Title": "SneakRush — Error en el Sistema Detectado"
+    "Msg.InconsistenciaSistema.Title": "SneakRush — Error en el Sistema Detectado",
+    "lbl.BarraEstado": "Usuario: {0}  |  Rol: {1}"
   },
 
   "FrmMenuPrincipal486LP": {
@@ -102,8 +103,8 @@
   "FrmCerrarSesion486LP": {
     "Title": "Cerrar Sesión",
     "lblPregunta": "¿Está seguro que desea cerrar sesión?",
-    "btnSi": "Sí",
-    "btnNo": "No"
+    "btnAceptar": "Aceptar",
+    "btnCancelar": "Cancelar"
   },
 
   "FrmGestionUsuarios486LP": {
@@ -186,7 +187,9 @@
     "Msg.BLL.ErrorInesperadoModificar": "Ocurrió un error inesperado al modificar el usuario.",
     "Msg.BLL.ErrorEliminar": "Ocurrió un error al eliminar el usuario.",
     "Msg.BLL.ErrorDesbloquear": "Ocurrió un error al desbloquear el usuario.",
-    "Msg.BLL.ErrorBloquear": "Ocurrió un error al bloquear el usuario."
+    "Msg.BLL.ErrorBloquear": "Ocurrió un error al bloquear el usuario.",
+    "rbtnActivoSi": "Sí",
+    "rbtnActivoNo": "No"
   },
 
   "FrmGestionFamilias486LP": {
@@ -227,7 +230,22 @@
     "Msg.FamiliaModificada": "Familia modificada correctamente.",
     "Msg.FamiliaEliminada": "Familia eliminada correctamente.",
     "Msg.PermisoAsignado": "Permiso asignado correctamente.",
-    "Msg.PermisoQuitado": "Permiso quitado correctamente."
+    "Msg.PermisoQuitado": "Permiso quitado correctamente.",
+    "pnlFamilias": "Familias",
+    "pnlPatentes": "Permisos disponibles",
+    "pnlAsignados": "Permisos asignados",
+    "mod.Todos": "Todos",
+    "mod.Usuarios": "Usuarios",
+    "mod.Familias": "Familias",
+    "mod.Perfiles": "Perfiles",
+    "mod.Bitacora": "Bitácora",
+    "mod.Respaldos": "Respaldos",
+    "mod.Maestro": "Maestro",
+    "mod.Compra": "Compra",
+    "mod.Venta": "Venta",
+    "mod.Reporte": "Reporte",
+    "mod.CierreSesion": "Cierre de sesión",
+    "mod.CambiarContrasena": "Cambiar contraseña"
   },
 
   "FrmGestionPerfiles486LP": {
@@ -286,7 +304,25 @@
     "Msg.FamiliaAsignada": "Familia asignada correctamente.",
     "Msg.FamiliaQuitada": "Familia quitada correctamente.",
     "Msg.PermisoAsignado": "Permiso asignado correctamente.",
-    "Msg.PermisoQuitado": "Permiso quitado correctamente."
+    "Msg.PermisoQuitado": "Permiso quitado correctamente.",
+    "pnlPerfiles": "Perfiles",
+    "pnlFamilias": "Familias disponibles",
+    "pnlPatentes": "Permisos directos disponibles",
+    "pnlComposicion": "Composición del perfil",
+    "lblFamiliasAsignadas": "Familias asignadas:",
+    "lblPermisosAsignados": "Permisos directos asignados:",
+    "mod.Todos": "Todos",
+    "mod.Usuarios": "Usuarios",
+    "mod.Familias": "Familias",
+    "mod.Perfiles": "Perfiles",
+    "mod.Bitacora": "Bitácora",
+    "mod.Respaldos": "Respaldos",
+    "mod.Maestro": "Maestro",
+    "mod.Compra": "Compra",
+    "mod.Venta": "Venta",
+    "mod.Reporte": "Reporte",
+    "mod.CierreSesion": "Cierre de sesión",
+    "mod.CambiarContrasena": "Cambiar contraseña"
   },
 
   "FrmBitacoraEvento486LP": {
@@ -312,7 +348,32 @@
     "Msg.PDFExportado": "PDF exportado correctamente:\n{0}",
     "Msg.PDFExportado.Title": "Exportar PDF",
     "Msg.ErrorPDF": "Error al exportar PDF:\n{0}",
-    "Msg.ErrorPDF.Title": "Error"
+    "Msg.ErrorPDF.Title": "Error",
+    "lblDNI": "DNI",
+    "lblModulo": "Módulo:",
+    "lblFechaDesde": "Fecha desde:",
+    "lblFechaHasta": "Fecha hasta:",
+    "lblCriticidad": "Criticidad:",
+    "grpDetalle": "Detalle del registro",
+    "lblDetNumero": "N°",
+    "lblDetFecha": "Fecha y Hora",
+    "lblDetUsuario": "Nombre y Apellido",
+    "lblDetDNI": "DNI",
+    "lblDetModulo": "Módulo",
+    "lblDetCriticidad": "Criticidad",
+    "lblDetDescripcion": "Descripción",
+    "lbl.Total": "Registros: {0}",
+    "crit.MuyAlta": "1 - Muy Alta",
+    "crit.Alta": "2 - Alta",
+    "crit.Media": "3 - Media",
+    "crit.Baja": "4 - Baja",
+    "crit.MuyBaja": "5 - Muy Baja",
+    "modBit.Login": "Login",
+    "modBit.Logout": "Logout",
+    "modBit.CambiarContrasena": "Cambiar Contraseña",
+    "modBit.GestionUsuarios": "Gestión Usuarios",
+    "modBit.GestionPerfiles": "Gestión Perfiles",
+    "modBit.GestionFamilias": "Gestión Familias"
   },
 
   "FrmReparacionBD486LP": {

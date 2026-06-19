@@ -9,6 +9,7 @@ namespace Services
 {
     public class SessionManager486LP
     {
+        private Usuario486LP _usuario;
         private SessionManager486LP() { }
 
         public static SessionManager486LP Instancia { get; private set; } = null;
@@ -22,20 +23,6 @@ namespace Services
 
             return Instancia;
         }
-
-        // Estado de sesión 
-        private Usuario486LP _usuario;
-        private string _idiomaActual;
-
-        //Esto es parte de la segunda entrega
-        //public string IdiomaActual
-        //{
-        //    get { return _idiomaActual; }
-        //    set
-        //    {
-        //        _idiomaActual = value;
-        //    }
-        //}
 
         public Usuario486LP UsuarioActual()
         {

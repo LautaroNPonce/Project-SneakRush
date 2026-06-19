@@ -17,61 +17,6 @@ namespace Sistema_SneakRush
             Program.LanguageManager.Agregar(this);
         }
 
-        public void ActualizarIdioma()
-        {
-            var lm = Program.LanguageManager;
-            string f = "FrmMenuPrincipal486LP";
-
-            this.Text = lm.ObtenerTexto(f, "Title");
-
-            // Menú Usuario
-            usuarioToolStripMenuItem.Text = lm.ObtenerTexto(f, "usuarioToolStripMenuItem");
-            cambiarContraseñaToolStripMenuItem.Text = lm.ObtenerTexto(f, "cambiarContraseñaToolStripMenuItem");
-            cambiarIdiomaToolStripMenuItem.Text = lm.ObtenerTexto(f, "cambiarIdiomaToolStripMenuItem");
-            iniciarSesionToolStripMenuItem.Text = lm.ObtenerTexto(f, "iniciarSesionToolStripMenuItem");
-            cerrarSesiónToolStripMenuItem.Text = lm.ObtenerTexto(f, "cerrarSesiónToolStripMenuItem");
-
-            // Menú Administrador
-            adminToolStripMenuItem.Text = lm.ObtenerTexto(f, "adminToolStripMenuItem");
-            gestiónDeUsuariosToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestiónDeUsuariosToolStripMenuItem");
-            gestiónDePerfilesToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestiónDePerfilesToolStripMenuItem");
-            gestionDeFamiliasToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionDeFamiliasToolStripMenuItem");
-            gestionDeRolesToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionDeRolesToolStripMenuItem");
-            bitácoraDeEventosToolStripMenuItem.Text = lm.ObtenerTexto(f, "bitácoraDeEventosToolStripMenuItem");
-            gestiónDeRespaldosToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestiónDeRespaldosToolStripMenuItem");
-
-            // Menú Maestro
-            gestionToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionToolStripMenuItem");
-            clientesToolStripMenuItem.Text = lm.ObtenerTexto(f, "clientesToolStripMenuItem");
-            productosToolStripMenuItem.Text = lm.ObtenerTexto(f, "productosToolStripMenuItem");
-            categoríasMarcasToolStripMenuItem.Text = lm.ObtenerTexto(f, "categoríasMarcasToolStripMenuItem");
-            proveedoresToolStripMenuItem.Text = lm.ObtenerTexto(f, "proveedoresToolStripMenuItem");
-
-            // Menú Compra
-            compraToolStripMenuItem.Text = lm.ObtenerTexto(f, "compraToolStripMenuItem");
-            generarSolicitudDeCompraToolStripMenuItem.Text = lm.ObtenerTexto(f, "generarSolicitudDeCompraToolStripMenuItem");
-            registrarOrdenDeCompraToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarOrdenDeCompraToolStripMenuItem");
-            registrarRecepciónDeMercaderíaToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarRecepciónDeMercaderíaToolStripMenuItem");
-
-            // Menú Venta
-            ventaToolStripMenuItem.Text = lm.ObtenerTexto(f, "ventaToolStripMenuItem");
-            gestionarCarritoToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionarCarritoToolStripMenuItem");
-            registrarOperaciónDeVentaToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarOperaciónDeVentaToolStripMenuItem");
-            consultarProductosToolStripMenuItem.Text = lm.ObtenerTexto(f, "consultarProductosToolStripMenuItem");
-
-            // Menú Reporte
-            reporteToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteToolStripMenuItem");
-            reporteDeVentasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeVentasToolStripMenuItem");
-            reporteDeStockToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeStockToolStripMenuItem");
-            reporteDeComprasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeComprasToolStripMenuItem");
-            consultasAnalíticasToolStripMenuItem.Text = lm.ObtenerTexto(f, "consultasAnalíticasToolStripMenuItem");
-
-            // Menú Ayuda
-            ayudaToolStripMenuItem.Text = lm.ObtenerTexto(f, "ayudaToolStripMenuItem");
-            verDocumentaciónToolStripMenuItem.Text = lm.ObtenerTexto(f, "verDocumentaciónToolStripMenuItem");
-            guíaDeUsuarioToolStripMenuItem.Text = lm.ObtenerTexto(f, "guíaDeUsuarioToolStripMenuItem");
-        }
-
         private void FrmMenuPrincipal486LP_Load(object sender, System.EventArgs e)
         {
             foreach (Control c in this.Controls)
@@ -93,7 +38,10 @@ namespace Sistema_SneakRush
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuario != null)
             {
-                lblEstado.Text = $"Usuario: {usuario.Nombre} {usuario.Apellido}  |  Rol: {usuario.Rol}";
+                var lm = Program.LanguageManager;
+                string f = "FrmMenuPrincipal486LP";
+                string nombreCompleto = $"{usuario.Nombre} {usuario.Apellido}";
+                lblEstado.Text = string.Format(lm.ObtenerTexto(f, "lbl.BarraEstado", "Usuario: {0}  |  Rol: {1}"),nombreCompleto, usuario.Rol);
             }
         }
 
@@ -366,6 +314,63 @@ namespace Sistema_SneakRush
         private void portuguesToolStripMenuItem_Click_1(object sender, System.EventArgs e)
         {
             AplicarCambioIdioma("pt", "Portugués");
+        }
+
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmMenuPrincipal486LP";
+
+            this.Text = lm.ObtenerTexto(f, "Title");
+
+            // Menú Usuario
+            usuarioToolStripMenuItem.Text = lm.ObtenerTexto(f, "usuarioToolStripMenuItem");
+            cambiarContraseñaToolStripMenuItem.Text = lm.ObtenerTexto(f, "cambiarContraseñaToolStripMenuItem");
+            cambiarIdiomaToolStripMenuItem.Text = lm.ObtenerTexto(f, "cambiarIdiomaToolStripMenuItem");
+            iniciarSesionToolStripMenuItem.Text = lm.ObtenerTexto(f, "iniciarSesionToolStripMenuItem");
+            cerrarSesiónToolStripMenuItem.Text = lm.ObtenerTexto(f, "cerrarSesiónToolStripMenuItem");
+
+            // Menú Administrador
+            adminToolStripMenuItem.Text = lm.ObtenerTexto(f, "adminToolStripMenuItem");
+            gestiónDeUsuariosToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestiónDeUsuariosToolStripMenuItem");
+            gestiónDePerfilesToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestiónDePerfilesToolStripMenuItem");
+            gestionDeFamiliasToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionDeFamiliasToolStripMenuItem");
+            gestionDeRolesToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionDeRolesToolStripMenuItem");
+            bitácoraDeEventosToolStripMenuItem.Text = lm.ObtenerTexto(f, "bitácoraDeEventosToolStripMenuItem");
+            gestiónDeRespaldosToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestiónDeRespaldosToolStripMenuItem");
+
+            // Menú Maestro
+            gestionToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionToolStripMenuItem");
+            clientesToolStripMenuItem.Text = lm.ObtenerTexto(f, "clientesToolStripMenuItem");
+            productosToolStripMenuItem.Text = lm.ObtenerTexto(f, "productosToolStripMenuItem");
+            categoríasMarcasToolStripMenuItem.Text = lm.ObtenerTexto(f, "categoríasMarcasToolStripMenuItem");
+            proveedoresToolStripMenuItem.Text = lm.ObtenerTexto(f, "proveedoresToolStripMenuItem");
+
+            // Menú Compra
+            compraToolStripMenuItem.Text = lm.ObtenerTexto(f, "compraToolStripMenuItem");
+            generarSolicitudDeCompraToolStripMenuItem.Text = lm.ObtenerTexto(f, "generarSolicitudDeCompraToolStripMenuItem");
+            registrarOrdenDeCompraToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarOrdenDeCompraToolStripMenuItem");
+            registrarRecepciónDeMercaderíaToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarRecepciónDeMercaderíaToolStripMenuItem");
+
+            // Menú Venta
+            ventaToolStripMenuItem.Text = lm.ObtenerTexto(f, "ventaToolStripMenuItem");
+            gestionarCarritoToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionarCarritoToolStripMenuItem");
+            registrarOperaciónDeVentaToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarOperaciónDeVentaToolStripMenuItem");
+            consultarProductosToolStripMenuItem.Text = lm.ObtenerTexto(f, "consultarProductosToolStripMenuItem");
+
+            // Menú Reporte
+            reporteToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteToolStripMenuItem");
+            reporteDeVentasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeVentasToolStripMenuItem");
+            reporteDeStockToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeStockToolStripMenuItem");
+            reporteDeComprasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeComprasToolStripMenuItem");
+            consultasAnalíticasToolStripMenuItem.Text = lm.ObtenerTexto(f, "consultasAnalíticasToolStripMenuItem");
+
+            // Menú Ayuda
+            ayudaToolStripMenuItem.Text = lm.ObtenerTexto(f, "ayudaToolStripMenuItem");
+            verDocumentaciónToolStripMenuItem.Text = lm.ObtenerTexto(f, "verDocumentaciónToolStripMenuItem");
+            guíaDeUsuarioToolStripMenuItem.Text = lm.ObtenerTexto(f, "guíaDeUsuarioToolStripMenuItem");
+
+            ActualizarEstado();
         }
     }
 }
