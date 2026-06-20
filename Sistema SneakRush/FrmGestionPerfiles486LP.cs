@@ -16,6 +16,8 @@ namespace Sistema_SneakRush
     {
         private BLL_Perfil486LP _bll = new BLL_Perfil486LP();
         private List<Permiso486LP> _todasLasPatentes = new List<Permiso486LP>();
+        private List<int> _idsFamiliasAsignadas = new List<int>();
+        private List<int> _idsPermisosAsignados = new List<int>();
         private readonly string[] _codigosModulo =
         {
             "Todos", "Usuarios", "Familias", "Perfiles", "Bitácora", "Respaldos",
@@ -67,10 +69,15 @@ namespace Sistema_SneakRush
 
         private void CargarFamilias()
         {
+            _idFamiliaSeleccionada = -1;
             dgvFamilias.Rows.Clear();
             List<Familia486LP> familias = _bll.ObtenerFamilias();
             foreach (Familia486LP f in familias)
             {
+                // Excluir las familias que ya están asignadas al perfil seleccionado
+                if (_idsFamiliasAsignadas.Contains(f.Id))
+                    continue;
+
                 dgvFamilias.Rows.Add(f.Id, f.Nombre);
             }
         }
@@ -113,11 +120,16 @@ namespace Sistema_SneakRush
 
         private void MostrarPatentes()
         {
+            _idPermisoSeleccionado = -1;
             dgvPatentes.Rows.Clear();
             string filtro = (cmbFiltroModulo.SelectedIndex >= 0) ? _codigosModulo[cmbFiltroModulo.SelectedIndex] : "Todos";
 
             foreach (Permiso486LP p in _todasLasPatentes)
             {
+                // Excluir los permisos que ya están asignados al perfil seleccionado
+                if (_idsPermisosAsignados.Contains(p.Id))
+                    continue;
+
                 if (filtro == "Todos" || ObtenerModulo(p.Nombre) == filtro)
                 {
                     dgvPatentes.Rows.Add(p.Id, p.Nombre);
@@ -150,21 +162,33 @@ namespace Sistema_SneakRush
         private void CargarFamiliasAsignadas(int idPerfil)
         {
             dgvFamiliasAsignadas.Rows.Clear();
+            _idsFamiliasAsignadas.Clear();
+
             List<Familia486LP> asignadas = _bll.ObtenerFamiliasDePerfil(idPerfil);
             foreach (Familia486LP f in asignadas)
             {
                 dgvFamiliasAsignadas.Rows.Add(f.Id, f.Nombre);
+                _idsFamiliasAsignadas.Add(f.Id);
             }
+
+            // Refrescar "familias disponibles" para que no muestre las ya asignadas
+            CargarFamilias();
         }
 
         private void CargarPermisosAsignados(int idPerfil)
         {
             dgvPermisosAsignados.Rows.Clear();
+            _idsPermisosAsignados.Clear();
+
             List<Permiso486LP> asignados = _bll.ObtenerPermisosDePerfil(idPerfil);
             foreach (Permiso486LP p in asignados)
             {
                 dgvPermisosAsignados.Rows.Add(p.Id, p.Nombre);
+                _idsPermisosAsignados.Add(p.Id);
             }
+
+            // Refrescar "permisos disponibles" para que no muestre los ya asignados
+            MostrarPatentes();
         }
 
         private void dgvPerfiles_SelectionChanged(object sender, EventArgs e)
@@ -486,6 +510,8 @@ namespace Sistema_SneakRush
             _nombrePerfilSeleccionado = string.Empty;
             dgvFamiliasAsignadas.Rows.Clear();
             dgvPermisosAsignados.Rows.Clear();
+            _idsFamiliasAsignadas.Clear();   // sin perfil seleccionado → todo vuelve a disponibles
+            _idsPermisosAsignados.Clear();
             ActualizarLabelPerfil();
             CargarPerfiles();
             CargarFamilias();

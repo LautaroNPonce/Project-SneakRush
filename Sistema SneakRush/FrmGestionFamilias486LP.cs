@@ -23,6 +23,7 @@ namespace Sistema_SneakRush
             "Todos", "Usuarios", "Familias", "Perfiles", "Bitácora", "Respaldos",
             "Maestro", "Compra", "Venta", "Reporte", "Cierre de sesión", "Cambiar contraseña"
         };
+        private List<int> _idsAsignados = new List<int>(); // Para no mostrar en disponibles los ya asignados
         private string _nombreFamiliaSeleccionada = string.Empty;
         private int _idFamiliaSeleccionada = -1;
         private int _idPermisoSeleccionado = -1;
@@ -101,11 +102,16 @@ namespace Sistema_SneakRush
 
         private void MostrarPatentes()
         {
+            _idPermisoSeleccionado = -1;
             dgvPatentes.Rows.Clear();
             string filtro = (cmbFiltroModulo.SelectedIndex >= 0) ? _codigosModulo[cmbFiltroModulo.SelectedIndex] : "Todos";
 
             foreach (Permiso486LP p in _todasLasPatentes)
             {
+                // Excluir los permisos que ya están asignados a la familia seleccionada
+                if (_idsAsignados.Contains(p.Id))
+                    continue;
+
                 if (filtro == "Todos" || ObtenerModulo(p.Nombre) == filtro)
                 {
                     dgvPatentes.Rows.Add(p.Id, p.Nombre);
@@ -138,11 +144,17 @@ namespace Sistema_SneakRush
         private void CargarPermisosAsignados(int idFamilia)
         {
             dgvAsignados.Rows.Clear();
+            _idsAsignados.Clear();
+
             List<Permiso486LP> asignados = _bll.ObtenerPermisosDeFamilia(idFamilia);
             foreach (Permiso486LP p in asignados)
             {
                 dgvAsignados.Rows.Add(p.Id, p.Nombre);
+                _idsAsignados.Add(p.Id);
             }
+
+            // Refrescar "disponibles" para que no muestre lo que ya está asignado
+            MostrarPatentes();
         }
 
         private void dgvFamilias_SelectionChanged(object sender, EventArgs e)
@@ -358,6 +370,7 @@ namespace Sistema_SneakRush
             _idPermisoSeleccionado = -1;
             _nombreFamiliaSeleccionada = string.Empty;
             dgvAsignados.Rows.Clear();
+            _idsAsignados.Clear();   // sin familia seleccionada → todos los permisos vuelven a disponibles
             ActualizarLabelFamilia();
             CargarFamilias();
             CargarPatentes();
