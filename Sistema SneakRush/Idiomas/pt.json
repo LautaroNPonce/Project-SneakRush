@@ -245,7 +245,15 @@
     "mod.Venta": "Venda",
     "mod.Reporte": "Relatório",
     "mod.CierreSesion": "Encerrar sessão",
-    "mod.CambiarContrasena": "Alterar senha"
+    "mod.CambiarContrasena": "Alterar senha",
+    "Msg.NombreMuyLargo": "O nome não pode ter mais de 50 caracteres.",
+    "Msg.NombreMuyLargo.Title": "Validação",
+    "Msg.AutoImpactoQuitar": "Esta família faz parte do seu próprio perfil. Se você remover esta permissão, perderá esse acesso. Deseja continuar?",
+    "Msg.AutoImpactoQuitar.Title": "Aviso",
+    "Msg.QuitarPermisoEnUso": "Esta família está atribuída a um ou mais perfis. Se você remover esta permissão, esses perfis deixarão de tê-la. Deseja continuar?",
+    "Msg.QuitarPermisoEnUso.Title": "Aviso",
+    "Msg.AutoImpactoEliminar": "Esta família faz parte do seu próprio perfil. Se você excluí-la, perderá esse acesso. Deseja continuar?",
+    "Msg.AutoImpactoEliminar.Title": "Aviso"
   },
 
   "FrmGestionPerfiles486LP": {
@@ -290,9 +298,9 @@
     "Msg.AdvertenciaAsociaciones.Title": "Aviso",
     "Msg.ConfirmarEliminar": "Tem certeza que deseja excluir o perfil selecionado?",
     "Msg.ConfirmarEliminar.Title": "Confirmar exclusão",
-    "Msg.AdvertenciaQuitarFamilia": "Você está removendo uma família do seu próprio perfil. Perderá acesso às suas funções imediatamente. Deseja continuar?",
     "Msg.AdvertenciaQuitarFamilia.Title": "Aviso",
-    "Msg.AdvertenciaQuitarPermiso": "Você está removendo uma permissão do seu próprio perfil. Perderá acesso a essa função imediatamente. Deseja continuar?",
+    "Msg.AdvertenciaQuitarFamilia": "Você está removendo uma família do seu próprio perfil. Perderá acesso às suas funções na próxima vez que iniciar sessão. Deseja continuar?",
+    "Msg.AdvertenciaQuitarPermiso": "Você está removendo uma permissão do seu próprio perfil. Perderá acesso a essa função na próxima vez que iniciar sessão. Deseja continuar?",
     "Msg.AdvertenciaQuitarPermiso.Title": "Aviso",
     "Msg.ModificarPerfilPropio": "Você modificou o nome do seu próprio perfil. Deve encerrar a sessão e iniciar novamente para que a alteração tenha efeito.",
     "Msg.ModificarPerfilPropio.Title": "Aviso",
@@ -322,7 +330,15 @@
     "mod.Venta": "Venda",
     "mod.Reporte": "Relatório",
     "mod.CierreSesion": "Encerrar sessão",
-    "mod.CambiarContrasena": "Alterar senha"
+    "mod.CambiarContrasena": "Alterar senha",
+    "Msg.NombreMuyLargo": "O nome não pode ter mais de 50 caracteres.",
+    "Msg.NombreMuyLargo.Title": "Validação",
+    "Msg.PermisosCompartidos": "Esta família compartilha permissões com outra já atribuída a este perfil. Deseja atribuí-la mesmo assim?\n\nNada muda: se a permissão estiver nas duas famílias, o perfil a tem apenas uma vez.",
+    "Msg.PermisosCompartidos.Title": "Permissões compartilhadas",
+    "Msg.SueltosQuitados": "Esta família já inclui permissões que você tinha atribuídas avulsas. Elas foram removidas das permissões diretas porque agora estão cobertas pela família:",
+    "Msg.SueltosQuitados.Title": "Permissões avulsas removidas",
+    "Msg.BloqueoAdmin": "Você não pode remover esta permissão do perfil Administrador: deixaria o sistema sem forma de administrar permissões.",
+    "Msg.BloqueoAdmin.Title": "Ação não permitida"
   },
 
   "FrmBitacoraEvento486LP": {

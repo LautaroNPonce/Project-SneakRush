@@ -201,9 +201,24 @@ namespace Sistema_SneakRush
 
         private void btnCrear_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("Debe ingresar un nombre.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Msg.IngresarNombre", "Debe ingresar un nombre."),
+                    lm.ObtenerTexto(f, "Msg.IngresarNombre.Title", "Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (txtNombre.Text.Trim().Length > 50)
+            {
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Msg.NombreMuyLargo", "El nombre no puede superar los 50 caracteres."),
+                    lm.ObtenerTexto(f, "Msg.NombreMuyLargo.Title", "Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -212,26 +227,38 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
             if (_idFamiliaSeleccionada <= 0)
             {
-                MessageBox.Show("Debe seleccionar una Familia.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarFamilia", "Debe seleccionar una Familia."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarFamilia.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("Debe ingresar un nombre válido.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.IngresarNombreValido", "Debe ingresar un nombre válido."),
+                    lm.ObtenerTexto(f, "Msg.IngresarNombreValido.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (txtNombre.Text.Trim().Length > 50)
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.NombreMuyLargo", "El nombre no puede superar los 50 caracteres."),
+                    lm.ObtenerTexto(f, "Msg.NombreMuyLargo.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -240,50 +267,52 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
             if (_idFamiliaSeleccionada <= 0)
             {
-                MessageBox.Show("Debe seleccionar una Familia.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarFamilia", "Debe seleccionar una Familia."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarFamilia.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Advertencia si está asignada a algún perfil
-            if (_bll.EstaAsignadaAPerfil(_idFamiliaSeleccionada))
+            // Auto-impacto (prioridad): la familia es de mi propio perfil
+            if (EsFamiliaDeMiPerfil(_idFamiliaSeleccionada))
             {
-                DialogResult confirm = MessageBox.Show("La familia está asignada a uno o más perfiles. Si la elimina, se quitará de esos perfiles. ¿Desea continuar?","Advertencia", 
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult confirm = MessageBox.Show(lm.ObtenerTexto(f, "Msg.AutoImpactoEliminar", "Esta familia forma parte de su propio perfil. Si la elimina, perderá ese acceso usted mismo. ¿Desea continuar?"),
+                    lm.ObtenerTexto(f, "Msg.AutoImpactoEliminar.Title", "Advertencia"),MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.No) return;
+            }
+            else if (_bll.EstaAsignadaAPerfil(_idFamiliaSeleccionada))
+            {
+                DialogResult confirm = MessageBox.Show(lm.ObtenerTexto(f, "Msg.AdvertenciaPerfiles", "La familia está asignada a uno o más perfiles. Si la elimina, se quitará de esos perfiles. ¿Desea continuar?"),
+                    lm.ObtenerTexto(f, "Msg.AdvertenciaPerfiles.Title", "Advertencia"),MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (confirm == DialogResult.No) return;
             }
 
-            // Advertencia si tiene permisos asignados
             if (_bll.TienePermisosAsignados(_idFamiliaSeleccionada))
             {
-                DialogResult confirm = MessageBox.Show("La familia tiene permisos asignados. Si la elimina, se quitarán todos los permisos asociados. ¿Desea continuar?","Advertencia", 
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (confirm == DialogResult.No) 
-                { 
-                    return; 
-                }
+                DialogResult confirm = MessageBox.Show(lm.ObtenerTexto(f, "Msg.AdvertenciaPermisos", "La familia tiene permisos asignados. Si la elimina, se quitarán todos los permisos asociados. ¿Desea continuar?"),
+                    lm.ObtenerTexto(f, "Msg.AdvertenciaPermisos.Title", "Advertencia"),MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.No) return;
             }
             else
             {
-                DialogResult confirm = MessageBox.Show("¿Está seguro que desea eliminar la familia seleccionada?","Confirmar eliminación", 
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (confirm == DialogResult.No) 
-                { 
-                    return; 
-                }
+                DialogResult confirm = MessageBox.Show(lm.ObtenerTexto(f, "Msg.ConfirmarEliminar", "¿Está seguro que desea eliminar la familia seleccionada?"),
+                    lm.ObtenerTexto(f, "Msg.ConfirmarEliminar.Title", "Confirmar eliminación"),MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirm == DialogResult.No) return;
             }
 
             string mensaje;
@@ -291,26 +320,31 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
             if (_idFamiliaSeleccionada <= 0)
             {
-                MessageBox.Show("Debe seleccionar una Familia.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarFamilia", "Debe seleccionar una Familia."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarFamilia.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (_idPermisoSeleccionado <= 0)
             {
-                MessageBox.Show("Debe seleccionar un Permiso.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarPermiso", "Debe seleccionar un Permiso."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarPermiso.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -319,42 +353,65 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarPermisosAsignados(_idFamiliaSeleccionada);
             }
             else
             {
-                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnQuitar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionFamilias486LP";
+
             if (_idFamiliaSeleccionada <= 0)
             {
-                MessageBox.Show("Debe seleccionar una Familia.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarFamilia", "Debe seleccionar una Familia."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarFamilia.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (dgvAsignados.CurrentRow == null || dgvAsignados.CurrentRow.Cells[0].Value == null)
             {
-                MessageBox.Show("Debe seleccionar un Permiso para quitar.", "Validación",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SeleccionarPermisoQuitar", "Debe seleccionar un Permiso para quitar."),
+                    lm.ObtenerTexto(f, "Msg.SeleccionarPermisoQuitar.Title", "Validación"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            int idPermiso = Convert.ToInt32(dgvAsignados.CurrentRow.Cells[0].Value);
+            if (EsFamiliaDeMiPerfil(_idFamiliaSeleccionada))
+            {
+                DialogResult confirm = MessageBox.Show(lm.ObtenerTexto(f, "Msg.AutoImpactoQuitar", "Esta familia forma parte de su propio perfil. Si le quita este permiso, perderá ese acceso usted mismo. ¿Desea continuar?"),
+                    lm.ObtenerTexto(f, "Msg.AutoImpactoQuitar.Title", "Advertencia"),MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.No)
+                { 
+                    return; 
+                }
+            }
+            else if (_bll.EstaAsignadaAPerfil(_idFamiliaSeleccionada))
+            {
+                DialogResult confirm = MessageBox.Show(lm.ObtenerTexto(f, "Msg.QuitarPermisoEnUso", "Esta familia está asignada a uno o más perfiles. Si le quita este permiso, esos perfiles dejarán de tenerlo. ¿Desea continuar?"),
+                    lm.ObtenerTexto(f, "Msg.QuitarPermisoEnUso.Title", "Advertencia"),MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.No)
+                {
+                    return;
+                }
+            }
 
+            int idPermiso = Convert.ToInt32(dgvAsignados.CurrentRow.Cells[0].Value);
             string mensaje;
             bool resultado = _bll.QuitarPermiso(_idFamiliaSeleccionada, idPermiso, out mensaje);
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarPermisosAsignados(_idFamiliaSeleccionada);
             }
             else
             {
-                MessageBox.Show(mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -499,6 +556,20 @@ namespace Sistema_SneakRush
         private void FrmGestionFamilias486LP_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.LanguageManager.Quitar(this);
+        }
+
+        // ¿La familia pertenece al perfil del usuario logueado actualmente?
+        private bool EsFamiliaDeMiPerfil(int idFamilia)
+        {
+            Usuario486LP usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null || !usuario.IdPerfil.HasValue)
+            { 
+                return false; 
+            }
+
+            BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
+            List<Familia486LP> misFamilias = bllPerfil.ObtenerFamiliasDePerfil(usuario.IdPerfil.Value);
+            return misFamilias.Any(f => f.Id == idFamilia);
         }
     }
 }

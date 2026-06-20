@@ -245,7 +245,15 @@
     "mod.Venta": "Sale",
     "mod.Reporte": "Report",
     "mod.CierreSesion": "Sign out",
-    "mod.CambiarContrasena": "Change password"
+    "mod.CambiarContrasena": "Change password",
+    "Msg.NombreMuyLargo": "The name cannot exceed 50 characters.",
+    "Msg.NombreMuyLargo.Title": "Validation",
+    "Msg.AutoImpactoQuitar": "This family is part of your own profile. If you remove this permission, you will lose that access yourself. Do you want to continue?",
+    "Msg.AutoImpactoQuitar.Title": "Warning",
+    "Msg.QuitarPermisoEnUso": "This family is assigned to one or more profiles. If you remove this permission, those profiles will no longer have it. Do you want to continue?",
+    "Msg.QuitarPermisoEnUso.Title": "Warning",
+    "Msg.AutoImpactoEliminar": "This family is part of your own profile. If you delete it, you will lose that access yourself. Do you want to continue?",
+    "Msg.AutoImpactoEliminar.Title": "Warning"
   },
 
   "FrmGestionPerfiles486LP": {
@@ -290,9 +298,9 @@
     "Msg.AdvertenciaAsociaciones.Title": "Warning",
     "Msg.ConfirmarEliminar": "Are you sure you want to delete the selected profile?",
     "Msg.ConfirmarEliminar.Title": "Confirm deletion",
-    "Msg.AdvertenciaQuitarFamilia": "You are removing a family from your own profile. You will immediately lose access to its functions. Do you want to continue?",
     "Msg.AdvertenciaQuitarFamilia.Title": "Warning",
-    "Msg.AdvertenciaQuitarPermiso": "You are removing a permission from your own profile. You will immediately lose access to that function. Do you want to continue?",
+    "Msg.AdvertenciaQuitarFamilia": "You are removing a family from your own profile. You will lose access to its functions the next time you log in. Do you want to continue?",
+    "Msg.AdvertenciaQuitarPermiso": "You are removing a permission from your own profile. You will lose access to that function the next time you log in. Do you want to continue?",
     "Msg.AdvertenciaQuitarPermiso.Title": "Warning",
     "Msg.ModificarPerfilPropio": "You modified the name of your own profile. You must log out and log back in for the change to take effect.",
     "Msg.ModificarPerfilPropio.Title": "Notice",
@@ -322,7 +330,15 @@
     "mod.Venta": "Sale",
     "mod.Reporte": "Report",
     "mod.CierreSesion": "Sign out",
-    "mod.CambiarContrasena": "Change password"
+    "mod.CambiarContrasena": "Change password",
+    "Msg.NombreMuyLargo": "The name cannot exceed 50 characters.",
+    "Msg.NombreMuyLargo.Title": "Validation",
+    "Msg.PermisosCompartidos": "This family shares permissions with another one already assigned to this profile. Do you want to assign it anyway?\n\nNothing changes: if the permission is in both families, the profile has it only once.",
+    "Msg.PermisosCompartidos.Title": "Shared permissions",
+    "Msg.SueltosQuitados": "This family already includes permissions you had assigned individually. They were removed from the direct permissions because they are now covered by the family:",
+    "Msg.SueltosQuitados.Title": "Loose permissions removed",
+    "Msg.BloqueoAdmin": "You cannot remove this permission from the Administrator profile: it would leave the system with no way to manage permissions.",
+    "Msg.BloqueoAdmin.Title": "Action not allowed"
   },
 
   "FrmBitacoraEvento486LP": {
