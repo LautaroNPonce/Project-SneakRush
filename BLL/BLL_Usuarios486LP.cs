@@ -20,7 +20,7 @@ namespace BLL
 
             if (string.IsNullOrEmpty(contraseña) || contraseña.Length < 8)
             {
-                Mensaje = "La contraseña debe tener al menos 8 caracteres.";
+                Mensaje = "Msg.ContraseñaMinimo"; // La contraseña debe tener al menos 8 caracteres.
                 return false;
             }
 
@@ -35,13 +35,13 @@ namespace BLL
 
             if (!tieneMayuscula)
             {
-                Mensaje = "La contraseña debe contener al menos una letra mayúscula.";
+                Mensaje = "Msg.ContraseñaMayuscula"; // La contraseña debe contener al menos una letra mayúscula.
                 return false;
             }
 
             if (!tieneMinuscula)
             {
-                Mensaje = "La contraseña debe contener al menos una letra minúscula.";
+                Mensaje = "Msg.ContraseñaMinuscula"; // La contraseña debe contener al menos una letra minúscula.
                 return false;
             }
 
@@ -144,43 +144,43 @@ namespace BLL
             {
                 if (string.IsNullOrEmpty(obj.DNI))
                 {
-                    { Mensaje = "El DNI es obligatorio."; return false; }
+                    { Mensaje = "Msg.Val.DNIObligatorio"; return false; } // El DNI es obligatorio.
                 }
 
-                if (string.IsNullOrEmpty(obj.Nombre)) 
-                { 
-                    { Mensaje = "El nombre es obligatorio."; return false; } 
+                if (string.IsNullOrEmpty(obj.Nombre))
+                {
+                    { Mensaje = "Msg.Val.NombreObligatorio"; return false; } // El nombre es obligatorio.
                 }
-                if (string.IsNullOrEmpty(obj.Apellido)) 
-                { 
-                    { Mensaje = "El apellido es obligatorio."; return false; } 
+                if (string.IsNullOrEmpty(obj.Apellido))
+                {
+                    { Mensaje = "Msg.Val.ApellidoObligatorio"; return false; } // El apellido es obligatorio.
                 }
-                if (string.IsNullOrEmpty(obj.NombreUsuario)) 
-                { 
-                    { Mensaje = "El nombre de usuario es obligatorio."; return false; } 
+                if (string.IsNullOrEmpty(obj.NombreUsuario))
+                {
+                    { Mensaje = "Msg.Val.LoginObligatorio"; return false; } // El nombre de usuario es obligatorio.
                 }
-                if (string.IsNullOrEmpty(obj.Email)) 
-                { 
-                    { Mensaje = "El correo es obligatorio."; return false; } 
+                if (string.IsNullOrEmpty(obj.Email))
+                {
+                    { Mensaje = "Msg.Val.EmailFormato"; return false; } // El correo es obligatorio.
                 }
                 if (!System.Text.RegularExpressions.Regex.IsMatch(obj.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
-                    Mensaje = "El formato del correo no es válido."; return false;
+                    Mensaje = "Msg.Val.EmailFormato"; return false; // El formato del correo no es válido.
                 }
 
                 List<Usuario486LP> todos = ObjetoDAL.Listar();
 
-                if (todos.Any(u => u.DNI == obj.DNI)) 
-                { 
-                    { Mensaje = "El DNI ingresado ya se encuentra registrado."; return false; } 
+                if (todos.Any(u => u.DNI == obj.DNI))
+                {
+                    { Mensaje = "Msg.BLL.DNIRegistrado"; return false; } // El DNI ingresado ya se encuentra registrado.
                 }
-                if (todos.Any(u => u.NombreUsuario.ToLower() == obj.NombreUsuario.ToLower())) 
-                { 
-                    { Mensaje = "El nombre de usuario ya se encuentra registrado."; return false; } 
+                if (todos.Any(u => u.NombreUsuario.ToLower() == obj.NombreUsuario.ToLower()))
+                {
+                    { Mensaje = "Msg.BLL.LoginRegistrado"; return false; } // El nombre de usuario ya se encuentra registrado.
                 }
                 if (todos.Any(u => u.Email.ToLower() == obj.Email.ToLower()))
                 {
-                    Mensaje = "El correo electrónico ya se encuentra registrado."; return false;
+                    Mensaje = "Msg.BLL.EmailRegistrado"; return false; // El correo electrónico ya se encuentra registrado.
                 }
 
                 contraseñaTemporal = obj.Apellido + obj.DNI;
@@ -206,7 +206,7 @@ namespace BLL
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Agregar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                Mensaje = "Ocurrió un error inesperado al agregar el usuario.";
+                Mensaje = "Msg.BLL.ErrorInesperadoAgregar"; // Ocurrió un error inesperado al agregar el usuario.
                 return false;
             }
         }
@@ -217,28 +217,28 @@ namespace BLL
 
             try
             {
-                if (string.IsNullOrEmpty(obj.Nombre)) 
-                { 
-                    { Mensaje = "El nombre es obligatorio."; return false; } 
+                if (string.IsNullOrEmpty(obj.Nombre))
+                {
+                    { Mensaje = "Msg.Val.NombreObligatorio"; return false; } // El nombre es obligatorio.
                 }
-                if (string.IsNullOrEmpty(obj.Apellido)) 
-                { 
-                    { Mensaje = "El apellido es obligatorio."; return false; } 
+                if (string.IsNullOrEmpty(obj.Apellido))
+                {
+                    { Mensaje = "Msg.Val.ApellidoObligatorio"; return false; } // El apellido es obligatorio.
                 }
-                if (string.IsNullOrEmpty(obj.Email)) 
-                { 
-                    { Mensaje = "El correo es obligatorio."; return false; } 
+                if (string.IsNullOrEmpty(obj.Email))
+                {
+                    { Mensaje = "Msg.Val.EmailFormato"; return false; } // El correo es obligatorio.
                 }
                 if (!System.Text.RegularExpressions.Regex.IsMatch(obj.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
                 {
-                    Mensaje = "El formato del correo no es válido."; return false;
+                    Mensaje = "Msg.Val.EmailFormato"; return false; // El formato del correo no es válido.
                 }
 
                 List<Usuario486LP> todos = ObjetoDAL.Listar();
 
                 if (todos.Any(u => u.Email.ToLower() == obj.Email.ToLower() && u.IdUsuario != obj.IdUsuario))
                 {
-                    Mensaje = "El correo electrónico ya se encuentra registrado por otro usuario."; return false;
+                    Mensaje = "Msg.BLL.EmailRegistradoOtro"; return false; // El correo electrónico ya se encuentra registrado por otro usuario.
                 }
 
                 bool resultado = ObjetoDAL.Modificar(obj, out Mensaje);
@@ -258,7 +258,7 @@ namespace BLL
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Modificar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                Mensaje = "Ocurrió un error inesperado al modificar el usuario.";
+                Mensaje = "Msg.BLL.ErrorInesperadoModificar"; // Ocurrió un error inesperado al modificar el usuario.
                 return false;
             }
         }
@@ -284,7 +284,7 @@ namespace BLL
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Eliminar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                Mensaje = "Ocurrió un error al eliminar el usuario.";
+                Mensaje = "Msg.BLL.ErrorEliminar"; // Ocurrió un error al eliminar el usuario.
                 return false;
             }
         }
@@ -310,7 +310,7 @@ namespace BLL
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Desbloquear(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                Mensaje = "Ocurrió un error al desbloquear el usuario.";
+                Mensaje = "Msg.BLL.ErrorDesbloquear"; // Ocurrió un error al desbloquear el usuario.
                 return false;
             }
         }
@@ -335,8 +335,8 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.BloquearPorDNI(): {ex.Message}", Criticidad486LP.MuyAlta,"Sistema","Sistema"));
-                Mensaje = "Ocurrió un error al bloquear el usuario.";
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.BloquearPorDNI(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                Mensaje = "Msg.BLL.ErrorBloquear"; // Ocurrió un error al bloquear el usuario.
                 return false;
             }
         }
@@ -362,7 +362,7 @@ namespace BLL
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.InvertirActivo(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                Mensaje = "Ocurrió un error al cambiar el estado del usuario.";
+                Mensaje = "Msg.BLL.ErrorInvertir"; // Ocurrió un error al cambiar el estado del usuario.
                 return false;
             }
         }
@@ -372,24 +372,24 @@ namespace BLL
             Mensaje = string.Empty;
             try
             {
-                if (contraseñaNueva != contraseñaConfirmar) 
-                { 
-                    { Mensaje = "La nueva contraseña y la confirmación no coinciden."; return false; } 
+                if (contraseñaNueva != contraseñaConfirmar)
+                {
+                    { Mensaje = "Msg.ContraseñasNoCoinciden"; return false; } // La nueva contraseña y la confirmación no coinciden.
                 }
-                if (contraseñaNueva == contraseñaActual) 
-                { 
-                    { Mensaje = "La nueva contraseña no puede ser igual a la actual."; return false; } 
+                if (contraseñaNueva == contraseñaActual)
+                {
+                    { Mensaje = "Msg.ContraseñaIgualActual"; return false; } // La nueva contraseña no puede ser igual a la actual.
                 }
-                if (!ValidarContraseña(contraseñaNueva, out Mensaje)) 
-                { 
-                    return false; 
+                if (!ValidarContraseña(contraseñaNueva, out Mensaje))
+                {
+                    return false;
                 }
 
                 Usuario486LP u = ObjetoDAL.ObtenerPorNombreUsuario(SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "");
 
-                if (u == null) 
-                { 
-                    { Mensaje = "No se pudo obtener el usuario de la sesión."; return false; } 
+                if (u == null)
+                {
+                    { Mensaje = "Msg.UsuarioSinSesion"; return false; } // No se pudo obtener el usuario de la sesión.
                 }
 
                 string hashActual = Encriptacion486LP.GenerarHash(contraseñaActual);
@@ -398,7 +398,7 @@ namespace BLL
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña", "Intento fallido: contraseña actual incorrecta.", Criticidad486LP.MuyAlta, dniUsuario,
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
-                    Mensaje = "La contraseña actual es incorrecta.";
+                    Mensaje = "Msg.ContraseñaActualIncorrecta"; // La contraseña actual es incorrecta.
                     return false;
                 }
 
@@ -421,7 +421,7 @@ namespace BLL
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Cambiar Contraseña", $"Error en BLL_Usuarios.CambiarContraseña(): {ex.Message}", Criticidad486LP.MuyAlta, dniUsuario, "Sistema"));
-                Mensaje = "Ocurrió un error inesperado al cambiar la contraseña.";
+                Mensaje = "Msg.ErrorInesperado"; // Ocurrió un error inesperado al cambiar la contraseña.
                 return false;
             }
         }

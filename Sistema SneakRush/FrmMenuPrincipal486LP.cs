@@ -31,6 +31,7 @@ namespace Sistema_SneakRush
             ActualizarEstado();
             AjustarMenuSegunPerfil();
             ActualizarIdioma();
+            AgregarAccentNaranja();
         }
 
         public void ActualizarEstado()
@@ -371,6 +372,23 @@ namespace Sistema_SneakRush
             guíaDeUsuarioToolStripMenuItem.Text = lm.ObtenerTexto(f, "guíaDeUsuarioToolStripMenuItem");
 
             ActualizarEstado();
+        }
+
+        private void AgregarAccentNaranja()
+        {
+            Menu.Paint += (s, ev) =>
+            {
+                int y = Menu.ClientSize.Height - 2;
+                using (var pluma = new System.Drawing.Pen(System.Drawing.Color.FromArgb(0xF0, 0x5A, 0x28), 3f))
+                    ev.Graphics.DrawLine(pluma, 0, y, Menu.ClientSize.Width, y);
+            };
+            lblEstado.Paint += (s, ev) =>
+            {
+                using (var pluma = new System.Drawing.Pen(System.Drawing.Color.FromArgb(0xF0, 0x5A, 0x28), 2f))
+                    ev.Graphics.DrawLine(pluma, 0, 0, lblEstado.ClientSize.Width, 0);
+            };
+            lblEstado.Invalidate();
+            Menu.Invalidate();
         }
     }
 }

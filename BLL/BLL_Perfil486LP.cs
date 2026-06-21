@@ -11,7 +11,7 @@ namespace BLL
     {
         private DAL.DAL_Perfil486LP _dalPerfil = new DAL.DAL_Perfil486LP();
         private DAL.DAL_Familia486LP _dalFamilia = new DAL.DAL_Familia486LP();
-        private DAL.DAL_Patente486LP _dalPatente = new DAL.DAL_Patente486LP();
+        private BLL_Patente486LP _bllPatente = new BLL_Patente486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
 
         public List<Perfil486LP> ObtenerPerfiles()
@@ -25,19 +25,19 @@ namespace BLL
 
             if (string.IsNullOrWhiteSpace(nombre))
             {
-                mensaje = "Debe ingresar un nombre.";
+                mensaje = "Msg.IngresarNombre"; // Debe ingresar un nombre.
                 return false;
             }
 
             List<Perfil486LP> perfiles = _dalPerfil.Listar();
             if (perfiles.Any(p => p.Nombre.ToLower() == nombre.ToLower()))
             {
-                mensaje = "Ya existe un Perfil con ese nombre.";
+                mensaje = "Msg.PerfilExiste"; // Ya existe un Perfil con ese nombre.
                 return false;
             }
 
             Perfil486LP nuevo = new Perfil486LP();
-            nuevo.Nombre= nombre;
+            nuevo.Nombre = nombre;
 
             bool resultado = _dalPerfil.Agregar(nuevo, out mensaje);
 
@@ -46,8 +46,8 @@ namespace BLL
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles",$"Se creó el perfil '{nombre}'.",
-                    Criticidad486LP.Alta,dni,nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se creó el perfil '{nombre}'.",
+                    Criticidad486LP.Alta, dni, nombreUsuario));
             }
 
             return resultado;
@@ -59,20 +59,20 @@ namespace BLL
 
             if (id <= 0)
             {
-                mensaje = "Debe seleccionar un Perfil.";
+                mensaje = "Msg.SeleccionarPerfil"; // Debe seleccionar un Perfil.
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(nuevoNombre))
             {
-                mensaje = "Debe ingresar un nombre válido.";
+                mensaje = "Msg.IngresarNombreValido"; // Debe ingresar un nombre válido.
                 return false;
             }
 
             List<Perfil486LP> perfiles = _dalPerfil.Listar();
             if (perfiles.Any(p => p.Nombre.ToLower() == nuevoNombre.ToLower() && p.IdPerfil != id))
             {
-                mensaje = "Ya existe un Perfil con ese nombre.";
+                mensaje = "Msg.PerfilExiste"; // Ya existe un Perfil con ese nombre.
                 return false;
             }
 
@@ -87,8 +87,8 @@ namespace BLL
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles",$"Se modificó el perfil con id '{id}' al nombre '{nuevoNombre}'.",
-                    Criticidad486LP.Media,dni,nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se modificó el perfil con id '{id}' al nombre '{nuevoNombre}'.",
+                    Criticidad486LP.Media, dni, nombreUsuario));
             }
 
             return resultado;
@@ -100,7 +100,7 @@ namespace BLL
 
             if (id <= 0)
             {
-                mensaje = "Debe seleccionar un Perfil.";
+                mensaje = "Msg.SeleccionarPerfil"; // Debe seleccionar un Perfil.
                 return false;
             }
 
@@ -108,7 +108,7 @@ namespace BLL
             Usuario486LP usuarioActual = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuarioActual != null && usuarioActual.IdPerfil.HasValue && usuarioActual.IdPerfil.Value == id)
             {
-                mensaje = "No puede eliminar el perfil que está usando actualmente.";
+                mensaje = "Msg.NoEliminarPerfilActivo"; // No puede eliminar el perfil que está usando actualmente.
                 return false;
             }
 
@@ -119,7 +119,7 @@ namespace BLL
                 string dni = usuarioActual?.DNI ?? "";
                 string nombreUsuario = usuarioActual?.NombreUsuario ?? "Sistema";
                 _bllBitacora.Registrar(new BitacoraEvento486LP
-                    ("Gestión Perfiles",$"Se eliminó el perfil con id '{id}'.",Criticidad486LP.Alta, dni, nombreUsuario));
+                    ("Gestión Perfiles", $"Se eliminó el perfil con id '{id}'.", Criticidad486LP.Alta, dni, nombreUsuario));
             }
 
             return resultado;
@@ -132,7 +132,7 @@ namespace BLL
 
         public List<Permiso486LP> ObtenerPatentes()
         {
-            return _dalPatente.Listar();
+            return _bllPatente.ObtenerPatentes();
         }
 
         public List<Familia486LP> ObtenerFamiliasDePerfil(int idPerfil)
@@ -151,20 +151,20 @@ namespace BLL
 
             if (idPerfil <= 0)
             {
-                mensaje = "Debe seleccionar un Perfil.";
+                mensaje = "Msg.SeleccionarPerfil"; // Debe seleccionar un Perfil.
                 return false;
             }
 
             if (idFamilia <= 0)
             {
-                mensaje = "Debe seleccionar una Familia.";
+                mensaje = "Msg.SeleccionarFamilia"; // Debe seleccionar una Familia.
                 return false;
             }
 
             List<Familia486LP> familiasActuales = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
             if (familiasActuales.Any(f => f.Id == idFamilia))
             {
-                mensaje = "El componente ya pertenece a este elemento.";
+                mensaje = "Msg.ComponenteExiste"; // El componente ya pertenece a este elemento.
                 return false;
             }
 
@@ -182,8 +182,8 @@ namespace BLL
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles",$"Se asignó la familia '{idFamilia}' al perfil '{idPerfil}'.",
-                    Criticidad486LP.Media,dni,nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se asignó la familia '{idFamilia}' al perfil '{idPerfil}'.",
+                    Criticidad486LP.Media, dni, nombreUsuario));
             }
 
             return resultado;
@@ -195,20 +195,20 @@ namespace BLL
 
             if (idPerfil <= 0)
             {
-                mensaje = "Debe seleccionar un Perfil.";
+                mensaje = "Msg.SeleccionarPerfil"; // Debe seleccionar un Perfil.
                 return false;
             }
 
             if (idFamilia <= 0)
             {
-                mensaje = "Debe seleccionar una Familia.";
+                mensaje = "Msg.SeleccionarFamilia"; // Debe seleccionar una Familia.
                 return false;
             }
 
             List<Familia486LP> familiasActuales = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
             if (!familiasActuales.Any(f => f.Id == idFamilia))
             {
-                mensaje = "Debe seleccionar un componente para quitar.";
+                mensaje = "Msg.SeleccionarFamiliaQuitar"; // Debe seleccionar una Familia para quitar.
                 return false;
             }
 
@@ -225,8 +225,8 @@ namespace BLL
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles",$"Se quitó la familia '{idFamilia}' del perfil '{idPerfil}'.",
-                    Criticidad486LP.Media,dni,nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó la familia '{idFamilia}' del perfil '{idPerfil}'.",
+                    Criticidad486LP.Media, dni, nombreUsuario));
             }
 
             return resultado;
@@ -238,20 +238,20 @@ namespace BLL
 
             if (idPerfil <= 0)
             {
-                mensaje = "Debe seleccionar un Perfil.";
+                mensaje = "Msg.SeleccionarPerfil"; // Debe seleccionar un Perfil.
                 return false;
             }
 
             if (idPermiso <= 0)
             {
-                mensaje = "Debe seleccionar un Permiso.";
+                mensaje = "Msg.SeleccionarPermiso"; // Debe seleccionar un Permiso.
                 return false;
             }
 
             List<Permiso486LP> permisosActuales = _dalPerfil.ListarPermisosDePerfil(idPerfil);
             if (permisosActuales.Any(p => p.Id == idPermiso))
             {
-                mensaje = "El componente ya pertenece a este elemento.";
+                mensaje = "Msg.ComponenteExiste"; // El componente ya pertenece a este elemento.
                 return false;
             }
 
@@ -260,8 +260,7 @@ namespace BLL
 
             if (familiaQueLoCubre != null)
             {
-                mensaje = $"Este permiso ya está incluido en la familia '{familiaQueLoCubre}', " +
-                          "asignada a este perfil. No es necesario asignarlo por separado.";
+                mensaje = "Msg.PermisoYaEnFamilia"; // Este permiso ya está incluido en la familia '{0}', asignada a este perfil. No es necesario asignarlo por separado.
                 return false;
             }
 
@@ -292,20 +291,20 @@ namespace BLL
 
             if (idPerfil <= 0)
             {
-                mensaje = "Debe seleccionar un Perfil.";
+                mensaje = "Msg.SeleccionarPerfil"; // Debe seleccionar un Perfil.
                 return false;
             }
 
             if (idPermiso <= 0)
             {
-                mensaje = "Debe seleccionar un Permiso.";
+                mensaje = "Msg.SeleccionarPermiso"; // Debe seleccionar un Permiso.
                 return false;
             }
 
             List<Permiso486LP> permisosActuales = _dalPerfil.ListarPermisosDePerfil(idPerfil);
             if (!permisosActuales.Any(p => p.Id == idPermiso))
             {
-                mensaje = "Debe seleccionar un componente para quitar.";
+                mensaje = "Msg.SeleccionarPermisoQuitar"; // Debe seleccionar un Permiso para quitar.
                 return false;
             }
 
@@ -322,8 +321,8 @@ namespace BLL
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles",$"Se quitó el permiso '{idPermiso}' del perfil '{idPerfil}'.",
-                    Criticidad486LP.Media,dni,nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó el permiso '{idPermiso}' del perfil '{idPerfil}'.",
+                    Criticidad486LP.Media, dni, nombreUsuario));
             }
 
             return resultado;
@@ -411,13 +410,6 @@ namespace BLL
             return permisos.Count > 0;
         }
 
-        public List<string> ObtenerPermisosDeUsuario(int? idPerfil)
-        {
-            if (!idPerfil.HasValue || idPerfil.Value <= 0)
-                return new List<string>();
-
-            return _dalPerfil.ObtenerNombresPermisosDePerfil(idPerfil.Value);
-        }
         public List<string> ObtenerPermisosPorRol(string nombreRol)
         {
             if (string.IsNullOrWhiteSpace(nombreRol))

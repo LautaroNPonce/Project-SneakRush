@@ -8,8 +8,6 @@ namespace Services
 {
     public class Permiso486LP : Composite486LP
     {
-        public string Descripcion { get; set; }
-
         public override void operacion()
         {
         }

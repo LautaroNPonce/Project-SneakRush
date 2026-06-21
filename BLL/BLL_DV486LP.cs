@@ -27,8 +27,8 @@ namespace BLL
                 foreach (DataColumn col in dt.Columns)
                 {
                     if (!_columnasIgnorar.Contains(col.ColumnName))
-                    { 
-                        sb.Append(fila[col].ToString()); 
+                    {
+                        sb.Append(fila[col].ToString());
                     }
                 }
             }
@@ -68,7 +68,7 @@ namespace BLL
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador",$"Se recalcularon los dígitos verificadores de la tabla '{tabla}'.",Criticidad486LP.MuyAlta, dni, nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador", $"Se recalcularon los dígitos verificadores de la tabla '{tabla}'.", Criticidad486LP.MuyAlta, dni, nombreUsuario));
 
                 return true;
             }
@@ -99,7 +99,7 @@ namespace BLL
                     string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
                     string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                    _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador",$"Inconsistencia detectada en la tabla '{tabla}'.",Criticidad486LP.MuyAlta, dni, nombreUsuario));
+                    _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador", $"Inconsistencia detectada en la tabla '{tabla}'.", Criticidad486LP.MuyAlta, dni, nombreUsuario));
 
                     return false;
                 }
@@ -137,11 +137,12 @@ namespace BLL
 
                     if (string.IsNullOrEmpty(hashGuardado))
                     {
+
                         lista.Add(new InconsistenciaDV486LP
                         {
                             ID = id,
                             Tabla = tabla,
-                            Inconsistencia = "Registro insertado directamente en la BD"
+                            Inconsistencia = "Inc.Insertado" // Registro insertado directamente en la BD
                         });
                     }
                     else if (hashRecalculado != hashGuardado)
@@ -150,12 +151,11 @@ namespace BLL
                         {
                             ID = id,
                             Tabla = tabla,
-                            Inconsistencia = "Registro modificado directamente en la BD"
+                            Inconsistencia = "Inc.Modificado" // Registro modificado directamente en la BD
                         });
                     }
                 }
 
-                // Si no hay filas modificadas ni insertadas pero el DVV no coincide → se eliminó un registro
                 string dvvCalculado = CalcularDVV(tabla);
                 string dvvGuardado = _dal.ObtenerDVV(tabla);
 
@@ -165,7 +165,7 @@ namespace BLL
                     {
                         ID = "-",
                         Tabla = tabla,
-                        Inconsistencia = "Registro eliminado directamente en la BD"
+                        Inconsistencia = "Inc.Eliminado" // Registro eliminado directamente en la BD
                     });
                 }
             }

@@ -227,12 +227,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.FamiliaCreada", "Familia creada correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -267,12 +269,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.FamiliaModificada", "Familia modificada correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -320,12 +324,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.FamiliaEliminada", "Familia eliminada correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -353,12 +359,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.PermisoAsignado", "Permiso asignado correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarPermisosAsignados(_idFamiliaSeleccionada);
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -406,12 +414,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.PermisoQuitado", "Permiso quitado correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarPermisosAsignados(_idFamiliaSeleccionada);
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -330,7 +330,7 @@ namespace Sistema_SneakRush
                 }
                 else
                 {
-                    MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.ErrorAgregar.Title", "Error al agregar"),
+                    MessageBox.Show(lm.ObtenerTexto(f, msg, msg), lm.ObtenerTexto(f, "Msg.ErrorAgregar.Title", "Error al agregar"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -374,7 +374,7 @@ namespace Sistema_SneakRush
                 }
                 else
                 {
-                    MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.ErrorModificar.Title", "Error al modificar"),
+                    MessageBox.Show(lm.ObtenerTexto(f, msg, msg), lm.ObtenerTexto(f, "Msg.ErrorModificar.Title", "Error al modificar"),
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -404,7 +404,7 @@ namespace Sistema_SneakRush
                     }
                     else
                     {
-                        MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.ErrorEliminar.Title", "Error al eliminar"),
+                        MessageBox.Show(lm.ObtenerTexto(f, msg, msg), lm.ObtenerTexto(f, "Msg.ErrorEliminar.Title", "Error al eliminar"),
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -453,7 +453,8 @@ namespace Sistema_SneakRush
                     }
                     else
                     {
-                        MessageBox.Show(msg, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"),MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(lm.ObtenerTexto(f, msg, msg), lm.ObtenerTexto(f, "Msg.Error.Title", "Error"),
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

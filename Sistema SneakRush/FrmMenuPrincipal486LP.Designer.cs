@@ -72,7 +72,7 @@
             // 
             // Menu
             // 
-            this.Menu.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.Menu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.Menu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.usuarioToolStripMenuItem,
@@ -84,6 +84,7 @@
             this.ayudaToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
+            this.Menu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.Menu.Size = new System.Drawing.Size(818, 28);
             this.Menu.TabIndex = 0;
             this.Menu.Text = "menuStrip1";
@@ -95,6 +96,7 @@
             this.cambiarContraseñaToolStripMenuItem,
             this.iniciarSesionToolStripMenuItem,
             this.cerrarSesiónToolStripMenuItem});
+            this.usuarioToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.usuarioToolStripMenuItem.Name = "usuarioToolStripMenuItem";
             this.usuarioToolStripMenuItem.Size = new System.Drawing.Size(73, 24);
             this.usuarioToolStripMenuItem.Text = "Usuario";
@@ -112,21 +114,21 @@
             // españolToolStripMenuItem
             // 
             this.españolToolStripMenuItem.Name = "españolToolStripMenuItem";
-            this.españolToolStripMenuItem.Size = new System.Drawing.Size(157, 26);
+            this.españolToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.españolToolStripMenuItem.Text = "Español";
             this.españolToolStripMenuItem.Click += new System.EventHandler(this.españolToolStripMenuItem_Click_1);
             // 
             // inglesToolStripMenuItem
             // 
             this.inglesToolStripMenuItem.Name = "inglesToolStripMenuItem";
-            this.inglesToolStripMenuItem.Size = new System.Drawing.Size(157, 26);
+            this.inglesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.inglesToolStripMenuItem.Text = "Ingles";
             this.inglesToolStripMenuItem.Click += new System.EventHandler(this.inglesToolStripMenuItem_Click_1);
             // 
             // portuguesToolStripMenuItem
             // 
             this.portuguesToolStripMenuItem.Name = "portuguesToolStripMenuItem";
-            this.portuguesToolStripMenuItem.Size = new System.Drawing.Size(157, 26);
+            this.portuguesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.portuguesToolStripMenuItem.Text = "Portugues";
             this.portuguesToolStripMenuItem.Click += new System.EventHandler(this.portuguesToolStripMenuItem_Click_1);
             // 
@@ -158,6 +160,7 @@
             this.gestiónDePerfilesToolStripMenuItem,
             this.bitácoraDeEventosToolStripMenuItem,
             this.gestiónDeRespaldosToolStripMenuItem});
+            this.adminToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
             this.adminToolStripMenuItem.Text = "Administrador";
@@ -213,6 +216,7 @@
             this.productosToolStripMenuItem,
             this.categoríasMarcasToolStripMenuItem,
             this.proveedoresToolStripMenuItem});
+            this.gestionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.gestionToolStripMenuItem.Name = "gestionToolStripMenuItem";
             this.gestionToolStripMenuItem.Size = new System.Drawing.Size(77, 24);
             this.gestionToolStripMenuItem.Text = "Maestro";
@@ -251,6 +255,7 @@
             this.generarSolicitudDeCompraToolStripMenuItem,
             this.registrarOrdenDeCompraToolStripMenuItem,
             this.registrarRecepciónDeMercaderíaToolStripMenuItem});
+            this.compraToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.compraToolStripMenuItem.Name = "compraToolStripMenuItem";
             this.compraToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
             this.compraToolStripMenuItem.Text = "Compra";
@@ -282,6 +287,7 @@
             this.gestionarCarritoToolStripMenuItem,
             this.registrarOperaciónDeVentaToolStripMenuItem,
             this.consultarProductosToolStripMenuItem});
+            this.ventaToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.ventaToolStripMenuItem.Name = "ventaToolStripMenuItem";
             this.ventaToolStripMenuItem.Size = new System.Drawing.Size(60, 24);
             this.ventaToolStripMenuItem.Text = "Venta";
@@ -314,6 +320,7 @@
             this.reporteDeStockToolStripMenuItem,
             this.reporteDeComprasToolStripMenuItem,
             this.consultasAnalíticasToolStripMenuItem});
+            this.reporteToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.reporteToolStripMenuItem.Name = "reporteToolStripMenuItem";
             this.reporteToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
             this.reporteToolStripMenuItem.Text = "Reporte";
@@ -351,6 +358,7 @@
             this.ayudaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.verDocumentaciónToolStripMenuItem,
             this.guíaDeUsuarioToolStripMenuItem});
+            this.ayudaToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
             this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 24);
             this.ayudaToolStripMenuItem.Text = "Ayuda";
@@ -371,20 +379,22 @@
             // 
             // lblEstado
             // 
-            this.lblEstado.AutoSize = true;
+            this.lblEstado.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.lblEstado.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblEstado.Font = new System.Drawing.Font("Segoe UI Black", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEstado.Location = new System.Drawing.Point(0, 447);
+            this.lblEstado.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEstado.ForeColor = System.Drawing.Color.White;
+            this.lblEstado.Location = new System.Drawing.Point(0, 441);
             this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Size = new System.Drawing.Size(0, 20);
+            this.lblEstado.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblEstado.Size = new System.Drawing.Size(818, 26);
             this.lblEstado.TabIndex = 1;
-            this.lblEstado.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblEstado.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FrmMenuPrincipal486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Highlight;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.ClientSize = new System.Drawing.Size(818, 467);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.Menu);

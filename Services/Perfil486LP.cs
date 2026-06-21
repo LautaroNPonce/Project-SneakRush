@@ -16,10 +16,5 @@ namespace Services
         {
             Componentes = new List<Composite486LP>();
         }
-
-        public override string ToString()
-        {
-            return Nombre;
-        }
     }
 }

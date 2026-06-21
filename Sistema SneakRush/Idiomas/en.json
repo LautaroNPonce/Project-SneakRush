@@ -73,7 +73,9 @@
     "Msg.IdiomaAplicado": "Language changed to: {0}",
     "Msg.IdiomaAplicado.Title": "Language",
     "Msg.SeleccionarIdioma": "You must select a language.",
-    "Msg.SeleccionarIdioma.Title": "Validation"
+    "Msg.SeleccionarIdioma.Title": "Validation",
+    "Msg.IdiomaVacio": "The language code cannot be empty.",
+    "Msg.IdiomaInvalido": "Invalid language."
   },
 
   "FrmCambiarContraseña486LP": {
@@ -338,7 +340,9 @@
     "Msg.SueltosQuitados": "This family already includes permissions you had assigned individually. They were removed from the direct permissions because they are now covered by the family:",
     "Msg.SueltosQuitados.Title": "Loose permissions removed",
     "Msg.BloqueoAdmin": "You cannot remove this permission from the Administrator profile: it would leave the system with no way to manage permissions.",
-    "Msg.BloqueoAdmin.Title": "Action not allowed"
+    "Msg.BloqueoAdmin.Title": "Action not allowed",
+    "Msg.PermisoYaEnFamilia": "This permission is already included in the family '{0}', assigned to this profile. There is no need to assign it separately.",
+    "Msg.BLL.ErrorInvertir": "An error occurred while changing the user's status."
   },
 
   "FrmBitacoraEvento486LP": {
@@ -405,6 +409,10 @@
     "Msg.Exito": "Verification digits recalculated successfully.",
     "Msg.Exito.Title": "Success",
     "Msg.RestaurarPendiente": "Restore functionality pending implementation.",
-    "Msg.RestaurarPendiente.Title": "Notice"
+    "Msg.RestaurarPendiente.Title": "Notice",
+    "Inc.Insertado": "Record inserted directly into the DB",
+    "Inc.Modificado": "Record modified directly in the DB",
+    "Inc.Eliminado": "Record deleted directly from the DB"
+
   }
 }

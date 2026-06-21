@@ -24,13 +24,13 @@ namespace BLL
 
             if (string.IsNullOrWhiteSpace(nombreIdioma))
             {
-                mensaje = "El código de idioma no puede estar vacío.";
+                mensaje = "Msg.IdiomaVacio"; // El código de idioma no puede estar vacío.
                 return false;
             }
 
             if (nombreIdioma != "Español" && nombreIdioma != "Inglés" && nombreIdioma != "Portugués")
             {
-                mensaje = "Idioma no válido.";
+                mensaje = "Msg.IdiomaInvalido"; // Idioma no válido.
                 return false;
             }
 
@@ -40,7 +40,7 @@ namespace BLL
             {
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Cambiar Idioma",$"Usuario cambió idioma a '{nombreIdioma}'.",
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Cambiar Idioma", $"Usuario cambió idioma a '{nombreIdioma}'.",
                     Criticidad486LP.Baja, dni, nombreUsuario));
 
                 string mensajeDV;

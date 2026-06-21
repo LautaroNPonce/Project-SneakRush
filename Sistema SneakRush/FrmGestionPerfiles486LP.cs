@@ -270,12 +270,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.PerfilCreado", "Perfil creado correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -326,12 +328,14 @@ namespace Sistema_SneakRush
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.PerfilModificado", "Perfil modificado correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -390,12 +394,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.PerfilEliminado", "Perfil eliminado correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Resetear();
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -447,13 +453,15 @@ namespace Sistema_SneakRush
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.FamiliaAsignada", "Familia asignada correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarFamiliasAsignadas(_idPerfilSeleccionado);
                 CargarPermisosAsignados(_idPerfilSeleccionado);
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -497,12 +505,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.FamiliaQuitada", "Familia quitada correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarFamiliasAsignadas(_idPerfilSeleccionado);
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -534,12 +544,19 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Msg.PermisoAsignado", "Permiso asignado correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"),MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarPermisosAsignados(_idPerfilSeleccionado);
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string texto = lm.ObtenerTexto(f, mensaje, mensaje);
+
+                if (mensaje == "Msg.PermisoYaEnFamilia")
+                    texto = string.Format(texto, _bll.FamiliaQueContienePermiso(_idPerfilSeleccionado, _idPermisoSeleccionado));
+
+                MessageBox.Show(texto, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"),MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -595,12 +612,14 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.PermisoQuitado", "Permiso quitado correctamente."),
+                    lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarPermisosAsignados(_idPerfilSeleccionado);
             }
             else
             {
-                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -785,5 +804,6 @@ namespace Sistema_SneakRush
         {
             Program.LanguageManager.Quitar(this);
         }
+
     }
 }

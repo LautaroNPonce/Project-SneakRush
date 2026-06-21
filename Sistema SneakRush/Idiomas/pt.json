@@ -73,7 +73,9 @@
     "Msg.IdiomaAplicado": "Idioma alterado para: {0}",
     "Msg.IdiomaAplicado.Title": "Idioma",
     "Msg.SeleccionarIdioma": "Você deve selecionar um idioma.",
-    "Msg.SeleccionarIdioma.Title": "Validação"
+    "Msg.SeleccionarIdioma.Title": "Validação",
+    "Msg.IdiomaVacio": "O código de idioma não pode estar vazio.",
+    "Msg.IdiomaInvalido": "Idioma inválido."
   },
 
   "FrmCambiarContraseña486LP": {
@@ -338,7 +340,9 @@
     "Msg.SueltosQuitados": "Esta família já inclui permissões que você tinha atribuídas avulsas. Elas foram removidas das permissões diretas porque agora estão cobertas pela família:",
     "Msg.SueltosQuitados.Title": "Permissões avulsas removidas",
     "Msg.BloqueoAdmin": "Você não pode remover esta permissão do perfil Administrador: deixaria o sistema sem forma de administrar permissões.",
-    "Msg.BloqueoAdmin.Title": "Ação não permitida"
+    "Msg.BloqueoAdmin.Title": "Ação não permitida",
+    "Msg.PermisoYaEnFamilia": "Esta permissão já está incluída na família '{0}', atribuída a este perfil. Não é necessário atribuí-la separadamente.",
+    "Msg.BLL.ErrorInvertir": "Ocorreu um erro ao alterar o estado do usuário."
   },
 
   "FrmBitacoraEvento486LP": {
@@ -405,6 +409,10 @@
     "Msg.Exito": "Dígitos verificadores recalculados com sucesso.",
     "Msg.Exito.Title": "Sucesso",
     "Msg.RestaurarPendiente": "Funcionalidade de restauração pendente de implementação.",
-    "Msg.RestaurarPendiente.Title": "Aviso"
+    "Msg.RestaurarPendiente.Title": "Aviso",
+    "Inc.Insertado": "Registro inserido diretamente no BD",
+    "Inc.Modificado": "Registro modificado diretamente no BD",
+    "Inc.Eliminado": "Registro excluído diretamente do BD"
+
   }
 }

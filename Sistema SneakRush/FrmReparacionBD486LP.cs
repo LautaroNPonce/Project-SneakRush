@@ -13,50 +13,72 @@ using static Services.DV486LP;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmReparacionBD486LP : Form
+    public partial class FrmReparacionBD486LP : Form, IObserver486LP
     {
         private BLL_DV486LP _bllDV = new BLL_DV486LP();
         private DV486LP _dv;
+        private List<InconsistenciaDV486LP> _inconsistencias = new List<InconsistenciaDV486LP>();
 
         public FrmReparacionBD486LP(DV486LP dv)
         {
             InitializeComponent();
             _dv = dv;
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmReparacionBD486LP_FormClosing;
         }
 
         private void FrmReparacionBD486LP_Load(object sender, EventArgs e)
         {
-            CargarInconsistencias();
+            CargarInconsistencias(); 
+            ActualizarIdioma();       
         }
 
         private void CargarInconsistencias()
         {
+            _inconsistencias = _bllDV.ObtenerInconsistencias(_dv.TablaAfectada);
+            RenderGrilla();
+        }
+
+        private void RenderGrilla()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmReparacionBD486LP";
+
             dgvInconsistencias.Rows.Clear();
 
-            List<InconsistenciaDV486LP> lista = _bllDV.ObtenerInconsistencias(_dv.TablaAfectada);
-
-            foreach (InconsistenciaDV486LP inc in lista)
+            foreach (InconsistenciaDV486LP inc in _inconsistencias)
             {
-                dgvInconsistencias.Rows.Add(inc.ID, inc.Tabla, inc.Inconsistencia);
+                string textoInc = lm.ObtenerTexto(f, inc.Inconsistencia, inc.Inconsistencia);
+                dgvInconsistencias.Rows.Add(inc.ID, inc.Tabla, textoInc);
             }
         }
 
         private void btnRecalcular_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmReparacionBD486LP";
+
             if (!_bllDV.RecalcularDV(_dv.TablaAfectada, out string mensaje))
             {
-                MessageBox.Show($"Error al recalcular: {mensaje}", "Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.ErrorRecalcular", "Error al recalcular: {0}"), mensaje),
+                    lm.ObtenerTexto(f, "Msg.ErrorRecalcular.Title", "Error"),MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            MessageBox.Show("Dígitos verificadores recalculados correctamente.", "Éxito",MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(lm.ObtenerTexto(f, "Msg.Exito", "Dígitos verificadores recalculados correctamente."),
+                lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"),MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
         private void btnRestaurar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Funcionalidad de restauración pendiente de implementar.", "Aviso",MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var lm = Program.LanguageManager;
+            string f = "FrmReparacionBD486LP";
+
+            MessageBox.Show(lm.ObtenerTexto(f, "Msg.RestaurarPendiente", "Funcionalidad de restauración pendiente de implementar."),
+                lm.ObtenerTexto(f, "Msg.RestaurarPendiente.Title", "Aviso"),MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
@@ -64,5 +86,30 @@ namespace Sistema_SneakRush
             Application.Exit();
         }
 
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmReparacionBD486LP";
+
+            this.Text = lm.ObtenerTexto(f, "Title", "Reparación de Base de Datos");
+
+            btnRecalcular.Text = lm.ObtenerTexto(f, "btnRecalcular", "Recalcular");
+            btnRestaurar.Text = lm.ObtenerTexto(f, "btnRestaurar", "Restaurar");
+            btnSalir.Text = lm.ObtenerTexto(f, "btnSalir", "Salir");
+
+            if (dgvInconsistencias.Columns.Count >= 3)
+            {
+                dgvInconsistencias.Columns[0].HeaderText = lm.ObtenerTexto(f, "col.ID", "ID");
+                dgvInconsistencias.Columns[1].HeaderText = lm.ObtenerTexto(f, "col.Tabla", "Tabla");
+                dgvInconsistencias.Columns[2].HeaderText = lm.ObtenerTexto(f, "col.Inconsistencia", "Inconsistencia");
+            }
+
+            RenderGrilla();
+        }
+
+        private void FrmReparacionBD486LP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.LanguageManager.Quitar(this);
+        }
     }
 }

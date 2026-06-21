@@ -37,11 +37,15 @@ namespace Sistema_SneakRush
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmCambiarContraseña486LP";
+
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
 
             if (usuario == null)
             {
-                MessageBox.Show("No hay sesión activa.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SinSesion", "No hay sesión activa."),lm.ObtenerTexto(f, "Msg.SinSesion.Title", "Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -50,15 +54,18 @@ namespace Sistema_SneakRush
 
             if (resultado)
             {
-                MessageBox.Show("Contraseña cambiada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.Exito", "Contraseña cambiada exitosamente."),lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LimpiarCampos();
                 this.Close();
             }
             else
             {
-                MessageBox.Show(mensaje, "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),lm.ObtenerTexto(f, "Msg.Error.Title", "Atención"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
         private void LimpiarCampos()
         {
             txtContraseña.Text = string.Empty;
