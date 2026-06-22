@@ -24,7 +24,18 @@
     "Msg.ErrorIntegridad": "Error verifying integrity: {0}",
     "Msg.ErrorIntegridad.Title": "SneakRush — Error",
     "Msg.InconsistenciaSistema": "A system error was detected.\nPlease contact the Administrator to resolve the issue.",
-    "Msg.InconsistenciaSistema.Title": "SneakRush — System Error Detected"
+    "Msg.InconsistenciaSistema.Title": "SneakRush — System Error Detected",
+    "Msg.CamposVacios.Titulo": "SneakRush — Empty fields",
+    "Msg.SesionUnica": "You can't open more than one instance of the session: you already have this same account in use.",
+    "Msg.SesionUnica.Titulo": "SneakRush — Single session",
+    "Msg.SesionActiva.Titulo": "SneakRush — Active session",
+    "Msg.CambioRequerido.Titulo": "SneakRush — Change required",
+    "Msg.InconsistenciaNoAdmin": "A system error was detected.\nContact the Administrator to resolve the issue.",
+    "Msg.InconsistenciaNoAdmin.Titulo": "SneakRush — System error detected",
+    "Msg.PasswordIncorrecta": "Incorrect password.",
+    "Msg.UsuarioInactivo.Titulo": "SneakRush — Inactive user",
+    "Msg.UsuarioBloqueado.Titulo": "SneakRush — Blocked user",
+    "Msg.Error.Titulo": "SneakRush — Error"
   },
 
   "FrmMenuPrincipal486LP": {

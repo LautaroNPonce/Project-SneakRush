@@ -30,12 +30,16 @@ namespace Sistema_SneakRush
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+            string f = "FrmIniciarSesionLP486";
+
             string nombreUsuario = txtUsuario.Text.Trim();
             string contraseña = txtContraseña.Text;
 
             if (string.IsNullOrEmpty(nombreUsuario) || string.IsNullOrEmpty(contraseña))
             {
-                MessageBox.Show("Por favor completá todos los campos.", "SneakRush — Campos vacíos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.CamposVacios", "Por favor completá todos los campos."),
+                    lm.ObtenerTexto(f, "Msg.CamposVacios.Titulo", "SneakRush — Campos vacíos"),MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -59,13 +63,17 @@ namespace Sistema_SneakRush
                             if (usuario.IdUsuario == usuarioActual.IdUsuario)
                             {
                                 // Mismo usuario el Singleton rechaza una segunda instancia de la misma sesión
-                                MessageBox.Show("No se puede crear más de una instancia de la sesión: ya tenés esta misma cuenta en uso.",
-                                    "SneakRush — Sesión única", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                MessageBox.Show(
+                                    lm.ObtenerTexto(f, "Msg.SesionUnica", "No se puede crear más de una instancia de la sesión: ya tenés esta misma cuenta en uso."),
+                                    lm.ObtenerTexto(f, "Msg.SesionUnica.Titulo", "SneakRush — Sesión única"),
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             }
                             else
                             {
-                                MessageBox.Show($"Ya hay una sesión activa como {usuarioActual.Nombre} {usuarioActual.Apellido}.\nCerrá la sesión antes de iniciar otra.",
-                                    "SneakRush — Sesión activa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                MessageBox.Show(
+                                    string.Format(lm.ObtenerTexto(f, "Msg.SesionActiva", "Ya hay una sesión activa como {0} {1}.\nCerrá la sesión antes de iniciar otra."), usuarioActual.Nombre, usuarioActual.Apellido),
+                                    lm.ObtenerTexto(f, "Msg.SesionActiva.Titulo", "SneakRush — Sesión activa"),
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             }
                             LimpiarCampos();
                             return;
@@ -76,7 +84,10 @@ namespace Sistema_SneakRush
 
                         if (usuario.DebeCambiarContraseña)
                         {
-                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show(
+                                lm.ObtenerTexto(f, "Msg.CambioRequerido", "Por seguridad, debe cambiar su contraseña antes de continuar."),
+                                lm.ObtenerTexto(f, "Msg.CambioRequerido.Titulo", "SneakRush — Cambio requerido"),
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
                             frmCambiar.ShowDialog();
                         }
@@ -96,7 +107,10 @@ namespace Sistema_SneakRush
 
                         if (usuario.DebeCambiarContraseña)
                         {
-                            MessageBox.Show("Por seguridad, debe cambiar su contraseña antes de continuar.", "SneakRush — Cambio requerido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show(
+                                lm.ObtenerTexto(f, "Msg.CambioRequerido", "Por seguridad, debe cambiar su contraseña antes de continuar."),
+                                lm.ObtenerTexto(f, "Msg.CambioRequerido.Titulo", "SneakRush — Cambio requerido"),
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
                             frmCambiar.ShowDialog();
                         }
@@ -109,7 +123,10 @@ namespace Sistema_SneakRush
                         {
                             if (!string.IsNullOrEmpty(mensajeDV))
                             {
-                                MessageBox.Show($"Error al verificar integridad: {mensajeDV}", "SneakRush — Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(
+                                    string.Format(lm.ObtenerTexto(f, "Msg.ErrorIntegridad", "Error al verificar integridad: {0}"), mensajeDV),
+                                    lm.ObtenerTexto(f, "Msg.Error.Titulo", "SneakRush — Error"),
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 return;
                             }
 
@@ -126,8 +143,10 @@ namespace Sistema_SneakRush
                             else
                             {
                                 // Otro rol → abre el menú con acceso restringido y muestra aviso
-                                MessageBox.Show("Se detectó un Error en el Sistema.\nContacte al Administrador para resolver el problema.",
-                                    "SneakRush — Error en el Sistema Detectado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                MessageBox.Show(
+                                    lm.ObtenerTexto(f, "Msg.InconsistenciaNoAdmin", "Se detectó un Error en el Sistema.\nContacte al Administrador para resolver el problema."),
+                                    lm.ObtenerTexto(f, "Msg.InconsistenciaNoAdmin.Titulo", "SneakRush — Error en el Sistema Detectado"),
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                                 FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP(true);
                                 menuPrincipal.Show();
@@ -146,28 +165,43 @@ namespace Sistema_SneakRush
 
 
                 case 0:
-                    MessageBox.Show("Usuario no encontrado.", "SneakRush — Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        lm.ObtenerTexto(f, "Msg.UsuarioNoEncontrado", "Usuario no encontrado."),
+                        lm.ObtenerTexto(f, "Msg.Error.Titulo", "SneakRush — Error"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     LimpiarCampos();
                     break;
 
                 case -1:
-                    MessageBox.Show("Contraseña incorrecta.", "SneakRush — Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        lm.ObtenerTexto(f, "Msg.PasswordIncorrecta", "Contraseña incorrecta."),
+                        lm.ObtenerTexto(f, "Msg.Error.Titulo", "SneakRush — Error"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     txtContraseña.Clear();
                     txtContraseña.Focus();
                     break;
 
                 case -2:
-                    MessageBox.Show("El usuario está inactivo. Contacte al Administrador.", "SneakRush — Usuario inactivo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        lm.ObtenerTexto(f, "Msg.UsuarioInactivo", "El usuario está inactivo. Contacte al Administrador."),
+                        lm.ObtenerTexto(f, "Msg.UsuarioInactivo.Titulo", "SneakRush — Usuario inactivo"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     LimpiarCampos();
                     break;
 
                 case -3:
-                    MessageBox.Show("El usuario está bloqueado. Contacte al Administrador.", "SneakRush — Usuario bloqueado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        lm.ObtenerTexto(f, "Msg.UsuarioBloqueado", "El usuario está bloqueado. Contacte al Administrador."),
+                        lm.ObtenerTexto(f, "Msg.UsuarioBloqueado.Titulo", "SneakRush — Usuario bloqueado"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     LimpiarCampos();
                     break;
 
                 default:
-                    MessageBox.Show($"Error inesperado: {mensaje}", "SneakRush — Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        string.Format(lm.ObtenerTexto(f, "Msg.ErrorInesperado", "Error inesperado: {0}"), mensaje),
+                        lm.ObtenerTexto(f, "Msg.Error.Titulo", "SneakRush — Error"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
 
             }
@@ -224,7 +258,5 @@ namespace Sistema_SneakRush
             label2.Text = lm.ObtenerTexto(f, "lblContraseña");
             btnIngresar.Text = lm.ObtenerTexto(f, "btnIngresar");
         }
-
-
     }
 }

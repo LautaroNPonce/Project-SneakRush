@@ -25,7 +25,18 @@
     "Msg.ErrorIntegridad.Title": "SneakRush — Error",
     "Msg.InconsistenciaSistema": "Se detectó un Error en el Sistema.\nContacte al Administrador para resolver el problema.",
     "Msg.InconsistenciaSistema.Title": "SneakRush — Error en el Sistema Detectado",
-    "lbl.BarraEstado": "Usuario: {0}  |  Rol: {1}"
+    "lbl.BarraEstado": "Usuario: {0}  |  Rol: {1}",
+    "Msg.CamposVacios.Titulo": "SneakRush — Campos vacíos",
+    "Msg.SesionUnica": "No se puede crear más de una instancia de la sesión: ya tenés esta misma cuenta en uso.",
+    "Msg.SesionUnica.Titulo": "SneakRush — Sesión única",
+    "Msg.SesionActiva.Titulo": "SneakRush — Sesión activa",
+    "Msg.CambioRequerido.Titulo": "SneakRush — Cambio requerido",
+    "Msg.InconsistenciaNoAdmin": "Se detectó un Error en el Sistema.\nContacte al Administrador para resolver el problema.",
+    "Msg.InconsistenciaNoAdmin.Titulo": "SneakRush — Error en el Sistema Detectado",
+    "Msg.PasswordIncorrecta": "Contraseña incorrecta.",
+    "Msg.UsuarioInactivo.Titulo": "SneakRush — Usuario inactivo",
+    "Msg.UsuarioBloqueado.Titulo": "SneakRush — Usuario bloqueado",
+    "Msg.Error.Titulo": "SneakRush — Error"
   },
 
   "FrmMenuPrincipal486LP": {

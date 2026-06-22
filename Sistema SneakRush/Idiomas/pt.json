@@ -24,7 +24,18 @@
     "Msg.ErrorIntegridad": "Erro ao verificar integridade: {0}",
     "Msg.ErrorIntegridad.Title": "SneakRush — Erro",
     "Msg.InconsistenciaSistema": "Foi detectado um erro no sistema.\nEntre em contato com o Administrador para resolver o problema.",
-    "Msg.InconsistenciaSistema.Title": "SneakRush — Erro no Sistema Detectado"
+    "Msg.InconsistenciaSistema.Title": "SneakRush — Erro no Sistema Detectado",
+    "Msg.CamposVacios.Titulo": "SneakRush — Campos vazios",
+    "Msg.SesionUnica": "Não é possível abrir mais de uma instância da sessão: você já tem esta mesma conta em uso.",
+    "Msg.SesionUnica.Titulo": "SneakRush — Sessão única",
+    "Msg.SesionActiva.Titulo": "SneakRush — Sessão ativa",
+    "Msg.CambioRequerido.Titulo": "SneakRush — Alteração necessária",
+    "Msg.InconsistenciaNoAdmin": "Foi detectado um erro no sistema.\nContate o Administrador para resolver o problema.",
+    "Msg.InconsistenciaNoAdmin.Titulo": "SneakRush — Erro no sistema detectado",
+    "Msg.PasswordIncorrecta": "Senha incorreta.",
+    "Msg.UsuarioInactivo.Titulo": "SneakRush — Usuário inativo",
+    "Msg.UsuarioBloqueado.Titulo": "SneakRush — Usuário bloqueado",
+    "Msg.Error.Titulo": "SneakRush — Erro"
   },
 
   "FrmMenuPrincipal486LP": {
