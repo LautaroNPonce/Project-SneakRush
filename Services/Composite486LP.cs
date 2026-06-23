@@ -15,10 +15,5 @@ namespace Services
         public abstract void add(Composite486LP c);
         public abstract void remove(Composite486LP c);
         public abstract Composite486LP get(int i);
-
-        public override string ToString()
-        {
-            return Nombre;
-        }
     }
 }

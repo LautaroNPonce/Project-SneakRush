@@ -20,9 +20,7 @@ namespace DAL
                     cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
                     con.Open();
                     object resultado = cmd.ExecuteScalar();
-                    return resultado != null && resultado != DBNull.Value
-                        ? resultado.ToString()
-                        : "es";
+                    return resultado != null && resultado != DBNull.Value ? resultado.ToString() : "es";
                 }
             }
             catch (Exception ex)

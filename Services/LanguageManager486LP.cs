@@ -103,7 +103,7 @@ namespace Services
             }
         }
 
-        // Guarda el último idioma usado en un archivo, para recordarlo entre ejecuciones
+        // Guardo el último idioma usado en un archivo, para recordarlo entre ejecuciones
         private void GuardarUltimoIdioma(string codigoIdioma)
         {
             try

@@ -353,39 +353,6 @@ namespace DAL
 
             return lista;
         }
-        public List<string> ObtenerNombresPermisosDePerfil(int idPerfil)
-        {
-            List<string> permisos = new List<string>();
-
-            try
-            {
-                using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
-                {
-                    string query = @"SELECT DISTINCT p.Nombre FROM Permiso p INNER JOIN Perfil_Permiso pp ON p.IdPermiso = pp.IdPermiso WHERE pp.IdPerfil = @IdPerfil
-                    UNION SELECT DISTINCT p.Nombre FROM Permiso p INNER JOIN Familia_Permiso fp ON p.IdPermiso = fp.IdPermiso INNER JOIN Perfil_Familia pf ON fp.IdFamilia = pf.IdFamilia
-                    WHERE pf.IdPerfil = @IdPerfil2";
-
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.Parameters.AddWithValue("@IdPerfil", idPerfil);
-                    cmd.Parameters.AddWithValue("@IdPerfil2", idPerfil);
-                    con.Open();
-
-                    using (SqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        while (dr.Read())
-                        {
-                            permisos.Add(dr["Nombre"].ToString());
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al obtener nombres de permisos del perfil: " + ex.Message);
-            }
-
-            return permisos;
-        }
 
         public List<string> ObtenerNombresPermisosPorRol(string nombreRol)
         {

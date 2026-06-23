@@ -333,7 +333,9 @@ namespace BLL
             // Permisos que trae la familia candidata
             List<Permiso486LP> permisosNuevaFamilia = _dalFamilia.ListarPermisosDeFamilia(idFamilia);
             if (permisosNuevaFamilia.Count == 0)
+            {
                 return false; // si no tiene permisos, no puede solapar con nada
+            }
 
             // IDs de permisos que ya vienen por las familias asignadas al perfil
             HashSet<int> permisosYaCubiertos = new HashSet<int>();
@@ -342,17 +344,19 @@ namespace BLL
             foreach (Familia486LP fam in familiasAsignadas)
             {
                 if (fam.Id == idFamilia)
+                {
                     continue; // por las dudas ignorar la misma familia
+                }
 
                 foreach (Permiso486LP perm in _dalFamilia.ListarPermisosDeFamilia(fam.Id))
                     permisosYaCubiertos.Add(perm.Id);
             }
 
-            // ¿hay al menos un permiso en común?
+            // hay al menos un permiso en común?
             return permisosNuevaFamilia.Any(p => permisosYaCubiertos.Contains(p.Id));
         }
 
-        // al asignar una familia, quita del perfil los permisos SUELTOS (directos) que esa familia ya cubre, para que un permiso no quede a la vez suelto y por familia.
+        // La asignar una familia, quita del perfil los permisos SUELTOS (directos) que esa familia ya cubre, para que un permiso no quede a la vez suelto y por familia.
         // Devuelve los nombres quitados (para informar en la GUI). Lista vacía si no quitó nada.
         public List<string> QuitarSueltosCubiertosPorFamilia(int idPerfil, int idFamilia)
         {
@@ -370,8 +374,10 @@ namespace BLL
                 if (idsFamilia.Contains(suelto.Id))
                 {
                     string m;
-                    if (QuitarPermiso(idPerfil, suelto.Id, out m)) // reusa el BLL: valida, persiste y registra en bitácora
-                        quitados.Add(suelto.Nombre);
+                    if (QuitarPermiso(idPerfil, suelto.Id, out m)) // La BLL: valida, persiste y registra en bitácora
+                    { 
+                        quitados.Add(suelto.Nombre); 
+                    }
                 }
             }
 
@@ -388,7 +394,9 @@ namespace BLL
             {
                 List<Permiso486LP> permisosFamilia = _dalFamilia.ListarPermisosDeFamilia(fam.Id);
                 if (permisosFamilia.Any(p => p.Id == idPermiso))
+                {
                     return fam.Nombre; // la encontró
+                }
             }
 
             return null; // ninguna familia asignada cubre ese permiso
@@ -401,20 +409,26 @@ namespace BLL
         public bool TieneFamiliasAsignadas(int idPerfil)
         {
             List<Familia486LP> familias = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
-            return familias.Count > 0;
+            {
+                return familias.Count > 0;
+            }
         }
 
         public bool TienePermisosAsignados(int idPerfil)
         {
             List<Permiso486LP> permisos = _dalPerfil.ListarPermisosDePerfil(idPerfil);
-            return permisos.Count > 0;
+            {
+                return permisos.Count > 0;
+            }
         }
 
         public List<string> ObtenerPermisosPorRol(string nombreRol)
         {
             if (string.IsNullOrWhiteSpace(nombreRol))
+            {
                 return new List<string>();
-
+            }
+        
             return _dalPerfil.ObtenerNombresPermisosPorRol(nombreRol);
         }
 
