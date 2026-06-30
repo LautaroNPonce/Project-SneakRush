@@ -14,8 +14,24 @@ namespace BLL
     {
         private DAL_DV486LP _dal = new DAL_DV486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
-
         private static readonly List<string> _columnasIgnorar = new List<string> { "DV" };
+        // Nombre de la columna PK de cada tabla, para el recálculo del DV por fila.
+        private static readonly Dictionary<string, string> _columnaIdPorTabla = new Dictionary<string, string>
+        {
+            { "Usuarios",       "IdUsuario"    },
+            { "Perfil",         "IdPerfil"     },
+            { "Familia",        "IdFamilia"    },
+            { "Permiso",        "IdPermiso"    },
+            { "BitacoraEvento", "IdLog"        },
+            { "Idioma",         "NombreIdioma" }
+        };
+
+        private static readonly string[] _tablasProtegidas = { "Usuarios", "Perfil", "Familia", "Permiso", "Idioma", "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
+        private static readonly List<string> _tablasSoloNivelTabla = new List<string> { "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
+        private string ObtenerColumnaId(string tabla)
+        {
+            return _columnaIdPorTabla.ContainsKey(tabla) ? _columnaIdPorTabla[tabla] : "Id";
+        }
 
         private string CalcularDVH(string tabla)
         {
@@ -57,18 +73,31 @@ namespace BLL
 
         public bool RecalcularDV(string tabla, out string mensaje)
         {
+            return RecalcularDV(tabla, true, out mensaje);
+        }
+
+        public bool RecalcularDV(string tabla, bool registrarBitacora, out string mensaje)
+        {
             mensaje = "";
             try
             {
                 string dvh = CalcularDVH(tabla);
                 string dvv = CalcularDVV(tabla);
                 _dal.GuardarDV(tabla, dvh, dvv);
-                _dal.RecalcularDVHPorFila(tabla);
+                if (!_tablasSoloNivelTabla.Contains(tabla)) 
+                { 
+                    _dal.RecalcularDVHPorFila(tabla, ObtenerColumnaId(tabla)); 
+                }
+                    
+                // No registramos en bitácora cuando recalculamos la propia tabla Bitacora:
+                // evita el círculo vicioso (el evento de recálculo dejaría el hash viejo otra vez).
+                if (registrarBitacora)
+                {
+                    string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
+                    string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
-                string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
-
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador", $"Se recalcularon los dígitos verificadores de la tabla '{tabla}'.", Criticidad486LP.MuyAlta, dni, nombreUsuario));
+                    _bllBitacora.Registrar(new BitacoraEvento486LP("Dígito Verificador", $"Se recalcularon los dígitos verificadores de la tabla '{tabla}'.", Criticidad486LP.MuyAlta, dni, nombreUsuario));
+                }
 
                 return true;
             }
@@ -119,11 +148,28 @@ namespace BLL
 
             try
             {
+                if (_tablasSoloNivelTabla.Contains(tabla))
+                {
+                    string dvhCalc = CalcularDVH(tabla);
+                    string dvvCalc = CalcularDVV(tabla);
+                    if (dvhCalc != _dal.ObtenerDVH(tabla) || dvvCalc != _dal.ObtenerDVV(tabla))
+                    {
+                        lista.Add(new InconsistenciaDV486LP
+                        {
+                            ID = "-",
+                            Tabla = tabla,
+                            Inconsistencia = "Inc.Modificado" // Relación modificada directamente en la BD
+                        });
+                    }
+                    return lista;
+                }
+
                 DataTable dt = _dal.LeerTabla(tabla);
+                string columnaId = ObtenerColumnaId(tabla);
 
                 foreach (DataRow fila in dt.Rows)
                 {
-                    string id = fila["IdUsuario"].ToString();
+                    string id = fila[columnaId].ToString();
 
                     StringBuilder sb = new StringBuilder();
                     foreach (DataColumn col in dt.Columns)
@@ -180,6 +226,55 @@ namespace BLL
             }
 
             return lista;
+        }
+
+        public List<string> VerificarTodas(out string errorTecnico)
+        {
+            errorTecnico = "";
+            List<string> conProblemas = new List<string>();
+
+            foreach (string tabla in _tablasProtegidas)
+            {
+                string tablaAfectada;
+                string mensaje;
+                bool ok = VerificarIntegridad(tabla, out tablaAfectada, out mensaje);
+
+                if (!ok)
+                {
+                    if (!string.IsNullOrEmpty(mensaje))
+                    {
+                        // Error técnico real: corto y lo reporto
+                        errorTecnico = mensaje;
+                        return conProblemas;
+                    }
+                    conProblemas.Add(tabla);
+                }
+            }
+
+            return conProblemas;
+        }
+
+        // Inconsistencias de varias tablas juntas (para mostrar todas en la grilla de reparación).
+        public List<InconsistenciaDV486LP> ObtenerInconsistenciasDeTablas(List<string> tablas)
+        {
+            List<InconsistenciaDV486LP> todas = new List<InconsistenciaDV486LP>();
+            foreach (string tabla in tablas)
+                todas.AddRange(ObtenerInconsistencias(tabla));
+            return todas;
+        }
+
+        // Recalcula varias tablas (botón "Recalcular" de la reparación).
+        public bool RecalcularTablas(List<string> tablas, out string mensaje)
+        {
+            mensaje = "";
+            foreach (string tabla in tablas)
+            {
+                // BitacoraEvento se recalcula sin registrar evento (evita el círculo vicioso).
+                bool registrar = tabla != "BitacoraEvento";
+                if (!RecalcularDV(tabla, registrar, out mensaje))
+                    return false;
+            }
+            return true;
         }
     }
 }

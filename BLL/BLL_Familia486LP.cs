@@ -49,6 +49,11 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Familias", $"Se creó la familia '{nombre}' con patentes base.", Criticidad486LP.Alta, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Familia", out mensajeDV);
+                bllDV.RecalcularDV("Familia_Permiso", out mensajeDV);
             }
 
             return resultado;
@@ -89,6 +94,10 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Familias", $"Se modificó la familia con id '{id}' al nombre '{nuevoNombre}'.", Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Familia", out mensajeDV);
             }
 
             return resultado;
@@ -112,6 +121,10 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Familias", $"Se eliminó la familia con id '{id}'.", Criticidad486LP.Alta, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Familia", out mensajeDV);
             }
 
             return resultado;
@@ -166,6 +179,10 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Familias", $"Se asignó el permiso '{idPermiso}' a la familia '{idFamilia}'.", Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Familia_Permiso", out mensajeDV);
             }
 
             return resultado;
@@ -225,6 +242,10 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Familias", $"Se quitó el permiso '{idPermiso}' de la familia '{idFamilia}'.", Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Familia_Permiso", out mensajeDV);
             }
 
             return resultado;

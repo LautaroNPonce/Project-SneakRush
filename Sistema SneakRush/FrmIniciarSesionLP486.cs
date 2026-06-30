@@ -116,33 +116,33 @@ namespace Sistema_SneakRush
                         }
 
                         BLL_DV486LP bllDV = new BLL_DV486LP();
-                        string tablaAfectada;
-                        string mensajeDV;
+                        string errorTecnicoDV;
+                        List<string> tablasConProblemas = bllDV.VerificarTodas(out errorTecnicoDV);
 
-                        if (!bllDV.VerificarIntegridad("Usuarios", out tablaAfectada, out mensajeDV))
+                        // Error técnico real (BD caída, etc.): no abrir menú
+                        if (!string.IsNullOrEmpty(errorTecnicoDV))
                         {
-                            if (!string.IsNullOrEmpty(mensajeDV))
-                            {
-                                MessageBox.Show(
-                                    string.Format(lm.ObtenerTexto(f, "Msg.ErrorIntegridad", "Error al verificar integridad: {0}"), mensajeDV),
-                                    lm.ObtenerTexto(f, "Msg.Error.Titulo", "SneakRush — Error"),
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                return;
-                            }
+                            MessageBox.Show(
+                                string.Format(lm.ObtenerTexto(f, "Msg.ErrorIntegridad", "Error al verificar integridad: {0}"), errorTecnicoDV),
+                                lm.ObtenerTexto(f, "Msg.Error.Titulo", "SneakRush — Error"),
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
 
+                        if (tablasConProblemas.Count > 0)
+                        {
                             if (usuario.Rol == "Administrador")
                             {
-                                // Administrador → abre formulario de reparación
+                                // Administrador abre reparación con TODAS las tablas afectadas
                                 this.Hide();
-                                DV486LP dv = new DV486LP(tablaAfectada, "", "");
-                                FrmReparacionBD486LP frmReparacion = new FrmReparacionBD486LP(dv);
+                                FrmReparacionBD486LP frmReparacion = new FrmReparacionBD486LP(tablasConProblemas);
                                 frmReparacion.ShowDialog();
                                 this.Show();
                                 return;
                             }
                             else
                             {
-                                // Otro rol → abre el menú con acceso restringido y muestra aviso
+                                // Otro rol menú restringido con aviso
                                 MessageBox.Show(
                                     lm.ObtenerTexto(f, "Msg.InconsistenciaNoAdmin", "Se detectó un Error en el Sistema.\nContacte al Administrador para resolver el problema."),
                                     lm.ObtenerTexto(f, "Msg.InconsistenciaNoAdmin.Titulo", "SneakRush — Error en el Sistema Detectado"),
@@ -155,7 +155,6 @@ namespace Sistema_SneakRush
                         }
                         else
                         {
-
                             FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP(false);
                             menuPrincipal.Show();
                             this.Hide();

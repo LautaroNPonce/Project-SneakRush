@@ -16,26 +16,30 @@ namespace Sistema_SneakRush
     public partial class FrmReparacionBD486LP : Form, IObserver486LP
     {
         private BLL_DV486LP _bllDV = new BLL_DV486LP();
-        private DV486LP _dv;
+        private List<string> _tablas;
         private List<InconsistenciaDV486LP> _inconsistencias = new List<InconsistenciaDV486LP>();
 
-        public FrmReparacionBD486LP(DV486LP dv)
+        // recibe todas las tablas con inconsistencia.
+        public FrmReparacionBD486LP(List<string> tablas)
         {
             InitializeComponent();
-            _dv = dv;
+            _tablas = tablas ?? new List<string>();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmReparacionBD486LP_FormClosing;
         }
 
+        // si en algún lado todavía se llama con una sola tabla.
+        public FrmReparacionBD486LP(DV486LP dv) : this(new List<string> { dv.TablaAfectada }) { }
+
         private void FrmReparacionBD486LP_Load(object sender, EventArgs e)
         {
-            CargarInconsistencias(); 
-            ActualizarIdioma();       
+            CargarInconsistencias();
+            ActualizarIdioma();
         }
 
         private void CargarInconsistencias()
         {
-            _inconsistencias = _bllDV.ObtenerInconsistencias(_dv.TablaAfectada);
+            _inconsistencias = _bllDV.ObtenerInconsistenciasDeTablas(_tablas);
             RenderGrilla();
         }
 
@@ -58,7 +62,7 @@ namespace Sistema_SneakRush
             var lm = Program.LanguageManager;
             string f = "FrmReparacionBD486LP";
 
-            if (!_bllDV.RecalcularDV(_dv.TablaAfectada, out string mensaje))
+            if (!_bllDV.RecalcularTablas(_tablas, out string mensaje))
             {
                 MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.ErrorRecalcular", "Error al recalcular: {0}"), mensaje),
                     lm.ObtenerTexto(f, "Msg.ErrorRecalcular.Title", "Error"),MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -91,7 +91,7 @@ namespace DAL
             }
         }
 
-        public void RecalcularDVHPorFila(string tabla)
+        public void RecalcularDVHPorFila(string tabla, string columnaId)
         {
             DataTable dt = LeerTabla(tabla);
             foreach (DataRow fila in dt.Rows)
@@ -107,16 +107,16 @@ namespace DAL
                 {
                     using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                     {
-                        SqlCommand cmd = new SqlCommand($"UPDATE {tabla} SET DV = @DV WHERE IdUsuario = @Id", con);
+                        SqlCommand cmd = new SqlCommand($"UPDATE {tabla} SET DV = @DV WHERE {columnaId} = @Id", con);
                         cmd.Parameters.AddWithValue("@DV", hash);
-                        cmd.Parameters.AddWithValue("@Id", fila["IdUsuario"]);
+                        cmd.Parameters.AddWithValue("@Id", fila[columnaId]);
                         con.Open();
-                        int filas = cmd.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"Error al actualizar DV fila {fila["IdUsuario"]}: {ex.Message}");
+                    throw new Exception($"Error al actualizar DV fila {fila[columnaId]}: {ex.Message}");
                 }
             }
         }

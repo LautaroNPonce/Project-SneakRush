@@ -15,9 +15,9 @@
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dgvEstiloHeader = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dgvEstiloCelda = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dgvEstiloAlterna = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblIcono = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlAccent = new System.Windows.Forms.Panel();
@@ -31,24 +31,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvInconsistencias)).BeginInit();
             this.SuspendLayout();
             // 
-            // estilos de grilla
-            // 
-            dgvEstiloHeader.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dgvEstiloHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            dgvEstiloHeader.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            dgvEstiloHeader.ForeColor = System.Drawing.Color.White;
-            dgvEstiloHeader.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            dgvEstiloHeader.SelectionForeColor = System.Drawing.Color.White;
-            dgvEstiloHeader.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            dgvEstiloCelda.BackColor = System.Drawing.Color.White;
-            dgvEstiloCelda.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            dgvEstiloCelda.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(42)))), ((int)(((byte)(55)))));
-            dgvEstiloCelda.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
-            dgvEstiloCelda.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            dgvEstiloAlterna.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(243)))), ((int)(((byte)(250)))));
-            dgvEstiloAlterna.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
-            dgvEstiloAlterna.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            // 
             // lblIcono
             // 
             this.lblIcono.AutoSize = true;
@@ -57,9 +39,9 @@
             this.lblIcono.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(90)))), ((int)(((byte)(40)))));
             this.lblIcono.Location = new System.Drawing.Point(38, 18);
             this.lblIcono.Name = "lblIcono";
-            this.lblIcono.Size = new System.Drawing.Size(28, 28);
+            this.lblIcono.Size = new System.Drawing.Size(37, 25);
             this.lblIcono.TabIndex = 7;
-            this.lblIcono.Text = "\uE7BA";
+            this.lblIcono.Text = "";
             // 
             // label1
             // 
@@ -69,7 +51,7 @@
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.label1.Location = new System.Drawing.Point(72, 20);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(515, 25);
+            this.label1.Size = new System.Drawing.Size(563, 31);
             this.label1.TabIndex = 0;
             this.label1.Text = "INCONSISTENCIA PRESENTE EN LA BASE DE DATOS";
             // 
@@ -115,7 +97,6 @@
             // 
             this.btnSalir.BackColor = System.Drawing.Color.White;
             this.btnSalir.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.btnSalir.FlatAppearance.BorderSize = 1;
             this.btnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSalir.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold);
             this.btnSalir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
@@ -131,26 +112,42 @@
             // 
             this.dgvInconsistencias.AllowUserToAddRows = false;
             this.dgvInconsistencias.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(243)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.dgvInconsistencias.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvInconsistencias.BackgroundColor = System.Drawing.Color.White;
-            this.dgvInconsistencias.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.dgvInconsistencias.ColumnHeadersDefaultCellStyle = dgvEstiloHeader;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvInconsistencias.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvInconsistencias.ColumnHeadersHeight = 30;
             this.dgvInconsistencias.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvInconsistencias.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colID,
             this.colTabla,
             this.colInconsistencia});
-            this.dgvInconsistencias.DefaultCellStyle = dgvEstiloCelda;
-            this.dgvInconsistencias.AlternatingRowsDefaultCellStyle = dgvEstiloAlterna;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(42)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvInconsistencias.DefaultCellStyle = dataGridViewCellStyle3;
             this.dgvInconsistencias.EnableHeadersVisualStyles = false;
             this.dgvInconsistencias.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(230)))), ((int)(((byte)(236)))));
-            this.dgvInconsistencias.Location = new System.Drawing.Point(75, 63);
+            this.dgvInconsistencias.Location = new System.Drawing.Point(12, 63);
             this.dgvInconsistencias.Name = "dgvInconsistencias";
             this.dgvInconsistencias.ReadOnly = true;
             this.dgvInconsistencias.RowHeadersVisible = false;
             this.dgvInconsistencias.RowHeadersWidth = 51;
             this.dgvInconsistencias.RowTemplate.Height = 26;
-            this.dgvInconsistencias.Size = new System.Drawing.Size(590, 200);
+            this.dgvInconsistencias.Size = new System.Drawing.Size(776, 200);
             this.dgvInconsistencias.TabIndex = 6;
             // 
             // colID

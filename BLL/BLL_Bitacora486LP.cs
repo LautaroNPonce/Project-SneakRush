@@ -15,7 +15,16 @@ namespace BLL
 
         public bool Registrar(BitacoraEvento486LP registro)
         {
-            return Dal.Registrar(registro);
+            bool resultado = Dal.Registrar(registro);
+
+            if (resultado)
+            {
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("BitacoraEvento", false, out mensajeDV);
+            }
+
+            return resultado;
         }
 
         public List<BitacoraEvento486LP> Listar()

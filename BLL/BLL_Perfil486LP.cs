@@ -48,6 +48,10 @@ namespace BLL
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se creó el perfil '{nombre}'.",
                     Criticidad486LP.Alta, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Perfil", out mensajeDV);
             }
 
             return resultado;
@@ -89,6 +93,10 @@ namespace BLL
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se modificó el perfil con id '{id}' al nombre '{nuevoNombre}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Perfil", out mensajeDV);
             }
 
             return resultado;
@@ -120,6 +128,10 @@ namespace BLL
                 string nombreUsuario = usuarioActual?.NombreUsuario ?? "Sistema";
                 _bllBitacora.Registrar(new BitacoraEvento486LP
                     ("Gestión Perfiles", $"Se eliminó el perfil con id '{id}'.", Criticidad486LP.Alta, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Perfil", out mensajeDV);
             }
 
             return resultado;
@@ -184,6 +196,10 @@ namespace BLL
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se asignó la familia '{idFamilia}' al perfil '{idPerfil}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Perfil_Familia", out mensajeDV);
             }
 
             return resultado;
@@ -227,6 +243,10 @@ namespace BLL
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó la familia '{idFamilia}' del perfil '{idPerfil}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Perfil_Familia", out mensajeDV);
             }
 
             return resultado;
@@ -280,6 +300,10 @@ namespace BLL
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se asignó el permiso '{idPermiso}' al perfil '{idPerfil}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Perfil_Permiso", out mensajeDV);
             }
 
             return resultado;
@@ -323,6 +347,10 @@ namespace BLL
 
                 _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó el permiso '{idPermiso}' del perfil '{idPerfil}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
+
+                string mensajeDV;
+                BLL_DV486LP bllDV = new BLL_DV486LP();
+                bllDV.RecalcularDV("Perfil_Permiso", out mensajeDV);
             }
 
             return resultado;
