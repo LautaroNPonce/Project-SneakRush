@@ -353,7 +353,9 @@
     "Msg.BloqueoAdmin": "Você não pode remover esta permissão do perfil Administrador: deixaria o sistema sem forma de administrar permissões.",
     "Msg.BloqueoAdmin.Title": "Ação não permitida",
     "Msg.PermisoYaEnFamilia": "Esta permissão já está incluída na família '{0}', atribuída a este perfil. Não é necessário atribuí-la separadamente.",
-    "Msg.BLL.ErrorInvertir": "Ocorreu um erro ao alterar o estado do usuário."
+    "Msg.BLL.ErrorInvertir": "Ocorreu um erro ao alterar o estado do usuário.",
+    "lblPermisosDeFamilia": "Permissões da família:",
+    "col.PermisoDeFamilia": "Permissão da família"
   },
 
   "FrmBitacoraEvento486LP": {

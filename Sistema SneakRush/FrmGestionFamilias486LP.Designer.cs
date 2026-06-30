@@ -61,7 +61,7 @@ namespace Sistema_SneakRush
             this.pnlFamilias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.pnlFamilias.Location = new System.Drawing.Point(12, 50);
             this.pnlFamilias.Name = "pnlFamilias";
-            this.pnlFamilias.Size = new System.Drawing.Size(340, 641);
+            this.pnlFamilias.Size = new System.Drawing.Size(340, 505);
             this.pnlFamilias.TabIndex = 1;
             this.pnlFamilias.TabStop = false;
             this.pnlFamilias.Text = "Familias";
@@ -99,8 +99,8 @@ namespace Sistema_SneakRush
             this.dgvFamilias.ColumnHeadersHeight = 29;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(42)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -114,7 +114,7 @@ namespace Sistema_SneakRush
             this.dgvFamilias.RowHeadersVisible = false;
             this.dgvFamilias.RowHeadersWidth = 51;
             this.dgvFamilias.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFamilias.Size = new System.Drawing.Size(315, 474);
+            this.dgvFamilias.Size = new System.Drawing.Size(315, 356);
             this.dgvFamilias.TabIndex = 1;
             this.dgvFamilias.SelectionChanged += new System.EventHandler(this.dgvFamilias_SelectionChanged);
             // 
@@ -125,7 +125,7 @@ namespace Sistema_SneakRush
             this.btnCrear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCrear.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrear.ForeColor = System.Drawing.Color.White;
-            this.btnCrear.Location = new System.Drawing.Point(10, 540);
+            this.btnCrear.Location = new System.Drawing.Point(10, 422);
             this.btnCrear.Name = "btnCrear";
             this.btnCrear.Size = new System.Drawing.Size(148, 32);
             this.btnCrear.TabIndex = 2;
@@ -140,7 +140,7 @@ namespace Sistema_SneakRush
             this.btnModificar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnModificar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnModificar.ForeColor = System.Drawing.Color.White;
-            this.btnModificar.Location = new System.Drawing.Point(167, 540);
+            this.btnModificar.Location = new System.Drawing.Point(177, 422);
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.Size = new System.Drawing.Size(148, 32);
             this.btnModificar.TabIndex = 3;
@@ -155,7 +155,7 @@ namespace Sistema_SneakRush
             this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEliminar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminar.ForeColor = System.Drawing.Color.White;
-            this.btnEliminar.Location = new System.Drawing.Point(10, 580);
+            this.btnEliminar.Location = new System.Drawing.Point(10, 460);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(148, 32);
             this.btnEliminar.TabIndex = 4;
@@ -170,7 +170,7 @@ namespace Sistema_SneakRush
             this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancelar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.btnCancelar.Location = new System.Drawing.Point(167, 580);
+            this.btnCancelar.Location = new System.Drawing.Point(177, 460);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(148, 32);
             this.btnCancelar.TabIndex = 5;
@@ -188,7 +188,7 @@ namespace Sistema_SneakRush
             this.pnlPatentes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.pnlPatentes.Location = new System.Drawing.Point(366, 50);
             this.pnlPatentes.Name = "pnlPatentes";
-            this.pnlPatentes.Size = new System.Drawing.Size(340, 641);
+            this.pnlPatentes.Size = new System.Drawing.Size(340, 464);
             this.pnlPatentes.TabIndex = 2;
             this.pnlPatentes.TabStop = false;
             this.pnlPatentes.Text = "Permisos disponibles";
@@ -215,8 +215,8 @@ namespace Sistema_SneakRush
             this.dgvPatentes.ColumnHeadersHeight = 29;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(42)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -230,7 +230,7 @@ namespace Sistema_SneakRush
             this.dgvPatentes.RowHeadersVisible = false;
             this.dgvPatentes.RowHeadersWidth = 51;
             this.dgvPatentes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPatentes.Size = new System.Drawing.Size(315, 524);
+            this.dgvPatentes.Size = new System.Drawing.Size(315, 356);
             this.dgvPatentes.TabIndex = 0;
             this.dgvPatentes.SelectionChanged += new System.EventHandler(this.dgvPatentes_SelectionChanged);
             // 
@@ -241,7 +241,7 @@ namespace Sistema_SneakRush
             this.btnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAgregar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregar.ForeColor = System.Drawing.Color.White;
-            this.btnAgregar.Location = new System.Drawing.Point(10, 588);
+            this.btnAgregar.Location = new System.Drawing.Point(10, 422);
             this.btnAgregar.Name = "btnAgregar";
             this.btnAgregar.Size = new System.Drawing.Size(315, 32);
             this.btnAgregar.TabIndex = 1;
@@ -259,7 +259,7 @@ namespace Sistema_SneakRush
             this.pnlAsignados.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.pnlAsignados.Location = new System.Drawing.Point(720, 50);
             this.pnlAsignados.Name = "pnlAsignados";
-            this.pnlAsignados.Size = new System.Drawing.Size(364, 641);
+            this.pnlAsignados.Size = new System.Drawing.Size(364, 464);
             this.pnlAsignados.TabIndex = 3;
             this.pnlAsignados.TabStop = false;
             this.pnlAsignados.Text = "Permisos asignados";
@@ -286,8 +286,8 @@ namespace Sistema_SneakRush
             this.dgvAsignados.ColumnHeadersHeight = 29;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(42)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -301,7 +301,7 @@ namespace Sistema_SneakRush
             this.dgvAsignados.RowHeadersVisible = false;
             this.dgvAsignados.RowHeadersWidth = 51;
             this.dgvAsignados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvAsignados.Size = new System.Drawing.Size(335, 534);
+            this.dgvAsignados.Size = new System.Drawing.Size(335, 368);
             this.dgvAsignados.TabIndex = 1;
             // 
             // btnQuitar
@@ -311,7 +311,7 @@ namespace Sistema_SneakRush
             this.btnQuitar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQuitar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnQuitar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.btnQuitar.Location = new System.Drawing.Point(10, 588);
+            this.btnQuitar.Location = new System.Drawing.Point(10, 422);
             this.btnQuitar.Name = "btnQuitar";
             this.btnQuitar.Size = new System.Drawing.Size(335, 32);
             this.btnQuitar.TabIndex = 2;
@@ -357,7 +357,7 @@ namespace Sistema_SneakRush
             // FrmGestionFamilias486LP
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
-            this.ClientSize = new System.Drawing.Size(1178, 703);
+            this.ClientSize = new System.Drawing.Size(1181, 575);
             this.Controls.Add(this.pnlAccent);
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.lblTitulo);

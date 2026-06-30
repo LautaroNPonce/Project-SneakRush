@@ -12,6 +12,7 @@ namespace BLL
         private DAL.DAL_Familia486LP _dalFamilia = new DAL.DAL_Familia486LP();
         private BLL_Patente486LP _bllPatente = new BLL_Patente486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
+        private readonly string[] _patentesBase = {"CAMBIAR_CONTRASENA_ACEPTAR", "CAMBIAR_CONTRASENA_SALIR","CERRAR_SESION_ACEPTAR", "CERRAR_SESION_CANCELAR"};
 
         public List<Familia486LP> ObtenerFamilias()
         {
@@ -42,10 +43,12 @@ namespace BLL
 
             if (resultado)
             {
+                AsignarPatentesBase(nueva.Id);
+
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Familias", $"Se creó la familia '{nombre}'.", Criticidad486LP.Alta, dni, nombreUsuario));
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Familias", $"Se creó la familia '{nombre}' con patentes base.", Criticidad486LP.Alta, dni, nombreUsuario));
             }
 
             return resultado;
@@ -166,6 +169,21 @@ namespace BLL
             }
 
             return resultado;
+        }
+
+        private void AsignarPatentesBase(int idFamilia)
+        {
+            List<Permiso486LP> todas = _bllPatente.ObtenerPatentes();
+
+            foreach (string codigo in _patentesBase)
+            {
+                Permiso486LP p = todas.FirstOrDefault(x => x.Nombre == codigo);
+                if (p != null)
+                {
+                    string msgIgnorado;
+                    _dalFamilia.AsignarPermiso(idFamilia, p.Id, out msgIgnorado);
+                }
+            }
         }
 
         public bool QuitarPermiso(int idFamilia, int idPermiso, out string mensaje)

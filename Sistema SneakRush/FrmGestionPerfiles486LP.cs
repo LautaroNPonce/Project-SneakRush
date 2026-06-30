@@ -15,6 +15,7 @@ namespace Sistema_SneakRush
     public partial class FrmGestionPerfiles486LP : Form, IObserver486LP
     {
         private BLL_Perfil486LP _bll = new BLL_Perfil486LP();
+        private BLL_Familia486LP _bllFamilia = new BLL_Familia486LP();
         private List<Permiso486LP> _todasLasPatentes = new List<Permiso486LP>();
         private List<int> _idsFamiliasAsignadas = new List<int>();
         private List<int> _idsPermisosAsignados = new List<int>();
@@ -32,6 +33,7 @@ namespace Sistema_SneakRush
             "PERFILES_ASIGNAR_PATENTE", "PERFILES_QUITAR_PATENTE",
             "FAMILIAS_ASIGNAR_PATENTE", "FAMILIAS_QUITAR_PATENTE"
         };
+
         private string _nombrePerfilSeleccionado = string.Empty;
         private int _idPerfilSeleccionado = -1;
         private int _idFamiliaSeleccionada = -1;
@@ -171,6 +173,7 @@ namespace Sistema_SneakRush
         private void CargarFamiliasAsignadas(int idPerfil)
         {
             dgvFamiliasAsignadas.Rows.Clear();
+            dgvPermisosDeFamilia.Rows.Clear();
             _idsFamiliasAsignadas.Clear();
 
             List<Familia486LP> asignadas = _bll.ObtenerFamiliasDePerfil(idPerfil);
@@ -212,6 +215,29 @@ namespace Sistema_SneakRush
 
             CargarFamiliasAsignadas(_idPerfilSeleccionado);
             CargarPermisosAsignados(_idPerfilSeleccionado);
+        }
+
+        private void dgvFamiliasAsignadas_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dgvFamiliasAsignadas.CurrentRow == null || dgvFamiliasAsignadas.CurrentRow.Cells[0].Value == null)
+            {
+                dgvPermisosDeFamilia.Rows.Clear();
+                return;
+            }
+
+            int idFamilia = Convert.ToInt32(dgvFamiliasAsignadas.CurrentRow.Cells[0].Value);
+            CargarPermisosDeFamilia(idFamilia);
+        }
+
+        // Muestra el contenido (patentes) de la familia asignada seleccionada.
+        private void CargarPermisosDeFamilia(int idFamilia)
+        {
+            dgvPermisosDeFamilia.Rows.Clear();
+            List<Permiso486LP> permisos = _bllFamilia.ObtenerPermisosDeFamilia(idFamilia);
+            foreach (Permiso486LP p in permisos)
+            {
+                dgvPermisosDeFamilia.Rows.Add(p.Id, p.Nombre);
+            }
         }
 
         private void dgvFamilias_SelectionChanged(object sender, EventArgs e)
@@ -604,6 +630,7 @@ namespace Sistema_SneakRush
             _nombrePerfilSeleccionado = string.Empty;
             dgvFamiliasAsignadas.Rows.Clear();
             dgvPermisosAsignados.Rows.Clear();
+            dgvPermisosDeFamilia.Rows.Clear();
             _idsFamiliasAsignadas.Clear();   // sin perfil seleccionado todo vuelve a disponibles
             _idsPermisosAsignados.Clear();
             ActualizarLabelPerfil();
@@ -700,6 +727,17 @@ namespace Sistema_SneakRush
             dgvPermisosAsignados.Columns["colIdPermisoAsig"].Visible = false;
             dgvPermisosAsignados.Columns["colNombrePermisoAsig"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
+            // dgvPermisosDeFamilia (muestra los permisos de la familia asignada seleccionada)
+            dgvPermisosDeFamilia.ReadOnly = true;
+            dgvPermisosDeFamilia.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPermisosDeFamilia.MultiSelect = false;
+            dgvPermisosDeFamilia.AllowUserToAddRows = false;
+            dgvPermisosDeFamilia.Columns.Clear();
+            dgvPermisosDeFamilia.Columns.Add("colIdPermisoFam", "ID");
+            dgvPermisosDeFamilia.Columns.Add("colNombrePermisoFam", "Permiso de la familia");
+            dgvPermisosDeFamilia.Columns["colIdPermisoFam"].Visible = false;
+            dgvPermisosDeFamilia.Columns["colNombrePermisoFam"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
             TraducirColumnas();
         }
 
@@ -723,6 +761,7 @@ namespace Sistema_SneakRush
 
             lblFamiliasAsignadas.Text = lm.ObtenerTexto(f, "lblFamiliasAsignadas");
             lblPermisosAsignados.Text = lm.ObtenerTexto(f, "lblPermisosAsignados");
+            lblPermisosDeFamilia.Text = lm.ObtenerTexto(f, "lblPermisosDeFamilia");
 
             btnCrear.Text = lm.ObtenerTexto(f, "btnCrear");
             btnModificar.Text = lm.ObtenerTexto(f, "btnModificar");
@@ -763,6 +802,10 @@ namespace Sistema_SneakRush
             if (dgvPermisosAsignados.Columns.Contains("colNombrePermisoAsig"))
             { 
                 dgvPermisosAsignados.Columns["colNombrePermisoAsig"].HeaderText = lm.ObtenerTexto(f, "col.PermisoAsignado"); 
+            }
+            if (dgvPermisosDeFamilia.Columns.Contains("colNombrePermisoFam"))
+            {
+                dgvPermisosDeFamilia.Columns["colNombrePermisoFam"].HeaderText = lm.ObtenerTexto(f, "col.PermisoDeFamilia");
             }
 
         }

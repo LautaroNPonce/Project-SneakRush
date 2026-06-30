@@ -50,19 +50,21 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
                 {
-                    string query = "INSERT INTO Familia (Nombre) VALUES (@Nombre)";
+                    string query = "INSERT INTO Familia (Nombre) VALUES (@Nombre); SELECT CAST(SCOPE_IDENTITY() AS INT);";
                     SqlCommand cmd = new SqlCommand(query, con);
                     cmd.CommandType = CommandType.Text;
                     cmd.Parameters.AddWithValue("@Nombre", f.Nombre);
 
                     con.Open();
-                    bool resultado = cmd.ExecuteNonQuery() > 0;
+                    object idGenerado = cmd.ExecuteScalar();
 
-                    if (resultado)
+                    if (idGenerado != null && idGenerado != DBNull.Value)
                     {
+                        f.Id = Convert.ToInt32(idGenerado);
                         mensaje = "Familia creada correctamente.";
                         return true;
                     }
+
                     mensaje = "No se pudo crear la familia.";
                     return false;
                 }

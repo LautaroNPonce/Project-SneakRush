@@ -42,6 +42,8 @@ namespace Sistema_SneakRush
             this.lblPerfilSeleccionado = new System.Windows.Forms.Label();
             this.lblFamiliasAsignadas = new System.Windows.Forms.Label();
             this.dgvFamiliasAsignadas = new System.Windows.Forms.DataGridView();
+            this.lblPermisosDeFamilia = new System.Windows.Forms.Label();
+            this.dgvPermisosDeFamilia = new System.Windows.Forms.DataGridView();
             this.btnQuitarFamilia = new System.Windows.Forms.Button();
             this.lblPermisosAsignados = new System.Windows.Forms.Label();
             this.dgvPermisosAsignados = new System.Windows.Forms.DataGridView();
@@ -58,6 +60,7 @@ namespace Sistema_SneakRush
             this.pnlComposicion.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFamiliasAsignadas)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPermisosAsignados)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPermisosDeFamilia)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlPerfiles
@@ -73,7 +76,7 @@ namespace Sistema_SneakRush
             this.pnlPerfiles.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.pnlPerfiles.Location = new System.Drawing.Point(12, 50);
             this.pnlPerfiles.Name = "pnlPerfiles";
-            this.pnlPerfiles.Size = new System.Drawing.Size(295, 620);
+            this.pnlPerfiles.Size = new System.Drawing.Size(295, 539);
             this.pnlPerfiles.TabIndex = 1;
             this.pnlPerfiles.TabStop = false;
             this.pnlPerfiles.Text = "Perfiles";
@@ -126,7 +129,7 @@ namespace Sistema_SneakRush
             this.dgvPerfiles.RowHeadersVisible = false;
             this.dgvPerfiles.RowHeadersWidth = 51;
             this.dgvPerfiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPerfiles.Size = new System.Drawing.Size(270, 460);
+            this.dgvPerfiles.Size = new System.Drawing.Size(270, 389);
             this.dgvPerfiles.TabIndex = 1;
             this.dgvPerfiles.SelectionChanged += new System.EventHandler(this.dgvPerfiles_SelectionChanged);
             // 
@@ -137,7 +140,7 @@ namespace Sistema_SneakRush
             this.btnCrear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCrear.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCrear.ForeColor = System.Drawing.Color.White;
-            this.btnCrear.Location = new System.Drawing.Point(10, 530);
+            this.btnCrear.Location = new System.Drawing.Point(10, 455);
             this.btnCrear.Name = "btnCrear";
             this.btnCrear.Size = new System.Drawing.Size(125, 32);
             this.btnCrear.TabIndex = 2;
@@ -152,7 +155,7 @@ namespace Sistema_SneakRush
             this.btnModificar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnModificar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnModificar.ForeColor = System.Drawing.Color.White;
-            this.btnModificar.Location = new System.Drawing.Point(155, 530);
+            this.btnModificar.Location = new System.Drawing.Point(155, 455);
             this.btnModificar.Name = "btnModificar";
             this.btnModificar.Size = new System.Drawing.Size(125, 32);
             this.btnModificar.TabIndex = 3;
@@ -167,7 +170,7 @@ namespace Sistema_SneakRush
             this.btnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEliminar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEliminar.ForeColor = System.Drawing.Color.White;
-            this.btnEliminar.Location = new System.Drawing.Point(10, 570);
+            this.btnEliminar.Location = new System.Drawing.Point(10, 493);
             this.btnEliminar.Name = "btnEliminar";
             this.btnEliminar.Size = new System.Drawing.Size(125, 32);
             this.btnEliminar.TabIndex = 4;
@@ -182,7 +185,7 @@ namespace Sistema_SneakRush
             this.btnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancelar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancelar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.btnCancelar.Location = new System.Drawing.Point(155, 570);
+            this.btnCancelar.Location = new System.Drawing.Point(155, 493);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(125, 32);
             this.btnCancelar.TabIndex = 5;
@@ -199,7 +202,7 @@ namespace Sistema_SneakRush
             this.pnlFamilias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.pnlFamilias.Location = new System.Drawing.Point(320, 50);
             this.pnlFamilias.Name = "pnlFamilias";
-            this.pnlFamilias.Size = new System.Drawing.Size(280, 620);
+            this.pnlFamilias.Size = new System.Drawing.Size(280, 501);
             this.pnlFamilias.TabIndex = 2;
             this.pnlFamilias.TabStop = false;
             this.pnlFamilias.Text = "Familias disponibles";
@@ -231,7 +234,7 @@ namespace Sistema_SneakRush
             this.dgvFamilias.RowHeadersVisible = false;
             this.dgvFamilias.RowHeadersWidth = 51;
             this.dgvFamilias.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFamilias.Size = new System.Drawing.Size(255, 530);
+            this.dgvFamilias.Size = new System.Drawing.Size(255, 424);
             this.dgvFamilias.TabIndex = 0;
             this.dgvFamilias.SelectionChanged += new System.EventHandler(this.dgvFamilias_SelectionChanged);
             // 
@@ -242,7 +245,7 @@ namespace Sistema_SneakRush
             this.btnAsignarFamilia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAsignarFamilia.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAsignarFamilia.ForeColor = System.Drawing.Color.White;
-            this.btnAsignarFamilia.Location = new System.Drawing.Point(10, 565);
+            this.btnAsignarFamilia.Location = new System.Drawing.Point(10, 455);
             this.btnAsignarFamilia.Name = "btnAsignarFamilia";
             this.btnAsignarFamilia.Size = new System.Drawing.Size(255, 32);
             this.btnAsignarFamilia.TabIndex = 1;
@@ -260,7 +263,7 @@ namespace Sistema_SneakRush
             this.pnlPatentes.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.pnlPatentes.Location = new System.Drawing.Point(614, 50);
             this.pnlPatentes.Name = "pnlPatentes";
-            this.pnlPatentes.Size = new System.Drawing.Size(280, 620);
+            this.pnlPatentes.Size = new System.Drawing.Size(280, 501);
             this.pnlPatentes.TabIndex = 3;
             this.pnlPatentes.TabStop = false;
             this.pnlPatentes.Text = "Permisos directos disponibles";
@@ -302,7 +305,7 @@ namespace Sistema_SneakRush
             this.dgvPatentes.RowHeadersVisible = false;
             this.dgvPatentes.RowHeadersWidth = 51;
             this.dgvPatentes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPatentes.Size = new System.Drawing.Size(255, 495);
+            this.dgvPatentes.Size = new System.Drawing.Size(255, 389);
             this.dgvPatentes.TabIndex = 0;
             this.dgvPatentes.SelectionChanged += new System.EventHandler(this.dgvPatentes_SelectionChanged);
             // 
@@ -313,7 +316,7 @@ namespace Sistema_SneakRush
             this.btnAsignarPermiso.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAsignarPermiso.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAsignarPermiso.ForeColor = System.Drawing.Color.White;
-            this.btnAsignarPermiso.Location = new System.Drawing.Point(10, 565);
+            this.btnAsignarPermiso.Location = new System.Drawing.Point(10, 455);
             this.btnAsignarPermiso.Name = "btnAsignarPermiso";
             this.btnAsignarPermiso.Size = new System.Drawing.Size(255, 32);
             this.btnAsignarPermiso.TabIndex = 1;
@@ -331,12 +334,14 @@ namespace Sistema_SneakRush
             this.pnlComposicion.Controls.Add(this.lblPermisosAsignados);
             this.pnlComposicion.Controls.Add(this.dgvPermisosAsignados);
             this.pnlComposicion.Controls.Add(this.btnQuitarPermiso);
+            this.pnlComposicion.Controls.Add(this.lblPermisosDeFamilia);
+            this.pnlComposicion.Controls.Add(this.dgvPermisosDeFamilia);
             this.pnlComposicion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.pnlComposicion.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pnlComposicion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.pnlComposicion.Location = new System.Drawing.Point(908, 50);
             this.pnlComposicion.Name = "pnlComposicion";
-            this.pnlComposicion.Size = new System.Drawing.Size(425, 620);
+            this.pnlComposicion.Size = new System.Drawing.Size(500, 551);
             this.pnlComposicion.TabIndex = 4;
             this.pnlComposicion.TabStop = false;
             this.pnlComposicion.Text = "Composición del perfil";
@@ -368,7 +373,7 @@ namespace Sistema_SneakRush
             this.dgvFamiliasAsignadas.AllowUserToResizeColumns = false;
             this.dgvFamiliasAsignadas.AllowUserToResizeRows = false;
             this.dgvFamiliasAsignadas.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvFamiliasAsignadas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgvFamiliasAsignadas.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvFamiliasAsignadas.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvFamiliasAsignadas.BackgroundColor = System.Drawing.Color.White;
@@ -391,8 +396,43 @@ namespace Sistema_SneakRush
             this.dgvFamiliasAsignadas.RowHeadersVisible = false;
             this.dgvFamiliasAsignadas.RowHeadersWidth = 51;
             this.dgvFamiliasAsignadas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFamiliasAsignadas.Size = new System.Drawing.Size(409, 204);
+            this.dgvFamiliasAsignadas.Size = new System.Drawing.Size(235, 168);
             this.dgvFamiliasAsignadas.TabIndex = 2;
+            this.dgvFamiliasAsignadas.SelectionChanged += new System.EventHandler(this.dgvFamiliasAsignadas_SelectionChanged);
+            // 
+            // lblPermisosDeFamilia
+            // 
+            this.lblPermisosDeFamilia.AutoSize = true;
+            this.lblPermisosDeFamilia.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPermisosDeFamilia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.lblPermisosDeFamilia.Location = new System.Drawing.Point(255, 48);
+            this.lblPermisosDeFamilia.Name = "lblPermisosDeFamilia";
+            this.lblPermisosDeFamilia.Size = new System.Drawing.Size(180, 23);
+            this.lblPermisosDeFamilia.TabIndex = 7;
+            this.lblPermisosDeFamilia.Text = "Permisos de la familia:";
+            // 
+            // dgvPermisosDeFamilia
+            // 
+            this.dgvPermisosDeFamilia.AllowUserToAddRows = false;
+            this.dgvPermisosDeFamilia.AllowUserToResizeColumns = false;
+            this.dgvPermisosDeFamilia.AllowUserToResizeRows = false;
+            this.dgvPermisosDeFamilia.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvPermisosDeFamilia.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvPermisosDeFamilia.BackgroundColor = System.Drawing.Color.White;
+            this.dgvPermisosDeFamilia.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvPermisosDeFamilia.ColumnHeadersHeight = 29;
+            this.dgvPermisosDeFamilia.DefaultCellStyle = dataGridViewCellStyle6;
+            this.dgvPermisosDeFamilia.EnableHeadersVisualStyles = false;
+            this.dgvPermisosDeFamilia.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(230)))), ((int)(((byte)(236)))));
+            this.dgvPermisosDeFamilia.Location = new System.Drawing.Point(255, 74);
+            this.dgvPermisosDeFamilia.MultiSelect = false;
+            this.dgvPermisosDeFamilia.Name = "dgvPermisosDeFamilia";
+            this.dgvPermisosDeFamilia.ReadOnly = true;
+            this.dgvPermisosDeFamilia.RowHeadersVisible = false;
+            this.dgvPermisosDeFamilia.RowHeadersWidth = 51;
+            this.dgvPermisosDeFamilia.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvPermisosDeFamilia.Size = new System.Drawing.Size(235, 168);
+            this.dgvPermisosDeFamilia.TabIndex = 8;
             // 
             // btnQuitarFamilia
             // 
@@ -401,7 +441,7 @@ namespace Sistema_SneakRush
             this.btnQuitarFamilia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQuitarFamilia.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnQuitarFamilia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.btnQuitarFamilia.Location = new System.Drawing.Point(10, 285);
+            this.btnQuitarFamilia.Location = new System.Drawing.Point(10, 248);
             this.btnQuitarFamilia.Name = "btnQuitarFamilia";
             this.btnQuitarFamilia.Size = new System.Drawing.Size(330, 32);
             this.btnQuitarFamilia.TabIndex = 3;
@@ -414,7 +454,7 @@ namespace Sistema_SneakRush
             this.lblPermisosAsignados.AutoSize = true;
             this.lblPermisosAsignados.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPermisosAsignados.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            this.lblPermisosAsignados.Location = new System.Drawing.Point(10, 328);
+            this.lblPermisosAsignados.Location = new System.Drawing.Point(6, 295);
             this.lblPermisosAsignados.Name = "lblPermisosAsignados";
             this.lblPermisosAsignados.Size = new System.Drawing.Size(238, 23);
             this.lblPermisosAsignados.TabIndex = 4;
@@ -440,14 +480,14 @@ namespace Sistema_SneakRush
             this.dgvPermisosAsignados.DefaultCellStyle = dataGridViewCellStyle7;
             this.dgvPermisosAsignados.EnableHeadersVisualStyles = false;
             this.dgvPermisosAsignados.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(230)))), ((int)(((byte)(236)))));
-            this.dgvPermisosAsignados.Location = new System.Drawing.Point(10, 354);
+            this.dgvPermisosAsignados.Location = new System.Drawing.Point(10, 321);
             this.dgvPermisosAsignados.MultiSelect = false;
             this.dgvPermisosAsignados.Name = "dgvPermisosAsignados";
             this.dgvPermisosAsignados.ReadOnly = true;
             this.dgvPermisosAsignados.RowHeadersVisible = false;
             this.dgvPermisosAsignados.RowHeadersWidth = 51;
             this.dgvPermisosAsignados.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPermisosAsignados.Size = new System.Drawing.Size(330, 204);
+            this.dgvPermisosAsignados.Size = new System.Drawing.Size(330, 180);
             this.dgvPermisosAsignados.TabIndex = 5;
             // 
             // btnQuitarPermiso
@@ -457,7 +497,7 @@ namespace Sistema_SneakRush
             this.btnQuitarPermiso.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQuitarPermiso.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnQuitarPermiso.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.btnQuitarPermiso.Location = new System.Drawing.Point(10, 565);
+            this.btnQuitarPermiso.Location = new System.Drawing.Point(10, 507);
             this.btnQuitarPermiso.Name = "btnQuitarPermiso";
             this.btnQuitarPermiso.Size = new System.Drawing.Size(330, 32);
             this.btnQuitarPermiso.TabIndex = 6;
@@ -503,7 +543,7 @@ namespace Sistema_SneakRush
             // FrmGestionPerfiles486LP
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
-            this.ClientSize = new System.Drawing.Size(1427, 686);
+            this.ClientSize = new System.Drawing.Size(1427, 606);
             this.Controls.Add(this.pnlAccent);
             this.Controls.Add(this.btnSalir);
             this.Controls.Add(this.lblTitulo);
@@ -528,6 +568,7 @@ namespace Sistema_SneakRush
             this.pnlComposicion.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFamiliasAsignadas)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPermisosAsignados)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPermisosDeFamilia)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -550,6 +591,8 @@ namespace Sistema_SneakRush
         private System.Windows.Forms.Label lblPerfilSeleccionado;
         private System.Windows.Forms.Label lblFamiliasAsignadas;
         private System.Windows.Forms.DataGridView dgvFamiliasAsignadas;
+        private System.Windows.Forms.Label lblPermisosDeFamilia;
+        private System.Windows.Forms.DataGridView dgvPermisosDeFamilia;
         private System.Windows.Forms.Button btnQuitarFamilia;
         private System.Windows.Forms.Label lblPermisosAsignados;
         private System.Windows.Forms.DataGridView dgvPermisosAsignados;
