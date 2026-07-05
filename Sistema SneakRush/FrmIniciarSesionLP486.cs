@@ -136,8 +136,20 @@ namespace Sistema_SneakRush
                                 // Administrador abre reparación con TODAS las tablas afectadas
                                 this.Hide();
                                 FrmReparacionBD486LP frmReparacion = new FrmReparacionBD486LP(tablasConProblemas);
-                                frmReparacion.ShowDialog();
-                                this.Show();
+                                DialogResult resultadoReparacion = frmReparacion.ShowDialog();
+
+                                if (resultadoReparacion == DialogResult.OK)
+                                {
+                                    // Recalculó los DV correctamente: la sesión YA está activa, así que
+                                    // entramos directo al menú sin volver a pedir login.
+                                    FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP(false);
+                                    menuPrincipal.Show();
+                                    this.Hide();
+                                }
+                                else
+                                {
+                                    this.Show();
+                                }
                                 return;
                             }
                             else

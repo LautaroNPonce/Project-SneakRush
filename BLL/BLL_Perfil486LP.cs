@@ -132,6 +132,8 @@ namespace BLL
                 string mensajeDV;
                 BLL_DV486LP bllDV = new BLL_DV486LP();
                 bllDV.RecalcularDV("Perfil", out mensajeDV);
+                bllDV.RecalcularDV("Perfil_Familia", out mensajeDV);
+                bllDV.RecalcularDV("Perfil_Permiso", out mensajeDV);
             }
 
             return resultado;

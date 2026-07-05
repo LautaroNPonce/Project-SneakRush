@@ -16,19 +16,37 @@ namespace Sistema_SneakRush
     public partial class FrmGestionRespaldo486LP : Form, IObserver486LP
     {
         private BLL_Respaldo486LP _bllRespaldo = new BLL_Respaldo486LP();
+        private bool _soloRestore;
+        private bool _puedeSeleccionarCarpeta;
+        private bool _puedeRespaldar;
+        private bool _puedeSeleccionarArchivo;
+        private bool _puedeRestaurar;
+        private bool _puedeSalir;
 
-        public FrmGestionRespaldo486LP()
+        public FrmGestionRespaldo486LP(bool soloRestore = false)
         {
             InitializeComponent();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionRespaldo486LP_FormClosing;
+            _soloRestore = soloRestore;
         }
 
         private void FrmGestionRespaldo486LP_Load(object sender, EventArgs e)
         {
             txtRutaBackup.Text = string.Empty;
             txtRutaRestore.Text = string.Empty;
+
+            if (_soloRestore)
+            {
+                grpBackup.Visible = false;
+                grpRestore.Top = grpBackup.Top;
+                btnSalir.Top = grpRestore.Bottom + 20;
+                this.ClientSize = new System.Drawing.Size(this.ClientSize.Width, btnSalir.Bottom + 20);
+            }
+
             ActualizarIdioma();
+            AjustarBotonesSegunPerfil();
+            AplicarPermisosBotones();
         }
 
         // ----------------------------- BACKUP -----------------------------
@@ -160,6 +178,30 @@ namespace Sistema_SneakRush
         private void FrmGestionRespaldo486LP_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.LanguageManager.Quitar(this);
+        }
+
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
+            List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);
+
+            _puedeSeleccionarCarpeta = permisos.Contains("RESPALDOS_SELECCIONAR_CARPETA");
+            _puedeRespaldar = permisos.Contains("RESPALDOS_BACKUP");
+            _puedeSeleccionarArchivo = permisos.Contains("RESPALDOS_SELECCIONAR_ARCHIVO");
+            _puedeRestaurar = permisos.Contains("RESPALDOS_RESTORE");
+            _puedeSalir = permisos.Contains("RESPALDOS_SALIR");
+        }
+
+        private void AplicarPermisosBotones()
+        {
+            btnSeleccionarCarpeta.Enabled = _puedeSeleccionarCarpeta;
+            btnRespaldar.Enabled = _puedeRespaldar;
+            btnSeleccionarArchivo.Enabled = _puedeSeleccionarArchivo;
+            btnRestaurar.Enabled = _puedeRestaurar;
+            btnSalir.Enabled = _puedeSalir;
         }
     }
 }

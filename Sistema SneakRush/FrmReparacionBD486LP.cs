@@ -78,16 +78,17 @@ namespace Sistema_SneakRush
 
         private void btnRestaurar_Click(object sender, EventArgs e)
         {
-            var lm = Program.LanguageManager;
-            string f = "FrmReparacionBD486LP";
-
-            MessageBox.Show(lm.ObtenerTexto(f, "Msg.RestaurarPendiente", "Funcionalidad de restauración pendiente de implementar."),
-                lm.ObtenerTexto(f, "Msg.RestaurarPendiente.Title", "Aviso"),MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (FrmGestionRespaldo486LP frm = new FrmGestionRespaldo486LP(true))
+            {
+                frm.StartPosition = FormStartPosition.CenterScreen;
+                frm.ShowDialog();
+            }
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
 
         public void ActualizarIdioma()

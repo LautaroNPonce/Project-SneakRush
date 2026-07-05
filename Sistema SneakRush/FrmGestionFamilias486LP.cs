@@ -131,7 +131,7 @@ namespace Sistema_SneakRush
             if (patente == "GESTION_FAMILIAS" || patente.StartsWith("FAMILIAS_")) return "Familias";
             if (patente == "GESTION_ROLES" || patente.StartsWith("PERFILES_")) return "Perfiles";
             if (patente.StartsWith("BITACORA_")) return "Bitácora";
-            if (patente == "GESTION_RESPALDOS") return "Respaldos";
+            if (patente == "GESTION_RESPALDOS" || patente.StartsWith("RESPALDOS_")) return "Respaldos";
             if (patente.StartsWith("MAESTRO_")) return "Maestro";
             if (patente.StartsWith("COMPRA_")) return "Compra";
             if (patente.StartsWith("VENTA_")) return "Venta";
