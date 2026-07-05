@@ -426,6 +426,32 @@
     "Inc.Insertado": "Registro inserido diretamente no BD",
     "Inc.Modificado": "Registro modificado diretamente no BD",
     "Inc.Eliminado": "Registro excluído diretamente do BD"
-
+  },
+  "FrmGestionRespaldo486LP": {
+    "Title": "Gestão de Backups",
+    "lblTitulo": "Gestão de Backups",
+    "grpBackup": "Backup",
+    "lblBackupPath": "Pasta de destino:",
+    "btnSeleccionarCarpeta": "Selecionar pasta...",
+    "btnRespaldar": "Fazer backup",
+    "grpRestore": "Restauração",
+    "lblRestorePath": "Arquivo de backup (.bak):",
+    "btnSeleccionarArchivo": "Selecionar arquivo...",
+    "btnRestaurar": "Restaurar",
+    "btnSalir": "Sair",
+    "Msg.Backup.Exito": "Backup gerado com sucesso em:",
+    "Msg.Backup.ExitoTitle": "Sucesso",
+    "Msg.Backup.ErrorTitle": "Erro",
+    "Msg.Restore.ArchivoInvalido": "Você deve selecionar um arquivo .bak válido.",
+    "Msg.Restore.ArchivoInvalidoTitle": "Aviso",
+    "Msg.Restore.Confirmar": "A restauração substituirá TODO o banco de dados atual e encerrará a sessão.\nDeseja continuar?",
+    "Msg.Restore.ConfirmarTitle": "Confirmar restauração",
+    "Msg.Restore.Exito": "Banco de dados restaurado com sucesso.\nO aplicativo será reiniciado para recarregar os dados.",
+    "Msg.Restore.ExitoTitle": "Sucesso",
+    "Msg.Restore.ErrorTitle": "Erro",
+    "Msg.Respaldo.CarpetaVacia": "Você deve selecionar uma pasta de destino.",
+    "Msg.Respaldo.ArchivoVacio": "Você deve selecionar um arquivo .bak.",
+    "Msg.Respaldo.ErrorBackup": "Ocorreu um erro inesperado ao gerar o backup.",
+    "Msg.Respaldo.ErrorRestore": "Ocorreu um erro inesperado ao restaurar o backup."
   }
 }

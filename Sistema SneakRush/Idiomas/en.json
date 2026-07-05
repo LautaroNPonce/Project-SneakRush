@@ -426,6 +426,32 @@
     "Inc.Insertado": "Record inserted directly into the DB",
     "Inc.Modificado": "Record modified directly in the DB",
     "Inc.Eliminado": "Record deleted directly from the DB"
-
+  },
+  "FrmGestionRespaldo486LP": {
+    "Title": "Backup Management",
+    "lblTitulo": "Backup Management",
+    "grpBackup": "Backup",
+    "lblBackupPath": "Destination folder:",
+    "btnSeleccionarCarpeta": "Select folder...",
+    "btnRespaldar": "Back up",
+    "grpRestore": "Restore",
+    "lblRestorePath": "Backup file (.bak):",
+    "btnSeleccionarArchivo": "Select file...",
+    "btnRestaurar": "Restore",
+    "btnSalir": "Exit",
+    "Msg.Backup.Exito": "Backup created successfully at:",
+    "Msg.Backup.ExitoTitle": "Success",
+    "Msg.Backup.ErrorTitle": "Error",
+    "Msg.Restore.ArchivoInvalido": "You must select a valid .bak file.",
+    "Msg.Restore.ArchivoInvalidoTitle": "Notice",
+    "Msg.Restore.Confirmar": "The restore will replace the ENTIRE current database and close your session.\nDo you want to continue?",
+    "Msg.Restore.ConfirmarTitle": "Confirm restore",
+    "Msg.Restore.Exito": "Database restored successfully.\nThe application will restart to reload the data.",
+    "Msg.Restore.ExitoTitle": "Success",
+    "Msg.Restore.ErrorTitle": "Error",
+    "Msg.Respaldo.CarpetaVacia": "You must select a destination folder.",
+    "Msg.Respaldo.ArchivoVacio": "You must select a .bak file.",
+    "Msg.Respaldo.ErrorBackup": "An unexpected error occurred while creating the backup.",
+    "Msg.Respaldo.ErrorRestore": "An unexpected error occurred while restoring the backup."
   }
 }

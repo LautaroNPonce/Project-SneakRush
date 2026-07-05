@@ -49,6 +49,7 @@
     <Compile Include="DAL_Idioma486LP.cs" />
     <Compile Include="DAL_Patente486LP.cs" />
     <Compile Include="DAL_Perfil486LP.cs" />
+    <Compile Include="DAL_Respaldo486LP.cs" />
     <Compile Include="DAL_Usuarios486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

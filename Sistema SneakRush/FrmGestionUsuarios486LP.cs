@@ -718,7 +718,8 @@ namespace Sistema_SneakRush
             btnAgregar.Text = lm.ObtenerTexto(f, "btnAgregar");
             btnEliminar.Text = lm.ObtenerTexto(f, "btnEliminar");
             btnModificar.Text = lm.ObtenerTexto(f, "btnModificar");
-            btnDesbloquear.Text = lm.ObtenerTexto(f, "btnDesbloquear");
+            Usuario486LP sel = dgvUsuarios.CurrentRow?.DataBoundItem as Usuario486LP;
+            btnDesbloquear.Text = (sel != null && !sel.Bloqueado) ? lm.ObtenerTexto(f, "btnBloquear") : lm.ObtenerTexto(f, "btnDesbloquear");
             btnAplicar.Text = lm.ObtenerTexto(f, "btnAplicar");
             btnCancelar.Text = lm.ObtenerTexto(f, "btnCancelar");
             btnSalir.Text = lm.ObtenerTexto(f, "btnSalir");

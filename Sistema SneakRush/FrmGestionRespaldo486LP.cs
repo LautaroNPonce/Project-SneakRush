@@ -1,8 +1,11 @@
-﻿using System;
+﻿using BLL;
+using Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +13,153 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGestionRespaldo486LP : Form
+    public partial class FrmGestionRespaldo486LP : Form, IObserver486LP
     {
+        private BLL_Respaldo486LP _bllRespaldo = new BLL_Respaldo486LP();
+
         public FrmGestionRespaldo486LP()
         {
             InitializeComponent();
+            Program.LanguageManager.Agregar(this);
+            this.FormClosing += FrmGestionRespaldo486LP_FormClosing;
+        }
+
+        private void FrmGestionRespaldo486LP_Load(object sender, EventArgs e)
+        {
+            txtRutaBackup.Text = string.Empty;
+            txtRutaRestore.Text = string.Empty;
+            ActualizarIdioma();
+        }
+
+        // ----------------------------- BACKUP -----------------------------
+
+        private void btnSeleccionarCarpeta_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
+            {
+                if (fbd.ShowDialog() == DialogResult.OK)
+                    txtRutaBackup.Text = fbd.SelectedPath;
+            }
+        }
+
+        private void btnRespaldar_Click(object sender, EventArgs e)
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionRespaldo486LP";
+
+            string ruta;
+            string mensaje;
+
+            if (!_bllRespaldo.Backup(txtRutaBackup.Text, out ruta, out mensaje))
+            {
+                // 'mensaje' puede ser una clave "Msg.X" (se traduce) o un error técnico
+                // "Error: ..." del DAL (se muestra tal cual gracias al fallback).
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Backup.ErrorTitle", "Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show(
+                lm.ObtenerTexto(f, "Msg.Backup.Exito", "Backup generado correctamente en:") + "\n" + ruta,
+                lm.ObtenerTexto(f, "Msg.Backup.ExitoTitle", "Éxito"),
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            txtRutaBackup.Text = string.Empty;
+        }
+
+        // ----------------------------- RESTORE ----------------------------
+
+        private void btnSeleccionarArchivo_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Filter = "SQL Server Backup (*.bak)|*.bak";
+                if (ofd.ShowDialog() == DialogResult.OK)
+                    txtRutaRestore.Text = ofd.FileName;
+            }
+        }
+
+        private void btnRestaurar_Click(object sender, EventArgs e)
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionRespaldo486LP";
+
+            // Validación del archivo ANTES de tocar la base.
+            if (string.IsNullOrWhiteSpace(txtRutaRestore.Text) ||
+                !File.Exists(txtRutaRestore.Text) ||
+                Path.GetExtension(txtRutaRestore.Text).ToLower() != ".bak")
+            {
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Msg.Restore.ArchivoInvalido", "Debe seleccionar un archivo .bak válido."),
+                    lm.ObtenerTexto(f, "Msg.Restore.ArchivoInvalidoTitle", "Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Confirmación: la restauración es DESTRUCTIVA.
+            DialogResult confirma = MessageBox.Show(
+                lm.ObtenerTexto(f, "Msg.Restore.Confirmar",
+                    "La restauración reemplazará TODA la base de datos actual y cerrará la sesión.\n¿Desea continuar?"),
+                lm.ObtenerTexto(f, "Msg.Restore.ConfirmarTitle", "Confirmar restauración"),
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (confirma != DialogResult.Yes)
+                return;
+
+            string mensaje;
+
+            if (!_bllRespaldo.Restore(txtRutaRestore.Text, out mensaje))
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    lm.ObtenerTexto(f, "Msg.Restore.ErrorTitle", "Error"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            MessageBox.Show(
+                lm.ObtenerTexto(f, "Msg.Restore.Exito",
+                    "Base de datos restaurada correctamente.\nLa aplicación se reiniciará para recargar los datos."),
+                lm.ObtenerTexto(f, "Msg.Restore.ExitoTitle", "Éxito"),
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Tras un restore, TODO lo que hay en memoria quedó viejo (grillas, sesión, y
+            // hasta el propio usuario logueado, que puede no existir en la base restaurada).
+            // Lo más prolijo y seguro es reiniciar la app y volver a loguearse.
+            Application.Restart();
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        // -------------------------- i18n (Observer) -----------------------
+
+        public void ActualizarIdioma()
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmGestionRespaldo486LP";
+
+            this.Text = lm.ObtenerTexto(f, "Title", "Gestión de Respaldos");
+            lblTitulo.Text = lm.ObtenerTexto(f, "lblTitulo", "Gestión de Respaldos");
+
+            grpBackup.Text = lm.ObtenerTexto(f, "grpBackup", "Respaldo (Backup)");
+            lblBackupPath.Text = lm.ObtenerTexto(f, "lblBackupPath", "Carpeta de destino:");
+            btnSeleccionarCarpeta.Text = lm.ObtenerTexto(f, "btnSeleccionarCarpeta", "Seleccionar carpeta...");
+            btnRespaldar.Text = lm.ObtenerTexto(f, "btnRespaldar", "Respaldar");
+
+            grpRestore.Text = lm.ObtenerTexto(f, "grpRestore", "Restauración (Restore)");
+            lblRestorePath.Text = lm.ObtenerTexto(f, "lblRestorePath", "Archivo de backup (.bak):");
+            btnSeleccionarArchivo.Text = lm.ObtenerTexto(f, "btnSeleccionarArchivo", "Seleccionar archivo...");
+            btnRestaurar.Text = lm.ObtenerTexto(f, "btnRestaurar", "Restaurar");
+
+            btnSalir.Text = lm.ObtenerTexto(f, "btnSalir", "Salir");
+        }
+
+        private void FrmGestionRespaldo486LP_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.LanguageManager.Quitar(this);
         }
     }
 }

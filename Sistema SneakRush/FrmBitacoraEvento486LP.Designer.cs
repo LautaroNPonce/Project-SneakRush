@@ -481,9 +481,9 @@ namespace Sistema_SneakRush
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlAccent = new System.Windows.Forms.Panel();
             this.dgtBitacoraEvento = new System.Windows.Forms.DataGridView();
@@ -503,20 +503,20 @@ namespace Sistema_SneakRush
             this.btnExportarPDF = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.grpDetalle = new System.Windows.Forms.GroupBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.txtDetDescripcion = new System.Windows.Forms.TextBox();
             this.txtDetCriticidad = new System.Windows.Forms.TextBox();
             this.txtDetModulo = new System.Windows.Forms.TextBox();
+            this.txtDetDescripcion = new System.Windows.Forms.TextBox();
             this.txtDetDNI = new System.Windows.Forms.TextBox();
             this.txtDetUsuario = new System.Windows.Forms.TextBox();
             this.txtDetFecha = new System.Windows.Forms.TextBox();
             this.txtDetNumero = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgtBitacoraEvento)).BeginInit();
             this.grpDetalle.SuspendLayout();
             this.SuspendLayout();
@@ -543,29 +543,29 @@ namespace Sistema_SneakRush
             // 
             // dgtBitacoraEvento
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(243)))), ((int)(((byte)(250)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            this.dgtBitacoraEvento.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(243)))), ((int)(((byte)(250)))));
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.dgtBitacoraEvento.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgtBitacoraEvento.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgtBitacoraEvento.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgtBitacoraEvento.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgtBitacoraEvento.ColumnHeadersHeight = 30;
             this.dgtBitacoraEvento.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(42)))), ((int)(((byte)(55)))));
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgtBitacoraEvento.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(42)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgtBitacoraEvento.DefaultCellStyle = dataGridViewCellStyle6;
             this.dgtBitacoraEvento.EnableHeadersVisualStyles = false;
             this.dgtBitacoraEvento.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(225)))), ((int)(((byte)(230)))), ((int)(((byte)(236)))));
             this.dgtBitacoraEvento.Location = new System.Drawing.Point(30, 73);
@@ -647,7 +647,7 @@ namespace Sistema_SneakRush
             this.cmbModulo.FormattingEnabled = true;
             this.cmbModulo.Location = new System.Drawing.Point(32, 631);
             this.cmbModulo.Name = "cmbModulo";
-            this.cmbModulo.Size = new System.Drawing.Size(159, 31);
+            this.cmbModulo.Size = new System.Drawing.Size(177, 31);
             this.cmbModulo.TabIndex = 8;
             // 
             // txtDNI
@@ -656,7 +656,7 @@ namespace Sistema_SneakRush
             this.txtDNI.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtDNI.Location = new System.Drawing.Point(32, 547);
             this.txtDNI.Name = "txtDNI";
-            this.txtDNI.Size = new System.Drawing.Size(159, 30);
+            this.txtDNI.Size = new System.Drawing.Size(177, 30);
             this.txtDNI.TabIndex = 9;
             // 
             // dtpFechaDesde
@@ -770,17 +770,6 @@ namespace Sistema_SneakRush
             this.grpDetalle.TabStop = false;
             this.grpDetalle.Text = "Detalle del registro";
             // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            this.label13.Location = new System.Drawing.Point(1361, 431);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(90, 20);
-            this.label13.TabIndex = 13;
-            this.label13.Text = "Descripcion";
-            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -847,16 +836,6 @@ namespace Sistema_SneakRush
             this.label7.TabIndex = 7;
             this.label7.Text = "N°";
             // 
-            // txtDetDescripcion
-            // 
-            this.txtDetDescripcion.BackColor = System.Drawing.Color.White;
-            this.txtDetDescripcion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDetDescripcion.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.txtDetDescripcion.Location = new System.Drawing.Point(6, 381);
-            this.txtDetDescripcion.Name = "txtDetDescripcion";
-            this.txtDetDescripcion.Size = new System.Drawing.Size(470, 29);
-            this.txtDetDescripcion.TabIndex = 6;
-            // 
             // txtDetCriticidad
             // 
             this.txtDetCriticidad.BackColor = System.Drawing.Color.White;
@@ -864,6 +843,7 @@ namespace Sistema_SneakRush
             this.txtDetCriticidad.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.txtDetCriticidad.Location = new System.Drawing.Point(6, 328);
             this.txtDetCriticidad.Name = "txtDetCriticidad";
+            this.txtDetCriticidad.ReadOnly = true;
             this.txtDetCriticidad.Size = new System.Drawing.Size(166, 29);
             this.txtDetCriticidad.TabIndex = 5;
             // 
@@ -874,8 +854,20 @@ namespace Sistema_SneakRush
             this.txtDetModulo.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.txtDetModulo.Location = new System.Drawing.Point(6, 274);
             this.txtDetModulo.Name = "txtDetModulo";
+            this.txtDetModulo.ReadOnly = true;
             this.txtDetModulo.Size = new System.Drawing.Size(166, 29);
             this.txtDetModulo.TabIndex = 4;
+            // 
+            // txtDetDescripcion
+            // 
+            this.txtDetDescripcion.BackColor = System.Drawing.Color.White;
+            this.txtDetDescripcion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDetDescripcion.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.txtDetDescripcion.Location = new System.Drawing.Point(6, 381);
+            this.txtDetDescripcion.Name = "txtDetDescripcion";
+            this.txtDetDescripcion.ReadOnly = true;
+            this.txtDetDescripcion.Size = new System.Drawing.Size(470, 29);
+            this.txtDetDescripcion.TabIndex = 6;
             // 
             // txtDetDNI
             // 
@@ -884,6 +876,7 @@ namespace Sistema_SneakRush
             this.txtDetDNI.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.txtDetDNI.Location = new System.Drawing.Point(6, 218);
             this.txtDetDNI.Name = "txtDetDNI";
+            this.txtDetDNI.ReadOnly = true;
             this.txtDetDNI.Size = new System.Drawing.Size(166, 29);
             this.txtDetDNI.TabIndex = 3;
             // 
@@ -894,6 +887,7 @@ namespace Sistema_SneakRush
             this.txtDetUsuario.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.txtDetUsuario.Location = new System.Drawing.Point(6, 163);
             this.txtDetUsuario.Name = "txtDetUsuario";
+            this.txtDetUsuario.ReadOnly = true;
             this.txtDetUsuario.Size = new System.Drawing.Size(166, 29);
             this.txtDetUsuario.TabIndex = 2;
             // 
@@ -904,6 +898,7 @@ namespace Sistema_SneakRush
             this.txtDetFecha.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.txtDetFecha.Location = new System.Drawing.Point(6, 108);
             this.txtDetFecha.Name = "txtDetFecha";
+            this.txtDetFecha.ReadOnly = true;
             this.txtDetFecha.Size = new System.Drawing.Size(166, 29);
             this.txtDetFecha.TabIndex = 1;
             // 
@@ -914,8 +909,20 @@ namespace Sistema_SneakRush
             this.txtDetNumero.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.txtDetNumero.Location = new System.Drawing.Point(6, 53);
             this.txtDetNumero.Name = "txtDetNumero";
+            this.txtDetNumero.ReadOnly = true;
             this.txtDetNumero.Size = new System.Drawing.Size(166, 29);
             this.txtDetNumero.TabIndex = 0;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.label13.Location = new System.Drawing.Point(1361, 431);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(90, 20);
+            this.label13.TabIndex = 13;
+            this.label13.Text = "Descripcion";
             // 
             // FrmBitacoraEvento486LP
             // 

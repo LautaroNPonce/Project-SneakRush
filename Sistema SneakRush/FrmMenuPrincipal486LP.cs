@@ -181,7 +181,7 @@ namespace Sistema_SneakRush
         }
         private void gestiónDeRespaldosToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Gestión de Respaldos");
+            AbrirFormulario(new FrmGestionRespaldo486LP());
         }
 
         // Menu Maestro
