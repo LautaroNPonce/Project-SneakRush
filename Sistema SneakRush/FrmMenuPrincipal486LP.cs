@@ -56,7 +56,13 @@ namespace Sistema_SneakRush
 
             if (_hayInconsistencia)
             {
+                // Solo Cambiar contraseña y Cerrar sesión hasta recalcular DV o restaurar la BD
                 usuarioToolStripMenuItem.Visible = true;
+                cambiarContraseñaToolStripMenuItem.Visible = true;
+                cerrarSesiónToolStripMenuItem.Visible = true;
+                cambiarIdiomaToolStripMenuItem.Visible = true;
+                iniciarSesionToolStripMenuItem.Visible = false;
+
                 ayudaToolStripMenuItem.Visible = false;
                 adminToolStripMenuItem.Visible = false;
                 gestionToolStripMenuItem.Visible = false;

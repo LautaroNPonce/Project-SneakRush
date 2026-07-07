@@ -202,7 +202,8 @@
     "Msg.BLL.ErrorDesbloquear": "Ocorreu um erro ao desbloquear o usuário.",
     "Msg.BLL.ErrorBloquear": "Ocorreu um erro ao bloquear o usuário.",
     "rbtnActivoSi": "Sim",
-    "rbtnActivoNo": "Não"
+    "rbtnActivoNo": "Não",
+    "Msg.BLL.ErrorInvertir": "Ocorreu um erro ao alterar o estado do usuário."
   },
 
   "FrmGestionFamilias486LP": {
@@ -353,7 +354,6 @@
     "Msg.BloqueoAdmin": "Você não pode remover esta permissão do perfil Administrador: deixaria o sistema sem forma de administrar permissões.",
     "Msg.BloqueoAdmin.Title": "Ação não permitida",
     "Msg.PermisoYaEnFamilia": "Esta permissão já está incluída na família '{0}', atribuída a este perfil. Não é necessário atribuí-la separadamente.",
-    "Msg.BLL.ErrorInvertir": "Ocorreu um erro ao alterar o estado do usuário.",
     "lblPermisosDeFamilia": "Permissões da família:",
     "col.PermisoDeFamilia": "Permissão da família"
   },
@@ -425,7 +425,8 @@
     "Msg.RestaurarPendiente.Title": "Aviso",
     "Inc.Insertado": "Registro inserido diretamente no BD",
     "Inc.Modificado": "Registro modificado diretamente no BD",
-    "Inc.Eliminado": "Registro excluído diretamente do BD"
+    "Inc.Eliminado": "Registro excluído diretamente do BD",
+    "lblEncabezado": "INCONSISTÊNCIA PRESENTE NO BANCO DE DADOS"
   },
   "FrmGestionRespaldo486LP": {
     "Title": "Gestão de Backups",
@@ -452,6 +453,8 @@
     "Msg.Respaldo.CarpetaVacia": "Você deve selecionar uma pasta de destino.",
     "Msg.Respaldo.ArchivoVacio": "Você deve selecionar um arquivo .bak.",
     "Msg.Respaldo.ErrorBackup": "Ocorreu um erro inesperado ao gerar o backup.",
-    "Msg.Respaldo.ErrorRestore": "Ocorreu um erro inesperado ao restaurar o backup."
+    "Msg.Respaldo.ErrorRestore": "Ocorreu um erro inesperado ao restaurar o backup.",
+    "lblEncabezado": "INCONSISTÊNCIA PRESENTE NO BANCO DE DADOS"
+
   }
 }

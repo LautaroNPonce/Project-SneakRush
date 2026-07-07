@@ -22,11 +22,11 @@ namespace BLL
             { "Perfil",         "IdPerfil"     },
             { "Familia",        "IdFamilia"    },
             { "Permiso",        "IdPermiso"    },
-            { "BitacoraEvento", "IdLog"        },
+            { "BitacoraEvento", "Numero" },
             { "Idioma",         "NombreIdioma" }
         };
 
-        private static readonly string[] _tablasProtegidas = { "Usuarios", "Perfil", "Familia", "Permiso", "Idioma", "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
+        private static readonly string[] _tablasProtegidas = { "BitacoraEvento","Usuarios", "Perfil", "Familia", "Permiso", "Idioma", "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
         private static readonly List<string> _tablasSoloNivelTabla = new List<string> { "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
         private string ObtenerColumnaId(string tabla)
         {
@@ -89,8 +89,8 @@ namespace BLL
                     _dal.RecalcularDVHPorFila(tabla, ObtenerColumnaId(tabla)); 
                 }
                     
-                // No registramos en bitácora cuando recalculamos la propia tabla Bitacora:
-                // evita el círculo vicioso (el evento de recálculo dejaría el hash viejo otra vez).
+                // No registro en bitácora cuando recalculamos la propia tabla Bitacora:
+                // evita un bucle infinito (el evento de recálculo dejaría el hash viejo otra vez).
                 if (registrarBitacora)
                 {
                     string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
@@ -243,7 +243,6 @@ namespace BLL
                 {
                     if (!string.IsNullOrEmpty(mensaje))
                     {
-                        // Error técnico real: corto y lo reporto
                         errorTecnico = mensaje;
                         return conProblemas;
                     }
@@ -263,16 +262,16 @@ namespace BLL
             return todas;
         }
 
-        // Recalcula varias tablas (botón "Recalcular" de la reparación).
         public bool RecalcularTablas(List<string> tablas, out string mensaje)
         {
             mensaje = "";
             foreach (string tabla in tablas)
             {
-                // BitacoraEvento se recalcula sin registrar evento (evita el círculo vicioso).
                 bool registrar = tabla != "BitacoraEvento";
                 if (!RecalcularDV(tabla, registrar, out mensaje))
-                    return false;
+                { 
+                    return false; 
+                }
             }
             return true;
         }

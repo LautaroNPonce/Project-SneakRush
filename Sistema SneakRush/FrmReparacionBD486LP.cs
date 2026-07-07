@@ -97,7 +97,7 @@ namespace Sistema_SneakRush
             string f = "FrmReparacionBD486LP";
 
             this.Text = lm.ObtenerTexto(f, "Title", "Reparación de Base de Datos");
-
+            label1.Text = lm.ObtenerTexto(f, "lblEncabezado", "INCONSISTENCIA PRESENTE EN LA BASE DE DATOS");
             btnRecalcular.Text = lm.ObtenerTexto(f, "btnRecalcular", "Recalcular");
             btnRestaurar.Text = lm.ObtenerTexto(f, "btnRestaurar", "Restaurar");
             btnSalir.Text = lm.ObtenerTexto(f, "btnSalir", "Salir");

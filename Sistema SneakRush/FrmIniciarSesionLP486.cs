@@ -140,15 +140,18 @@ namespace Sistema_SneakRush
 
                                 if (resultadoReparacion == DialogResult.OK)
                                 {
-                                    // Recalculó los DV correctamente: la sesión YA está activa, así que
-                                    // entramos directo al menú sin volver a pedir login.
-                                    FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP(false);
-                                    menuPrincipal.Show();
-                                    this.Hide();
+                                    if (!this.IsDisposed)
+                                    {
+                                        // Recalculó los DV correctamente: la sesión YA está activa, así que
+                                        // entramos directo al menú sin volver a pedir login.
+                                        FrmMenuPrincipal486LP menuPrincipal = new FrmMenuPrincipal486LP(false);
+                                        menuPrincipal.Show();
+                                        this.Hide();
+                                    }
                                 }
                                 else
                                 {
-                                    this.Show();
+                                    if (!this.IsDisposed) this.Show();
                                 }
                                 return;
                             }
