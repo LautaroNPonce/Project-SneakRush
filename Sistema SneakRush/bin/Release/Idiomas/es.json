@@ -202,7 +202,8 @@
     "Msg.BLL.ErrorDesbloquear": "Ocurrió un error al desbloquear el usuario.",
     "Msg.BLL.ErrorBloquear": "Ocurrió un error al bloquear el usuario.",
     "rbtnActivoSi": "Sí",
-    "rbtnActivoNo": "No"
+    "rbtnActivoNo": "No",
+    "Msg.BLL.ErrorInvertir": "Ocurrió un error al cambiar el estado del usuario."
   },
 
   "FrmGestionFamilias486LP": {
@@ -353,7 +354,6 @@
     "Msg.BloqueoAdmin": "No puede quitar este permiso del perfil Administrador: dejaría al sistema sin forma de administrar permisos.",
     "Msg.BloqueoAdmin.Title": "Acción no permitida",
     "Msg.PermisoYaEnFamilia": "Este permiso ya está incluido en la familia '{0}', asignada a este perfil. No es necesario asignarlo por separado.",
-    "Msg.BLL.ErrorInvertir": "Ocurrió un error al cambiar el estado del usuario.",
     "lblPermisosDeFamilia": "Permisos de la familia:",
     "col.PermisoDeFamilia": "Permiso de la familia"
   },
@@ -425,7 +425,14 @@
     "Msg.RestaurarPendiente.Title": "Aviso",
     "Inc.Insertado": "Registro insertado directamente en la BD",
     "Inc.Modificado": "Registro modificado directamente en la BD",
-    "Inc.Eliminado": "Registro eliminado directamente en la BD"
+    "Inc.Eliminado": "Registro eliminado directamente en la BD",
+    "lblEncabezado": "INCONSISTENCIA PRESENTE EN LA BASE DE DATOS",
+    "Msg.ConfirmarRecalcular": "¿Está seguro de que desea recalcular los dígitos verificadores?",
+    "Msg.ConfirmarRecalcular.Title": "Confirmar recálculo",
+    "Msg.ConfirmarRestaurar": "¿Está seguro de que desea restaurar la base de datos? Se reemplazará toda la información actual por la del respaldo.",
+    "Msg.ConfirmarRestaurar.Title": "Confirmar restauración",
+    "Msg.ConfirmarSalir": "¿Está seguro de que desea salir sin reparar la inconsistencia?",
+    "Msg.ConfirmarSalir.Title": "Confirmar salida"
   },
   "FrmGestionRespaldo486LP": {
     "Title": "Gestión de Respaldos",
@@ -452,6 +459,7 @@
     "Msg.Respaldo.CarpetaVacia": "Debe seleccionar una carpeta de destino.",
     "Msg.Respaldo.ArchivoVacio": "Debe seleccionar un archivo .bak.",
     "Msg.Respaldo.ErrorBackup": "Ocurrió un error inesperado al generar el backup.",
-    "Msg.Respaldo.ErrorRestore": "Ocurrió un error inesperado al restaurar el backup."
+    "Msg.Respaldo.ErrorRestore": "Ocurrió un error inesperado al restaurar el backup.",
+    "lblEncabezado": "INCONSISTENCIA PRESENTE EN LA BASE DE DATOS"
   }
 }

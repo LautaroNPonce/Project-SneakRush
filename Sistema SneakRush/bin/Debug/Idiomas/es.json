@@ -426,7 +426,13 @@
     "Inc.Insertado": "Registro insertado directamente en la BD",
     "Inc.Modificado": "Registro modificado directamente en la BD",
     "Inc.Eliminado": "Registro eliminado directamente en la BD",
-    "lblEncabezado": "INCONSISTENCIA PRESENTE EN LA BASE DE DATOS"
+    "lblEncabezado": "INCONSISTENCIA PRESENTE EN LA BASE DE DATOS",
+    "Msg.ConfirmarRecalcular": "¿Está seguro de que desea recalcular los dígitos verificadores?",
+    "Msg.ConfirmarRecalcular.Title": "Confirmar recálculo",
+    "Msg.ConfirmarRestaurar": "¿Está seguro de que desea restaurar la base de datos? Se reemplazará toda la información actual por la del respaldo.",
+    "Msg.ConfirmarRestaurar.Title": "Confirmar restauración",
+    "Msg.ConfirmarSalir": "¿Está seguro de que desea salir sin reparar la inconsistencia?",
+    "Msg.ConfirmarSalir.Title": "Confirmar salida"
   },
   "FrmGestionRespaldo486LP": {
     "Title": "Gestión de Respaldos",

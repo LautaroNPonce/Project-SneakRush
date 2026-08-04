@@ -57,20 +57,36 @@ namespace Sistema_SneakRush
             }
         }
 
+        private bool Confirmar(string claveMsg, string defaultMsg, string claveTitulo, string defaultTitulo)
+        {
+            var lm = Program.LanguageManager;
+            string f = "FrmReparacionBD486LP";
+
+            return MessageBox.Show(
+                lm.ObtenerTexto(f, claveMsg, defaultMsg),
+                lm.ObtenerTexto(f, claveTitulo, defaultTitulo),
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question) == DialogResult.Yes;
+        }
+
         private void btnRecalcular_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
             string f = "FrmReparacionBD486LP";
 
+            if (!Confirmar("Msg.ConfirmarRecalcular", "¿Está seguro de que desea recalcular los dígitos verificadores?",
+                    "Msg.ConfirmarRecalcular.Title", "Confirmar recálculo"))
+                return;
+
             if (!_bllDV.RecalcularTablas(_tablas, out string mensaje))
             {
                 MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.ErrorRecalcular", "Error al recalcular: {0}"), mensaje),
-                    lm.ObtenerTexto(f, "Msg.ErrorRecalcular.Title", "Error"),MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    lm.ObtenerTexto(f, "Msg.ErrorRecalcular.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             MessageBox.Show(lm.ObtenerTexto(f, "Msg.Exito", "Dígitos verificadores recalculados correctamente."),
-                lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"),MessageBoxButtons.OK, MessageBoxIcon.Information);
+                lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -78,6 +94,10 @@ namespace Sistema_SneakRush
 
         private void btnRestaurar_Click(object sender, EventArgs e)
         {
+            if (!Confirmar("Msg.ConfirmarRestaurar", "¿Está seguro de que desea restaurar la base de datos? Se reemplazará toda la información actual por la del respaldo.",
+                "Msg.ConfirmarRestaurar.Title", "Confirmar restauración"))
+                return;
+
             using (FrmGestionRespaldo486LP frm = new FrmGestionRespaldo486LP(true))
             {
                 frm.StartPosition = FormStartPosition.CenterScreen;
@@ -87,6 +107,9 @@ namespace Sistema_SneakRush
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
+            if (!Confirmar("Msg.ConfirmarSalir", "¿Está seguro de que desea salir sin reparar la inconsistencia?","Msg.ConfirmarSalir.Title", "Confirmar salida"))
+                return;
+
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }

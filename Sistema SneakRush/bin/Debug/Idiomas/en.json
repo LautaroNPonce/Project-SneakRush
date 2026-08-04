@@ -426,7 +426,13 @@
     "Inc.Insertado": "Record inserted directly into the DB",
     "Inc.Modificado": "Record modified directly in the DB",
     "Inc.Eliminado": "Record deleted directly from the DB",
-    "lblEncabezado": "INCONSISTENCY PRESENT IN THE DATABASE"
+    "lblEncabezado": "INCONSISTENCY PRESENT IN THE DATABASE",
+    "Msg.ConfirmarRecalcular": "Are you sure you want to recalculate the verification digits?",
+    "Msg.ConfirmarRecalcular.Title": "Confirm recalculation",
+    "Msg.ConfirmarRestaurar": "Are you sure you want to restore the database? All current data will be replaced with the backup.",
+    "Msg.ConfirmarRestaurar.Title": "Confirm restore",
+    "Msg.ConfirmarSalir": "Are you sure you want to exit without repairing the inconsistency?",
+    "Msg.ConfirmarSalir.Title": "Confirm exit"
   },
   "FrmGestionRespaldo486LP": {
     "Title": "Backup Management",

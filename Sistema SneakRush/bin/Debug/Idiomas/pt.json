@@ -426,7 +426,14 @@
     "Inc.Insertado": "Registro inserido diretamente no BD",
     "Inc.Modificado": "Registro modificado diretamente no BD",
     "Inc.Eliminado": "Registro excluído diretamente do BD",
-    "lblEncabezado": "INCONSISTÊNCIA PRESENTE NO BANCO DE DADOS"
+    "lblEncabezado": "INCONSISTÊNCIA PRESENTE NO BANCO DE DADOS",
+    "Msg.ConfirmarRecalcular": "Tem certeza de que deseja recalcular os dígitos verificadores?",
+    "Msg.ConfirmarRecalcular.Title": "Confirmar recálculo",
+    "Msg.ConfirmarRestaurar": "Tem certeza de que deseja restaurar o banco de dados? Todas as informações atuais serão substituídas pelas do backup.",
+    "Msg.ConfirmarRestaurar.Title": "Confirmar restauração",
+    "Msg.ConfirmarSalir": "Tem certeza de que deseja sair sem reparar a inconsistência?",
+    "Msg.ConfirmarSalir.Title": "Confirmar saída"
+
   },
   "FrmGestionRespaldo486LP": {
     "Title": "Gestão de Backups",

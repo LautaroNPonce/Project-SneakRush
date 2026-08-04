@@ -108,34 +108,59 @@ namespace DAL
             }
         }
 
+        // Antes de borrarla, quita sus vinculos hijos (Perfil_Familia y Familia_Permiso) para no violar las foreign keys.
+        // Todo lo hago en una transaccion: o se borra todo, o no se borra nada.
         public bool Eliminar(int id, out string mensaje)
         {
             mensaje = "";
-            try
+
+            using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
             {
-                using (SqlConnection con = new SqlConnection(Conexion486LP.BD))
+                con.Open();
+                using (SqlTransaction tran = con.BeginTransaction())
                 {
-                    string query = "DELETE FROM Familia WHERE IdFamilia = @Id";
-                    SqlCommand cmd = new SqlCommand(query, con);
-                    cmd.CommandType = CommandType.Text;
-                    cmd.Parameters.AddWithValue("@Id", id);
-
-                    con.Open();
-                    bool resultado = cmd.ExecuteNonQuery() > 0;
-
-                    if (resultado)
+                    try
                     {
-                        mensaje = "Familia eliminada correctamente.";
-                        return true;
+                        // Primero Quito la familia de los perfiles que la usan.
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Perfil_Familia WHERE IdFamilia = @Id", con, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@Id", id);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Segundo quito los permisos asignados a la familia.
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Familia_Permiso WHERE IdFamilia = @Id", con, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@Id", id);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Tercero recien ahora borrar la familia.
+                        int filas;
+                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Familia WHERE IdFamilia = @Id", con, tran))
+                        {
+                            cmd.Parameters.AddWithValue("@Id", id);
+                            filas = cmd.ExecuteNonQuery();
+                        }
+
+                        if (filas > 0)
+                        {
+                            tran.Commit();
+                            mensaje = "Familia eliminada correctamente.";
+                            return true;
+                        }
+
+                        tran.Rollback();
+                        mensaje = "No se pudo eliminar la familia.";
+                        return false;
                     }
-                    mensaje = "No se pudo eliminar la familia.";
-                    return false;
+                    catch (Exception ex)
+                    {
+                        try { tran.Rollback(); } catch { }
+                        mensaje = "Error: " + ex.Message;
+                        return false;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                mensaje = "Error: " + ex.Message;
-                return false;
             }
         }
 

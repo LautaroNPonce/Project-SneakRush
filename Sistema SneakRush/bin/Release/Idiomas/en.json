@@ -202,7 +202,8 @@
     "Msg.BLL.ErrorDesbloquear": "An error occurred while unlocking the user.",
     "Msg.BLL.ErrorBloquear": "An error occurred while blocking the user.",
     "rbtnActivoSi": "Yes",
-    "rbtnActivoNo": "No"
+    "rbtnActivoNo": "No",
+    "Msg.BLL.ErrorInvertir": "An error occurred while changing the user's status."
   },
 
   "FrmGestionFamilias486LP": {
@@ -353,7 +354,6 @@
     "Msg.BloqueoAdmin": "You cannot remove this permission from the Administrator profile: it would leave the system with no way to manage permissions.",
     "Msg.BloqueoAdmin.Title": "Action not allowed",
     "Msg.PermisoYaEnFamilia": "This permission is already included in the family '{0}', assigned to this profile. There is no need to assign it separately.",
-    "Msg.BLL.ErrorInvertir": "An error occurred while changing the user's status.",
     "lblPermisosDeFamilia": "Family permissions:",
     "col.PermisoDeFamilia": "Family permission"
   },
@@ -425,7 +425,14 @@
     "Msg.RestaurarPendiente.Title": "Notice",
     "Inc.Insertado": "Record inserted directly into the DB",
     "Inc.Modificado": "Record modified directly in the DB",
-    "Inc.Eliminado": "Record deleted directly from the DB"
+    "Inc.Eliminado": "Record deleted directly from the DB",
+    "lblEncabezado": "INCONSISTENCY PRESENT IN THE DATABASE",
+    "Msg.ConfirmarRecalcular": "Are you sure you want to recalculate the verification digits?",
+    "Msg.ConfirmarRecalcular.Title": "Confirm recalculation",
+    "Msg.ConfirmarRestaurar": "Are you sure you want to restore the database? All current data will be replaced with the backup.",
+    "Msg.ConfirmarRestaurar.Title": "Confirm restore",
+    "Msg.ConfirmarSalir": "Are you sure you want to exit without repairing the inconsistency?",
+    "Msg.ConfirmarSalir.Title": "Confirm exit"
   },
   "FrmGestionRespaldo486LP": {
     "Title": "Backup Management",
@@ -452,6 +459,7 @@
     "Msg.Respaldo.CarpetaVacia": "You must select a destination folder.",
     "Msg.Respaldo.ArchivoVacio": "You must select a .bak file.",
     "Msg.Respaldo.ErrorBackup": "An unexpected error occurred while creating the backup.",
-    "Msg.Respaldo.ErrorRestore": "An unexpected error occurred while restoring the backup."
+    "Msg.Respaldo.ErrorRestore": "An unexpected error occurred while restoring the backup.",
+    "lblEncabezado": "INCONSISTENCY PRESENT IN THE DATABASE"
   }
 }
