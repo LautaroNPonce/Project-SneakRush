@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carrito486LP.cs" />
     <Compile Include="Cliente486LP.cs" />
-    <Compile Include="Idioma486LP.cs" />
+    <Compile Include="DetalleCarrito486LP.cs" />
+    <Compile Include="Producto486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

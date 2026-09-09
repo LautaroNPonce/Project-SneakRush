@@ -193,19 +193,19 @@ namespace Sistema_SneakRush
         // Menu Maestro
         private void clientesToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Clientes");
+            AbrirFormulario(new FrmGestionClientes486LP());
         }
         private void productosToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Productos");
+            AbrirFormulario(new FrmGestionProductos486LP());
         }
         private void categoríasMarcasToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Categorías / Marcas");
+            AbrirFormulario(new FrmGestionCategoriasMarcas486LP());
         }
         private void proveedoresToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Proveedores");
+            AbrirFormulario(new FrmGestionProveedores486LP());
         }
 
         // Menu Compra
@@ -225,7 +225,7 @@ namespace Sistema_SneakRush
         // Menu Venta
         private void gestionarCarritoToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Gestionar Carrito");
+            AbrirFormulario(new FrmGestionCarrito486LP());
         }
         private void registrarOperaciónDeVentaToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -233,7 +233,7 @@ namespace Sistema_SneakRush
         }
         private void consultarProductosToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Consultar Productos");
+            AbrirFormulario(new FrmConsultarProducto486LP());
         }
 
         // Menu Reporte

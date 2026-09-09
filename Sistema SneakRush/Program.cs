@@ -34,6 +34,11 @@ namespace Sistema_SneakRush
         [STAThread]
         static void Main()
         {
+            // Para que la moneda sea el peso argentino, y el formato de fecha sea dd/MM/yyyy, se fuerza la cultura a "es-AR" (Español - Argentina).
+            var ar = new System.Globalization.CultureInfo("es-AR");
+            System.Threading.Thread.CurrentThread.CurrentCulture = ar;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = ar;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
