@@ -1,5 +1,5 @@
 ﻿using BE;
-using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -11,12 +11,12 @@ namespace BLL
 {
     public class BLL_Carrito486LP
     {
-        private DAL_Carrito486LP ObjetoDAL = new DAL_Carrito486LP();
+        private Mapper_Carrito486LP ObjetoMapper = new Mapper_Carrito486LP();
         private BLL_Producto486LP ObjProducto = new BLL_Producto486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Agrega un producto al carrito (en memoria), validando stock.
-        // Devuelve false y un mensaje si no hay stock disponible.
+        // Agrega un producto al carrito (en memoria), validando stock
+        // Devuelve false y un mensaje si no hay stock disponible
         public bool Agregar(Carrito486LP carrito, Producto486LP producto, int cantidad, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -31,6 +31,7 @@ namespace BLL
                 {
                     Mensaje = "La cantidad debe ser mayor a cero."; return false;
                 }
+
                 // Cantidad ya cargada de ese producto en el carrito
                 int yaCargado = carrito.Detalles.Where(d => d.IdProducto == producto.IdProducto).Sum(d => d.Cantidad);
 
@@ -87,7 +88,7 @@ namespace BLL
                 carrito.Estado = "Activo";
                 carrito.Total = carrito.Detalles.Sum(d => d.Subtotal);
 
-                int idGenerado = ObjetoDAL.Guardar(carrito, out Mensaje);
+                int idGenerado = ObjetoMapper.Guardar(carrito, out Mensaje);
                 bool resultado = idGenerado > 0;
 
                 if (resultado)
@@ -121,7 +122,7 @@ namespace BLL
         {
             try
             {
-                return ObjetoDAL.Obtener(idCarrito);
+                return ObjetoMapper.Obtener(idCarrito);
             }
             catch (Exception ex)
             {

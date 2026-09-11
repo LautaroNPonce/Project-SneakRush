@@ -1,5 +1,6 @@
 ﻿using BE;
 using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace BLL
 {
     public class BLL_Producto486LP
     {
-        private DAL_Producto486LP ObjetoDAL = new DAL_Producto486LP();
+        private Mapper_Producto486LP ObjetoMapper = new Mapper_Producto486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
         // Lista todos los productos
@@ -19,7 +20,7 @@ namespace BLL
         {
             try
             {
-                return ObjetoDAL.Listar();
+                return ObjetoMapper.Listar();
             }
             catch (Exception ex)
             {
@@ -28,15 +29,12 @@ namespace BLL
             }
         }
 
-        // Busca productos por filtros opcionales (Marca / Modelo / Color / Talle) y,
-        // opcionalmente, solo los que tengan stock disponible.
-        // Ante un error de acceso a datos, registra el evento en bitacora (flujo alternativo 7.2)
-        // y devuelve una lista vacia para que la GUI muestre "sin resultados" sin caerse.
+        // Busca productos por filtros opcionales (Marca / Modelo / Color / Talle) y, opcionalmente, solo los que tengan stock disponible.
         public List<Producto486LP> Buscar(string marca, string modelo, string color, string talle, bool soloConStock)
         {
             try
             {
-                return ObjetoDAL.Buscar(marca, modelo, color, talle, soloConStock);
+                return ObjetoMapper.Buscar(marca, modelo, color, talle, soloConStock);
             }
             catch (Exception ex)
             {
@@ -50,7 +48,7 @@ namespace BLL
         {
             try
             {
-                return ObjetoDAL.ObtenerPorAtributos(marca, modelo, color, talle);
+                return ObjetoMapper.ObtenerPorAtributos(marca, modelo, color, talle);
             }
             catch (Exception ex)
             {
@@ -64,7 +62,7 @@ namespace BLL
         {
             try
             {
-                Producto486LP p = ObjetoDAL.ObtenerPorId(idProducto);
+                Producto486LP p = ObjetoMapper.ObtenerPorId(idProducto);
                 return p != null && p.Stock >= cantidad;
             }
             catch (Exception ex)

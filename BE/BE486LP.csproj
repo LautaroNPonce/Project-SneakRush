@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Carrito486LP.cs" />
     <Compile Include="Cliente486LP.cs" />
+    <Compile Include="ColumnaTabla486LP.cs" />
     <Compile Include="DetalleCarrito486LP.cs" />
     <Compile Include="Producto486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

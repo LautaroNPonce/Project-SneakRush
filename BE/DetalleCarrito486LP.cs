@@ -8,14 +8,21 @@ namespace BE
 {
     public class DetalleCarrito486LP
     {
+        [ColumnaTabla486LP]
         public int IdDetalle { get; set; }
+        [ColumnaTabla486LP]
         public int IdCarrito { get; set; }
+        [ColumnaTabla486LP]
         public int IdProducto { get; set; }
+        [ColumnaTabla486LP]
         public int Cantidad { get; set; }
+        [ColumnaTabla486LP]
         public decimal Precio { get; set; }
+        [ColumnaTabla486LP]
         public decimal Subtotal { get; set; }
 
-        // Referencia al producto (para mostrar Marca/Modelo/Color/Talle en la grilla)
+        // Referencia al producto (para mostrar Marca/Modelo/Color/Talle en la grilla).
+        // NO llevan [ColumnaTabla486LP]: no son columnas de DetalleCarrito, son el objeto relacionado y propiedades calculadas de solo lectura.
         public Producto486LP Producto { get; set; }
         public string Marca { get { return Producto?.Marca; } }
         public string Modelo { get { return Producto?.Modelo; } }

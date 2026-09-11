@@ -46,3 +46,5 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema S
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Idiomas\en.json
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Idiomas\es.json
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Idiomas\pt.json
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Mappers.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\bin\Debug\Mappers.pdb

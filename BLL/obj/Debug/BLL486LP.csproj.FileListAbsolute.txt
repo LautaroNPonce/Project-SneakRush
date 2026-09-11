@@ -13,3 +13,5 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\D
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL486LP.csproj.Up2Date
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\obj\Debug\BLL.pdb
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Mappers.dll
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\BLL\bin\Debug\Mappers.pdb

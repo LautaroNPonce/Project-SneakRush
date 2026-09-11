@@ -64,6 +64,10 @@
       <Project>{455635ab-1f34-4a20-9127-29c2f04c6f8e}</Project>
       <Name>DAL486LP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mappers\Mappers486LP.csproj">
+      <Project>{fcecb7e0-090b-4db0-ae4a-546f93051c10}</Project>
+      <Name>Mappers486LP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Services\Services486LP.csproj">
       <Project>{8d60589e-7c80-47b6-86d4-71d1f5dff4fd}</Project>
       <Name>Services486LP</Name>

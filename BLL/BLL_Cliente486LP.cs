@@ -1,5 +1,6 @@
 ﻿using BE;
 using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace BLL
 {
     public class BLL_Cliente486LP
     {
-        private DAL_Cliente486LP ObjetoDAL = new DAL_Cliente486LP();
+        private Mapper_Cliente486LP ObjetoMapper = new Mapper_Cliente486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
         private BLL_DV486LP ObjDV = new BLL_DV486LP();
 
@@ -23,7 +24,7 @@ namespace BLL
         {
             try
             {
-                List<Cliente486LP> lista = ObjetoDAL.Listar();
+                List<Cliente486LP> lista = ObjetoMapper.Listar();
                 foreach (Cliente486LP c in lista)
                 {
                     c.Correo = DescifrarCorreo(c.Correo);
@@ -42,7 +43,7 @@ namespace BLL
         {
             try
             {
-                Cliente486LP c = ObjetoDAL.Obtener(dni);
+                Cliente486LP c = ObjetoMapper.Obtener(dni);
                 if (c != null)
                 {
                     c.Correo = DescifrarCorreo(c.Correo);
@@ -59,7 +60,7 @@ namespace BLL
         // Indica si existe un cliente con ese DNI.
         public bool Existe(string dni)
         {
-            return ObjetoDAL.Existe(dni);
+            return ObjetoMapper.Existe(dni);
         }
 
         // Valida el formato del DNI: solo numeros, entre 7 y 10 digitos.
@@ -86,7 +87,7 @@ namespace BLL
                 mensaje = "Complete los campos obligatorios (Nombre, Apellido y Correo).";
                 return false;
             }
-            if (ObjetoDAL.Existe(cliente.DNI))
+            if (ObjetoMapper.Existe(cliente.DNI))
             {
                 mensaje = "Ya existe un cliente registrado con ese DNI.";
                 return false;
@@ -97,7 +98,7 @@ namespace BLL
                 // Se cifra el correo antes de persistir
                 cliente.Correo = Encriptacion486LP.EncriptarAES(cliente.Correo.Trim());
 
-                ObjetoDAL.Agregar(cliente);
+                ObjetoMapper.Agregar(cliente);
 
                 RecalcularDVCliente();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
@@ -130,7 +131,7 @@ namespace BLL
                 mensaje = "Complete los campos obligatorios (Nombre, Apellido y Correo).";
                 return false;
             }
-            if (!ObjetoDAL.Existe(cliente.DNI))
+            if (!ObjetoMapper.Existe(cliente.DNI))
             {
                 mensaje = "No existe un cliente con ese DNI para modificar.";
                 return false;
@@ -140,7 +141,7 @@ namespace BLL
             {
                 cliente.Correo = Encriptacion486LP.EncriptarAES(cliente.Correo.Trim());
 
-                ObjetoDAL.Modificar(cliente);
+                ObjetoMapper.Modificar(cliente);
 
                 RecalcularDVCliente();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
@@ -161,7 +162,7 @@ namespace BLL
         {
             mensaje = "";
 
-            if (!ObjetoDAL.Existe(dni))
+            if (!ObjetoMapper.Existe(dni))
             {
                 mensaje = "No existe un cliente con ese DNI para eliminar.";
                 return false;
@@ -169,7 +170,7 @@ namespace BLL
 
             try
             {
-                ObjetoDAL.Eliminar(dni);
+                ObjetoMapper.Eliminar(dni);
 
                 RecalcularDVCliente();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
@@ -185,16 +186,13 @@ namespace BLL
                 return false;
             }
         }
-
-        // Recalcula el Digito Verificador de la tabla Cliente (DVH por fila + DVV de tabla).
         private void RecalcularDVCliente()
         {
             string mensajeDV;
             ObjDV.RecalcularDV("Cliente", out mensajeDV);
         }
 
-        // Descifra el correo con tolerancia: si el dato no esta cifrado (o falla),
-        // devuelve el valor original para no romper la grilla.
+        // Descifra el correo con tolerancia: si el dato no esta cifrado (o falla), devuelve el valor original para no romper la grilla.
         private string DescifrarCorreo(string correo)
         {
             try
