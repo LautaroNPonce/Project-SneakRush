@@ -14,15 +14,19 @@ namespace BLL
     {
         private Mapper_Bitacora486LP Mapper = new Mapper_Bitacora486LP();
 
+        // Firma publica SIN CAMBIOS (sigue devolviendo bool) - no rompe a ninguno de los lugares que ya llaman ObjBitacora.Registrar(...) en el resto del sistema.
         public bool Registrar(BitacoraEvento486LP registro)
         {
-            bool resultado = Mapper.Registrar(registro);
+            // Mapper.Registrar ahora devuelve el "Numero" (Id) generado, no un bool - lo necesitamos para actualizar el DV de ESA fila
+            // puntual, sin recorrer toda la tabla (que hoy tiene miles de filas y hacia fallar el recalculo completo en cada evento).
+            int numeroGenerado = Mapper.Registrar(registro);
+            bool resultado = numeroGenerado > 0;
 
             if (resultado)
             {
                 string mensajeDV;
                 BLL_DV486LP bllDV = new BLL_DV486LP();
-                bllDV.RecalcularDV("BitacoraEvento", false, out mensajeDV);
+                bllDV.RegistrarDVDeFilaNueva("BitacoraEvento", numeroGenerado, out mensajeDV);
             }
 
             return resultado;

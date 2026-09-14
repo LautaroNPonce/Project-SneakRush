@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 namespace Mappers
 {
 
-    /// Habla con SQL para el Digito Verificador. Reemplaza a DAL_DV486LP. DV opera sobre 13 tablas distintas, pero NUNCA arma el nombre de tabla
-    /// como texto SQL dinamico: cada tabla tiene su propio SP fijo (DV_Leer_X, DV_ActualizarFila_X), y este Mapper solo ELIGE cual SP 
-    /// llamar segun el nombre de tabla que le llega - la eleccion es en C#, el SQL de cada SP es fijo y conocido de antemano.
-    /// UBICACION TRANSITORIA en Mappers (no en Services) - es la ULTIMA entidad de seguridad transitoria; al terminar esta migracion se
-    /// mueven los 6 Mappers de seguridad a Services de una sola vez (ver Entrada 6 del CHANGELOG).
+    /// DV opera sobre 13 tablas distintas, pero NUNCA arma el nombre de tabla como texto SQL dinamico: cada tabla tiene su propio SP fijo
+    /// (DV_Leer_X, DV_ActualizarFila_X), y este Mapper solo ELIGE cual SP llamar segun el nombre de tabla que le llega - la eleccion es en C#,
+    /// el SQL de cada SP es fijo y conocido de antemano.
+    /// UBICACION DEFINITIVA en Services (no en Mappers) - fue la ULTIMA entidad migrada; con esta se completo el refactor y se movieron los 7 Mappers
+    /// de seguridad/auditoria a Services (ver CHANGELOG_Refactor_Arquitectura.md).
 
     public class Mapper_DV486LP : MapperBase486LP
     {
@@ -52,7 +52,8 @@ namespace Mappers
             { "Cliente",         "DV_ActualizarFila_Cliente" }
         };
 
-        // Lee TODAS las columnas y filas de una tabla protegida (para calcular DVH/DVV). Elige el SP fijo correspondiente - nunca arma SQL con el nombre de tabla como texto.
+        // Lee TODAS las columnas y filas de una tabla protegida (para calcular DVH/DVV). Elige el SP fijo correspondiente - nunca arma SQL con el
+        // nombre de tabla como texto.
         public DataTable LeerTabla(string nombreTabla)
         {
             if (!_spLeerPorTabla.ContainsKey(nombreTabla))
@@ -125,6 +126,30 @@ namespace Mappers
             catch (Exception ex)
             {
                 throw new Exception($"Error al guardar DV de tabla '{tabla}': {ex.Message}");
+            }
+        }
+
+        // Actualiza el DV de UNA SOLA fila puntual (sin recorrer el resto de la tabla). Se usa cuando se acaba de insertar/modificar un unico registro mucho mas rapido que
+        // RecalcularDVHPorFila para tablas grandes (ej. BitacoraEvento, que crece indefinidamente).
+        public void ActualizarDVDeUnaFila(string tabla, object id, string dv)
+        {
+            if (!_spActualizarFilaPorTabla.ContainsKey(tabla))
+            {
+                throw new Exception($"No hay un SP de actualización de fila configurado para la tabla '{tabla}'.");
+            }
+
+            try
+            {
+                SqlCommand cmd = new SqlCommand(_spActualizarFilaPorTabla[tabla]);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@Id", id));
+                cmd.Parameters.Add(new SqlParameter("@DV", dv));
+
+                Conexion486LP.EjecutarNoConsulta(cmd);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al actualizar DV de la fila {id} en '{tabla}': {ex.Message}");
             }
         }
 

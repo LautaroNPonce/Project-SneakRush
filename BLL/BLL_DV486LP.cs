@@ -38,9 +38,17 @@ namespace BLL
             return _columnaIdPorTabla.ContainsKey(tabla) ? _columnaIdPorTabla[tabla] : "Id";
         }
 
+        // Calculo de hashes: se separo en dos partes (leer + calcular) para poder REUTILIZAR un DataTable ya leido, en vez de releer la tabla
+        // completa cada vez (ver RegistrarDVDeFilaNueva mas abajo).
+
         private string CalcularDVH(string tabla)
         {
             DataTable dt = _mapper.LeerTabla(tabla);
+            return CalcularDVHDesdeTabla(dt);
+        }
+
+        private string CalcularDVHDesdeTabla(DataTable dt)
+        {
             StringBuilder sb = new StringBuilder();
 
             foreach (DataRow fila in dt.Rows)
@@ -60,6 +68,11 @@ namespace BLL
         private string CalcularDVV(string tabla)
         {
             DataTable dt = _mapper.LeerTabla(tabla);
+            return CalcularDVVDesdeTabla(dt);
+        }
+
+        private string CalcularDVVDesdeTabla(DataTable dt)
+        {
             StringBuilder sb = new StringBuilder();
 
             foreach (DataColumn col in dt.Columns)
@@ -74,6 +87,67 @@ namespace BLL
             }
 
             return Encriptacion486LP.GenerarHash(sb.ToString());
+        }
+
+        // Hash de UNA fila individual (misma formula que usa Mapper_DV486LP.RecalcularDVHPorFila).
+        private string CalcularHashDeFila(DataRow fila, DataColumnCollection columnas)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (DataColumn col in columnas)
+            {
+                if (col.ColumnName != "DV")
+                    sb.Append(fila[col].ToString());
+            }
+            return Encriptacion486LP.GenerarHash(sb.ToString());
+        }
+
+        // NUEVO: recalculo LIVIANO para cuando se acaba de insertar/modificar UNA fila puntual (ej. un evento nuevo en Bitacora). En vez de recorrer TODA la tabla fila por fila
+        // (RecalcularDVHPorFila, que con miles de filas se vuelve lentisimo y puede fallar a mitad de camino), lee la tabla UNA sola vez, actualiza solo esa fila, y
+        // reusa esos mismos datos para el DVH/DVV de nivel tabla.
+
+        public bool RegistrarDVDeFilaNueva(string tabla, object id, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                DataTable dt = _mapper.LeerTabla(tabla); // UNA sola lectura completa
+
+                if (!_tablasSoloNivelTabla.Contains(tabla))
+                {
+                    string columnaId = ObtenerColumnaId(tabla);
+                    DataRow filaEncontrada = null;
+                    foreach (DataRow fila in dt.Rows)
+                    {
+                        if (fila[columnaId].ToString() == id.ToString())
+                        {
+                            filaEncontrada = fila;
+                            break;
+                        }
+                    }
+
+                    if (filaEncontrada == null)
+                    {
+                        mensaje = $"No se encontró la fila con Id '{id}' en la tabla '{tabla}'.";
+                        return false;
+                    }
+
+                    string hashFila = CalcularHashDeFila(filaEncontrada, dt.Columns);
+                    _mapper.ActualizarDVDeUnaFila(tabla, id, hashFila);
+                }
+
+                // DVH/DVV de nivel tabla, reusando el MISMO DataTable ya leido
+                // (no se vuelve a consultar la base).
+                string dvh = CalcularDVHDesdeTabla(dt);
+                string dvv = CalcularDVVDesdeTabla(dt);
+                _mapper.GuardarDV(tabla, dvh, dvv);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                return false;
+            }
         }
 
         public bool RecalcularDV(string tabla, out string mensaje)

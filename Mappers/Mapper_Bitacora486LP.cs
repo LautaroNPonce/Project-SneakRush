@@ -12,19 +12,21 @@ namespace Mappers
 {
 
     /// Habla con SQL para BitacoraEvento. Reemplaza a DAL_Bitacora486LP.
-    /// UBICACION TRANSITORIA en Mappers (no en Services) - mismo motivo que las 5 entidades anteriores, ver Entrada 6 del CHANGELOG. Es la PENULTIMA migracion del refactor: falta solo DV.
+    /// UBICACION DEFINITIVA en Services (no en Mappers) - ver CHANGELOG_Refactor_Arquitectura.md.
 
     public class Mapper_Bitacora486LP : MapperBase486LP
     {
-        // Registra un evento nuevo en la bitacora.
-        public bool Registrar(BitacoraEvento486LP registro)
+        // Registra un evento nuevo en la bitacora. Devuelve el "Numero" (Id) generado, o 0 si fallo - antes devolvia bool, ahora devuelve el Id
+        // para que BLL_DV486LP pueda actualizar el DV de ESA fila puntual, sin tener que recorrer toda la tabla (que hoy tiene miles de filas).
+        public int Registrar(BitacoraEvento486LP registro)
         {
             try
             {
                 SqlCommand cmd = new SqlCommand("BitacoraEvento_Registrar");
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                // Misma validacion de rango que tenia el DAL original: datetime minimo de SQL Server es 1/1/1753, si viene por debajo se usa "ahora".
+                // Misma validacion de rango que tenia el DAL original: datetime
+                // minimo de SQL Server es 1/1/1753, si viene por debajo se usa "ahora".
                 DateTime fecha = registro.Fecha < new DateTime(1753, 1, 1) ? DateTime.Now : registro.Fecha;
 
                 cmd.Parameters.Add(new SqlParameter("@Fecha", fecha));
@@ -34,15 +36,17 @@ namespace Mappers
                 cmd.Parameters.Add(new SqlParameter("@DNI", registro.DNI));
                 cmd.Parameters.Add(new SqlParameter("@NombreUsuario", registro.NombreUsuario ?? ""));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                object idGenerado = Conexion486LP.EjecutarEscalar(cmd);
+                return (idGenerado != null && idGenerado != DBNull.Value) ? Convert.ToInt32(idGenerado) : 0;
             }
             catch
             {
-                return false;
+                return 0;
             }
         }
 
-        // Lista todos los eventos de la bitacora (con Nombre/Apellido del usuario relacionado, via LEFT JOIN), mas recientes primero.
+        // Lista todos los eventos de la bitacora (con Nombre/Apellido del
+        // usuario relacionado, via LEFT JOIN), mas recientes primero.
         public List<BitacoraEvento486LP> Listar()
         {
             try

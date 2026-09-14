@@ -1,3 +1,5 @@
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\obj\Debug\Mappers486LP.csproj.AssemblyReference.cache
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\obj\Debug\Mappers486LP.csproj.CoreCompileInputs.cache
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\bin\Debug\Mappers.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\bin\Debug\Mappers.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\bin\Debug\BE.dll
@@ -8,8 +10,6 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\b
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\bin\Debug\DAL.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\bin\Debug\Services.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\bin\Debug\Newtonsoft.Json.xml
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\obj\Debug\Mappers486LP.csproj.AssemblyReference.cache
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\obj\Debug\Mappers486LP.csproj.CoreCompileInputs.cache
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\obj\Debug\Mappers4.D556D145.Up2Date
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\obj\Debug\Mappers.dll
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Mappers\obj\Debug\Mappers.pdb
