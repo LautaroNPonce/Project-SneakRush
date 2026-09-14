@@ -1,4 +1,5 @@
-﻿using Services;
+﻿using Mappers;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,17 @@ namespace BLL
 {
     public class BLL_Perfil486LP
     {
-        private DAL.DAL_Perfil486LP _dalPerfil = new DAL.DAL_Perfil486LP();
-        private DAL.DAL_Familia486LP _dalFamilia = new DAL.DAL_Familia486LP();
+        private Mapper_Perfil486LP _mapperPerfil = new Mapper_Perfil486LP();
+
+        // CORRECCION: antes se accedia directo a DAL.DAL_Familia486LP (que ya no existe, se elimino al migrar Familia). Ahora se usa BLL_Familia486LP
+        // (su propia BLL, via sus metodos publicos) en vez de tocar el Mapper de otra entidad directamente - una BLL habla con otra BLL, no con el Mapper ajeno.
+        private BLL_Familia486LP _bllFamilia = new BLL_Familia486LP();
         private BLL_Patente486LP _bllPatente = new BLL_Patente486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
 
         public List<Perfil486LP> ObtenerPerfiles()
         {
-            return _dalPerfil.Listar();
+            return _mapperPerfil.Listar();
         }
 
         public bool CrearPerfil(string nombre, out string mensaje)
@@ -29,7 +33,7 @@ namespace BLL
                 return false;
             }
 
-            List<Perfil486LP> perfiles = _dalPerfil.Listar();
+            List<Perfil486LP> perfiles = _mapperPerfil.Listar();
             if (perfiles.Any(p => p.Nombre.ToLower() == nombre.ToLower()))
             {
                 mensaje = "Msg.PerfilExiste"; // Ya existe un Perfil con ese nombre.
@@ -39,7 +43,7 @@ namespace BLL
             Perfil486LP nuevo = new Perfil486LP();
             nuevo.Nombre = nombre;
 
-            bool resultado = _dalPerfil.Agregar(nuevo, out mensaje);
+            bool resultado = _mapperPerfil.Agregar(nuevo, out mensaje);
 
             if (resultado)
             {
@@ -73,7 +77,7 @@ namespace BLL
                 return false;
             }
 
-            List<Perfil486LP> perfiles = _dalPerfil.Listar();
+            List<Perfil486LP> perfiles = _mapperPerfil.Listar();
             if (perfiles.Any(p => p.Nombre.ToLower() == nuevoNombre.ToLower() && p.IdPerfil != id))
             {
                 mensaje = "Msg.PerfilExiste"; // Ya existe un Perfil con ese nombre.
@@ -84,7 +88,7 @@ namespace BLL
             perfil.IdPerfil = id;
             perfil.Nombre = nuevoNombre;
 
-            bool resultado = _dalPerfil.Modificar(perfil, out mensaje);
+            bool resultado = _mapperPerfil.Modificar(perfil, out mensaje);
 
             if (resultado)
             {
@@ -120,7 +124,7 @@ namespace BLL
                 return false;
             }
 
-            bool resultado = _dalPerfil.Eliminar(id, out mensaje);
+            bool resultado = _mapperPerfil.Eliminar(id, out mensaje);
 
             if (resultado)
             {
@@ -141,7 +145,7 @@ namespace BLL
 
         public List<Familia486LP> ObtenerFamilias()
         {
-            return _dalFamilia.Listar();
+            return _bllFamilia.ObtenerFamilias();
         }
 
         public List<Permiso486LP> ObtenerPatentes()
@@ -151,12 +155,12 @@ namespace BLL
 
         public List<Familia486LP> ObtenerFamiliasDePerfil(int idPerfil)
         {
-            return _dalPerfil.ListarFamiliasDePerfil(idPerfil);
+            return _mapperPerfil.ListarFamiliasDePerfil(idPerfil);
         }
 
         public List<Permiso486LP> ObtenerPermisosDePerfil(int idPerfil)
         {
-            return _dalPerfil.ListarPermisosDePerfil(idPerfil);
+            return _mapperPerfil.ListarPermisosDePerfil(idPerfil);
         }
 
         public bool AsignarFamilia(int idPerfil, int idFamilia, out string mensaje)
@@ -175,7 +179,7 @@ namespace BLL
                 return false;
             }
 
-            List<Familia486LP> familiasActuales = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
+            List<Familia486LP> familiasActuales = _mapperPerfil.ListarFamiliasDePerfil(idPerfil);
             if (familiasActuales.Any(f => f.Id == idFamilia))
             {
                 mensaje = "Msg.ComponenteExiste"; // El componente ya pertenece a este elemento.
@@ -189,7 +193,7 @@ namespace BLL
             perfil.Componentes.Add(familia);
 
             // Persistir en BD
-            bool resultado = _dalPerfil.AsignarFamilia(idPerfil, idFamilia, out mensaje);
+            bool resultado = _mapperPerfil.AsignarFamilia(idPerfil, idFamilia, out mensaje);
 
             if (resultado)
             {
@@ -223,7 +227,7 @@ namespace BLL
                 return false;
             }
 
-            List<Familia486LP> familiasActuales = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
+            List<Familia486LP> familiasActuales = _mapperPerfil.ListarFamiliasDePerfil(idPerfil);
             if (!familiasActuales.Any(f => f.Id == idFamilia))
             {
                 mensaje = "Msg.SeleccionarFamiliaQuitar"; // Debe seleccionar una Familia para quitar.
@@ -236,7 +240,7 @@ namespace BLL
             perfil.Componentes.Remove(familia);
 
             // Persistir en BD
-            bool resultado = _dalPerfil.QuitarFamilia(idPerfil, idFamilia, out mensaje);
+            bool resultado = _mapperPerfil.QuitarFamilia(idPerfil, idFamilia, out mensaje);
 
             if (resultado)
             {
@@ -270,14 +274,14 @@ namespace BLL
                 return false;
             }
 
-            List<Permiso486LP> permisosActuales = _dalPerfil.ListarPermisosDePerfil(idPerfil);
+            List<Permiso486LP> permisosActuales = _mapperPerfil.ListarPermisosDePerfil(idPerfil);
             if (permisosActuales.Any(p => p.Id == idPermiso))
             {
                 mensaje = "Msg.ComponenteExiste"; // El componente ya pertenece a este elemento.
                 return false;
             }
 
-            // bloquear si el permiso ya viene por una familia asignada 
+            // bloquear si el permiso ya viene por una familia asignada
             string familiaQueLoCubre = FamiliaQueContienePermiso(idPerfil, idPermiso);
 
             if (familiaQueLoCubre != null)
@@ -293,7 +297,7 @@ namespace BLL
             perfil.Componentes.Add(permiso);
 
             // Persistir en BD
-            bool resultado = _dalPerfil.AsignarPermiso(idPerfil, idPermiso, out mensaje);
+            bool resultado = _mapperPerfil.AsignarPermiso(idPerfil, idPermiso, out mensaje);
 
             if (resultado)
             {
@@ -327,7 +331,7 @@ namespace BLL
                 return false;
             }
 
-            List<Permiso486LP> permisosActuales = _dalPerfil.ListarPermisosDePerfil(idPerfil);
+            List<Permiso486LP> permisosActuales = _mapperPerfil.ListarPermisosDePerfil(idPerfil);
             if (!permisosActuales.Any(p => p.Id == idPermiso))
             {
                 mensaje = "Msg.SeleccionarPermisoQuitar"; // Debe seleccionar un Permiso para quitar.
@@ -340,7 +344,7 @@ namespace BLL
             perfil.Componentes.Remove(permiso);
 
             // Persistir en BD
-            bool resultado = _dalPerfil.QuitarPermiso(idPerfil, idPermiso, out mensaje);
+            bool resultado = _mapperPerfil.QuitarPermiso(idPerfil, idPermiso, out mensaje);
 
             if (resultado)
             {
@@ -361,7 +365,7 @@ namespace BLL
         public bool FamiliaSolapaConAsignadas(int idPerfil, int idFamilia)
         {
             // Permisos que trae la familia candidata
-            List<Permiso486LP> permisosNuevaFamilia = _dalFamilia.ListarPermisosDeFamilia(idFamilia);
+            List<Permiso486LP> permisosNuevaFamilia = _bllFamilia.ObtenerPermisosDeFamilia(idFamilia);
             if (permisosNuevaFamilia.Count == 0)
             {
                 return false; // si no tiene permisos, no puede solapar con nada
@@ -369,7 +373,7 @@ namespace BLL
 
             // IDs de permisos que ya vienen por las familias asignadas al perfil
             HashSet<int> permisosYaCubiertos = new HashSet<int>();
-            List<Familia486LP> familiasAsignadas = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
+            List<Familia486LP> familiasAsignadas = _mapperPerfil.ListarFamiliasDePerfil(idPerfil);
 
             foreach (Familia486LP fam in familiasAsignadas)
             {
@@ -378,7 +382,7 @@ namespace BLL
                     continue; // por las dudas ignorar la misma familia
                 }
 
-                foreach (Permiso486LP perm in _dalFamilia.ListarPermisosDeFamilia(fam.Id))
+                foreach (Permiso486LP perm in _bllFamilia.ObtenerPermisosDeFamilia(fam.Id))
                     permisosYaCubiertos.Add(perm.Id);
             }
 
@@ -392,12 +396,12 @@ namespace BLL
         {
             List<string> quitados = new List<string>();
 
-            List<Permiso486LP> permisosFamilia = _dalFamilia.ListarPermisosDeFamilia(idFamilia);
+            List<Permiso486LP> permisosFamilia = _bllFamilia.ObtenerPermisosDeFamilia(idFamilia);
             if (permisosFamilia.Count == 0)
                 return quitados;
 
             HashSet<int> idsFamilia = new HashSet<int>(permisosFamilia.Select(p => p.Id));
-            List<Permiso486LP> sueltos = _dalPerfil.ListarPermisosDePerfil(idPerfil);
+            List<Permiso486LP> sueltos = _mapperPerfil.ListarPermisosDePerfil(idPerfil);
 
             foreach (Permiso486LP suelto in sueltos)
             {
@@ -405,8 +409,8 @@ namespace BLL
                 {
                     string m;
                     if (QuitarPermiso(idPerfil, suelto.Id, out m)) // La BLL: valida, persiste y registra en bitácora
-                    { 
-                        quitados.Add(suelto.Nombre); 
+                    {
+                        quitados.Add(suelto.Nombre);
                     }
                 }
             }
@@ -418,11 +422,11 @@ namespace BLL
         // Devuelve el NOMBRE de esa familia, o null si ninguna lo contiene.
         public string FamiliaQueContienePermiso(int idPerfil, int idPermiso)
         {
-            List<Familia486LP> familiasAsignadas = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
+            List<Familia486LP> familiasAsignadas = _mapperPerfil.ListarFamiliasDePerfil(idPerfil);
 
             foreach (Familia486LP fam in familiasAsignadas)
             {
-                List<Permiso486LP> permisosFamilia = _dalFamilia.ListarPermisosDeFamilia(fam.Id);
+                List<Permiso486LP> permisosFamilia = _bllFamilia.ObtenerPermisosDeFamilia(fam.Id);
                 if (permisosFamilia.Any(p => p.Id == idPermiso))
                 {
                     return fam.Nombre; // la encontró
@@ -434,11 +438,11 @@ namespace BLL
 
         public bool TieneUsuariosAsignados(int idPerfil)
         {
-            return _dalPerfil.TieneUsuarios(idPerfil);
+            return _mapperPerfil.TieneUsuarios(idPerfil);
         }
         public bool TieneFamiliasAsignadas(int idPerfil)
         {
-            List<Familia486LP> familias = _dalPerfil.ListarFamiliasDePerfil(idPerfil);
+            List<Familia486LP> familias = _mapperPerfil.ListarFamiliasDePerfil(idPerfil);
             {
                 return familias.Count > 0;
             }
@@ -446,7 +450,7 @@ namespace BLL
 
         public bool TienePermisosAsignados(int idPerfil)
         {
-            List<Permiso486LP> permisos = _dalPerfil.ListarPermisosDePerfil(idPerfil);
+            List<Permiso486LP> permisos = _mapperPerfil.ListarPermisosDePerfil(idPerfil);
             {
                 return permisos.Count > 0;
             }
@@ -458,8 +462,8 @@ namespace BLL
             {
                 return new List<string>();
             }
-        
-            return _dalPerfil.ObtenerNombresPermisosPorRol(nombreRol);
+
+            return _mapperPerfil.ObtenerNombresPermisosPorRol(nombreRol);
         }
 
     }

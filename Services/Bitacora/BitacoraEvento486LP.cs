@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BE;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,34 @@ namespace Services
 {
     public class BitacoraEvento486LP
     {
+        [ColumnaTabla486LP]
         public int Numero { get; set; }
+        [ColumnaTabla486LP]
         public DateTime Fecha { get; set; }
+        [ColumnaTabla486LP]
         public string Modulo { get; set; }
+        [ColumnaTabla486LP]
         public string Descripcion { get; set; }
+        [ColumnaTabla486LP]
         public int Criticidad { get; set; }
+        [ColumnaTabla486LP]
         public string DNI { get; set; }
+        [ColumnaTabla486LP]
         public string NombreUsuario { get; set; }
+
+        // Nombre/Apellido NO son columnas de BitacoraEvento: vienen del JOIN con Usuarios en Listar()/Filtrar(). Igual llevan el atributo porque el SP
+        // las devuelve con esos nombres exactos y el mapeo es por nombre de columna del resultado, no por tabla de origen.
+
+        [ColumnaTabla486LP]
         public string Nombre { get; set; }
+        [ColumnaTabla486LP]
         public string Apellido { get; set; }
 
         // Constructores
         public BitacoraEvento486LP() { }
 
         // Lo uso para REGISTRAR un evento nuevo en la BD (En BLL_Usuarios)
-        public BitacoraEvento486LP(string modulo, string descripcion, int criticidad, string dni, string nombreUsuario = "") 
+        public BitacoraEvento486LP(string modulo, string descripcion, int criticidad, string dni, string nombreUsuario = "")
         {
             Fecha = DateTime.Now;
             Modulo = modulo;

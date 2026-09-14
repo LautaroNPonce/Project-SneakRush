@@ -1,5 +1,6 @@
 ﻿using BE;
 using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace BLL
 {
     public class BLL_Usuarios486LP
     {
-        private DAL_Usuarios486LP ObjetoDAL = new DAL_Usuarios486LP();
+        private Mapper_Usuarios486LP ObjetoMapper = new Mapper_Usuarios486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
         // Valida que la contraseña cumpla la política de seguridad (mínimo 8 caracteres, al menos una mayúscula y una minúscula)
@@ -54,7 +55,7 @@ namespace BLL
             Mensaje = string.Empty;
             try
             {
-                Usuario486LP u = ObjetoDAL.ObtenerPorNombreUsuario(nombreUsuario);
+                Usuario486LP u = ObjetoMapper.ObtenerPorNombreUsuario(nombreUsuario);
 
                 if (u == null)
                 {
@@ -80,11 +81,11 @@ namespace BLL
                 {
                     int intentos = u.IntentosFallidos + 1;
                     string msg;
-                    ObjetoDAL.ActualizarIntentos(nombreUsuario, intentos, out msg);
+                    ObjetoMapper.ActualizarIntentos(nombreUsuario, intentos, out msg);
 
                     if (intentos >= 3)
                     {
-                        ObjetoDAL.Bloquear(nombreUsuario, out msg);
+                        ObjetoMapper.Bloquear(nombreUsuario, out msg);
                         ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Usuario {nombreUsuario} bloqueado por 3 intentos fallidos.", Criticidad486LP.MuyAlta, u.DNI, u.NombreUsuario));
                         Mensaje = "Usuario bloqueado por 3 intentos fallidos. Contacte al administrador.";
                         return -3;
@@ -96,7 +97,7 @@ namespace BLL
                 }
 
                 string mensaje;
-                ObjetoDAL.ActualizarIntentos(nombreUsuario, 0, out mensaje);
+                ObjetoMapper.ActualizarIntentos(nombreUsuario, 0, out mensaje);
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Inicio de sesión exitoso: {nombreUsuario}.", Criticidad486LP.MuyAlta, u.DNI, u.NombreUsuario));
                 usuarioLogueado = u;
                 return 1;
@@ -113,7 +114,7 @@ namespace BLL
         {
             try
             {
-                return ObjetoDAL.Listar();
+                return ObjetoMapper.Listar();
             }
             catch (Exception ex)
             {
@@ -126,7 +127,7 @@ namespace BLL
         {
             try
             {
-                return ObjetoDAL.ListarActivos();
+                return ObjetoMapper.ListarActivos();
             }
             catch (Exception ex)
             {
@@ -168,7 +169,7 @@ namespace BLL
                     Mensaje = "Msg.Val.EmailFormato"; return false; // El formato del correo no es válido.
                 }
 
-                List<Usuario486LP> todos = ObjetoDAL.Listar();
+                List<Usuario486LP> todos = ObjetoMapper.Listar();
 
                 if (todos.Any(u => u.DNI == obj.DNI))
                 {
@@ -189,7 +190,7 @@ namespace BLL
                 obj.Bloqueado = false;
                 obj.IntentosFallidos = 0;
 
-                bool resultado = ObjetoDAL.Agregar(obj, out Mensaje);
+                bool resultado = ObjetoMapper.Agregar(obj, out Mensaje);
 
                 if (resultado)
                 {
@@ -234,14 +235,14 @@ namespace BLL
                     Mensaje = "Msg.Val.EmailFormato"; return false; // El formato del correo no es válido.
                 }
 
-                List<Usuario486LP> todos = ObjetoDAL.Listar();
+                List<Usuario486LP> todos = ObjetoMapper.Listar();
 
                 if (todos.Any(u => u.Email.ToLower() == obj.Email.ToLower() && u.IdUsuario != obj.IdUsuario))
                 {
                     Mensaje = "Msg.BLL.EmailRegistradoOtro"; return false; // El correo electrónico ya se encuentra registrado por otro usuario.
                 }
 
-                bool resultado = ObjetoDAL.Modificar(obj, out Mensaje);
+                bool resultado = ObjetoMapper.Modificar(obj, out Mensaje);
 
                 if (resultado)
                 {
@@ -267,7 +268,7 @@ namespace BLL
         {
             try
             {
-                bool resultado = ObjetoDAL.Eliminar(idUsuario, out Mensaje);
+                bool resultado = ObjetoMapper.Eliminar(idUsuario, out Mensaje);
 
                 if (resultado)
                 {
@@ -293,7 +294,7 @@ namespace BLL
         {
             try
             {
-                bool resultado = ObjetoDAL.Desbloquear(dni, out Mensaje);
+                bool resultado = ObjetoMapper.Desbloquear(dni, out Mensaje);
 
                 if (resultado)
                 {
@@ -319,7 +320,7 @@ namespace BLL
         {
             try
             {
-                bool resultado = ObjetoDAL.BloquearPorDNI(dni, out Mensaje);
+                bool resultado = ObjetoMapper.BloquearPorDNI(dni, out Mensaje);
 
                 if (resultado)
                 {
@@ -345,7 +346,7 @@ namespace BLL
         {
             try
             {
-                bool resultado = ObjetoDAL.InvertirActivo(dni, out Mensaje);
+                bool resultado = ObjetoMapper.InvertirActivo(dni, out Mensaje);
 
                 if (resultado)
                 {
@@ -385,7 +386,7 @@ namespace BLL
                     return false;
                 }
 
-                Usuario486LP u = ObjetoDAL.ObtenerPorNombreUsuario(SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "");
+                Usuario486LP u = ObjetoMapper.ObtenerPorNombreUsuario(SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "");
 
                 if (u == null)
                 {
@@ -403,7 +404,7 @@ namespace BLL
                 }
 
                 string hashNueva = Encriptacion486LP.GenerarHash(contraseñaNueva);
-                bool resultado = ObjetoDAL.CambiarContraseña(idUsuario, hashNueva, out Mensaje);
+                bool resultado = ObjetoMapper.CambiarContraseña(idUsuario, hashNueva, out Mensaje);
 
                 if (resultado)
                 {
@@ -426,6 +427,8 @@ namespace BLL
             }
         }
 
+        // CORREGIDO: antes instanciaba DAL_Bitacora486LP directo (acceso directo a otra "DAL"). Ese archivo ya no existe (se elimino al migrar Bitacora),
+        // asi que ahora usa ObjBitacora (BLL_Bitacora486LP), que ya tenia como campo - una BLL habla con otra BLL, nunca con el Mapper ajeno directo.
         public void Logout(string dni, out string mensaje)
         {
             mensaje = string.Empty;
@@ -443,8 +446,7 @@ namespace BLL
                     NombreUsuario = usuarioActual.NombreUsuario
                 };
 
-                DAL_Bitacora486LP dalBitacora = new DAL_Bitacora486LP();
-                dalBitacora.Registrar(evento);
+                ObjBitacora.Registrar(evento);
 
                 SessionManager486LP.ObtenerInstancia().LogOut();
             }

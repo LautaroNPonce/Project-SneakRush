@@ -1,4 +1,5 @@
 ﻿using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace BLL
 {
     public class BLL_DV486LP
     {
-        private DAL_DV486LP _dal = new DAL_DV486LP();
+        private Mapper_DV486LP _mapper = new Mapper_DV486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
         private static readonly List<string> _columnasIgnorar = new List<string> { "DV" };
         // Nombre de la columna PK de cada tabla, para el recálculo del DV por fila.
@@ -39,7 +40,7 @@ namespace BLL
 
         private string CalcularDVH(string tabla)
         {
-            DataTable dt = _dal.LeerTabla(tabla);
+            DataTable dt = _mapper.LeerTabla(tabla);
             StringBuilder sb = new StringBuilder();
 
             foreach (DataRow fila in dt.Rows)
@@ -58,7 +59,7 @@ namespace BLL
 
         private string CalcularDVV(string tabla)
         {
-            DataTable dt = _dal.LeerTabla(tabla);
+            DataTable dt = _mapper.LeerTabla(tabla);
             StringBuilder sb = new StringBuilder();
 
             foreach (DataColumn col in dt.Columns)
@@ -87,12 +88,12 @@ namespace BLL
             {
                 string dvh = CalcularDVH(tabla);
                 string dvv = CalcularDVV(tabla);
-                _dal.GuardarDV(tabla, dvh, dvv);
-                if (!_tablasSoloNivelTabla.Contains(tabla)) 
-                { 
-                    _dal.RecalcularDVHPorFila(tabla, ObtenerColumnaId(tabla)); 
+                _mapper.GuardarDV(tabla, dvh, dvv);
+                if (!_tablasSoloNivelTabla.Contains(tabla))
+                {
+                    _mapper.RecalcularDVHPorFila(tabla, ObtenerColumnaId(tabla));
                 }
-                    
+
                 // No registro en bitácora cuando recalculamos la propia tabla Bitacora:
                 // evita un bucle infinito (el evento de recálculo dejaría el hash viejo otra vez).
                 if (registrarBitacora)
@@ -122,8 +123,8 @@ namespace BLL
                 string dvhCalculado = CalcularDVH(tabla);
                 string dvvCalculado = CalcularDVV(tabla);
 
-                string dvhGuardado = _dal.ObtenerDVH(tabla);
-                string dvvGuardado = _dal.ObtenerDVV(tabla);
+                string dvhGuardado = _mapper.ObtenerDVH(tabla);
+                string dvvGuardado = _mapper.ObtenerDVV(tabla);
 
                 if (dvhCalculado != dvhGuardado || dvvCalculado != dvvGuardado)
                 {
@@ -156,7 +157,7 @@ namespace BLL
                 {
                     string dvhCalc = CalcularDVH(tabla);
                     string dvvCalc = CalcularDVV(tabla);
-                    if (dvhCalc != _dal.ObtenerDVH(tabla) || dvvCalc != _dal.ObtenerDVV(tabla))
+                    if (dvhCalc != _mapper.ObtenerDVH(tabla) || dvvCalc != _mapper.ObtenerDVV(tabla))
                     {
                         lista.Add(new InconsistenciaDV486LP
                         {
@@ -168,7 +169,7 @@ namespace BLL
                     return lista;
                 }
 
-                DataTable dt = _dal.LeerTabla(tabla);
+                DataTable dt = _mapper.LeerTabla(tabla);
                 string columnaId = ObtenerColumnaId(tabla);
 
                 foreach (DataRow fila in dt.Rows)
@@ -207,7 +208,7 @@ namespace BLL
                 }
 
                 string dvvCalculado = CalcularDVV(tabla);
-                string dvvGuardado = _dal.ObtenerDVV(tabla);
+                string dvvGuardado = _mapper.ObtenerDVV(tabla);
 
                 if (dvvCalculado != dvvGuardado && lista.Count == 0)
                 {
@@ -273,8 +274,8 @@ namespace BLL
             {
                 bool registrar = tabla != "BitacoraEvento";
                 if (!RecalcularDV(tabla, registrar, out mensaje))
-                { 
-                    return false; 
+                {
+                    return false;
                 }
             }
             return true;

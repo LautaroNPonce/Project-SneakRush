@@ -1,4 +1,5 @@
 ﻿using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace BLL
 {
     public class BLL_Respaldo486LP
     {
-        private DAL_Respaldo486LP ObjetoDAL = new DAL_Respaldo486LP();
+        private Mapper_Respaldo486LP ObjetoMapper = new Mapper_Respaldo486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
         public bool Backup(string carpetaDestino, out string rutaArchivo, out string Mensaje)
@@ -26,11 +27,11 @@ namespace BLL
 
             try
             {
-                bool resultado = ObjetoDAL.Backup(carpetaDestino, out rutaArchivo, out Mensaje);
+                bool resultado = ObjetoMapper.Backup(carpetaDestino, out rutaArchivo, out Mensaje);
 
                 if (resultado)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos",$"Backup completo de la BD generado en: {rutaArchivo}.",Criticidad486LP.Alta,
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos", $"Backup completo de la BD generado en: {rutaArchivo}.", Criticidad486LP.Alta,
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
@@ -39,7 +40,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos",$"Error en BLL_Respaldo.Backup(): {ex.Message}",Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos", $"Error en BLL_Respaldo.Backup(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 Mensaje = "Msg.Respaldo.ErrorBackup"; // Ocurrió un error inesperado al generar el backup.
                 return false;
             }
@@ -57,13 +58,13 @@ namespace BLL
 
             try
             {
-                bool resultado = ObjetoDAL.Restore(rutaArchivo, out Mensaje);
+                bool resultado = ObjetoMapper.Restore(rutaArchivo, out Mensaje);
 
                 if (resultado)
                 {
                     try
                     {
-                        ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos",$"Restauración completa de la BD desde: {rutaArchivo}.",Criticidad486LP.MuyAlta,
+                        ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos", $"Restauración completa de la BD desde: {rutaArchivo}.", Criticidad486LP.MuyAlta,
                             SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                             SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                     }
@@ -77,7 +78,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos",$"Error en BLL_Respaldo.Restore(): {ex.Message}",Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Respaldos", $"Error en BLL_Respaldo.Restore(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 Mensaje = "Msg.Respaldo.ErrorRestore"; // Ocurrió un error inesperado al restaurar el backup.
                 return false;
             }

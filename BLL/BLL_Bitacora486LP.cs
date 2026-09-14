@@ -1,5 +1,6 @@
 ﻿using BE;
 using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,11 @@ namespace BLL
 {
     public class BLL_Bitacora486LP
     {
-        private DAL_Bitacora486LP Dal = new DAL_Bitacora486LP();
+        private Mapper_Bitacora486LP Mapper = new Mapper_Bitacora486LP();
 
         public bool Registrar(BitacoraEvento486LP registro)
         {
-            bool resultado = Dal.Registrar(registro);
+            bool resultado = Mapper.Registrar(registro);
 
             if (resultado)
             {
@@ -29,12 +30,12 @@ namespace BLL
 
         public List<BitacoraEvento486LP> Listar()
         {
-            return Dal.Listar();
+            return Mapper.Listar();
         }
 
         public List<BitacoraEvento486LP> Filtrar(string dni, string nombreUsuario, string modulo, int? criticidad, string fechaInicio, string fechaFin)
         {
-            return Dal.Filtrar(dni, nombreUsuario, modulo, criticidad, fechaInicio, fechaFin);
+            return Mapper.Filtrar(dni, nombreUsuario, modulo, criticidad, fechaInicio, fechaFin);
         }
     }
 }

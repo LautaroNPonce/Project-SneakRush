@@ -44,9 +44,17 @@
   <ItemGroup>
     <Compile Include="ManejadorMapeo486LP.cs" />
     <Compile Include="MapperBase486LP.cs" />
+    <Compile Include="Mapper_Bitacora486LP.cs" />
     <Compile Include="Mapper_Carrito486LP.cs" />
     <Compile Include="Mapper_Cliente486LP.cs" />
+    <Compile Include="Mapper_DV486LP.cs" />
+    <Compile Include="Mapper_Familia486LP.cs" />
+    <Compile Include="Mapper_Idioma486LP.cs" />
+    <Compile Include="Mapper_Perfil486LP.cs" />
+    <Compile Include="Mapper_Permiso486LP.cs" />
     <Compile Include="Mapper_Producto486LP.cs" />
+    <Compile Include="Mapper_Respaldo486LP.cs" />
+    <Compile Include="Mapper_Usuarios486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +66,13 @@
       <Project>{455635AB-1F34-4A20-9127-29C2F04C6F8E}</Project>
       <Name>DAL486LP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Services\Services486LP.csproj">
+      <Project>{8d60589e-7c80-47b6-86d4-71d1f5dff4fd}</Project>
+      <Name>Services486LP</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

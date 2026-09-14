@@ -1,4 +1,5 @@
 ﻿using DAL;
+using Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,12 @@ namespace BLL
 {
     public class BLL_Idioma486LP
     {
-        private DAL_Idioma486LP _dal = new DAL_Idioma486LP();
+        private Mapper_Idioma486LP _mapper = new Mapper_Idioma486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
 
         public string ObtenerIdioma(int idUsuario)
         {
-            return _dal.ObtenerIdioma(idUsuario);
+            return _mapper.ObtenerIdioma(idUsuario);
         }
 
         public bool GuardarIdioma(int idUsuario, string nombreIdioma, out string mensaje)
@@ -34,7 +35,7 @@ namespace BLL
                 return false;
             }
 
-            bool resultado = _dal.GuardarIdioma(idUsuario, nombreIdioma, out mensaje);
+            bool resultado = _mapper.GuardarIdioma(idUsuario, nombreIdioma, out mensaje);
 
             if (resultado)
             {
