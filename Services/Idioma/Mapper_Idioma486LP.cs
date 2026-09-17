@@ -1,4 +1,5 @@
 ﻿using DAL;
+using Mappers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mappers
+namespace Services
 {
 
     /// Habla con SQL para el idioma de un usuario. Reemplaza a DAL_Idioma486LP.

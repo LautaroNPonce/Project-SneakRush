@@ -1,5 +1,5 @@
 ﻿using DAL;
-using Services;
+using Mappers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mappers
+namespace Services
 {
 
     /// Habla con SQL para BitacoraEvento. Reemplaza a DAL_Bitacora486LP.

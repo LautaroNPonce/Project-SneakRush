@@ -1,5 +1,5 @@
 ﻿using DAL;
-using Services;
+using Mappers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mappers
+namespace Services
 {
 
     /// DV opera sobre 13 tablas distintas, pero NUNCA arma el nombre de tabla como texto SQL dinamico: cada tabla tiene su propio SP fijo

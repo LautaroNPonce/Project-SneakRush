@@ -1,5 +1,5 @@
 ﻿using DAL;
-using Services;
+using Mappers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mappers
+namespace Services
 {
     /// Habla con SQL para la entidad Permiso (patentes). Reemplaza a DAL_Patente486LP.
     /// UBICACION TRANSITORIA: vive en Mappers (no en Services) porque hoy DAL todavia depende de Services (por los DAL_Xxx.cs de seguridad que faltan

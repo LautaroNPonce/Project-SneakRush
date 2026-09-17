@@ -1,6 +1,5 @@
 ﻿using DAL;
 using Mappers;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Services.DV486LP;
 
-namespace BLL
+namespace Services
 {
     public class BLL_DV486LP
     {

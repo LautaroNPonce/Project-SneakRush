@@ -1,14 +1,13 @@
 ﻿using BE;
 using DAL;
 using Mappers;
-using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL
+namespace Services
 {
     public class BLL_Bitacora486LP
     {
