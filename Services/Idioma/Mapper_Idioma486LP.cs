@@ -38,6 +38,9 @@ namespace Services
         }
 
         // Actualiza el idioma asignado a un usuario.
+        // NOTA: no se compara el conteo de filas de ExecuteNonQuery para decidir exito -
+        // en este entorno no siempre refleja el resultado real. Se confia en la ausencia
+        // de excepcion, igual que Mapper_Cliente486LP/Mapper_Carrito486LP.
         public bool GuardarIdioma(int idUsuario, string codigoIdioma, out string mensaje)
         {
             mensaje = "";
@@ -48,14 +51,9 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@IdUsuario", idUsuario));
                 cmd.Parameters.Add(new SqlParameter("@NombreIdioma", codigoIdioma));
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-                if (resultado)
-                {
-                    mensaje = "Idioma guardado correctamente.";
-                    return true;
-                }
-                mensaje = "No se pudo guardar el idioma.";
-                return false;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Idioma guardado correctamente.";
+                return true;
             }
             catch (Exception ex)
             {

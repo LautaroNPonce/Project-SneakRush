@@ -70,6 +70,10 @@ namespace Services
         }
 
         // Da de alta un usuario. La contraseña llega YA hasheada desde la BLL.
+        // NOTA: no se compara el conteo de filas de ExecuteNonQuery para decidir exito -
+        // en este entorno no siempre refleja el resultado real (confirmado con casos reales
+        // donde el alta funcionaba en la base pero el conteo indicaba lo contrario). Se
+        // confia en la ausencia de excepcion, igual que Mapper_Cliente486LP/Mapper_Carrito486LP.
         public bool Agregar(Usuario486LP obj, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -91,7 +95,8 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@NombreIdioma", (object)obj.NombreIdioma ?? DBNull.Value));
                 cmd.Parameters.Add(new SqlParameter("@DebeCambiarContraseña", true));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -117,7 +122,8 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@IdPerfil", (object)obj.IdPerfil ?? DBNull.Value));
                 cmd.Parameters.Add(new SqlParameter("@NombreIdioma", (object)obj.NombreIdioma ?? DBNull.Value));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -136,7 +142,8 @@ namespace Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@DNI", dni));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -155,7 +162,8 @@ namespace Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@DNI", dni));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -174,7 +182,8 @@ namespace Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@DNI", dni));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -194,7 +203,8 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@IdUsuario", idUsuario));
                 cmd.Parameters.Add(new SqlParameter("@Contraseña", nuevaContraseña));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -214,7 +224,8 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@NombreUsuario", nombreUsuario));
                 cmd.Parameters.Add(new SqlParameter("@Intentos", intentos));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -233,7 +244,8 @@ namespace Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@NombreUsuario", nombreUsuario));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {
@@ -252,7 +264,8 @@ namespace Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdUsuario", idUsuario));
 
-                return Conexion486LP.EjecutarNoConsulta(cmd) > 0;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                return true;
             }
             catch (Exception ex)
             {

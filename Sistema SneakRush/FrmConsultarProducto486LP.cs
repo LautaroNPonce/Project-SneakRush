@@ -18,6 +18,10 @@ namespace Sistema_SneakRush
     {
         private BLL_Producto486LP _bllProducto = new BLL_Producto486LP();
         private readonly string f = "FrmConsultarProducto486LP";
+        private bool _puedeBuscar;
+        private bool _puedeLimpiar;
+        private bool _puedeSeleccionar;
+        private bool _puedeCancelar;
 
         // Producto elegido por el usuario. El carrito lo lee tras cerrar con DialogResult.OK.
         public Producto486LP ProductoSeleccionado { get; private set; }
@@ -50,6 +54,8 @@ namespace Sistema_SneakRush
             }
 
             CargarGrilla();
+            AjustarBotonesSegunPerfil();
+            AplicarPermisosBotones();
             ActualizarIdioma();
         }
 
@@ -61,6 +67,29 @@ namespace Sistema_SneakRush
 
             List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
             return permisos.Contains("VENTA_CONSULTAR_PRODUCTOS");
+        }
+
+        // Patentes granulares por boton (ademas de la patente de acceso al form).
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
+            List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);
+
+            _puedeBuscar = permisos.Contains("PRODUCTOS_BUSCAR");
+            _puedeLimpiar = permisos.Contains("PRODUCTOS_LIMPIAR");
+            _puedeSeleccionar = permisos.Contains("PRODUCTOS_SELECCIONAR");
+            _puedeCancelar = permisos.Contains("PRODUCTOS_CANCELAR");
+        }
+
+        private void AplicarPermisosBotones()
+        {
+            btnBuscar.Enabled = _puedeBuscar;
+            btnLimpiar.Enabled = _puedeLimpiar;
+            btnSeleccionar.Enabled = _puedeSeleccionar;
+            btnCancelar.Enabled = _puedeCancelar;
         }
 
         // Carga la grilla con el catalogo completo (paso 3 del escenario principal)

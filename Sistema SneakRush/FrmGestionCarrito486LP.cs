@@ -18,10 +18,17 @@ namespace Sistema_SneakRush
         private BLL_Carrito486LP _bllCarrito = new BLL_Carrito486LP();
         private BLL_Producto486LP _bllProducto = new BLL_Producto486LP();
         private BLL_Cliente486LP _bllCliente = new BLL_Cliente486LP();
-
-        // Carrito en construccion (en memoria hasta finalizar la carga)
+        private readonly string f = "FrmGestionCarrito486LP";
         private Carrito486LP _carrito = new Carrito486LP();
         private bool _clienteAsignado = false;
+
+        // Patentes granulares por boton (ademas de la patente de acceso al form, VENTA_GESTIONAR_CARRITO).
+        private bool _puedeAsignar;
+        private bool _puedeAgregar;
+        private bool _puedeEliminar;
+        private bool _puedeModificar;
+        private bool _puedeFinalizar;
+        private bool _puedeCancelar;
 
         public FrmGestionCarrito486LP()
         {
@@ -32,23 +39,82 @@ namespace Sistema_SneakRush
 
         private void FrmGestionCarrito486LP_Load(object sender, EventArgs e)
         {
+            // Verificacion de acceso al form completo (mismo patron que FrmConsultarProducto486LP).
+            if (!TienePatenteAcceso())
+            {
+                var lm = Program.LanguageManager;
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.SinPermiso", "No tiene permiso para gestionar el carrito."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.SinPermiso.Title", "Acceso denegado"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                this.BeginInvoke(new Action(() =>
+                {
+                    this.DialogResult = DialogResult.Cancel;
+                    this.Close();
+                }));
+                return;
+            }
+
             _carrito = new Carrito486LP();
             _clienteAsignado = false;
             ConfigurarColumnas();
             RefrescarGrilla();
             ActualizarTotal();
+            AjustarBotonesSegunPerfil();
+            AplicarPermisosBotones();
             ActualizarIdioma();
         }
 
-        // ---------------- Asignar cliente ----------------
+        // Verifica que el usuario en sesion tenga la patente de acceso al form.
+        private bool TienePatenteAcceso()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return false;
+
+            List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
+            return permisos.Contains("VENTA_GESTIONAR_CARRITO");
+        }
+
+        // Patentes granulares por boton.
+        private void AjustarBotonesSegunPerfil()
+        {
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            if (usuario == null) return;
+
+            BLL_Perfil486LP bllPerfil = new BLL_Perfil486LP();
+            List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);
+
+            _puedeAsignar = permisos.Contains("CARRITO_ASIGNAR");
+            _puedeAgregar = permisos.Contains("CARRITO_AGREGAR");
+            _puedeEliminar = permisos.Contains("CARRITO_ELIMINAR");
+            _puedeModificar = permisos.Contains("CARRITO_MODIFICAR");
+            _puedeFinalizar = permisos.Contains("CARRITO_FINALIZAR");
+            _puedeCancelar = permisos.Contains("CARRITO_CANCELAR");
+        }
+
+        private void AplicarPermisosBotones()
+        {
+            btnAsignar.Enabled = _puedeAsignar;
+            btnAgregar.Enabled = _puedeAgregar;
+            btnEliminar.Enabled = _puedeEliminar;
+            btnModificar.Enabled = _puedeModificar;
+            btnFinalizar.Enabled = _puedeFinalizar;
+            btnCancelar.Enabled = _puedeCancelar;
+        }
+
         private void btnAsignar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
             string dni = txtDNI.Text.Trim();
 
             // Validar formato del DNI (solo numeros, 7 u 8 digitos)
             if (!System.Text.RegularExpressions.Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
-                MessageBox.Show("DNI incorrecto.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.DNIIncorrecto", "DNI incorrecto."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Validacion.Title", "Validación"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -56,8 +122,9 @@ namespace Sistema_SneakRush
             if (!_bllCliente.Existe(dni))
             {
                 DialogResult r = MessageBox.Show(
-                    "El cliente con DNI " + dni + " no está registrado. ¿Desea registrarlo ahora?",
-                    "Cliente no registrado", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    string.Format(lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ClienteNoRegistrado", "El cliente con DNI {0} no está registrado. ¿Desea registrarlo ahora?"), dni),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ClienteNoRegistrado.Title", "Cliente no registrado"),
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (r == DialogResult.Yes)
                 {
@@ -76,12 +143,16 @@ namespace Sistema_SneakRush
 
             _carrito.DNICliente = dni;
             _clienteAsignado = true;
-            MessageBox.Show("Cliente asignado al carrito.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(
+                lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ClienteAsignado", "Cliente asignado al carrito."),
+                lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Informacion.Title", "Información"),
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // ---------------- Agregar producto ----------------
         private void btnAgregar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+
             // Abre el CUN01 "Consultar productos" para elegir el producto.
             using (FrmConsultarProducto486LP frm = new FrmConsultarProducto486LP())
             {
@@ -93,7 +164,7 @@ namespace Sistema_SneakRush
                     bool ok = _bllCarrito.Agregar(_carrito, frm.ProductoSeleccionado, cantidad, out mensaje);
                     if (!ok)
                     {
-                        MessageBox.Show(mensaje, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -103,12 +174,16 @@ namespace Sistema_SneakRush
             }
         }
 
-        // ---------------- Eliminar renglon ----------------
         private void btnEliminar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+
             if (dgvCarrito.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un producto del carrito para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.SeleccionarParaEliminar", "Seleccione un producto del carrito para eliminar."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -121,12 +196,16 @@ namespace Sistema_SneakRush
             }
         }
 
-        // ---------------- Modificar cantidad ----------------
         private void btnModificar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+
             if (dgvCarrito.CurrentRow == null)
             {
-                MessageBox.Show("Seleccione un producto del carrito para modificar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.SeleccionarParaModificar", "Seleccione un producto del carrito para modificar."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -137,7 +216,10 @@ namespace Sistema_SneakRush
 
                 if (!_bllProducto.VerificarStock(det.IdProducto, nuevaCantidad))
                 {
-                    MessageBox.Show("Sin stock disponible para la cantidad solicitada.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.SinStock", "Sin stock disponible para la cantidad solicitada."),
+                        lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -149,12 +231,16 @@ namespace Sistema_SneakRush
             }
         }
 
-        // ---------------- Finalizar carga ----------------
         private void btnFinalizar_Click(object sender, EventArgs e)
         {
+            var lm = Program.LanguageManager;
+
             if (!_clienteAsignado)
             {
-                MessageBox.Show("Debe asignar un cliente antes de finalizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.DebeAsignarCliente", "Debe asignar un cliente antes de finalizar."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -163,16 +249,18 @@ namespace Sistema_SneakRush
 
             if (ok)
             {
-                MessageBox.Show("Carrito guardado con éxito.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.CarritoGuardado", "Carrito guardado con éxito."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Informacion.Title", "Información"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             else
             {
-                MessageBox.Show(mensaje, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
-        // ---------------- Cancelar ----------------
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -191,11 +279,9 @@ namespace Sistema_SneakRush
             lblTotal.Text = _carrito.Total.ToString("C");
         }
 
-        // ---------------- Observer de idioma ----------------
         public void ActualizarIdioma()
         {
             var lm = Program.LanguageManager;
-            string f = "FrmGestionCarrito486LP";
             this.Text = lm.ObtenerTexto(f, "Frm.GestionCarrito.Titulo", "Gestionar carrito");
             lblTitulo.Text = lm.ObtenerTexto(f, "Frm.GestionCarrito.Titulo", "Gestionar carrito");
             lblCarrito.Text = lm.ObtenerTexto(f, "Frm.GestionCarrito.Carrito", "Carrito");
@@ -210,6 +296,8 @@ namespace Sistema_SneakRush
             btnModificar.Text = lm.ObtenerTexto(f, "Frm.GestionCarrito.Modificar", "Modificar");
             btnFinalizar.Text = lm.ObtenerTexto(f, "Frm.GestionCarrito.Finalizar", "Finalizar carga");
             btnCancelar.Text = lm.ObtenerTexto(f, "Frm.GestionCarrito.Cancelar", "Cancelar");
+
+            AplicarEncabezadosColumnas();
         }
 
         private void FrmGestionCarrito486LP_FormClosing(object sender, FormClosingEventArgs e)
@@ -223,13 +311,30 @@ namespace Sistema_SneakRush
             dgvCarrito.AutoGenerateColumns = false;
             dgvCarrito.Columns.Clear();
 
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Marca", HeaderText = "Marca" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Modelo", HeaderText = "Modelo" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Color", HeaderText = "Color" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Talle", HeaderText = "Talle" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Cantidad", HeaderText = "Cantidad" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", HeaderText = "Precio" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", HeaderText = "Subtotal" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Marca", Name = "colMarca" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Modelo", Name = "colModelo" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Color", Name = "colColor" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Talle", Name = "colTalle" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Cantidad", Name = "colCantidad" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", Name = "colPrecio" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", Name = "colSubtotal" });
+
+            AplicarEncabezadosColumnas();
+        }
+
+        // Traduce los encabezados de la grilla - separado de ConfigurarColumnas() para poder llamarlo tambien desde ActualizarIdioma() cuando el idioma cambia en caliente.
+        private void AplicarEncabezadosColumnas()
+        {
+            if (dgvCarrito.Columns.Count == 0) return;
+
+            var lm = Program.LanguageManager;
+            dgvCarrito.Columns["colMarca"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionCarrito.Col.Marca", "Marca");
+            dgvCarrito.Columns["colModelo"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionCarrito.Col.Modelo", "Modelo");
+            dgvCarrito.Columns["colColor"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionCarrito.Col.Color", "Color");
+            dgvCarrito.Columns["colTalle"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionCarrito.Col.Talle", "Talle");
+            dgvCarrito.Columns["colCantidad"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionCarrito.Col.Cantidad", "Cantidad");
+            dgvCarrito.Columns["colPrecio"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionCarrito.Col.Precio", "Precio");
+            dgvCarrito.Columns["colSubtotal"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionCarrito.Col.Subtotal", "Subtotal");
         }
     }
 }

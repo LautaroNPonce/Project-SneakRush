@@ -12,7 +12,7 @@ namespace Services
 {
     /// Habla con SQL para la entidad Familia. Reemplaza a DAL_Familia486LP.
     /// UBICACION TRANSITORIA en Mappers (no en Services) - mismo motivo que Mapper_Permiso486LP e Idioma, ver Entrada 6 del CHANGELOG.
-   
+
     public class Mapper_Familia486LP : MapperBase486LP
     {
         // Lista todas las familias.
@@ -62,6 +62,9 @@ namespace Services
         }
 
         // Modifica el nombre de una familia.
+        // NOTA: no se compara el conteo de filas de ExecuteNonQuery para decidir exito -
+        // en este entorno no siempre refleja el resultado real. Se confia en la ausencia
+        // de excepcion, igual que Mapper_Cliente486LP/Mapper_Carrito486LP.
         public bool Modificar(Familia486LP f, out string mensaje)
         {
             mensaje = "";
@@ -72,15 +75,9 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@Id", f.Id));
                 cmd.Parameters.Add(new SqlParameter("@Nombre", f.Nombre));
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
-                {
-                    mensaje = "Familia modificada correctamente.";
-                    return true;
-                }
-                mensaje = "No se pudo modificar la familia.";
-                return false;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Familia modificada correctamente.";
+                return true;
             }
             catch (Exception ex)
             {
@@ -90,7 +87,7 @@ namespace Services
         }
 
         // Elimina una familia. Antes borra sus vinculos (Perfil_Familia y Familia_Permiso) para no violar las foreign keys - todo en una
-        // sola transaccion, agrupando 3 SPs atomicos (mismo patron que Carrito).
+        // sola transaccion, agrupando 3 SPs atomicos (mismo patron que Carrito). Mismo criterio que Modificar: no se compara conteo de filas.
         public bool Eliminar(int id, out string mensaje)
         {
             mensaje = "";
@@ -113,18 +110,11 @@ namespace Services
                 SqlCommand cmd3 = new SqlCommand("Familia_Eliminar");
                 cmd3.CommandType = CommandType.StoredProcedure;
                 cmd3.Parameters.Add(new SqlParameter("@Id", id));
-                int filas = Conexion486LP.EjecutarNoConsultaEnTransaccion(cmd3, con, tran);
+                Conexion486LP.EjecutarNoConsultaEnTransaccion(cmd3, con, tran);
 
-                if (filas > 0)
-                {
-                    tran.Commit();
-                    mensaje = "Familia eliminada correctamente.";
-                    return true;
-                }
-
-                tran.Rollback();
-                mensaje = "No se pudo eliminar la familia.";
-                return false;
+                tran.Commit();
+                mensaje = "Familia eliminada correctamente.";
+                return true;
             }
             catch (Exception ex)
             {
@@ -138,20 +128,43 @@ namespace Services
             }
         }
 
+        // Verifica si el permiso ya esta asignado a la familia. Se usa TANTO antes de actuar (para
+        // dar un mensaje claro si ya estaba en el estado pedido) COMO despues de actuar (para
+        // confirmar el resultado real - en este entorno el conteo de filas que devuelve
+        // ExecuteNonQuery no siempre refleja si el INSERT/DELETE realmente tuvo efecto,
+        // asi que no se usa ese conteo para decidir exito o fracaso).
+        private bool TienePermiso(int idFamilia, int idPermiso)
+        {
+            SqlCommand cmd = new SqlCommand("Familia_TienePermiso");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdFamilia", idFamilia));
+            cmd.Parameters.Add(new SqlParameter("@IdPermiso", idPermiso));
+
+            object resultado = Conexion486LP.EjecutarEscalar(cmd);
+            return resultado != null && resultado != DBNull.Value && Convert.ToInt32(resultado) > 0;
+        }
+
         // Asigna un permiso (patente) a una familia.
         public bool AsignarPermiso(int idFamilia, int idPermiso, out string mensaje)
         {
             mensaje = "";
             try
             {
+                if (TienePermiso(idFamilia, idPermiso))
+                {
+                    mensaje = "Ese permiso ya estaba asignado a esta familia.";
+                    return false;
+                }
+
                 SqlCommand cmd = new SqlCommand("Familia_AsignarPermiso");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdFamilia", idFamilia));
                 cmd.Parameters.Add(new SqlParameter("@IdPermiso", idPermiso));
+                Conexion486LP.EjecutarNoConsulta(cmd);
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
+                // Se confirma el resultado real releyendo, en vez de confiar en el conteo de
+                // filas de ExecuteNonQuery.
+                if (TienePermiso(idFamilia, idPermiso))
                 {
                     mensaje = "Permiso asignado correctamente.";
                     return true;
@@ -172,14 +185,19 @@ namespace Services
             mensaje = "";
             try
             {
+                if (!TienePermiso(idFamilia, idPermiso))
+                {
+                    mensaje = "Ese permiso no estaba asignado a esta familia.";
+                    return false;
+                }
+
                 SqlCommand cmd = new SqlCommand("Familia_QuitarPermiso");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdFamilia", idFamilia));
                 cmd.Parameters.Add(new SqlParameter("@IdPermiso", idPermiso));
+                Conexion486LP.EjecutarNoConsulta(cmd);
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
+                if (!TienePermiso(idFamilia, idPermiso))
                 {
                     mensaje = "Permiso quitado correctamente.";
                     return true;

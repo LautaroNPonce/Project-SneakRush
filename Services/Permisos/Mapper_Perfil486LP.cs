@@ -33,6 +33,8 @@ namespace Services
         }
 
         // Da de alta un perfil. NOTA: igual que el original, no devuelve el Id generado (el DAL viejo tampoco lo hacia).
+        // Tampoco se compara el conteo de filas de ExecuteNonQuery para decidir exito - en este entorno no siempre refleja el resultado real. Se confia en la ausencia de excepcion,
+        // igual que Mapper_Cliente486LP/Mapper_Carrito486LP.
         public bool Agregar(Perfil486LP p, out string mensaje)
         {
             mensaje = "";
@@ -42,15 +44,9 @@ namespace Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@Nombre", p.Nombre));
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
-                {
-                    mensaje = "Perfil creado correctamente.";
-                    return true;
-                }
-                mensaje = "No se pudo crear el perfil.";
-                return false;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Perfil creado correctamente.";
+                return true;
             }
             catch (Exception ex)
             {
@@ -59,7 +55,7 @@ namespace Services
             }
         }
 
-        // Modifica el nombre de un perfil.
+        // Modifica el nombre de un perfil. Mismo criterio que Agregar: no se compara conteo de filas.
         public bool Modificar(Perfil486LP p, out string mensaje)
         {
             mensaje = "";
@@ -70,15 +66,9 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@IdPerfil", p.IdPerfil));
                 cmd.Parameters.Add(new SqlParameter("@Nombre", p.Nombre));
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
-                {
-                    mensaje = "Perfil modificado correctamente.";
-                    return true;
-                }
-                mensaje = "No se pudo modificar el perfil.";
-                return false;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Perfil modificado correctamente.";
+                return true;
             }
             catch (Exception ex)
             {
@@ -88,7 +78,7 @@ namespace Services
         }
 
         // Elimina un perfil. NOTA: igual que el original, no borra antes los vinculos de Perfil_Familia/Perfil_Permiso (se replica el mismo
-        // comportamiento tal cual estaba, sin agregar logica nueva).
+        // comportamiento tal cual estaba, sin agregar logica nueva). Mismo criterio que Agregar/Modificar: no se compara conteo de filas.
         public bool Eliminar(int id, out string mensaje)
         {
             mensaje = "";
@@ -98,15 +88,9 @@ namespace Services
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdPerfil", id));
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
-                {
-                    mensaje = "Perfil eliminado correctamente.";
-                    return true;
-                }
-                mensaje = "No se pudo eliminar el perfil.";
-                return false;
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Perfil eliminado correctamente.";
+                return true;
             }
             catch (Exception ex)
             {
@@ -132,20 +116,53 @@ namespace Services
             }
         }
 
+        // Verifica si el perfil ya tiene la familia asignada. Se usa TANTO antes de actuar
+        // (mensaje claro si ya estaba en el estado pedido) COMO despues de actuar (para
+        // confirmar el resultado real - en este entorno el conteo de filas que devuelve
+        // ExecuteNonQuery no siempre refleja si el INSERT/DELETE realmente tuvo efecto,
+        // asi que no se usa ese conteo para decidir exito o fracaso).
+        private bool TieneFamilia(int idPerfil, int idFamilia)
+        {
+            SqlCommand cmd = new SqlCommand("Perfil_TieneFamilia");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdPerfil", idPerfil));
+            cmd.Parameters.Add(new SqlParameter("@IdFamilia", idFamilia));
+
+            object resultado = Conexion486LP.EjecutarEscalar(cmd);
+            return resultado != null && resultado != DBNull.Value && Convert.ToInt32(resultado) > 0;
+        }
+
+        // Verifica si el perfil ya tiene el permiso suelto asignado. Mismo criterio que TieneFamilia.
+        private bool TienePermiso(int idPerfil, int idPermiso)
+        {
+            SqlCommand cmd = new SqlCommand("Perfil_TienePermiso");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdPerfil", idPerfil));
+            cmd.Parameters.Add(new SqlParameter("@IdPermiso", idPermiso));
+
+            object resultado = Conexion486LP.EjecutarEscalar(cmd);
+            return resultado != null && resultado != DBNull.Value && Convert.ToInt32(resultado) > 0;
+        }
+
         // Asigna una familia a un perfil.
         public bool AsignarFamilia(int idPerfil, int idFamilia, out string mensaje)
         {
             mensaje = "";
             try
             {
+                if (TieneFamilia(idPerfil, idFamilia))
+                {
+                    mensaje = "Esa familia ya estaba asignada a este perfil.";
+                    return false;
+                }
+
                 SqlCommand cmd = new SqlCommand("Perfil_AsignarFamilia");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdPerfil", idPerfil));
                 cmd.Parameters.Add(new SqlParameter("@IdFamilia", idFamilia));
+                Conexion486LP.EjecutarNoConsulta(cmd);
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
+                if (TieneFamilia(idPerfil, idFamilia))
                 {
                     mensaje = "Familia asignada correctamente.";
                     return true;
@@ -166,14 +183,19 @@ namespace Services
             mensaje = "";
             try
             {
+                if (!TieneFamilia(idPerfil, idFamilia))
+                {
+                    mensaje = "Esa familia no estaba asignada a este perfil.";
+                    return false;
+                }
+
                 SqlCommand cmd = new SqlCommand("Perfil_QuitarFamilia");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdPerfil", idPerfil));
                 cmd.Parameters.Add(new SqlParameter("@IdFamilia", idFamilia));
+                Conexion486LP.EjecutarNoConsulta(cmd);
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
+                if (!TieneFamilia(idPerfil, idFamilia))
                 {
                     mensaje = "Familia quitada correctamente.";
                     return true;
@@ -194,14 +216,19 @@ namespace Services
             mensaje = "";
             try
             {
+                if (TienePermiso(idPerfil, idPermiso))
+                {
+                    mensaje = "Ese permiso ya estaba asignado a este perfil.";
+                    return false;
+                }
+
                 SqlCommand cmd = new SqlCommand("Perfil_AsignarPermiso");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdPerfil", idPerfil));
                 cmd.Parameters.Add(new SqlParameter("@IdPermiso", idPermiso));
+                Conexion486LP.EjecutarNoConsulta(cmd);
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
+                if (TienePermiso(idPerfil, idPermiso))
                 {
                     mensaje = "Permiso asignado correctamente.";
                     return true;
@@ -222,14 +249,19 @@ namespace Services
             mensaje = "";
             try
             {
+                if (!TienePermiso(idPerfil, idPermiso))
+                {
+                    mensaje = "Ese permiso no estaba asignado a este perfil.";
+                    return false;
+                }
+
                 SqlCommand cmd = new SqlCommand("Perfil_QuitarPermiso");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdPerfil", idPerfil));
                 cmd.Parameters.Add(new SqlParameter("@IdPermiso", idPermiso));
+                Conexion486LP.EjecutarNoConsulta(cmd);
 
-                bool resultado = Conexion486LP.EjecutarNoConsulta(cmd) > 0;
-
-                if (resultado)
+                if (!TienePermiso(idPerfil, idPermiso))
                 {
                     mensaje = "Permiso quitado correctamente.";
                     return true;
