@@ -70,6 +70,12 @@
     <Compile Include="FrmCerrarSesion486LP.Designer.cs">
       <DependentUpon>FrmCerrarSesion486LP.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmCobrarVenta486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmCobrarVenta486LP.Designer.cs">
+      <DependentUpon>FrmCobrarVenta486LP.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmConsultarAnaliticas486LP.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -524,5 +524,31 @@
     "Frm.GestionCarrito.Msg.SinStock": "Not enough stock for the requested quantity.",
     "Frm.GestionCarrito.Msg.DebeAsignarCliente": "You must assign a customer before finishing.",
     "Frm.GestionCarrito.Msg.CarritoGuardado": "Cart saved successfully."
+  },
+
+  "FrmGestionClientes486LP": {
+    "Frm.GestionClientes.Titulo": "Manage customers",
+    "Frm.GestionClientes.Datos": "Customer data",
+    "Frm.GestionClientes.DNI": "ID number:",
+    "Frm.GestionClientes.Nombre": "First name:",
+    "Frm.GestionClientes.Apellido": "Last name:",
+    "Frm.GestionClientes.Correo": "Email:",
+    "Frm.GestionClientes.Telefono": "Phone:",
+    "Frm.GestionClientes.Lista": "Registered customers:",
+    "Frm.GestionClientes.Agregar": "Add",
+    "Frm.GestionClientes.Modificar": "Modify",
+    "Frm.GestionClientes.Eliminar": "Delete",
+    "Frm.GestionClientes.Limpiar": "Clear",
+    "Frm.GestionClientes.Cerrar": "Close",
+    "Frm.GestionClientes.Col.DNI": "ID number",
+    "Frm.GestionClientes.Col.Nombre": "First name",
+    "Frm.GestionClientes.Col.Apellido": "Last name",
+    "Frm.GestionClientes.Col.Telefono": "Phone",
+    "Frm.GestionClientes.Msg.Title": "Manage customers",
+    "Frm.GestionClientes.Msg.SinPermiso": "You do not have permission to manage customers.",
+    "Frm.GestionClientes.Msg.SinPermiso.Title": "Access denied",
+    "Frm.GestionClientes.Msg.SeleccionarParaEliminar": "Select a customer from the grid to delete.",
+    "Frm.GestionClientes.Msg.ConfirmarEliminacion": "Confirm deletion of the customer with ID number {0}?",
+    "Frm.GestionClientes.Msg.CamposObligatorios": "Fill in the required fields (ID number, first name, last name, and email)."
   }
 }

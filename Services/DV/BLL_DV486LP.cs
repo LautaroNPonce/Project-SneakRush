@@ -27,10 +27,12 @@ namespace Services
             { "Producto",       "IdProducto"   },
             { "Carrito",        "IdCarrito"    },
             { "DetalleCarrito", "IdDetalle"    },
-            { "Cliente",        "DNI"          }
+            { "Cliente",        "DNI"          },
+            { "Venta",          "IdVenta"      },
+            { "DetalleVenta",   "IdDetalleVenta" }
         };
 
-        private static readonly string[] _tablasProtegidas = { "BitacoraEvento", "Usuarios", "Perfil", "Familia", "Permiso", "Idioma", "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso", "Producto", "Carrito", "DetalleCarrito", "Cliente" };
+        private static readonly string[] _tablasProtegidas = { "BitacoraEvento", "Usuarios", "Perfil", "Familia", "Permiso", "Idioma", "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso", "Producto", "Carrito", "DetalleCarrito", "Cliente", "Venta", "DetalleVenta" };
         private static readonly List<string> _tablasSoloNivelTabla = new List<string> { "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
         private string ObtenerColumnaId(string tabla)
         {

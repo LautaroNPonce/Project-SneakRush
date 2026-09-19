@@ -10,10 +10,6 @@ using System.Threading.Tasks;
 
 namespace Mappers
 {
-
-    /// Para la transaccion (cabecera + N detalles, todo o nada), el Mapper le pide a Conexion486LP una conexion ABIERTA (AbrirConexion) y arranca su propia
-    /// SqlTransaction. Cada operacion individual sigue pasando por la DAL, usando las sobrecargas "EnTransaccion" para compartir la misma conexion+transaccion.
-
     public class Mapper_Carrito486LP : MapperBase486LP
     {
         // Guarda el carrito (cabecera) y sus detalles en una transaccion.
@@ -95,6 +91,60 @@ namespace Mappers
             catch
             {
                 return null;
+            }
+        }
+
+        // Busca el carrito "Activo" de un DNI (cabecera + detalles). NUEVO para CUN04: hasta ahora
+        // solo se buscaba por IdCarrito, nunca por DNI. Mismo patron que Obtener(idCarrito).
+        public Carrito486LP ObtenerActivoPorDNI(string dni)
+        {
+            try
+            {
+                SqlCommand cmdCab = new SqlCommand("Carrito_ObtenerActivoPorDNI");
+                cmdCab.CommandType = CommandType.StoredProcedure;
+                cmdCab.Parameters.Add(new SqlParameter("@DNICliente", dni));
+
+                DataTable tablaCab = Conexion486LP.EjecutarConsulta(cmdCab);
+                if (tablaCab.Rows.Count == 0) return null;
+
+                Carrito486LP carrito = ManejadorMapeo486LP.MapearEntidad<Carrito486LP>(tablaCab.Rows[0]);
+
+                SqlCommand cmdDet = new SqlCommand("DetalleCarrito_ListarPorCarrito");
+                cmdDet.CommandType = CommandType.StoredProcedure;
+                cmdDet.Parameters.Add(new SqlParameter("@IdCarrito", carrito.IdCarrito));
+
+                DataTable tablaDet = Conexion486LP.EjecutarConsulta(cmdDet);
+                carrito.Detalles = ManejadorMapeo486LP.MapearLista<DetalleCarrito486LP>(tablaDet);
+
+                return carrito;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // Cambia el Estado del carrito (ej. "Activo" -> "Facturado" cuando CUN04 completa la venta).
+        // NUEVO para CUN04. No se compara el conteo de filas de ExecuteNonQuery para decidir exito -
+        // mismo criterio ya aplicado en el resto del proyecto (Usuarios, Familia, Perfil, Idioma).
+        public bool ActualizarEstado(int idCarrito, string estado, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                SqlCommand cmd = new SqlCommand("Carrito_ActualizarEstado");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@IdCarrito", idCarrito));
+                cmd.Parameters.Add(new SqlParameter("@Estado", estado));
+
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Estado actualizado correctamente.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = "Error: " + ex.Message;
+                return false;
             }
         }
     }

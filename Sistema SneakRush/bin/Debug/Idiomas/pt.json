@@ -525,5 +525,31 @@
     "Frm.GestionCarrito.Msg.SinStock": "Estoque insuficiente para a quantidade solicitada.",
     "Frm.GestionCarrito.Msg.DebeAsignarCliente": "Você deve atribuir um cliente antes de finalizar.",
     "Frm.GestionCarrito.Msg.CarritoGuardado": "Carrinho salvo com sucesso."
+  },
+
+  "FrmGestionClientes486LP": {
+    "Frm.GestionClientes.Titulo": "Gerenciar clientes",
+    "Frm.GestionClientes.Datos": "Dados do cliente",
+    "Frm.GestionClientes.DNI": "DNI:",
+    "Frm.GestionClientes.Nombre": "Nome:",
+    "Frm.GestionClientes.Apellido": "Sobrenome:",
+    "Frm.GestionClientes.Correo": "E-mail:",
+    "Frm.GestionClientes.Telefono": "Telefone:",
+    "Frm.GestionClientes.Lista": "Clientes registrados:",
+    "Frm.GestionClientes.Agregar": "Adicionar",
+    "Frm.GestionClientes.Modificar": "Modificar",
+    "Frm.GestionClientes.Eliminar": "Excluir",
+    "Frm.GestionClientes.Limpiar": "Limpar",
+    "Frm.GestionClientes.Cerrar": "Fechar",
+    "Frm.GestionClientes.Col.DNI": "DNI",
+    "Frm.GestionClientes.Col.Nombre": "Nome",
+    "Frm.GestionClientes.Col.Apellido": "Sobrenome",
+    "Frm.GestionClientes.Col.Telefono": "Telefone",
+    "Frm.GestionClientes.Msg.Title": "Gerenciar clientes",
+    "Frm.GestionClientes.Msg.SinPermiso": "Você não tem permissão para gerenciar clientes.",
+    "Frm.GestionClientes.Msg.SinPermiso.Title": "Acesso negado",
+    "Frm.GestionClientes.Msg.SeleccionarParaEliminar": "Selecione um cliente na grade para excluir.",
+    "Frm.GestionClientes.Msg.ConfirmarEliminacion": "Confirma a exclusão do cliente com DNI {0}?",
+    "Frm.GestionClientes.Msg.CamposObligatorios": "Preencha os campos obrigatórios (DNI, Nome, Sobrenome e E-mail)."
   }
 }

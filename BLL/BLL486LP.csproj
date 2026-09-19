@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,6 +48,9 @@
     <Compile Include="BLL_Cliente486LP.cs" />
     <Compile Include="BLL_Inicializador486LP.cs" />
     <Compile Include="BLL_Producto486LP.cs" />
+    <Compile Include="BLL_Venta486LP.cs" />
+    <Compile Include="GeneradorComprobantePDF486LP.cs" />
+    <Compile Include="IEstrategiaPago486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +70,9 @@
       <Project>{8d60589e-7c80-47b6-86d4-71d1f5dff4fd}</Project>
       <Name>Services486LP</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

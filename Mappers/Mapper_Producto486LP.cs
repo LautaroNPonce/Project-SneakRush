@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 namespace Mappers
 {
     /// Habla con SQL para la entidad Producto. Reemplaza a DAL_Producto486LP.
-    /// Producto hoy es de solo lectura (no hay ABM todavia, eso es CUN11).
-    
+    /// Fue de solo lectura hasta CUN04 (no habia ABM, eso sigue siendo CUN11) - CUN04 le agrega su
+    /// primer metodo de escritura (ActualizarStock), por eso ahora tambien participa del mecanismo de DV.
+
     public class Mapper_Producto486LP : MapperBase486LP
     {
         // Lista todos los productos.
@@ -86,6 +87,30 @@ namespace Mappers
             catch
             {
                 return null;
+            }
+        }
+
+        // Descuenta stock tras una venta (CUN04, paso 11 - "el Sistema actualiza automaticamente el
+        // stock"). Primer metodo de ESCRITURA de este Mapper. No se compara el conteo de filas de
+        // ExecuteNonQuery para decidir exito - mismo criterio ya aplicado en el resto del proyecto.
+        public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                SqlCommand cmd = new SqlCommand("Producto_ActualizarStock");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@IdProducto", idProducto));
+                cmd.Parameters.Add(new SqlParameter("@Cantidad", cantidad));
+
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Stock actualizado correctamente.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = "Error: " + ex.Message;
+                return false;
             }
         }
     }

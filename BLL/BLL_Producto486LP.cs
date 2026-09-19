@@ -71,5 +71,47 @@ namespace BLL
                 return false;
             }
         }
+
+        // Descuenta stock tras una venta (CUN04, paso 11). Primer metodo de escritura de esta BLL -
+        // por eso, a partir de ahora, Producto tambien recalcula su DV (RegistrarDVDeFilaNueva: solo
+        // esa fila puntual, igual criterio que Bitacora, porque esto se ejecuta en CADA venta).
+        public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                bool ok = ObjetoMapper.ActualizarStock(idProducto, cantidad, out mensaje);
+
+                if (ok)
+                {
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RegistrarDVDeFilaNueva("Producto", idProducto, out mensajeDV);
+                }
+
+                return ok;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Producto.ActualizarStock(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
+            }
+        }
+
+        // Obtiene un producto por su Id. NUEVO para CUN04: hace falta para completar el objeto Producto relacionado de cada DetalleCarrito486LP (que llega en null desde el Mapper de
+        // Carrito) y asi poder mostrar Marca/Modelo/Color/Talle en la grilla de Cobrar venta.
+        public Producto486LP ObtenerPorId(int idProducto)
+        {
+            try
+            {
+                return ObjetoMapper.ObtenerPorId(idProducto);
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Producto.ObtenerPorId(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return null;
+            }
+        }
     }
 }

@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 namespace Services
 {
 
-    /// DV opera sobre 13 tablas distintas, pero NUNCA arma el nombre de tabla como texto SQL dinamico: cada tabla tiene su propio SP fijo
-    /// (DV_Leer_X, DV_ActualizarFila_X), y este Mapper solo ELIGE cual SP llamar segun el nombre de tabla que le llega - la eleccion es en C#,
-    /// el SQL de cada SP es fijo y conocido de antemano.
+    /// DV opera sobre 15 tablas distintas (13 + Venta/DetalleVenta agregadas en CUN04), pero NUNCA arma el nombre de tabla como texto SQL dinamico: cada
+    /// tabla tiene su propio SP fijo (DV_Leer_X, DV_ActualizarFila_X), y este Mapper solo ELIGE cual SP llamar segun el nombre de tabla que le llega - la
+    /// eleccion es en C#, el SQL de cada SP es fijo y conocido de antemano.
     /// UBICACION DEFINITIVA en Services (no en Mappers) - fue la ULTIMA entidad migrada; con esta se completo el refactor y se movieron los 7 Mappers
     /// de seguridad/auditoria a Services (ver CHANGELOG_Refactor_Arquitectura.md).
 
     public class Mapper_DV486LP : MapperBase486LP
     {
-        // Nombre del SP de lectura completa, por tabla protegida (13 tablas).
+        // Nombre del SP de lectura completa, por tabla protegida (15 tablas).
         private static readonly Dictionary<string, string> _spLeerPorTabla = new Dictionary<string, string>
         {
             { "BitacoraEvento",   "DV_Leer_BitacoraEvento" },
@@ -34,10 +34,12 @@ namespace Services
             { "Producto",         "DV_Leer_Producto" },
             { "Carrito",          "DV_Leer_Carrito" },
             { "DetalleCarrito",   "DV_Leer_DetalleCarrito" },
-            { "Cliente",          "DV_Leer_Cliente" }
+            { "Cliente",          "DV_Leer_Cliente" },
+            { "Venta",            "DV_Leer_Venta" },
+            { "DetalleVenta",     "DV_Leer_DetalleVenta" }
         };
 
-        // Nombre del SP que actualiza el DV de UNA fila, por tabla (solo las 10 que llevan DVH por fila - las 3 puente quedan afuera).
+        // Nombre del SP que actualiza el DV de UNA fila, por tabla (solo las que llevan DVH por fila - las 3 puente quedan afuera).
         private static readonly Dictionary<string, string> _spActualizarFilaPorTabla = new Dictionary<string, string>
         {
             { "BitacoraEvento",  "DV_ActualizarFila_BitacoraEvento" },
@@ -49,7 +51,9 @@ namespace Services
             { "Producto",        "DV_ActualizarFila_Producto" },
             { "Carrito",         "DV_ActualizarFila_Carrito" },
             { "DetalleCarrito",  "DV_ActualizarFila_DetalleCarrito" },
-            { "Cliente",         "DV_ActualizarFila_Cliente" }
+            { "Cliente",         "DV_ActualizarFila_Cliente" },
+            { "Venta",           "DV_ActualizarFila_Venta" },
+            { "DetalleVenta",    "DV_ActualizarFila_DetalleVenta" }
         };
 
         // Lee TODAS las columnas y filas de una tabla protegida (para calcular DVH/DVV). Elige el SP fijo correspondiente - nunca arma SQL con el

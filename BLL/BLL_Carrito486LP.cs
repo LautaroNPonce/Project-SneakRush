@@ -130,5 +130,46 @@ namespace BLL
                 return null;
             }
         }
+
+        // Busca el carrito "Activo" de un DNI. NUEVO para CUN04 (paso 4 del escenario principal).
+        public Carrito486LP ObtenerActivoPorDNI(string dni)
+        {
+            try
+            {
+                return ObjetoMapper.ObtenerActivoPorDNI(dni);
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Carrito.ObtenerActivoPorDNI(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return null;
+            }
+        }
+
+        // Cambia el Estado del carrito (ej. a "Facturado" cuando CUN04 completa la venta, para que
+        // no vuelva a aparecer como activo). NUEVO para CUN04. No recalcula DV aca: lo hace
+        // BLL_Venta486LP.RegistrarVenta() junto con el resto de las tablas afectadas por la venta.
+        public bool ActualizarEstado(int idCarrito, string estado, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                bool ok = ObjetoMapper.ActualizarEstado(idCarrito, estado, out mensaje);
+
+                if (ok)
+                {
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RegistrarDVDeFilaNueva("Carrito", idCarrito, out mensajeDV);
+                }
+
+                return ok;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Carrito.ActualizarEstado(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
+            }
+        }
     }
 }

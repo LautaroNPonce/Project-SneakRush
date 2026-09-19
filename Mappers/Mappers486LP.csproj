@@ -47,6 +47,7 @@
     <Compile Include="Mapper_Carrito486LP.cs" />
     <Compile Include="Mapper_Cliente486LP.cs" />
     <Compile Include="Mapper_Producto486LP.cs" />
+    <Compile Include="Mapper_Venta486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
