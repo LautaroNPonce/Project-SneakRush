@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms; 
+using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
@@ -34,12 +34,15 @@ namespace Sistema_SneakRush
         private bool _puedeCobrar;
         private bool _puedeVerComprobante;
         private bool _puedeCancelar;
+        private bool _formateandoNumero;
+        private bool _formateandoVencimiento;
 
         public FrmCobrarVenta486LP()
         {
             InitializeComponent();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmCobrarVenta486LP_FormClosing;
+            this.Load += FrmCobrarVenta486LP_Load;
 
             // Los eventos se conectan aca (no en el Designer, que se armo sin logica todavia).
             btnSeleccionar.Click += btnSeleccionar_Click;
@@ -49,6 +52,8 @@ namespace Sistema_SneakRush
             rbEfectivo.CheckedChanged += MedioPago_CheckedChanged;
             rbTarjeta.CheckedChanged += MedioPago_CheckedChanged;
             rbTransferencia.CheckedChanged += MedioPago_CheckedChanged;
+            txtNumero.TextChanged += txtNumero_TextChanged;
+            txtVencimiento.TextChanged += txtVencimiento_TextChanged;
         }
 
         private void FrmCobrarVenta486LP_Load(object sender, EventArgs e)
@@ -132,25 +137,13 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Paso 5: si el DNI no corresponde a un Cliente registrado, dispara CUN03 «include».
-            if (!_bllCliente.Existe(dni))
-            {
-                using (FrmGestionClientes486LP frmClientes = new FrmGestionClientes486LP())
-                {
-                    frmClientes.ShowDialog();
-                }
-
-                // 5.1: el Cliente cancela el registro -> sigue sin existir, se corta aca sin generar nada.
-                if (!_bllCliente.Existe(dni))
-                {
-                    return;
-                }
-            }
-
-            // Paso 4: recuperar el carrito "Activo" de ese cliente.
+            // Paso 4: recuperar el carrito "Activo" de ese DNI. El cliente ya quedo asignado
+            // al carrito en CUN02 (el include a CUN03 vive ahi, ya no en este form) - aca no
+            // hace falta verificar/registrar cliente, solo buscar el carrito.
             Carrito486LP carrito = _bllCarrito.ObtenerActivoPorDNI(dni);
             if (carrito == null)
             {
+                // 3.2: sin carrito activo para ese DNI (o el DNI no corresponde a ningun cliente).
                 MessageBox.Show(
                     lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.SinCarritoActivo", "Ese cliente no tiene un carrito activo para cobrar."),
                     lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Aviso.Title", "Aviso"),
@@ -216,7 +209,8 @@ namespace Sistema_SneakRush
         // de pago elegido es Tarjeta.
         private bool ValidarDatosTarjeta()
         {
-            if (!System.Text.RegularExpressions.Regex.IsMatch(txtNumero.Text.Trim(), @"^\d{16}$"))
+            string numeroSinEspacios = txtNumero.Text.Replace(" ", "").Trim();
+            if (!System.Text.RegularExpressions.Regex.IsMatch(numeroSinEspacios, @"^\d{16}$"))
                 return false;
 
             var match = System.Text.RegularExpressions.Regex.Match(txtVencimiento.Text.Trim(), @"^(0[1-9]|1[0-2])/(\d{2})$");
@@ -233,6 +227,47 @@ namespace Sistema_SneakRush
                 return false;
 
             return true;
+        }
+
+        // Formatea el numero de tarjeta en grupos de 4 mientras se escribe (ej. "1234 5678 9012 3456").
+        private void txtNumero_TextChanged(object sender, EventArgs e)
+        {
+            if (_formateandoNumero) return;
+            _formateandoNumero = true;
+
+            string soloDigitos = new string(txtNumero.Text.Where(char.IsDigit).ToArray());
+            if (soloDigitos.Length > 16) soloDigitos = soloDigitos.Substring(0, 16);
+
+            StringBuilder formateado = new StringBuilder();
+            for (int i = 0; i < soloDigitos.Length; i++)
+            {
+                if (i > 0 && i % 4 == 0) formateado.Append(' ');
+                formateado.Append(soloDigitos[i]);
+            }
+
+            txtNumero.Text = formateado.ToString();
+            txtNumero.SelectionStart = txtNumero.Text.Length;
+
+            _formateandoNumero = false;
+        }
+
+        // Inserta el "/" automaticamente despues de los primeros 2 digitos (MM/AA).
+        private void txtVencimiento_TextChanged(object sender, EventArgs e)
+        {
+            if (_formateandoVencimiento) return;
+            _formateandoVencimiento = true;
+
+            string soloDigitos = new string(txtVencimiento.Text.Where(char.IsDigit).ToArray());
+            if (soloDigitos.Length > 4) soloDigitos = soloDigitos.Substring(0, 4);
+
+            string formateado = soloDigitos.Length > 2
+                ? soloDigitos.Substring(0, 2) + "/" + soloDigitos.Substring(2)
+                : soloDigitos;
+
+            txtVencimiento.Text = formateado;
+            txtVencimiento.SelectionStart = txtVencimiento.Text.Length;
+
+            _formateandoVencimiento = false;
         }
 
         private string ObtenerMedioPagoSeleccionado()
@@ -387,6 +422,11 @@ namespace Sistema_SneakRush
         private void FrmCobrarVenta486LP_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.LanguageManager.Quitar(this);
+        }
+
+        private void lblVencimiento_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

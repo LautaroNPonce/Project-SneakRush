@@ -160,6 +160,10 @@ namespace BLL
                     string mensajeDV;
                     BLL_DV486LP bllDV = new BLL_DV486LP();
                     bllDV.RegistrarDVDeFilaNueva("Carrito", idCarrito, out mensajeDV);
+
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Carrito #{idCarrito} actualizado a estado '{estado}'.", Criticidad486LP.Media,
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
                 }
 
                 return ok;

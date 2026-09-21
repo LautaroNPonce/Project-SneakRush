@@ -114,21 +114,21 @@
             // españolToolStripMenuItem
             // 
             this.españolToolStripMenuItem.Name = "españolToolStripMenuItem";
-            this.españolToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.españolToolStripMenuItem.Size = new System.Drawing.Size(157, 26);
             this.españolToolStripMenuItem.Text = "Español";
             this.españolToolStripMenuItem.Click += new System.EventHandler(this.españolToolStripMenuItem_Click_1);
             // 
             // inglesToolStripMenuItem
             // 
             this.inglesToolStripMenuItem.Name = "inglesToolStripMenuItem";
-            this.inglesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.inglesToolStripMenuItem.Size = new System.Drawing.Size(157, 26);
             this.inglesToolStripMenuItem.Text = "Ingles";
             this.inglesToolStripMenuItem.Click += new System.EventHandler(this.inglesToolStripMenuItem_Click_1);
             // 
             // portuguesToolStripMenuItem
             // 
             this.portuguesToolStripMenuItem.Name = "portuguesToolStripMenuItem";
-            this.portuguesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.portuguesToolStripMenuItem.Size = new System.Drawing.Size(157, 26);
             this.portuguesToolStripMenuItem.Text = "Portugues";
             this.portuguesToolStripMenuItem.Click += new System.EventHandler(this.portuguesToolStripMenuItem_Click_1);
             // 
@@ -303,7 +303,7 @@
             // 
             this.registrarOperaciónDeVentaToolStripMenuItem.Name = "registrarOperaciónDeVentaToolStripMenuItem";
             this.registrarOperaciónDeVentaToolStripMenuItem.Size = new System.Drawing.Size(225, 26);
-            this.registrarOperaciónDeVentaToolStripMenuItem.Text = "Registrar operación";
+            this.registrarOperaciónDeVentaToolStripMenuItem.Text = "Registrar venta";
             this.registrarOperaciónDeVentaToolStripMenuItem.Click += new System.EventHandler(this.registrarOperaciónDeVentaToolStripMenuItem_Click);
             // 
             // consultarProductosToolStripMenuItem

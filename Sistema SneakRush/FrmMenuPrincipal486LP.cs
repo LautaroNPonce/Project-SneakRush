@@ -77,6 +77,7 @@ namespace Sistema_SneakRush
 
             usuarioToolStripMenuItem.Visible = true;
             ayudaToolStripMenuItem.Visible = true;
+            iniciarSesionToolStripMenuItem.Visible = permisos.Contains("USUARIO_INICIAR_SESION");
 
             bool verAdmin = permisos.Contains("GESTION_USUARIOS")
                          || permisos.Contains("GESTION_FAMILIAS")
@@ -229,7 +230,7 @@ namespace Sistema_SneakRush
         }
         private void registrarOperaciónDeVentaToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Registrar Operación");
+            AbrirFormulario(new FrmCobrarVenta486LP());
         }
         private void consultarProductosToolStripMenuItem_Click(object sender, System.EventArgs e)
         {

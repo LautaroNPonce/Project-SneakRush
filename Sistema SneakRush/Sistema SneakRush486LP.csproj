@@ -226,6 +226,9 @@
     <EmbeddedResource Include="FrmCerrarSesion486LP.resx">
       <DependentUpon>FrmCerrarSesion486LP.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmCobrarVenta486LP.resx">
+      <DependentUpon>FrmCobrarVenta486LP.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultarAnaliticas486LP.resx">
       <DependentUpon>FrmConsultarAnaliticas486LP.cs</DependentUpon>
     </EmbeddedResource>
