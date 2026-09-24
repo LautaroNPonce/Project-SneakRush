@@ -589,5 +589,37 @@
     "Frm.CobrarVenta.Msg.Informacion.Title": "Information",
     "Frm.CobrarVenta.Msg.SinComprobante": "No receipt has been generated yet.",
     "Frm.CobrarVenta.Msg.ErrorAbrirComprobante": "The receipt could not be opened: {0}"
+  },
+
+  "FrmGenerarSolicitud486LP": {
+    "Frm.GenerarSolicitud.Titulo": "Generate purchase request",
+    "Frm.GenerarSolicitud.Filtros": "Filters",
+    "Frm.GenerarSolicitud.Marca": "Brand:",
+    "Frm.GenerarSolicitud.Talle": "Size:",
+    "Frm.GenerarSolicitud.LimpiarFiltros": "Clear filters",
+    "Frm.GenerarSolicitud.Filtro.Todas": "(All)",
+    "Frm.GenerarSolicitud.Filtro.Todos": "(All)",
+    "Frm.GenerarSolicitud.Catalogo": "Catalog (sorted by stock)",
+    "Frm.GenerarSolicitud.GrupoAgregar": "Add selected product to the request",
+    "Frm.GenerarSolicitud.Cantidad": "Requested quantity:",
+    "Frm.GenerarSolicitud.Agregar": "Add to request",
+    "Frm.GenerarSolicitud.Solicitud": "Products in the request",
+    "Frm.GenerarSolicitud.Quitar": "Remove",
+    "Frm.GenerarSolicitud.Confirmar": "Confirm request",
+    "Frm.GenerarSolicitud.Cancelar": "Cancel",
+    "Frm.GenerarSolicitud.Col.Marca": "Brand",
+    "Frm.GenerarSolicitud.Col.Modelo": "Model",
+    "Frm.GenerarSolicitud.Col.Color": "Color",
+    "Frm.GenerarSolicitud.Col.Talle": "Size",
+    "Frm.GenerarSolicitud.Col.Stock": "Stock",
+    "Frm.GenerarSolicitud.Col.CantidadSolicitada": "Qty. Requested",
+    "Frm.GenerarSolicitud.Msg.SinPermiso": "You do not have permission to generate purchase requests.",
+    "Frm.GenerarSolicitud.Msg.SinPermiso.Title": "Access denied",
+    "Frm.GenerarSolicitud.Msg.SeleccionarProducto": "Select a product from the catalog.",
+    "Frm.GenerarSolicitud.Msg.CantidadInvalida": "Invalid quantity.",
+    "Frm.GenerarSolicitud.Msg.Validacion.Title": "Validation",
+    "Frm.GenerarSolicitud.Msg.SinProductos": "The request has no products.",
+    "Frm.GenerarSolicitud.Msg.Aviso.Title": "Notice",
+    "Frm.GenerarSolicitud.Msg.Informacion.Title": "Information"
   }
 }

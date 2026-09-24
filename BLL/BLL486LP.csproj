@@ -48,6 +48,7 @@
     <Compile Include="BLL_Cliente486LP.cs" />
     <Compile Include="BLL_Inicializador486LP.cs" />
     <Compile Include="BLL_Producto486LP.cs" />
+    <Compile Include="BLL_SolicitudCompra486LP.cs" />
     <Compile Include="BLL_Venta486LP.cs" />
     <Compile Include="GeneradorComprobantePDF486LP.cs" />
     <Compile Include="IEstrategiaPago486LP.cs" />

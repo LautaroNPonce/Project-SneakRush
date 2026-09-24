@@ -212,7 +212,7 @@ namespace Sistema_SneakRush
         // Menu Compra
         private void generarSolicitudDeCompraToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Generar Solicitud");
+            AbrirFormulario(new FrmGenerarSolicitud486LP());
         }
         private void registrarOrdenDeCompraToolStripMenuItem_Click(object sender, System.EventArgs e)
         {

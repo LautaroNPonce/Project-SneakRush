@@ -15,6 +15,12 @@ namespace Sistema_SneakRush
         public FrmRegistrarOrden486LP()
         {
             InitializeComponent();
+            this.Load += FrmRegistrarOrden486LP_Load;
+        }
+
+        private void FrmRegistrarOrden486LP_Load(object sender, EventArgs e)
+        {
+            // La logica real (patentes, carga de solicitudes/proveedores, idioma, etc.) se agrega en el paso de Codigo.
         }
     }
 }

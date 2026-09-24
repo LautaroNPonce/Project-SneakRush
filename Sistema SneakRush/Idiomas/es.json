@@ -589,5 +589,37 @@
     "Frm.CobrarVenta.Msg.Informacion.Title": "Información",
     "Frm.CobrarVenta.Msg.SinComprobante": "Todavía no se generó ningún comprobante.",
     "Frm.CobrarVenta.Msg.ErrorAbrirComprobante": "No se pudo abrir el comprobante: {0}"
+  },
+
+  "FrmGenerarSolicitud486LP": {
+    "Frm.GenerarSolicitud.Titulo": "Generar solicitud de compra",
+    "Frm.GenerarSolicitud.Filtros": "Filtros",
+    "Frm.GenerarSolicitud.Marca": "Marca:",
+    "Frm.GenerarSolicitud.Talle": "Talle:",
+    "Frm.GenerarSolicitud.LimpiarFiltros": "Limpiar filtros",
+    "Frm.GenerarSolicitud.Filtro.Todas": "(Todas)",
+    "Frm.GenerarSolicitud.Filtro.Todos": "(Todos)",
+    "Frm.GenerarSolicitud.Catalogo": "Catálogo (ordenado por stock)",
+    "Frm.GenerarSolicitud.GrupoAgregar": "Agregar producto seleccionado a la solicitud",
+    "Frm.GenerarSolicitud.Cantidad": "Cantidad solicitada:",
+    "Frm.GenerarSolicitud.Agregar": "Agregar a solicitud",
+    "Frm.GenerarSolicitud.Solicitud": "Productos en la solicitud",
+    "Frm.GenerarSolicitud.Quitar": "Quitar",
+    "Frm.GenerarSolicitud.Confirmar": "Confirmar solicitud",
+    "Frm.GenerarSolicitud.Cancelar": "Cancelar",
+    "Frm.GenerarSolicitud.Col.Marca": "Marca",
+    "Frm.GenerarSolicitud.Col.Modelo": "Modelo",
+    "Frm.GenerarSolicitud.Col.Color": "Color",
+    "Frm.GenerarSolicitud.Col.Talle": "Talle",
+    "Frm.GenerarSolicitud.Col.Stock": "Stock",
+    "Frm.GenerarSolicitud.Col.CantidadSolicitada": "Cant. Solicitada",
+    "Frm.GenerarSolicitud.Msg.SinPermiso": "No tiene permiso para generar solicitudes de compra.",
+    "Frm.GenerarSolicitud.Msg.SinPermiso.Title": "Acceso denegado",
+    "Frm.GenerarSolicitud.Msg.SeleccionarProducto": "Seleccione un producto del catálogo.",
+    "Frm.GenerarSolicitud.Msg.CantidadInvalida": "Cantidad inválida.",
+    "Frm.GenerarSolicitud.Msg.Validacion.Title": "Validación",
+    "Frm.GenerarSolicitud.Msg.SinProductos": "La solicitud no tiene productos.",
+    "Frm.GenerarSolicitud.Msg.Aviso.Title": "Aviso",
+    "Frm.GenerarSolicitud.Msg.Informacion.Title": "Información"
   }
 }
