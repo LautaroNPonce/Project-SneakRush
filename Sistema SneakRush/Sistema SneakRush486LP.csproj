@@ -172,6 +172,12 @@
     <Compile Include="FrmMenuPrincipal486LP.Designer.cs">
       <DependentUpon>FrmMenuPrincipal486LP.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmRegistrarFactura486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmRegistrarFactura486LP.Designer.cs">
+      <DependentUpon>FrmRegistrarFactura486LP.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmRegistrarOperacion486LP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,6 +279,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmMenuPrincipal486LP.resx">
       <DependentUpon>FrmMenuPrincipal486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmRegistrarFactura486LP.resx">
+      <DependentUpon>FrmRegistrarFactura486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmRegistrarOrden486LP.resx">
       <DependentUpon>FrmRegistrarOrden486LP.cs</DependentUpon>

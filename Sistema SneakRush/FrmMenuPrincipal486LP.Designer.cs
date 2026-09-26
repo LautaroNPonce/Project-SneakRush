@@ -67,6 +67,7 @@
             this.verDocumentaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.guíaDeUsuarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblEstado = new System.Windows.Forms.Label();
+            this.registrarFacturaYPagoDeCompraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -254,7 +255,8 @@
             this.compraToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.generarSolicitudDeCompraToolStripMenuItem,
             this.registrarOrdenDeCompraToolStripMenuItem,
-            this.registrarRecepciónDeMercaderíaToolStripMenuItem});
+            this.registrarRecepciónDeMercaderíaToolStripMenuItem,
+            this.registrarFacturaYPagoDeCompraToolStripMenuItem});
             this.compraToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.compraToolStripMenuItem.Name = "compraToolStripMenuItem";
             this.compraToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
@@ -263,21 +265,21 @@
             // generarSolicitudDeCompraToolStripMenuItem
             // 
             this.generarSolicitudDeCompraToolStripMenuItem.Name = "generarSolicitudDeCompraToolStripMenuItem";
-            this.generarSolicitudDeCompraToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
-            this.generarSolicitudDeCompraToolStripMenuItem.Text = "Generar solicitud";
+            this.generarSolicitudDeCompraToolStripMenuItem.Size = new System.Drawing.Size(327, 26);
+            this.generarSolicitudDeCompraToolStripMenuItem.Text = "Generar solicitud de compra";
             this.generarSolicitudDeCompraToolStripMenuItem.Click += new System.EventHandler(this.generarSolicitudDeCompraToolStripMenuItem_Click);
             // 
             // registrarOrdenDeCompraToolStripMenuItem
             // 
             this.registrarOrdenDeCompraToolStripMenuItem.Name = "registrarOrdenDeCompraToolStripMenuItem";
-            this.registrarOrdenDeCompraToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
-            this.registrarOrdenDeCompraToolStripMenuItem.Text = "Registrar orden";
+            this.registrarOrdenDeCompraToolStripMenuItem.Size = new System.Drawing.Size(327, 26);
+            this.registrarOrdenDeCompraToolStripMenuItem.Text = "Registrar orden de compra";
             this.registrarOrdenDeCompraToolStripMenuItem.Click += new System.EventHandler(this.registrarOrdenDeCompraToolStripMenuItem_Click);
             // 
             // registrarRecepciónDeMercaderíaToolStripMenuItem
             // 
             this.registrarRecepciónDeMercaderíaToolStripMenuItem.Name = "registrarRecepciónDeMercaderíaToolStripMenuItem";
-            this.registrarRecepciónDeMercaderíaToolStripMenuItem.Size = new System.Drawing.Size(320, 26);
+            this.registrarRecepciónDeMercaderíaToolStripMenuItem.Size = new System.Drawing.Size(327, 26);
             this.registrarRecepciónDeMercaderíaToolStripMenuItem.Text = "Registrar recepción de mercadería";
             this.registrarRecepciónDeMercaderíaToolStripMenuItem.Click += new System.EventHandler(this.registrarRecepciónDeMercaderíaToolStripMenuItem_Click);
             // 
@@ -390,6 +392,13 @@
             this.lblEstado.TabIndex = 1;
             this.lblEstado.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // registrarFacturaYPagoDeCompraToolStripMenuItem
+            // 
+            this.registrarFacturaYPagoDeCompraToolStripMenuItem.Name = "registrarFacturaYPagoDeCompraToolStripMenuItem";
+            this.registrarFacturaYPagoDeCompraToolStripMenuItem.Size = new System.Drawing.Size(327, 26);
+            this.registrarFacturaYPagoDeCompraToolStripMenuItem.Text = "\tRegistrar factura y pago de compra";
+            this.registrarFacturaYPagoDeCompraToolStripMenuItem.Click += new System.EventHandler(this.registrarFacturaYPagoDeCompraToolStripMenuItem_Click);
+            // 
             // FrmMenuPrincipal486LP
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -449,5 +458,6 @@
         private System.Windows.Forms.ToolStripMenuItem españolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem inglesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem portuguesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem registrarFacturaYPagoDeCompraToolStripMenuItem;
     }
 }

@@ -64,7 +64,7 @@ namespace BLL
             }
         }
 
-        // Trae una solicitud ya registrada, con su detalle (CUN06 la va a necesitar).
+        // Trae una solicitud ya registrada, con su detalle.
         public SolicitudCompra486LP ObtenerPorId(int idSolicitud)
         {
             try
@@ -75,6 +75,47 @@ namespace BLL
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_SolicitudCompra.ObtenerPorId(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return null;
+            }
+        }
+
+        // Lista las solicitudes en estado "Pendiente" (CUN06 las necesita para armar la orden).
+        public List<SolicitudCompra486LP> ListarPendientes()
+        {
+            try
+            {
+                return ObjetoMapper.ListarPendientes();
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_SolicitudCompra.ListarPendientes(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return new List<SolicitudCompra486LP>();
+            }
+        }
+
+        // Cambia el Estado de la solicitud (ej. a "Procesada" cuando CUN06 genera la orden).
+        // No se compara el conteo de filas de ExecuteNonQuery para decidir exito - mismo
+        // criterio ya aplicado en el resto del proyecto.
+        public bool ActualizarEstado(int idSolicitud, string estado, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                bool ok = ObjetoMapper.ActualizarEstado(idSolicitud, estado, out mensaje);
+
+                if (ok)
+                {
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RegistrarDVDeFilaNueva("SolicitudCompra", idSolicitud, out mensajeDV);
+                }
+
+                return ok;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_SolicitudCompra.ActualizarEstado(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
             }
         }
     }

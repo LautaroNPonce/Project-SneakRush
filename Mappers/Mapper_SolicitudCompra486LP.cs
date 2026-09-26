@@ -61,7 +61,7 @@ namespace Mappers
             }
         }
 
-        // Trae una solicitud ya registrada, con su detalle completo (CUN06 la va a necesitar).
+        // Trae una solicitud ya registrada, con su detalle completo.
         public SolicitudCompra486LP ObtenerPorId(int idSolicitud)
         {
             try
@@ -87,6 +87,47 @@ namespace Mappers
             catch
             {
                 return null;
+            }
+        }
+
+        // Lista las solicitudes en estado "Pendiente" (sin detalle - CUN06 solo necesita la
+        // cabecera para armar la lista de seleccion; el detalle se trae aparte con ObtenerPorId
+        // recien cuando el Administrador elige una).
+        public List<SolicitudCompra486LP> ListarPendientes()
+        {
+            try
+            {
+                SqlCommand cmd = new SqlCommand("SolicitudCompra_ListarPendientes");
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
+                return ManejadorMapeo486LP.MapearLista<SolicitudCompra486LP>(tabla);
+            }
+            catch
+            {
+                return new List<SolicitudCompra486LP>();
+            }
+        }
+
+        // Cambia el Estado de la solicitud (ej. a "Procesada" cuando CUN06 genera la orden).
+        public bool ActualizarEstado(int idSolicitud, string estado, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                SqlCommand cmd = new SqlCommand("SolicitudCompra_ActualizarEstado");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@IdSolicitud", idSolicitud));
+                cmd.Parameters.Add(new SqlParameter("@Estado", estado));
+
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Estado actualizado correctamente.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = "Error: " + ex.Message;
+                return false;
             }
         }
     }

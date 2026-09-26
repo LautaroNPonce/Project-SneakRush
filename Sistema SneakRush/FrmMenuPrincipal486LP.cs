@@ -216,11 +216,16 @@ namespace Sistema_SneakRush
         }
         private void registrarOrdenDeCompraToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Registrar Orden");
+            AbrirFormulario(new FrmRegistrarOrden486LP());
         }
         private void registrarRecepciónDeMercaderíaToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Registrar Recepción de Mercadería");
+            AbrirFormulario(new FrmRegistrarRecepcion486LP());
+        }
+
+        private void registrarFacturaYPagoDeCompraToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            AbrirFormulario(new FrmRegistrarFactura486LP());
         }
 
         // Menu Venta

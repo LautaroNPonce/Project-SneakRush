@@ -1,6 +1,7 @@
 ﻿using BE;
 using DAL;
 using Mappers;
+using Mappers.Mappers;
 using Services;
 using System;
 using System.Collections.Generic;
@@ -115,6 +116,37 @@ namespace BLL
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Producto.ObtenerPorId(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return null;
+            }
+        }
+
+        // Aumenta stock tras confirmarse el pago de una compra (CUN08). Mismo criterio que
+        // ActualizarStock: recalcula el DV de esa unica fila (RegistrarDVDeFilaNueva), porque
+        // esto se ejecuta en cada compra pagada.
+        public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                bool ok = ObjetoMapper.AumentarStock(idProducto, cantidad, out mensaje);
+
+                if (ok)
+                {
+                    string mensajeDV;
+                    BLL_DV486LP bllDV = new BLL_DV486LP();
+                    bllDV.RegistrarDVDeFilaNueva("Producto", idProducto, out mensajeDV);
+
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Stock actualizado: Producto Id {idProducto}, se sumaron {cantidad} unidades.", Criticidad486LP.Media,
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
+                        SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
+                }
+
+                return ok;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_Producto.AumentarStock(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
             }
         }
     }

@@ -46,7 +46,11 @@
     <Compile Include="MapperBase486LP.cs" />
     <Compile Include="Mapper_Carrito486LP.cs" />
     <Compile Include="Mapper_Cliente486LP.cs" />
+    <Compile Include="Mapper_Factura486LP.cs" />
+    <Compile Include="Mapper_OrdenCompra486LP.cs" />
     <Compile Include="Mapper_Producto486LP.cs" />
+    <Compile Include="Mapper_Proveedor486LP.cs" />
+    <Compile Include="Mapper_Recepcion486LP.cs" />
     <Compile Include="Mapper_SolicitudCompra486LP.cs" />
     <Compile Include="Mapper_Venta486LP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

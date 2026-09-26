@@ -91,14 +91,37 @@ namespace Mappers
         }
 
         // Descuenta stock tras una venta (CUN04, paso 11 - "el Sistema actualiza automaticamente el
-        // stock"). Primer metodo de ESCRITURA de este Mapper. No se compara el conteo de filas de
-        // ExecuteNonQuery para decidir exito - mismo criterio ya aplicado en el resto del proyecto.
+        // stock"). No se compara el conteo de filas de ExecuteNonQuery para decidir exito - mismo
+        // criterio ya aplicado en el resto del proyecto.
         public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
             try
             {
                 SqlCommand cmd = new SqlCommand("Producto_ActualizarStock");
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@IdProducto", idProducto));
+                cmd.Parameters.Add(new SqlParameter("@Cantidad", cantidad));
+
+                Conexion486LP.EjecutarNoConsulta(cmd);
+                mensaje = "Stock actualizado correctamente.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = "Error: " + ex.Message;
+                return false;
+            }
+        }
+
+        // Suma stock tras confirmarse el pago de una compra (CUN08) - separado de
+        // ActualizarStock, que resta (Ventas). Mismo criterio: no compara filas afectadas.
+        public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
+        {
+            mensaje = "";
+            try
+            {
+                SqlCommand cmd = new SqlCommand("Producto_AumentarStock");
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.Add(new SqlParameter("@IdProducto", idProducto));
                 cmd.Parameters.Add(new SqlParameter("@Cantidad", cantidad));
