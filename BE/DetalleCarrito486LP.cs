@@ -22,7 +22,7 @@ namespace BE
         public decimal Subtotal { get; set; }
 
         // Referencia al producto (para mostrar Marca/Modelo/Color/Talle en la grilla).
-        // NO llevan [ColumnaTabla486LP]: no son columnas de DetalleCarrito, son el objeto relacionado y propiedades calculadas de solo lectura.
+        // no llevan [ColumnaTabla486LP] xq no son columnas de DetalleCarrito, son el objeto relacionado y propiedades calculadas de solo lectura.
         public Producto486LP Producto { get; set; }
         public string Marca { get { return Producto?.Marca; } }
         public string Modelo { get { return Producto?.Modelo; } }

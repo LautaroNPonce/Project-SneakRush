@@ -17,10 +17,8 @@ namespace BE
         [ColumnaTabla486LP]
         public int CantidadSolicitada { get; set; }
 
-        // Vienen del JOIN con Producto en el SP DetalleSolicitudCompra_ListarPorSolicitud - NO son
-        // columnas reales de la tabla DetalleSolicitudCompra (por eso no participan del mecanismo
-        // de DV, que lee "SELECT * FROM DetalleSolicitudCompra"). Llevan [ColumnaTabla486LP] igual,
-        // para que el mapeo por reflexion las complete solas desde el DataTable del JOIN.
+        // Vienen del JOIN con Producto (no son columnas reales de DetalleSolicitudCompra, por eso el DV no las controla). Llevan [ColumnaTabla486LP] igual para que el mapeo las complete
+        // solas desde el resultado del JOIN.
         [ColumnaTabla486LP]
         public string Marca { get; set; }
         [ColumnaTabla486LP]

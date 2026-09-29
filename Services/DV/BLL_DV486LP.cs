@@ -29,10 +29,27 @@ namespace Services
             { "DetalleCarrito", "IdDetalle"    },
             { "Cliente",        "DNI"          },
             { "Venta",          "IdVenta"      },
-            { "DetalleVenta",   "IdDetalleVenta" }
+            { "DetalleVenta",   "IdDetalleVenta" },
+            // Agregadas en RFN2 Compras (CUN05-08) - antes de esto nunca se registraron aca,
+            // por eso RecalcularDV/RegistrarDVDeFilaNueva nunca actualizaban nada para ellas.
+            { "Proveedor",              "IdProveedor" },
+            { "SolicitudCompra",        "IdSolicitud" },
+            { "DetalleSolicitudCompra", "IdDetalleSolicitud" },
+            { "OrdenCompra",            "IdOrden" },
+            { "DetalleOrdenCompra",     "IdDetalleOrden" },
+            { "Recepcion",              "IdRecepcion" },
+            { "DetalleRecepcion",       "IdDetalleRecepcion" },
+            { "Factura",                "IdFactura" }
         };
 
-        private static readonly string[] _tablasProtegidas = { "BitacoraEvento", "Usuarios", "Perfil", "Familia", "Permiso", "Idioma", "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso", "Producto", "Carrito", "DetalleCarrito", "Cliente", "Venta", "DetalleVenta" };
+        private static readonly string[] _tablasProtegidas = {
+            "BitacoraEvento", "Usuarios", "Perfil", "Familia", "Permiso", "Idioma",
+            "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso",
+            "Producto", "Carrito", "DetalleCarrito", "Cliente", "Venta", "DetalleVenta",
+            // Agregadas en RFN2 Compras (CUN05-08).
+            "Proveedor", "SolicitudCompra", "DetalleSolicitudCompra",
+            "OrdenCompra", "DetalleOrdenCompra", "Recepcion", "DetalleRecepcion", "Factura"
+        };
         private static readonly List<string> _tablasSoloNivelTabla = new List<string> { "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
         private string ObtenerColumnaId(string tabla)
         {

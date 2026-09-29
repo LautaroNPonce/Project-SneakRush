@@ -20,13 +20,11 @@ namespace BE
         public int IdSolicitud { get; set; }
         [ColumnaTabla486LP]
         public decimal CostoTotal { get; set; }
-        // Nuevo en CUN07: "Pendiente de Recepción" -> "Recibida" (mismo patron que Estado en
-        // SolicitudCompra486LP y Carrito486LP).
+
         [ColumnaTabla486LP]
         public string Estado { get; set; }
 
-        // NO lleva [ColumnaTabla486LP]: no es una columna de la tabla OrdenCompra, es la
-        // coleccion de detalles relacionados (se llena aparte).
+        // no lleva [ColumnaTabla486LP] xq no es una columna de la tabla OrdenCompra, es la  coleccion de detalles relacionados (se llena aparte).
         public List<DetalleOrdenCompra486LP> Detalles { get; set; }
 
         public OrdenCompra486LP()

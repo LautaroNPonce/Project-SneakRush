@@ -10,10 +10,6 @@ using System.Threading.Tasks;
 
 namespace Mappers
 {
-    /// Habla con SQL para la entidad Producto. Reemplaza a DAL_Producto486LP.
-    /// Fue de solo lectura hasta CUN04 (no habia ABM, eso sigue siendo CUN11) - CUN04 le agrega su
-    /// primer metodo de escritura (ActualizarStock), por eso ahora tambien participa del mecanismo de DV.
-
     public class Mapper_Producto486LP : MapperBase486LP
     {
         // Lista todos los productos.
@@ -33,10 +29,8 @@ namespace Mappers
             }
         }
 
-        // Busca productos por filtros opcionales. Un filtro vacio/blanco se manda
-        // como NULL al SP, que lo ignora (mismo comportamiento que tenia la DAL).
-        // NOTA: no traga la excepcion, la deja propagar para que BLL_Producto.Buscar
-        // la registre en bitacora (flujo alternativo 7.2) - igual que antes.
+        // Busca productos por filtros opcionales. Un filtro vacío se manda como NULL al SP, que lo ignora.
+        // No traga la excepción: la deja propagar para que BLL_Producto.Buscar la registre en bitácora.
         public List<Producto486LP> Buscar(string marca, string modelo, string color, string talle, bool soloConStock)
         {
             SqlCommand cmd = new SqlCommand("Producto_Buscar");
@@ -90,9 +84,7 @@ namespace Mappers
             }
         }
 
-        // Descuenta stock tras una venta (CUN04, paso 11 - "el Sistema actualiza automaticamente el
-        // stock"). No se compara el conteo de filas de ExecuteNonQuery para decidir exito - mismo
-        // criterio ya aplicado en el resto del proyecto.
+        // Descuenta stock tras una venta (CUN04). No compara filas afectadas para decidir éxito, mismo criterio de siempre.
         public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -114,8 +106,7 @@ namespace Mappers
             }
         }
 
-        // Suma stock tras confirmarse el pago de una compra (CUN08) - separado de
-        // ActualizarStock, que resta (Ventas). Mismo criterio: no compara filas afectadas.
+        // Suma stock tras confirmarse el pago de una compra (CUN08) - separado de ActualizarStock, que resta (Ventas). Mismo criterio: no compara filas afectadas.
         public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";

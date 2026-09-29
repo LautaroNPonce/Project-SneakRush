@@ -16,10 +16,8 @@ namespace BLL
         private BLL_OrdenCompra486LP ObjOrden = new BLL_OrdenCompra486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Registra la recepcion a partir de lo armado en pantalla (Cantidad Recibida/Faltante
-        // ya calculadas ahi mismo). Al persistir con exito, cierra la Orden de origen
-        // pasandola a "Recibida" (el stock NO se toca aca - eso ocurre recien en CUN08,
-        // tras confirmarse el pago).
+        // Registra la recepción armada en pantalla (Cantidad Recibida/Faltante ya calculadas ahí)
+        // Al persistir, cierra la Orden de origen Recibida el stock no se toca acá, eso ocurre recién cuando se confirma el pago.
         public Recepcion486LP RegistrarRecepcion(Recepcion486LP recepcion, out string mensaje)
         {
             mensaje = "";
@@ -41,7 +39,7 @@ namespace BLL
                     return null;
                 }
 
-                // La orden de origen pasa a "Recibida": no vuelve a aparecer como pendiente de recepcion.
+                // La orden de origen pasa a recibida, no vuelve a aparecer como pendiente de recepcion
                 string mensajeOrden;
                 ObjOrden.ActualizarEstado(recepcion.IdOrden, "Recibida", out mensajeOrden);
 
@@ -73,8 +71,7 @@ namespace BLL
             }
         }
 
-        // Trae la Recepcion de una Orden puntual, con su detalle (CUN08 la necesita para saber
-        // la Cantidad Recibida real de cada producto, y asi aumentar el stock).
+        // Trae la Recepcion de una Orden puntual, con su detalle (lo utilizo para saber la Cantidad Recibida real de cada producto, y asi aumentar el stock).
         public Recepcion486LP ObtenerPorIdOrden(int idOrden)
         {
             try

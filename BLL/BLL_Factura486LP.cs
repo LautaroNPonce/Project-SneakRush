@@ -16,10 +16,7 @@ namespace BLL
         private BLL_Producto486LP ObjProducto = new BLL_Producto486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Registra la factura (solo cabecera) a partir de la Orden elegida y su Total ya
-        // calculado en pantalla. El pago se confirma aparte, en ConfirmarPago - recien ahi
-        // se actualiza stock y se cierra la orden (asi el DV de Factura queda como "alta" acá,
-        // y como "actualizacion de una fila" alla, mismo criterio de siempre).
+        // Registra la factura (solo cabecera) con el total ya calculado en pantalla. El pago se confirma aparte, en confirmarpago recién ahí se actualiza stock y se cierra la orden
         public Factura486LP RegistrarFactura(Factura486LP factura, out string mensaje)
         {
             mensaje = "";
@@ -56,12 +53,7 @@ namespace BLL
             }
         }
 
-        // Confirma el pago (llamado tras la aprobacion simulada de la Entidad Bancaria): pasa
-        // la Factura a "Pagada" con el medio de pago usado, aumenta el stock de cada producto
-        // segun lo efectivamente recibido (detalleRecepcion), y cierra la Orden como "Facturada".
-        // detalleRecepcion se lo pasa el Form, que ya lo consulto para mostrar la pantalla - no
-        // le corresponde a esta BLL volver a pedirselo a BLL_Recepcion486LP solo para repetir
-        // una consulta que ya se hizo.
+        // Confirma el pago y pasa la factura a pagada, aumenta stock según lo recibido (detalleRecepcion) y cierra la orden facturada
         public bool ConfirmarPago(Factura486LP factura, string medioPago, List<DetalleRecepcion486LP> detalleRecepcion, out string mensaje)
         {
             mensaje = "";
@@ -74,6 +66,10 @@ namespace BLL
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al confirmar el pago de la factura: {mensaje}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                     return false;
                 }
+
+                // Lo utilizo para que el la factura que tengo en memoria quede actualizada con el estado y medio de pago, para el mensaje de bitacora
+                factura.Estado = "Pagada";
+                factura.MedioPago = medioPago;
 
                 foreach (DetalleRecepcion486LP det in detalleRecepcion)
                 {

@@ -21,8 +21,6 @@ namespace Sistema_SneakRush
         private readonly string f = "FrmGestionCarrito486LP";
         private Carrito486LP _carrito = new Carrito486LP();
         private bool _clienteAsignado = false;
-
-        // Patentes granulares por boton (ademas de la patente de acceso al form, VENTA_GESTIONAR_CARRITO).
         private bool _puedeAsignar;
         private bool _puedeAgregar;
         private bool _puedeEliminar;
@@ -39,7 +37,6 @@ namespace Sistema_SneakRush
 
         private void FrmGestionCarrito486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al form completo (mismo patron que FrmConsultarProducto486LP).
             if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
@@ -108,7 +105,7 @@ namespace Sistema_SneakRush
             var lm = Program.LanguageManager;
             string dni = txtDNI.Text.Trim();
 
-            // Validar formato del DNI (solo numeros, 7 u 8 digitos)
+            // Validar formato del dni (solo numeros, 7 u 8 digitos)
             if (!System.Text.RegularExpressions.Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
                 MessageBox.Show(
@@ -118,7 +115,7 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // El cliente tiene que estar registrado antes de asignarlo al carrito.
+            // El cliente tiene que estar registrado antes de asignarlo al carrito.¿
             if (!_bllCliente.Existe(dni))
             {
                 DialogResult r = MessageBox.Show(
@@ -133,11 +130,9 @@ namespace Sistema_SneakRush
                         frmClientes.ShowDialog();
                     }
                 }
-
-                // Se vuelve a verificar: si se registro en la pantalla anterior, ya existe.
                 if (!_bllCliente.Existe(dni))
                 {
-                    return; // el cajero cancelo el registro o cerro sin registrar; no se asigna
+                    return;
                 }
             }
 
@@ -153,7 +148,7 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // Abre el CUN01 "Consultar productos" para elegir el producto.
+            // Abre el CUN01 "Consultar productos" para elegir el producto
             using (FrmConsultarProducto486LP frm = new FrmConsultarProducto486LP())
             {
                 if (frm.ShowDialog() == DialogResult.OK && frm.ProductoSeleccionado != null)
@@ -305,7 +300,7 @@ namespace Sistema_SneakRush
             Program.LanguageManager.Quitar(this);
         }
 
-        // Define las columnas de la grilla ligadas a las propiedades reales del DetalleCarrito486LP (Marca/Modelo/Color/Talle son de solo lectura en el BE).
+        // Define las columnas de la grilla ligadas a las propiedades reales del DetalleCarrito486LP (Marca/Modelo/Color/Talle son de solo lectura en el BE)
         private void ConfigurarColumnas()
         {
             dgvCarrito.AutoGenerateColumns = false;
@@ -322,7 +317,6 @@ namespace Sistema_SneakRush
             AplicarEncabezadosColumnas();
         }
 
-        // Traduce los encabezados de la grilla - separado de ConfigurarColumnas() para poder llamarlo tambien desde ActualizarIdioma() cuando el idioma cambia en caliente.
         private void AplicarEncabezadosColumnas()
         {
             if (dgvCarrito.Columns.Count == 0) return;

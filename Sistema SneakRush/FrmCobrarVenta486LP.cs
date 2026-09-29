@@ -22,14 +22,9 @@ namespace Sistema_SneakRush
         private BLL_Producto486LP _bllProducto = new BLL_Producto486LP();
         private BLL_Perfil486LP _bllPerfil = new BLL_Perfil486LP();
         private readonly string f = "FrmCobrarVenta486LP";
-
-        // El carrito que se esta cobrando (llenado en btnSeleccionar_Click), la venta ya generada
-        // (llenada recien despues de un cobro exitoso) y la ruta del PDF ya generado para esa venta.
         private Carrito486LP _carritoActual;
         private Venta486LP _ventaGenerada;
         private string _rutaComprobante;
-
-        // Patentes granulares por boton (ademas de la patente de acceso al form, VENTA_REGISTRAR_OPERACION).
         private bool _puedeSeleccionar;
         private bool _puedeCobrar;
         private bool _puedeVerComprobante;
@@ -43,8 +38,6 @@ namespace Sistema_SneakRush
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmCobrarVenta486LP_FormClosing;
             this.Load += FrmCobrarVenta486LP_Load;
-
-            // Los eventos se conectan aca (no en el Designer, que se armo sin logica todavia).
             btnSeleccionar.Click += btnSeleccionar_Click;
             btnCobrar.Click += btnCobrar_Click;
             btnVerComprobante.Click += btnVerComprobante_Click;
@@ -58,8 +51,7 @@ namespace Sistema_SneakRush
 
         private void FrmCobrarVenta486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al form completo (mismo patron que los otros 3 CUN).
-            if (!TienePatenteAcceso())
+            if (!TienePatenteAcceso()) // Verificacion de acceso al form completo (mismo patron que los otros 3 CUN)
             {
                 var lm = Program.LanguageManager;
                 MessageBox.Show(
@@ -82,7 +74,7 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al form.
+        // Verifica que el usuario en sesion tenga la patente de acceso al form
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -92,7 +84,7 @@ namespace Sistema_SneakRush
             return permisos.Contains("VENTA_REGISTRAR_OPERACION");
         }
 
-        // Patentes granulares por boton.
+        // Patentes granulares por boton
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -110,18 +102,17 @@ namespace Sistema_SneakRush
         {
             btnSeleccionar.Enabled = _puedeSeleccionar;
             btnCobrar.Enabled = _puedeCobrar;
-            // "Ver comprobante" ademas depende de que ya haya una venta generada.
-            btnVerComprobante.Enabled = _puedeVerComprobante && _ventaGenerada != null;
+            btnVerComprobante.Enabled = _puedeVerComprobante && _ventaGenerada != null; // "Ver comprobante" ademas depende de que ya haya una venta generada
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // Habilita/deshabilita el panel de datos de tarjeta segun el medio de pago elegido.
+        // habilita/deshabilita el panel de datos de tarjeta segun el medio de pago elegido
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
             grpTarjeta.Enabled = rbTarjeta.Checked;
         }
 
-        // ---------------- Seleccionar (buscar carrito por DNI) ----------------
+        // Seleccionar (buscar carrito por DNI) 
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -137,9 +128,9 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Paso 4: recuperar el carrito "Activo" de ese DNI. El cliente ya quedo asignado
-            // al carrito en CUN02 (el include a CUN03 vive ahi, ya no en este form) - aca no
-            // hace falta verificar/registrar cliente, solo buscar el carrito.
+            // Paso 4: recuperar el carrito activo de ese DNI. 
+            // El cliente ya quedó asignado en CUN02 (el include a CUN03 vive ahí)  acá no hace falta verificar/registrar cliente
+
             Carrito486LP carrito = _bllCarrito.ObtenerActivoPorDNI(dni);
             if (carrito == null)
             {
@@ -151,8 +142,7 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // El Producto de cada detalle llega en null desde el Mapper de Carrito - se resuelve aca
-            // para poder mostrar Marca/Modelo/Color/Talle en la grilla (solo lectura).
+            // El Producto de cada detalle llega en null desde el Mapper de Carrito - se resuelve acá para mostrar Marca/Modelo/Color/Talle en la grilla
             foreach (DetalleCarrito486LP det in carrito.Detalles)
             {
                 if (det.Producto == null)
@@ -173,7 +163,6 @@ namespace Sistema_SneakRush
             lblTotal.Text = _carritoActual.Total.ToString("C");
         }
 
-        // Define las columnas de la grilla de detalle (solo lectura - el carrito ya viene armado de CUN02).
         private void ConfigurarColumnas()
         {
             dgvDetalle.AutoGenerateColumns = false;
@@ -205,8 +194,7 @@ namespace Sistema_SneakRush
             dgvDetalle.Columns["colSubtotal"].HeaderText = lm.ObtenerTexto(f, "Frm.CobrarVenta.Col.Subtotal", "Subtotal");
         }
 
-        // 8.1: valida los datos de la tarjeta (numero, vencimiento, CVV). Solo se llama si el medio
-        // de pago elegido es Tarjeta.
+        // 8.1: valida los datos de la tarjeta (numero, vencimiento, CVV). Solo se llama si el medio de pago elegido es Tarjeta.
         private bool ValidarDatosTarjeta()
         {
             string numeroSinEspacios = txtNumero.Text.Replace(" ", "").Trim();
@@ -251,7 +239,7 @@ namespace Sistema_SneakRush
             _formateandoNumero = false;
         }
 
-        // Inserta el "/" automaticamente despues de los primeros 2 digitos (MM/AA).
+        // Inserta el "/" automaticamente despues de los primeros 2 digitos (mm/aa)
         private void txtVencimiento_TextChanged(object sender, EventArgs e)
         {
             if (_formateandoVencimiento) return;
@@ -277,7 +265,6 @@ namespace Sistema_SneakRush
             return "Efectivo";
         }
 
-        // ---------------- Cobrar ----------------
         private void btnCobrar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -302,10 +289,8 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // A partir de aca el pago es ASINCRONO (Efectivo resuelve al instante, Tarjeta/Transferencia
-            // usan un Hilo de ~3s) - se muestra el indicador de "Procesando" mientras tanto. La estrategia
-            // vuelve sola al hilo de UI (via SynchronizationContext), por eso el callback puede tocar
-            // controles del form sin problema, sin que la BLL necesite conocer el Form en absoluto.
+            // A partir de acá el pago es asincrono (efectivo resuelve al instante, tarjeta/transferencia usan un hilo de 3s), con el indicador de "Procesando" mientras tanto
+            // La estrategia vuelve sola al hilo de UI (SynchronizationContext), por eso el callback puede tocar el form sin problema
             MostrarProcesando(true);
 
             IEstrategiaPago486LP estrategia = FabricaEstrategiaPago486LP.Crear(medioPago);
@@ -322,14 +307,13 @@ namespace Sistema_SneakRush
                     {
                         _ventaGenerada = venta;
 
-                        // Paso 6/12: se genera el comprobante (PDF, formato ticket) apenas se
-                        // confirma la venta - "Ver comprobante" despues solo lo vuelve a abrir.
+                        // Paso 6/12: se genera el comprobante pdf apenas se confirma la venta, "Ver comprobante" despues solo lo vuelve a abrir
                         Cliente486LP cliente = _bllCliente.Obtener(venta.DNICliente);
                         _rutaComprobante = GeneradorComprobantePDF486LP.Generar(venta, cliente);
 
                         MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Informacion.Title", "Información"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Una vez cobrada, no se puede volver a operar sobre la misma venta.
+                        // Una vez cobrada, no se puede volver a operar sobre la misma venta
                         txtDNI.Enabled = false;
                         btnSeleccionar.Enabled = false;
                         grpMedioPago.Enabled = false;
@@ -345,21 +329,17 @@ namespace Sistema_SneakRush
             });
         }
 
-        // Muestra/oculta el indicador visual de "Procesando pago..." (barra + texto) y bloquea los
-        // controles mientras dura, para que no se pueda tocar nada a mitad del procesamiento.
+        // Muestra/oculta el indicador visual de procesando pago
         private void MostrarProcesando(bool mostrando)
         {
             lblProcesando.Visible = mostrando;
             pbProcesando.Visible = mostrando;
-
             btnCobrar.Enabled = !mostrando && _puedeCobrar;
             btnSeleccionar.Enabled = !mostrando && _puedeSeleccionar;
             grpMedioPago.Enabled = !mostrando;
             grpTarjeta.Enabled = !mostrando && rbTarjeta.Checked;
         }
 
-        // ---------------- Ver comprobante ----------------
-        // Abre el PDF ya generado (en btnCobrar_Click) con el visor predeterminado del sistema.
         private void btnVerComprobante_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -386,7 +366,6 @@ namespace Sistema_SneakRush
             }
         }
 
-        // ---------------- Cancelar ----------------
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();

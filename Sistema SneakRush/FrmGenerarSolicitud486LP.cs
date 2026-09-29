@@ -20,15 +20,11 @@ namespace Sistema_SneakRush
         private BLL_Perfil486LP _bllPerfil = new BLL_Perfil486LP();
         private readonly string f = "FrmGenerarSolicitud486LP";
 
-        // Umbral para el resaltado de "stock bajo" (naranja). Stock = 0 siempre es rojo.
-        private const int UmbralStockBajo = 3;
+        private const int UmbralStockBajo = 3; // Umbral para el resaltado de stock bajo (naranja). Stock = 0 siempre es rojo.
 
-        // Todo el catalogo, sin filtrar (se filtra en memoria) y la solicitud que se va armando.
         private List<Producto486LP> _productosDisponibles = new List<Producto486LP>();
         private SolicitudCompra486LP _solicitudEnConstruccion = new SolicitudCompra486LP();
         private Producto486LP _productoSeleccionado;
-
-        // Patentes granulares por boton (ademas de la de acceso, COMPRA_GENERAR_SOLICITUD).
         private bool _puedeAgregar;
         private bool _puedeQuitar;
         private bool _puedeConfirmar;
@@ -106,7 +102,6 @@ namespace Sistema_SneakRush
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // ---------------- Catalogo ----------------
         private void CargarCatalogo()
         {
             _productosDisponibles = _bllProducto.Listar().OrderBy(p => p.Stock).ToList();
@@ -165,8 +160,7 @@ namespace Sistema_SneakRush
             AplicarResaltadoStock();
         }
 
-        // Rojo si Stock=0, naranja si Stock<=UmbralStockBajo - para que el Administrador
-        // detecte de un vistazo lo urgente, sin tener que leer columna por columna.
+        // Rojo si Stock=0, naranja si Stock<=UmbralStockBajo para que el Administrador detecte de un vistazo lo urgente, sin tener que leer columna por columna
         private void AplicarResaltadoStock()
         {
             foreach (DataGridViewRow fila in dgvCatalogo.Rows)
@@ -189,6 +183,8 @@ namespace Sistema_SneakRush
                     fila.DefaultCellStyle.SelectionForeColor = Color.FromArgb(65, 40, 0);
                 }
             }
+
+            dgvCatalogo.Refresh();
         }
 
         private void dgvCatalogo_SelectionChanged(object sender, EventArgs e)
@@ -196,7 +192,6 @@ namespace Sistema_SneakRush
             _productoSeleccionado = dgvCatalogo.CurrentRow?.DataBoundItem as Producto486LP;
         }
 
-        // ---------------- Agregar / Quitar de la solicitud ----------------
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -212,7 +207,7 @@ namespace Sistema_SneakRush
 
             int cantidad = (int)numCantidad.Value;
 
-            // 4.1: cantidad invalida (el NumericUpDown ya tiene Minimum=1, esto es una guarda extra).
+            // 4.1: cantidad invalida (el NumericUpDown ya tiene Minimum=1, esto es una guarda extra)
             if (cantidad <= 0)
             {
                 MessageBox.Show(
@@ -222,7 +217,7 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Si el producto ya estaba en la solicitud, se suma la cantidad en vez de duplicar la fila.
+            // Si el producto ya estaba en la solicitud, se suma la cantidad en vez de duplicar la fila
             DetalleSolicitudCompra486LP existente = _solicitudEnConstruccion.Detalles
                 .FirstOrDefault(d => d.IdProducto == _productoSeleccionado.IdProducto);
 
@@ -263,7 +258,6 @@ namespace Sistema_SneakRush
             dgvSolicitud.DataSource = new BindingList<DetalleSolicitudCompra486LP>(_solicitudEnConstruccion.Detalles);
         }
 
-        // ---------------- Confirmar / Cancelar ----------------
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -297,7 +291,6 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // ---------------- Columnas ----------------
         private void ConfigurarColumnas()
         {
             dgvCatalogo.AutoGenerateColumns = false;
@@ -363,7 +356,7 @@ namespace Sistema_SneakRush
             btnConfirmar.Text = lm.ObtenerTexto(f, "Frm.GenerarSolicitud.Confirmar", "Confirmar solicitud");
             btnCancelar.Text = lm.ObtenerTexto(f, "Frm.GenerarSolicitud.Cancelar", "Cancelar");
 
-            // Los combos de filtro llevan textos traducibles ("(Todas)"/"(Todos)") - se rearman.
+            // Los combos de filtro llevan textos traducibles ("(Todas)"/"(Todos)") se rearman.
             CargarCombosFiltro();
             AplicarEncabezadosColumnas();
         }

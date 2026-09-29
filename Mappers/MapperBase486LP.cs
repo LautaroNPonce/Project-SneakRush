@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Mappers
 {
-    /// Base de todos los Mappers. A partir de la correccion de arquitectura, esta clase NO expone la conexion: eso ahora es responsabilidad exclusiva
-    /// de DAL.Conexion486LP, que es quien conecta, desconecta, lee y escribe.
-    /// Los Mappers arman el SqlCommand (nombre del SP + parametros) y se lo pasan a Conexion486LP.EjecutarConsulta/EjecutarNoConsulta/EjecutarEscalar.
-    /// Se deja esta clase base para que todos los Mappers compartan un mismo tipo (util si mas adelante hace falta agregar algo comun a todos).
+    // Base de todos los Mappers. No expone la conexión (eso es de DAL.Conexion486LP)
+    // cada Mapper arma el SqlCommand y se lo pasa a Conexion486LP para que lo ejecute. Queda como clase base por si más adelante hace falta algo común a todos los Mappers
     public abstract class MapperBase486LP
     {
     }

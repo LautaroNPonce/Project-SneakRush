@@ -15,8 +15,6 @@ namespace BLL
         private BLL_Producto486LP ObjProducto = new BLL_Producto486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Agrega un producto al carrito (en memoria), validando stock
-        // Devuelve false y un mensaje si no hay stock disponible
         public bool Agregar(Carrito486LP carrito, Producto486LP producto, int cantidad, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -61,14 +59,13 @@ namespace BLL
             }
         }
 
-        // Quita un renglon del carrito (en memoria) y recalcula el total
         public void QuitarProducto(Carrito486LP carrito, DetalleCarrito486LP detalle)
         {
             carrito.Detalles.Remove(detalle);
             carrito.Total = carrito.Detalles.Sum(d => d.Subtotal);
         }
 
-        // Guarda el carrito en la base: valida, persiste, recalcula DV y registra en bitacora
+
         public bool GuardarCarrito(Carrito486LP carrito, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -117,7 +114,6 @@ namespace BLL
             }
         }
 
-        // Obtiene un carrito por su Id
         public Carrito486LP ObtenerCarrito(int idCarrito)
         {
             try
@@ -131,7 +127,7 @@ namespace BLL
             }
         }
 
-        // Busca el carrito "Activo" de un DNI. NUEVO para CUN04 (paso 4 del escenario principal).
+        // Busca el carrito Activo de un DNI
         public Carrito486LP ObtenerActivoPorDNI(string dni)
         {
             try
@@ -145,9 +141,8 @@ namespace BLL
             }
         }
 
-        // Cambia el Estado del carrito (ej. a "Facturado" cuando CUN04 completa la venta, para que
-        // no vuelva a aparecer como activo). NUEVO para CUN04. No recalcula DV aca: lo hace
-        // BLL_Venta486LP.RegistrarVenta() junto con el resto de las tablas afectadas por la venta.
+        // Cambia el Estado del carrito (ej: a facturado cuando completa la venta, para que no vuelva a aparecer como activo)
+        // No recalcula DV acá lo hace BLL_Venta486LP.RegistrarVenta() junto con el resto de las tablas afectadas
         public bool ActualizarEstado(int idCarrito, string estado, out string mensaje)
         {
             mensaje = "";

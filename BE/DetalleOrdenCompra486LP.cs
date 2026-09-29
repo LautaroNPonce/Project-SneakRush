@@ -21,7 +21,7 @@ namespace BE
         [ColumnaTabla486LP]
         public decimal Subtotal { get; set; }
 
-        // Vienen del JOIN con Producto en el SP DetalleOrdenCompra_ListarPorOrden - NO son columnas reales de la tabla DetalleOrdenCompra (por eso no participan del mecanismo
+        // Vienen del JOIN con Producto en el SP DetalleOrdenCompra_ListarPorOrden - no son columnas reales de la tabla DetalleOrdenCompra (por eso no participan del mecanismo
         // de DV). Llevan [ColumnaTabla486LP] igual, mismo patron que DetalleVenta486LP y DetalleSolicitudCompra486LP, para que el mapeo por reflexion las complete solas.
         [ColumnaTabla486LP]
         public string Marca { get; set; }

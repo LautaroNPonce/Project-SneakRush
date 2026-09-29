@@ -24,8 +24,6 @@ namespace Sistema_SneakRush
         private List<SolicitudCompra486LP> _solicitudesPendientes = new List<SolicitudCompra486LP>();
         private SolicitudCompra486LP _solicitudSeleccionada;
         private OrdenCompra486LP _ordenEnConstruccion;
-
-        // Patentes granulares por boton (ademas de la de acceso, COMPRA_REGISTRAR_ORDEN).
         private bool _puedeConfirmar;
         private bool _puedeCancelar;
 
@@ -94,12 +92,11 @@ namespace Sistema_SneakRush
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // ---------------- Solicitudes pendientes ----------------
         private void CargarSolicitudesPendientes()
         {
             _solicitudesPendientes = _bllSolicitud.ListarPendientes();
 
-            // 2.1: no hay solicitudes pendientes.
+            // 2.1: no hay solicitudes pendientes
             if (_solicitudesPendientes.Count == 0)
             {
                 var lm = Program.LanguageManager;
@@ -121,8 +118,6 @@ namespace Sistema_SneakRush
         {
             SolicitudCompra486LP seleccionada = dgvSolicitudes.CurrentRow?.DataBoundItem as SolicitudCompra486LP;
             if (seleccionada == null) return;
-
-            // ListarPendientes solo trae la cabecera - hace falta reconsultar para el detalle.
             _solicitudSeleccionada = _bllSolicitud.ObtenerPorId(seleccionada.IdSolicitud);
             if (_solicitudSeleccionada == null) return;
 
@@ -148,8 +143,7 @@ namespace Sistema_SneakRush
                     Modelo = detSol.Modelo,
                     Color = detSol.Color,
                     Talle = detSol.Talle,
-                    // Dato de referencia: ultimo costo pagado por este producto en una orden
-                    // anterior (null si nunca se compro antes) - solo para guiar al Administrador.
+                    // Dato de referencia: ultimo costo pagado por este producto en una orden anterior (null si nunca se compro antes) solo para guiar al Administrador.
                     UltimoCosto = _bllOrden.ObtenerUltimoCosto(detSol.IdProducto)
                 });
             }
@@ -157,7 +151,6 @@ namespace Sistema_SneakRush
             MostrarDetalleOrden();
         }
 
-        // ---------------- Proveedor ----------------
         private void CargarProveedores()
         {
             List<Proveedor486LP> proveedores = _bllProveedor.Listar();
@@ -166,7 +159,6 @@ namespace Sistema_SneakRush
             cmbProveedor.ValueMember = "IdProveedor";
         }
 
-        // ---------------- Detalle de la orden (grilla editable) ----------------
         private void MostrarDetalleOrden()
         {
             dgvDetalleOrden.AutoGenerateColumns = false;
@@ -175,7 +167,7 @@ namespace Sistema_SneakRush
             ActualizarCostoTotal();
         }
 
-        // 6.1: valida el Costo Unitario apenas el Administrador termina de editar una celda.
+        // 6.1: valida el Costo Unitario apenas el Administrador termina de editar una celda
         private void dgvDetalleOrden_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             string nombreColumna = dgvDetalleOrden.Columns[e.ColumnIndex].Name;
@@ -210,7 +202,6 @@ namespace Sistema_SneakRush
             lblCostoTotal.Text = total.ToString("C");
         }
 
-        // ---------------- Confirmar / Cancelar ----------------
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -263,7 +254,6 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // ---------------- Columnas ----------------
         private void ConfigurarColumnas()
         {
             dgvSolicitudes.AutoGenerateColumns = false;

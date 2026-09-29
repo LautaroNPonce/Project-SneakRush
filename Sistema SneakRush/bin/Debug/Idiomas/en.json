@@ -73,7 +73,8 @@
     "ayudaToolStripMenuItem": "Help",
     "verDocumentaciónToolStripMenuItem": "View Documentation",
     "guíaDeUsuarioToolStripMenuItem": "User Guide",
-    "lbl.BarraEstado": "User: {0}  |  Role: {1}"
+    "lbl.BarraEstado": "User: {0}  |  Role: {1}",
+    "registrarFacturaYPagoDeCompraToolStripMenuItem": "Register purchase invoice and payment"
   },
 
   "FrmCambiarIdioma486LP": {
@@ -406,7 +407,11 @@
     "modBit.CambiarContrasena": "Change Password",
     "modBit.GestionUsuarios": "User Management",
     "modBit.GestionPerfiles": "Profile Management",
-    "modBit.GestionFamilias": "Family Management"
+    "modBit.GestionFamilias": "Family Management",
+    "modBit.GestionRespaldos": "Backup Management",
+    "modBit.Ventas": "Sales",
+    "modBit.DigitoVerificador": "Check Digit",
+    "modBit.Compras": "Purchases"
   },
 
   "FrmReparacionBD486LP": {
@@ -682,16 +687,16 @@
     "Frm.RegistrarFactura.Titulo": "Register purchase invoice and payment",
     "Frm.RegistrarFactura.Ordenes": "Orders pending invoicing",
     "Frm.RegistrarFactura.DetalleFactura": "Invoice details",
-    "Frm.RegistrarFactura.Total": "Total:",
     "Frm.RegistrarFactura.MedioPago": "Payment method",
-    "Frm.RegistrarFactura.MedioPagoLabel": "Payment method:",
     "Frm.RegistrarFactura.Efectivo": "Cash",
     "Frm.RegistrarFactura.Tarjeta": "Card",
     "Frm.RegistrarFactura.Transferencia": "Bank transfer",
+    "Frm.RegistrarFactura.DatosTarjeta": "Card details",
     "Frm.RegistrarFactura.Numero": "Number:",
-    "Frm.RegistrarFactura.Vencimiento": "Expiry:",
+    "Frm.RegistrarFactura.Vencimiento": "Expiry (MM/YY):",
     "Frm.RegistrarFactura.CVV": "CVV:",
     "Frm.RegistrarFactura.Procesando": "Processing payment...",
+    "Frm.RegistrarFactura.Total": "Total:",
     "Frm.RegistrarFactura.Cobrar": "Register invoice and charge",
     "Frm.RegistrarFactura.VerComprobante": "View Receipt",
     "Frm.RegistrarFactura.Cancelar": "Cancel",
@@ -709,7 +714,8 @@
     "Frm.RegistrarFactura.Msg.SinPendientes": "There are no orders pending invoicing.",
     "Frm.RegistrarFactura.Msg.SeleccionarOrden": "Select a purchase order.",
     "Frm.RegistrarFactura.Msg.DatosTarjetaInvalidos": "Invalid card details.",
-    "Frm.RegistrarFactura.Msg.PagoConfirmado": "Payment confirmed. You can now view the receipt.",
+    "Frm.RegistrarFactura.Msg.SinComprobante": "No receipt has been generated yet.",
+    "Frm.RegistrarFactura.Msg.ErrorAbrirComprobante": "Could not open the receipt: {0}",
     "Frm.RegistrarFactura.Msg.Validacion.Title": "Validation",
     "Frm.RegistrarFactura.Msg.Aviso.Title": "Notice",
     "Frm.RegistrarFactura.Msg.Informacion.Title": "Information"

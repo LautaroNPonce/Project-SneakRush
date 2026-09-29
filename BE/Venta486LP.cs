@@ -21,7 +21,7 @@ namespace BE
         [ColumnaTabla486LP]
         public decimal Total { get; set; }
 
-        // NO lleva [ColumnaTabla486LP]: no es una columna de la tabla Venta, es la coleccion de detalles relacionados (se llena aparte).
+        // no lleva [ColumnaTabla486LP] xq no es una columna de la tabla Venta, es la coleccion de detalles relacionados (se llena aparte).
         public List<DetalleVenta486LP> Detalles { get; set; }
 
         public Venta486LP()

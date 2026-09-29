@@ -23,8 +23,6 @@ namespace Sistema_SneakRush
         private List<OrdenCompra486LP> _ordenesPendientes = new List<OrdenCompra486LP>();
         private OrdenCompra486LP _ordenSeleccionada;
         private Recepcion486LP _recepcionEnConstruccion;
-
-        // Patentes granulares por boton (ademas de la de acceso, COMPRA_REGISTRAR_RECEPCION).
         private bool _puedeConfirmar;
         private bool _puedeCancelar;
 
@@ -92,12 +90,11 @@ namespace Sistema_SneakRush
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // ---------------- Ordenes pendientes de recepcion ----------------
         private void CargarOrdenesPendientes()
         {
             _ordenesPendientes = _bllOrden.ListarPendientesDeRecepcion();
 
-            // 2.1: no hay ordenes pendientes de recepcion.
+            // 2.1: no hay ordenes pendientes de recepcion
             if (_ordenesPendientes.Count == 0)
             {
                 var lm = Program.LanguageManager;
@@ -119,17 +116,14 @@ namespace Sistema_SneakRush
         {
             OrdenCompra486LP seleccionada = dgvOrdenes.CurrentRow?.DataBoundItem as OrdenCompra486LP;
             if (seleccionada == null) return;
-
-            // ListarPendientesDeRecepcion solo trae la cabecera - hace falta reconsultar para el detalle.
             _ordenSeleccionada = _bllOrden.ObtenerPorId(seleccionada.IdOrden);
             if (_ordenSeleccionada == null) return;
 
             ArmarRecepcionDesdeDetalleOrden();
         }
 
-        // Arranca asumiendo que llego todo lo pedido (CantidadRecibida = CantidadPedida, sin
-        // faltantes) - el Encargado de Deposito solo ajusta si algo no llego completo, en vez
-        // de tener que tipear la cantidad de cada producto desde cero.
+        // Arranca asumiendo que llegó todo lo pedido (CantidadRecibida = CantidadPedida)
+        // el Encargado de Depósito solo ajusta si algo no llegó completo, sin tipear todo desde cero.
         private void ArmarRecepcionDesdeDetalleOrden()
         {
             _recepcionEnConstruccion = new Recepcion486LP
@@ -155,7 +149,6 @@ namespace Sistema_SneakRush
             MostrarDetalleRecepcion();
         }
 
-        // ---------------- Detalle de la recepcion (grilla editable) ----------------
         private void MostrarDetalleRecepcion()
         {
             dgvDetalleRecepcion.AutoGenerateColumns = false;
@@ -163,7 +156,7 @@ namespace Sistema_SneakRush
             dgvDetalleRecepcion.DataSource = new BindingList<DetalleRecepcion486LP>(_recepcionEnConstruccion.Detalles);
         }
 
-        // 5.1: valida la Cantidad Recibida apenas el Encargado de Deposito termina de editar.
+        // 5.1: valida la Cantidad Recibida apenas el Encargado de Deposito termina de editar
         private void dgvDetalleRecepcion_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (dgvDetalleRecepcion.Columns[e.ColumnIndex].Name != "colCantidadRecibida") return;
@@ -184,8 +177,6 @@ namespace Sistema_SneakRush
             det.CantidadFaltante = det.CantidadPedida - det.CantidadRecibida;
             dgvDetalleRecepcion.Refresh();
         }
-
-        // ---------------- Confirmar / Cancelar ----------------
         private void btnConfirmar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -218,7 +209,6 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // ---------------- Columnas ----------------
         private void ConfigurarColumnas()
         {
             dgvOrdenes.AutoGenerateColumns = false;

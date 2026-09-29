@@ -10,13 +10,9 @@ using System.Threading.Tasks;
 
 namespace Mappers
 {
-    /// Habla con SQL para la entidad Factura. Sin transaccion cabecera-detalle (no tiene
-    /// detalle propio) - mas simple que el resto de los Mappers de negocio.
-
     public class Mapper_Factura486LP : MapperBase486LP
     {
-        // Alta de la factura, arranca en "Pendiente de Pago" con MedioPago en null (se completa
-        // recien cuando se confirma el pago, via ActualizarEstadoYPago).
+        // arranca en "Pendiente de Pago" con MedioPago en null (se completa recien cuando se confirma el pago, via ActualizarEstadoYPago).
         public bool Agregar(Factura486LP factura, out string mensaje)
         {
             mensaje = "";

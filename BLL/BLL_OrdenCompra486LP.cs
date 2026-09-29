@@ -15,10 +15,6 @@ namespace BLL
         private BLL_SolicitudCompra486LP ObjSolicitud = new BLL_SolicitudCompra486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Registra la orden a partir de lo armado en pantalla (Solicitud elegida, Proveedor,
-        // Cantidad/Costo por producto). Fecha y CostoTotal los calcula/pone la BLL. Al persistir
-        // con exito, cierra la Solicitud de origen pasandola a "Procesada" (ese mismo metodo
-        // ya recalcula el DV de SolicitudCompra por su cuenta, no hace falta repetirlo aca).
         public OrdenCompra486LP RegistrarOrden(OrdenCompra486LP orden, out string mensaje)
         {
             mensaje = "";
@@ -46,7 +42,7 @@ namespace BLL
                     return null;
                 }
 
-                // La solicitud de origen pasa a "Procesada": no vuelve a aparecer como pendiente.
+                // La solicitud de origen pasa a procesada xq no vuelve a aparecer como pendiente
                 string mensajeSolicitud;
                 ObjSolicitud.ActualizarEstado(orden.IdSolicitud, "Procesada", out mensajeSolicitud);
 
@@ -73,7 +69,7 @@ namespace BLL
             }
         }
 
-        // Trae una orden ya registrada, con su detalle (CUN07/08 la necesitan).
+        // Trae una orden ya registrada, con su detalle
         public OrdenCompra486LP ObtenerPorId(int idOrden)
         {
             try
@@ -86,8 +82,6 @@ namespace BLL
                 return null;
             }
         }
-
-        // Costo mas reciente pagado por este producto - dato de referencia para CUN06.
         public decimal? ObtenerUltimoCosto(int idProducto)
         {
             try
@@ -100,8 +94,6 @@ namespace BLL
                 return null;
             }
         }
-
-        // Lista las ordenes en estado "Pendiente de Recepción" (CUN07 las necesita).
         public List<OrdenCompra486LP> ListarPendientesDeRecepcion()
         {
             try
@@ -115,9 +107,8 @@ namespace BLL
             }
         }
 
-        // Cambia el Estado de la orden (ej. a "Recibida" en CUN07, o a "Facturada" en CUN08).
-        // No se compara el conteo de filas de ExecuteNonQuery para decidir exito - mismo
-        // criterio ya aplicado en el resto del proyecto.
+        // Cambia el Estado de la orden (recibida en CUN07 y facturada en CUN08)
+        // No se compara el conteo de filas afectadas para decidir éxito - mismo criterio de siempre
         public bool ActualizarEstado(int idOrden, string estado, out string mensaje)
         {
             mensaje = "";
@@ -141,8 +132,6 @@ namespace BLL
                 return false;
             }
         }
-
-        // Lista las ordenes en estado "Recibida" (CUN08 las necesita).
         public List<OrdenCompra486LP> ListarPendientesDeFacturacion()
         {
             try

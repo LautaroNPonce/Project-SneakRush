@@ -19,9 +19,8 @@ namespace BE
         [ColumnaTabla486LP]
         public int CantidadFaltante { get; set; }
 
-        // Vienen del JOIN con Producto - mismo patron que DetalleVenta486LP, DetalleSolicitudCompra486LP
-        // y DetalleOrdenCompra486LP: no son columnas reales de DetalleRecepcion, pero llevan
-        // [ColumnaTabla486LP] para que el mapeo por reflexion las complete solas.
+        // Vienen del JOIN con Producto (no son columnas reales de DetalleRecepcion, por eso el DV  no las controla).
+        // Llevan [ColumnaTabla486LP] igual para que el mapeo las complete solas.
         [ColumnaTabla486LP]
         public string Marca { get; set; }
         [ColumnaTabla486LP]
@@ -31,9 +30,8 @@ namespace BE
         [ColumnaTabla486LP]
         public string Talle { get; set; }
 
-        // Dato de referencia (Cantidad Pedida de la Orden de origen) - NO es columna de
-        // DetalleRecepcion, se completa en memoria al armar el detalle desde la Orden, para
-        // poder mostrar la comparacion Pedida vs Recibida en pantalla.
+        // Dato de referencia (Cantidad Pedida de la Orden) - NO es columna de DetalleRecepcion,
+        // se completa en memoria al armar el detalle, para mostrar Pedida vs Recibida en pantalla.
         public int CantidadPedida { get; set; }
 
         public DetalleRecepcion486LP() { }

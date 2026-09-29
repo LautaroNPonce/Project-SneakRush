@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -9,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    /// Resuelve automaticamente el motor de SQL Server disponible en la PC. (prueba primero LocalDB y, si no responde, SQL Server Express)
-    /// A partir del refactor de arquitectura, esta clase es la UNICA que conecta, desconecta, lee y escribe contra la base. Los Mappers arman el SqlCommand
-    /// (nombre del SP + parametros) y se lo pasan a estos metodos para que lo ejecuten; los Mappers ya no abren SqlConnection por su cuenta.
     public class Conexion486LP
     {
         private const string CATALOGO = "SneakRushDB";
@@ -25,19 +23,18 @@ namespace DAL
         private static string _instancia;
         private static readonly object _candado = new object();
 
-        /// Cadena de conexion a la base SneakRushDB en la instancia detectada
+        // Cadena de conexión a SneakRushDB en la instancia detectada
         public static string BD
         {
             get { return ConstruirCadena(ResolverInstancia(), CATALOGO); }
         }
 
-        /// Cadena de conexion a 'master' en la misma instancia detectada
+        // Cadena de conexión a master en la misma instancia
         public static string Master
         {
             get { return ConstruirCadena(ResolverInstancia(), "master"); }
         }
 
-        /// Nombre de la instancia que quedo seleccionada (para logs / diagnostico)
         public static string InstanciaDetectada
         {
             get { return ResolverInstancia(); }
@@ -45,8 +42,7 @@ namespace DAL
 
         // Ejecucion (conectar / leer / escribir / desconectar)
 
-        /// Ejecuta un comando de LECTURA (normalmente CommandType.StoredProcedure) y devuelve el resultado como DataTable. Abre la conexion, llena la
-        /// tabla, y la cierra sola (via el using).
+        // Ejecuta una lectura (SP) y devuelve el resultado como DataTable
         public static DataTable EjecutarConsulta(SqlCommand comando)
         {
             using (SqlConnection con = new SqlConnection(BD))
@@ -59,7 +55,7 @@ namespace DAL
             }
         }
 
-        /// Ejecuta un comando de ESCRITURA (INSERT/UPDATE/DELETE) y devuelve la cantidad de filas afectadas. Abre y cierra la conexion sola.
+        // Ejecuta una escritura (INSERT/UPDATE/DELETE) y devuelve filas afectadas. Abre y cierra sola
         public static int EjecutarNoConsulta(SqlCommand comando)
         {
             using (SqlConnection con = new SqlConnection(BD))
@@ -70,7 +66,7 @@ namespace DAL
             }
         }
 
-        /// Ejecuta un comando y devuelve un unico valor (para Existe/COUNT o para recuperar un Id generado con SCOPE_IDENTITY). Abre y cierra la conexion sola.
+        // Ejecuta un comando y devuelve un único valor (Existe/COUNT o un Id con SCOPE_IDENTITY)
         public static object EjecutarEscalar(SqlCommand comando)
         {
             using (SqlConnection con = new SqlConnection(BD))
@@ -81,15 +77,10 @@ namespace DAL
             }
         }
 
-        // ------------------------------------------------------------------
-        // Casos con TRANSACCION (varias operaciones que tienen que ser todo o
-        // nada, ej. Carrito+DetalleCarrito). Ahi el Mapper necesita compartir
-        // UNA misma conexion+transaccion entre varios comandos, asi que la DAL
-        // le presta la conexion abierta y sobrecargas que reciben la transaccion.
-        // ------------------------------------------------------------------
+        // Casos con transacción (varias operaciones todo o nada, ej: Carrito+DetalleCarrito)
+        // el Mapper comparte una misma conexión+transacción entre comandos, y la DAL la presta abierta
 
-        /// Abre y devuelve una conexion (el llamador es responsable de cerrarla).
-        /// Solo se usa para casos transaccionales multi-paso.
+        // Abre una conexión (el llamador la cierra). Solo para casos transaccionales multi-paso.
         public static SqlConnection AbrirConexion()
         {
             SqlConnection con = new SqlConnection(BD);
@@ -111,16 +102,8 @@ namespace DAL
             return comando.ExecuteScalar();
         }
 
-        // ------------------------------------------------------------------
-        // SOLO para Respaldo (Backup/Restore): estos comandos ALTER DATABASE /
-        // BACKUP DATABASE / RESTORE DATABASE no admiten una transaccion
-        // explicita (SQL Server los rechaza dentro de BEGIN TRAN), y encima
-        // tienen que ejecutarse conectados a 'master' (nunca a SneakRushDB,
-        // porque no se puede restaurar una base mientras hay una conexion
-        // activa usandola). Por eso esta variante: conexion sin transaccion,
-        // abierta contra 'master'.
-        // ------------------------------------------------------------------
-
+        // Solo para Respaldo ALTER/BACKUP/RESTORE DATABASE no admiten transacción explícita,
+        // y deben correr contra master (no se puede restaurar una base con una conexión activa usándola)
         public static SqlConnection AbrirConexionMaster()
         {
             SqlConnection con = new SqlConnection(Master);
@@ -134,10 +117,8 @@ namespace DAL
             return comando.ExecuteNonQuery();
         }
 
-        // ------------------------------------------------------------------
-        // Deteccion de instancia (SIN CAMBIOS respecto a como ya estaba)
-        // ------------------------------------------------------------------
-
+   
+        // Deteccion de instancia 
         private static string ConstruirCadena(string instancia, string catalogo)
         {
             var b = new SqlConnectionStringBuilder
@@ -184,7 +165,7 @@ namespace DAL
                     }
                 }
 
-                // Ninguna respondio: se devuelve la primera (LocalDB) para que, si algo falla, el mensaje de error apunte al caso mas comun.
+                // ninguna respondio se devuelve la primera (LocalDB) para que, si algo falla, el mensaje de error apunte al caso mas comun
                 _instancia = InstanciasPosibles[0];
                 return _instancia;
             }

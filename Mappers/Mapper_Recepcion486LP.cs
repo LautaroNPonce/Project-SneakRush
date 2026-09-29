@@ -22,9 +22,6 @@ namespace Mappers
 
     namespace Mappers
     {
-        /// Habla con SQL para la entidad Recepcion. Mismo patron cabecera-detalle que los demas
-        /// Mappers de negocio con esa relacion.
-
         public class Mapper_Recepcion486LP : MapperBase486LP
         {
             // Alta de la recepcion (cabecera + detalle), todo en una sola transaccion.

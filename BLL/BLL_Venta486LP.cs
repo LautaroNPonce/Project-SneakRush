@@ -16,9 +16,8 @@ namespace BLL
         private BLL_Carrito486LP ObjCarrito = new BLL_Carrito486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Registra la venta a partir de un carrito ya armado (CUN02): arma la cabecera+detalle, persiste, descuenta stock producto por producto, cierra el carrito de origen (pasa a
-        // "Facturado"), recalcula DV de las 3 tablas afectadas (Venta, DetalleVenta, Producto queda resuelto adentro de ActualizarStock) y registra en bitacora. Todo o nada a nivel de negocio:
-        // si algun paso posterior a la venta falla, se informa en el mensaje pero la Venta en si ya quedo persistida (siempre se aprueba el pago en este proyecto, no hay reversion posible).
+        // Registra la venta desde un carrito ya armado: persiste cabecera+detalle, descuenta stock, cierra el carrito ("Facturado"), recalcula DV y registra bitácora.
+        // La Venta queda persistida siempre  el pago nunca se rechaza en este proyecto, no hay reversión posible.
         public Venta486LP RegistrarVenta(Carrito486LP carrito, string medioPago, out string mensaje)
         {
             mensaje = "";
@@ -62,14 +61,14 @@ namespace BLL
                     return null;
                 }
 
-                // Paso 11 del escenario principal: actualizar stock de cada producto vendido.
+                // se actualiza el stock de cada producto vendido
                 foreach (DetalleVenta486LP det in venta.Detalles)
                 {
                     string mensajeStock;
                     ObjProducto.ActualizarStock(det.IdProducto, det.Cantidad, out mensajeStock);
                 }
 
-                // El carrito de origen pasa a "Facturado": no vuelve a aparecer como Activo.
+                // El carrito de origen pasa a "Facturado" xq no vuelve a aparecer como Activo
                 string mensajeCarrito;
                 ObjCarrito.ActualizarEstado(carrito.IdCarrito, "Facturado", out mensajeCarrito);
 
@@ -80,7 +79,6 @@ namespace BLL
                     $"Venta registrada: Comprobante {venta.NroComprobante}, Cliente DNI {venta.DNICliente}, Medio de pago {venta.MedioPago}, Total ${venta.Total}.",
                     Criticidad486LP.Alta, dni, nombreUsuario));
 
-                // DV de Venta y DetalleVenta (el de Producto ya se recalculo, fila por fila, dentro de ActualizarStock).
                 string mensajeDV;
                 BLL_DV486LP bllDV = new BLL_DV486LP();
                 bllDV.RecalcularDV("Venta", out mensajeDV);

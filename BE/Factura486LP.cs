@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    // A diferencia de Venta/Carrito/Solicitud/Orden, esta entidad NO tiene Detalles: es solo
-    // cabecera. El detalle real de la compra ya vive repartido entre DetalleOrdenCompra
-    // (Costo Unitario) y DetalleRecepcion (Cantidad Recibida), registrados en CUN06/CUN07 -
-    // duplicarlo aca hubiera sido repetir datos que ya existen.
     public class Factura486LP
     {
         [ColumnaTabla486LP]
@@ -20,11 +16,11 @@ namespace BE
         public DateTime Fecha { get; set; }
         [ColumnaTabla486LP]
         public int IdOrden { get; set; }
-        // NULL hasta que se confirma el pago (Factura_Agregar la inserta en NULL a proposito).
         [ColumnaTabla486LP]
         public string MedioPago { get; set; }
         [ColumnaTabla486LP]
         public decimal Total { get; set; }
+
         // "Pendiente de Pago" -> "Pagada" (mismo patron que Estado en las demas entidades).
         [ColumnaTabla486LP]
         public string Estado { get; set; }

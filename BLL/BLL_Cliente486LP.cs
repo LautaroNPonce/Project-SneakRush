@@ -19,7 +19,7 @@ namespace BLL
 
         private const string MODULO = "Ventas";
 
-        // Lista todos los clientes, devolviendo el Correo YA descifrado (para mostrar en la GUI).
+        // Lista todos los clientes, devolviendo el correo yA descifrado (para mostrar en la GUI)
         public List<Cliente486LP> Listar()
         {
             try
@@ -38,7 +38,7 @@ namespace BLL
             }
         }
 
-        // Obtiene un cliente por DNI, con el Correo descifrado. Null si no existe.
+        // Obtiene un cliente por DNI, con el Correo descifrado. Null si no existe
         public Cliente486LP Obtener(string dni)
         {
             try
@@ -57,13 +57,13 @@ namespace BLL
             }
         }
 
-        // Indica si existe un cliente con ese DNI.
+        // Indica si existe un cliente con ese DNI
         public bool Existe(string dni)
         {
             return ObjetoMapper.Existe(dni);
         }
 
-        // Valida el formato del DNI: solo numeros, entre 7 y 10 digitos.
+        // Valida el formato del DNI: solo numeros, entre 7 y 10 digitos
         public bool ValidarDNI(string dni)
         {
             if (string.IsNullOrWhiteSpace(dni)) return false;
@@ -192,7 +192,7 @@ namespace BLL
             ObjDV.RecalcularDV("Cliente", out mensajeDV);
         }
 
-        // Descifra el correo con tolerancia: si el dato no esta cifrado (o falla), devuelve el valor original para no romper la grilla.
+        // Descifra el correo con tolerancia si el dato no esta cifrado (o falla), devuelve el valor original para no romper la grilla.
         private string DescifrarCorreo(string correo)
         {
             try

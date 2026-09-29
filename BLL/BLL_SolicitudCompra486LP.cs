@@ -14,10 +14,7 @@ namespace BLL
         private Mapper_SolicitudCompra486LP ObjetoMapper = new Mapper_SolicitudCompra486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Registra la solicitud a partir de lo armado en pantalla. Fecha, DNIAdministrador y
-        // Estado los pone la BLL (no el Form): el Administrador es siempre el usuario en sesion,
-        // y el Estado arranca en "Pendiente" - recien CUN06 la pasa a otro estado cuando se
-        // convierte en orden de compra.
+        // Registra la solicitud armada en pantalla. Fecha, DNIAdministrador y Estado los pone la BLL, no el Form  el Administrador es siempre el usuario en sesión, y el Estado arranca en "Pendiente"
         public SolicitudCompra486LP RegistrarSolicitud(SolicitudCompra486LP solicitud, out string mensaje)
         {
             mensaje = "";
@@ -64,7 +61,7 @@ namespace BLL
             }
         }
 
-        // Trae una solicitud ya registrada, con su detalle.
+        // Trae una solicitud ya registrada, con su detalle
         public SolicitudCompra486LP ObtenerPorId(int idSolicitud)
         {
             try
@@ -78,7 +75,7 @@ namespace BLL
             }
         }
 
-        // Lista las solicitudes en estado "Pendiente" (CUN06 las necesita para armar la orden).
+        // Lista las solicitudes en estado "Pendiente"
         public List<SolicitudCompra486LP> ListarPendientes()
         {
             try
@@ -92,9 +89,6 @@ namespace BLL
             }
         }
 
-        // Cambia el Estado de la solicitud (ej. a "Procesada" cuando CUN06 genera la orden).
-        // No se compara el conteo de filas de ExecuteNonQuery para decidir exito - mismo
-        // criterio ya aplicado en el resto del proyecto.
         public bool ActualizarEstado(int idSolicitud, string estado, out string mensaje)
         {
             mensaje = "";

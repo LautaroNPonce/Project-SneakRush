@@ -44,7 +44,7 @@ namespace Sistema_SneakRush
                     lm.ObtenerTexto(f, "Msg.SinPermiso.Title", "Acceso denegado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                // Se cierra despues del Load para evitar problemas al cerrar durante la carga.
+                // Se cierra despues del Load para evitar problemas al cerrar durante la carga
                 this.BeginInvoke(new Action(() =>
                 {
                     this.DialogResult = DialogResult.Cancel;
@@ -59,7 +59,7 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente para consultar productos.
+        // Verifica que el usuario en sesion tenga la patente para consultar productos
         private bool TienePatenteConsulta()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -69,7 +69,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("VENTA_CONSULTAR_PRODUCTOS");
         }
 
-        // Patentes granulares por boton (ademas de la patente de acceso al form).
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -98,7 +97,7 @@ namespace Sistema_SneakRush
             MostrarEnGrilla(_bllProducto.Listar());
         }
 
-        // Vuelca la lista en la grilla y aplica formato de columnas.
+        // Vuelca la lista en la grilla y aplica formato de columnas
         private void MostrarEnGrilla(List<Producto486LP> lista)
         {
             dgvProductos.DataSource = null;
@@ -133,7 +132,7 @@ namespace Sistema_SneakRush
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        // Boton "Buscar": aplica los filtros ingresados (pasos 4 a 7 + alternativos 6.1 y 7.1)
+        // aplica los filtros ingresados (pasos 4 a 7 + alternativos 6.1 y 7.1)
         private void Buscar()
         {
             List<Producto486LP> lista = _bllProducto.Buscar(
@@ -157,7 +156,6 @@ namespace Sistema_SneakRush
             Buscar();
         }
 
-        // Boton "Limpiar": borra los filtros y vuelve a mostrar el catalogo completo
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtMarca.Clear();
@@ -168,7 +166,6 @@ namespace Sistema_SneakRush
             CargarGrilla();
         }
 
-        // Boton "Seleccionar": toma el producto de la fila actual y cierra el form.
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             if (dgvProductos.CurrentRow == null)
@@ -186,15 +183,12 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // Boton "Cancelar": cierra sin elegir producto.
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             ProductoSeleccionado = null;
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
-
-        // Observer de idioma: actualiza todas las leyendas en caliente.
         public void ActualizarIdioma()
         {
             var lm = Program.LanguageManager;

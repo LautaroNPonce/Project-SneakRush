@@ -10,12 +10,8 @@ using System.Threading.Tasks;
 
 namespace Mappers
 {
-    /// Habla con SQL para la entidad OrdenCompra. Mismo patron cabecera-detalle que
-    /// Mapper_Venta486LP y Mapper_SolicitudCompra486LP.
-
     public class Mapper_OrdenCompra486LP : MapperBase486LP
     {
-        // Da de alta una orden (cabecera + detalle), todo en una sola transaccion.
         public bool Agregar(OrdenCompra486LP orden, out string mensaje)
         {
             mensaje = "";
@@ -34,10 +30,7 @@ namespace Mappers
 
                 int idOrden = (int)Conexion486LP.EjecutarEscalarEnTransaccion(cmdCab, con, tran);
                 orden.IdOrden = idOrden;
-
-                // El SP genera el NroOrden con el mismo padding (6 digitos) - se replica aca
-                // el mismo calculo para no tener que hacer una consulta extra solo para leerlo.
-                orden.NroOrden = idOrden.ToString("D6");
+                orden.NroOrden = idOrden.ToString("D6"); //El SP genera el NroOrden con el mismo padding(6 digitos)
                 orden.Estado = "Pendiente de Recepción";
 
                 foreach (DetalleOrdenCompra486LP det in orden.Detalles)
@@ -98,7 +91,7 @@ namespace Mappers
             }
         }
 
-        // Costo mas reciente pagado por este producto - dato de referencia para CUN06.
+        // Costo mas reciente pagado por este producto, dato de referencia para CUN06.
         public decimal? ObtenerUltimoCosto(int idProducto)
         {
             try
@@ -116,7 +109,7 @@ namespace Mappers
             }
         }
 
-        // Lista las ordenes en estado "Pendiente de Recepción" (CUN07 las necesita).
+        // Lista las ordenes en estado "Pendiente de Recepción" (CUN07 las necesita)
         public List<OrdenCompra486LP> ListarPendientesDeRecepcion()
         {
             try
@@ -133,8 +126,7 @@ namespace Mappers
             }
         }
 
-        // Cambia el Estado de la orden (ej. a "Recibida" cuando CUN07 registra la recepcion,
-        // o a "Facturada" cuando CUN08 registra la factura).
+        // Cambia el Estado de la orden (ej: a "Recibida" cuando CUN07 registra la recepcion, o a "Facturada" cuando CUN08 registra la factura).
         public bool ActualizarEstado(int idOrden, string estado, out string mensaje)
         {
             mensaje = "";
@@ -156,8 +148,7 @@ namespace Mappers
             }
         }
 
-        // Lista las ordenes en estado "Recibida" (CUN08 las necesita para armar la lista de
-        // seleccion de facturacion).
+        // Lista las ordenes en estado "Recibida" (CUN08 las necesita para armar la lista de seleccion de facturacion).
         public List<OrdenCompra486LP> ListarPendientesDeFacturacion()
         {
             try

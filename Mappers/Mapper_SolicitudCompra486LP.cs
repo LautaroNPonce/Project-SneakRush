@@ -10,12 +10,9 @@ using System.Threading.Tasks;
 
 namespace Mappers
 {
-    /// Habla con SQL para la entidad SolicitudCompra. Mismo patron que Mapper_Venta486LP: nace
-    /// directamente con Mapper (nunca tuvo una DAL_SolicitudCompra486LP propia).
 
     public class Mapper_SolicitudCompra486LP : MapperBase486LP
     {
-        // Da de alta una solicitud (cabecera + detalle), todo en una sola transaccion.
         public bool Agregar(SolicitudCompra486LP solicitud, out string mensaje)
         {
             mensaje = "";
@@ -61,7 +58,7 @@ namespace Mappers
             }
         }
 
-        // Trae una solicitud ya registrada, con su detalle completo.
+        // Trae una solicitud ya registrada, con su detalle completo
         public SolicitudCompra486LP ObtenerPorId(int idSolicitud)
         {
             try
@@ -90,9 +87,6 @@ namespace Mappers
             }
         }
 
-        // Lista las solicitudes en estado "Pendiente" (sin detalle - CUN06 solo necesita la
-        // cabecera para armar la lista de seleccion; el detalle se trae aparte con ObtenerPorId
-        // recien cuando el Administrador elige una).
         public List<SolicitudCompra486LP> ListarPendientes()
         {
             try
@@ -109,7 +103,7 @@ namespace Mappers
             }
         }
 
-        // Cambia el Estado de la solicitud (ej. a "Procesada" cuando CUN06 genera la orden).
+        // Cambia el Estado de la solicitud (ej: procesada)
         public bool ActualizarEstado(int idSolicitud, string estado, out string mensaje)
         {
             mensaje = "";

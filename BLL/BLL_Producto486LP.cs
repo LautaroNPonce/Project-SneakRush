@@ -30,7 +30,6 @@ namespace BLL
             }
         }
 
-        // Busca productos por filtros opcionales (Marca / Modelo / Color / Talle) y, opcionalmente, solo los que tengan stock disponible.
         public List<Producto486LP> Buscar(string marca, string modelo, string color, string talle, bool soloConStock)
         {
             try
@@ -44,7 +43,6 @@ namespace BLL
             }
         }
 
-        // Obtiene un producto por sus atributos (Marca, Modelo, Color, Talle)
         public Producto486LP ObtenerProducto(string marca, string modelo, string color, string talle)
         {
             try
@@ -58,7 +56,6 @@ namespace BLL
             }
         }
 
-        // Verifica que haya stock suficiente del producto para la cantidad pedida
         public bool VerificarStock(int idProducto, int cantidad)
         {
             try
@@ -72,10 +69,6 @@ namespace BLL
                 return false;
             }
         }
-
-        // Descuenta stock tras una venta (CUN04, paso 11). Primer metodo de escritura de esta BLL -
-        // por eso, a partir de ahora, Producto tambien recalcula su DV (RegistrarDVDeFilaNueva: solo
-        // esa fila puntual, igual criterio que Bitacora, porque esto se ejecuta en CADA venta).
         public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -104,8 +97,8 @@ namespace BLL
             }
         }
 
-        // Obtiene un producto por su Id. NUEVO para CUN04: hace falta para completar el objeto Producto relacionado de cada DetalleCarrito486LP (que llega en null desde el Mapper de
-        // Carrito) y asi poder mostrar Marca/Modelo/Color/Talle en la grilla de Cobrar venta.
+        // Obtiene un producto por su Id. Hace falta para completar el Producto de cada DetalleCarrito486LP (llega en null desde el Mapper de Carrito) y así mostrar
+        // Marca/Modelo/Color/Talle en la grilla de Cobrar venta
         public Producto486LP ObtenerPorId(int idProducto)
         {
             try
@@ -119,9 +112,7 @@ namespace BLL
             }
         }
 
-        // Aumenta stock tras confirmarse el pago de una compra (CUN08). Mismo criterio que
-        // ActualizarStock: recalcula el DV de esa unica fila (RegistrarDVDeFilaNueva), porque
-        // esto se ejecuta en cada compra pagada.
+        // Aumenta stock tras confirmarse el pago de una compra. Mismo criterio que actualizarStock: recalcula el DV de esa única fila, porque esto corre en cada compra pagada
         public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";

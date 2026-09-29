@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    // Version MINIMA a proposito - se amplia cuando se llegue a CUN12 "Gestionar Proveedores" (ver pendiente guardado: hay que actualizar tambien el Diagrama de Clases y el DER de CUN06,
-    // y el script SQL con ALTER TABLE sobre esta misma tabla).
+    // todavia no llegamos a CUN12 "Gestionar Proveedores" entonces tiene datos minimos
     public class Proveedor486LP
     {
         [ColumnaTabla486LP]

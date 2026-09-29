@@ -13,8 +13,6 @@ namespace Mappers
 
     public class Mapper_Venta486LP : MapperBase486LP
     {
-        // Da de alta una venta (cabecera + detalle), todo en una sola transaccion - mismo patron que
-        // Mapper_Carrito486LP.Guardar (la unica otra entidad de negocio con relacion cabecera-detalle).
         public bool Agregar(Venta486LP venta, out string mensaje)
         {
             mensaje = "";
@@ -34,9 +32,7 @@ namespace Mappers
                 int idVenta = (int)Conexion486LP.EjecutarEscalarEnTransaccion(cmdCab, con, tran);
                 venta.IdVenta = idVenta;
 
-                // El SP genera el NroComprobante con el mismo padding (6 digitos, ej. "000123") - se
-                // replica aca el mismo calculo para no tener que hacer una consulta extra solo para leerlo.
-                venta.NroComprobante = idVenta.ToString("D6");
+                venta.NroComprobante = idVenta.ToString("D6"); // el NroComprobante tiene el mismo valor que el IdVenta, pero con padding de 6 digitos (ej: 000123)
 
                 foreach (DetalleVenta486LP det in venta.Detalles)
                 {
@@ -67,7 +63,7 @@ namespace Mappers
             }
         }
 
-        // Trae una venta ya registrada, con su detalle completo (para "Ver comprobante").
+        // Trae una venta ya registrada, con su detalle completo (para ver comprobante)
         public Venta486LP ObtenerPorId(int idVenta)
         {
             try

@@ -19,7 +19,7 @@ namespace BE
         [ColumnaTabla486LP]
         public string Estado { get; set; }
 
-        // NO lleva [ColumnaTabla486LP]: no es una columna de la tabla Carrito, es la coleccion de detalles relacionados (se llena aparte).
+        // no lleva [ColumnaTabla486LP] xq no es una columna de la tabla Carrito, es la coleccion de detalles relacionados (se llena aparte).
         public List<DetalleCarrito486LP> Detalles { get; set; }
 
         public Carrito486LP()

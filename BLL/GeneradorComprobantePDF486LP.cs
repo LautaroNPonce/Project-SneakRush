@@ -8,23 +8,16 @@ using System.Linq;
 
 namespace BLL
 {
-    // Genera comprobantes en PDF, con formato de TICKET (angosto, como el de una maquina de
-    // tarjeta o Mercado Pago) - no una factura A4 formal. Usa iTextSharp 5.5.13.
-    // 2 modos, por overload: Generar(Venta, Cliente) para CUN04, Generar(Factura, ...) para CUN08.
     public static class GeneradorComprobantePDF486LP
     {
-        private const float AnchoTicket = 226f; // ~80mm, ancho tipico de un rollo termico de POS
-
-        // Genera el PDF de una Venta y devuelve la ruta del archivo creado. "cliente" puede ser
-        // null (si no se pudo resolver por algun motivo) - el comprobante igual se genera, solo
-        // sin el nombre.
+        private const float AnchoTicket = 226f; 
         public static string Generar(Venta486LP venta, Cliente486LP cliente)
         {
             string carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Comprobantes");
             Directory.CreateDirectory(carpeta);
             string rutaArchivo = Path.Combine(carpeta, $"Comprobante_{venta.NroComprobante}.pdf");
 
-            // Alto dinamico: mas renglones de detalle => ticket mas largo, para no dejar espacio de mas.
+            //  mas renglones de detalle => ticket mas largo, para no dejar espacio de mas.
             float alto = 240f + (venta.Detalles.Count * 40f);
             Document doc = new Document(new Rectangle(AnchoTicket, alto), 10f, 10f, 10f, 10f);
 
@@ -82,11 +75,6 @@ namespace BLL
             return rutaArchivo;
         }
 
-        // Genera el PDF de una Factura de compra (CUN08) y devuelve la ruta del archivo creado.
-        // "detalle" ya debe venir armado por el llamador con los valores REALES a facturar
-        // (Cantidad puesta en Cantidad Recibida, Subtotal recalculado con esa cantidad, no la
-        // Cantidad Pedida original de CUN06) - este metodo solo imprime lo que recibe, no cruza
-        // Orden con Recepcion por su cuenta.
         public static string Generar(Factura486LP factura, string nombreProveedor, List<DetalleOrdenCompra486LP> detalle)
         {
             string carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Comprobantes");

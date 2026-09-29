@@ -11,10 +11,6 @@ using System.Threading.Tasks;
 namespace Mappers
 {
 
-
-    /// Habla con SQL para la entidad Cliente. Reemplaza a DAL_Cliente486LP. Arma el SqlCommand (SP + parametros) y se lo pasa a Conexion486LP para que lo ejecute 
-   /// (conectar/leer/escribir/desconectar es responsabilidad e la DAL, no de este Mapper). El mapeo fila-a-entidad lo hace ManejadorMapeo486LP (reflexion + atributo).
-
     public class Mapper_Cliente486LP : MapperBase486LP
     {
         // Lista todos los clientes.
@@ -34,7 +30,7 @@ namespace Mappers
             }
         }
 
-        // Obtiene un cliente por su DNI (devuelve null si no existe).
+        // Obtiene un cliente por su dni (devuelve null si no existe)
         public Cliente486LP Obtener(string dni)
         {
             try
@@ -52,7 +48,7 @@ namespace Mappers
             }
         }
 
-        // Indica si ya existe un cliente con ese DNI.
+        // Indica si ya existe un cliente con ese dni
         public bool Existe(string dni)
         {
             try
@@ -83,7 +79,7 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Modifica los datos de un cliente (por DNI). El Correo llega YA cifrado desde la BLL.
+        // Modifica los datos de un cliente por dni. El Correo llega ya cifrado desde la BLL
         public int Modificar(Cliente486LP cliente)
         {
             SqlCommand cmd = new SqlCommand("Cliente_Modificar");
@@ -97,7 +93,7 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Baja fisica de un cliente por DNI.
+        // Baja fisica de un cliente por dni
         public int Eliminar(string dni)
         {
             SqlCommand cmd = new SqlCommand("Cliente_Eliminar");

@@ -21,11 +21,8 @@ namespace BE
         [ColumnaTabla486LP]
         public decimal Subtotal { get; set; }
 
-        // Vienen del JOIN con Producto en el SP DetalleVenta_ListarPorVenta - NO son columnas reales de
-        // la tabla DetalleVenta (por eso no participan del mecanismo de DV, que lee "SELECT * FROM DetalleVenta").
-        // Llevan [ColumnaTabla486LP] igual, para que el mapeo por reflexion las complete solas desde el
-        // DataTable del JOIN - a diferencia de DetalleCarrito486LP (que deja el objeto Producto en null
-        // y lo resuelve aparte), aca no hace falta ninguna resolucion posterior.
+        // Vienen del JOIN con Producto (no son columnas reales de DetalleVenta, por eso el DV no las controla). Llevan [ColumnaTabla486LP] igual para que el mapeo las complete
+        // solas desde el resultado del JOIN, sin resolución aparte (a diferencia de DetalleCarrito486LP).
         [ColumnaTabla486LP]
         public string Marca { get; set; }
         [ColumnaTabla486LP]

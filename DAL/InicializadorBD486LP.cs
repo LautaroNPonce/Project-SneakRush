@@ -7,13 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace DAL
 {
-    /// Se asegura de que la base SneakRushDB exista en la instancia detectada por Conexion486LP. Si NO existe, la crea y ejecuta el script
+    //  Se asegura de que la base SneakRushDB exista en la instancia detectada por Conexion486LP. Si NO existe, la crea y ejecuta el script
     public static class InicializadorBD486LP
     {
         private const string NOMBRE_BASE = "SneakRushDB";
         private const string ARCHIVO_SCRIPT = "SneakRushDB_Instalador.sql";
 
-        /// Devuelve true si la base ya existia o se creo correctamente y devuelve false y mensaje con el detalle si algo fallo
+        // Devuelve true si la base ya existia o se creo correctamente y devuelve false y mensaje con el detalle si algo fallo
         public static bool AsegurarBaseDeDatos(out string mensaje)
         {
             mensaje = string.Empty;
@@ -69,7 +69,7 @@ namespace DAL
             }
         }
 
-        /// Busca el .sql al lado del ejecutable o en la subcarpeta 'BaseDeDatos'.
+        // Busca el .sql al lado del ejecutable o en la subcarpeta BaseDeDatos
         private static string UbicarScript()
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -94,8 +94,7 @@ namespace DAL
 
         private static List<string> SepararPorGo(string script)
         {
-            // Separa por lineas que contengan unicamente 'GO' (igual que SSMS/sqlcmd).
-            // ADO.NET no entiende 'GO', por eso hay que partir el script en lotes.
+            // Separa por lineas que contengan unicamente 'GO' (igual que SSMS/sqlcmd). ADO.NET no entiende 'GO', por eso hay que partir el script en lotes
             string[] partes = Regex.Split(
                 script,
                 @"^\s*GO\s*$",

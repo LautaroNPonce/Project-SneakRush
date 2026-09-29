@@ -23,7 +23,7 @@ namespace Sistema_SneakRush
         private readonly string[] _codigosModulo =
         {
             "", "Login", "Logout", "Cambiar Contraseña",
-            "Gestión Usuarios", "Gestión Perfiles", "Gestión Familias", "Gestión Respaldos", "Ventas", "Dígito Verificador"
+            "Gestión Usuarios", "Gestión Perfiles", "Gestión Familias", "Gestión Respaldos", "Ventas", "Dígito Verificador", "Compras"
         };
         private bool _filtroAplicado = true;   // arranca igual que el diseñador (botón = "Cancelar")
         private int _ultimoTotal = 0;
@@ -85,8 +85,9 @@ namespace Sistema_SneakRush
                 lm.ObtenerTexto(f, "modBit.GestionPerfiles", "Gestión Perfiles"),
                 lm.ObtenerTexto(f, "modBit.GestionFamilias", "Gestión Familias"),
                 lm.ObtenerTexto(f, "modBit.GestionRespaldos", "Gestión Respaldos"),
-                lm.ObtenerTexto(f, "modBit.Ventas", "Ventas"),
-                lm.ObtenerTexto(f, "modBit.DigitoVerificador", "Dígito Verificador")
+                lm.ObtenerTexto(f, "modBit.Ventas", "Ventas"), 
+                lm.ObtenerTexto(f, "modBit.DigitoVerificador", "Dígito Verificador"), 
+                lm.ObtenerTexto(f, "modBit.Compras", "Compras")
 
             });
             cmbModulo.SelectedIndex = (idxModulo >= 0) ? idxModulo : 0;

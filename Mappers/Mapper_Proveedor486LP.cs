@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace Mappers
 {
-    /// Habla con SQL para la entidad Proveedor. Solo lectura por ahora (Listar) - el resto
-    /// (Agregar/Modificar/Eliminar) se agrega en CUN12 "Gestionar Proveedores".
-
     public class Mapper_Proveedor486LP : MapperBase486LP
     {
         public List<Proveedor486LP> Listar()
@@ -31,7 +28,7 @@ namespace Mappers
             }
         }
 
-        // Suma stock (compra) - separado de ActualizarStock, que resta (usado por Ventas).
+        // Suma stock (compra)  separado de ActualizarStock, que resta (usado por Ventas).
         public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";

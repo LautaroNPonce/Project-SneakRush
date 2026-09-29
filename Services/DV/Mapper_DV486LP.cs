@@ -11,15 +11,18 @@ using System.Threading.Tasks;
 namespace Services
 {
 
-    /// DV opera sobre 15 tablas distintas (13 + Venta/DetalleVenta agregadas en CUN04), pero NUNCA arma el nombre de tabla como texto SQL dinamico: cada
-    /// tabla tiene su propio SP fijo (DV_Leer_X, DV_ActualizarFila_X), y este Mapper solo ELIGE cual SP llamar segun el nombre de tabla que le llega - la
-    /// eleccion es en C#, el SQL de cada SP es fijo y conocido de antemano.
+    /// DV opera sobre 23 tablas distintas (15 de Ventas/Seguridad + 8 agregadas en RFN2 Compras:
+    /// Proveedor, SolicitudCompra, DetalleSolicitudCompra, OrdenCompra, DetalleOrdenCompra,
+    /// Recepcion, DetalleRecepcion, Factura), pero NUNCA arma el nombre de tabla como texto SQL
+    /// dinamico: cada tabla tiene su propio SP fijo (DV_Leer_X, DV_ActualizarFila_X), y este
+    /// Mapper solo ELIGE cual SP llamar segun el nombre de tabla que le llega - la eleccion es en
+    /// C#, el SQL de cada SP es fijo y conocido de antemano.
     /// UBICACION DEFINITIVA en Services (no en Mappers) - fue la ULTIMA entidad migrada; con esta se completo el refactor y se movieron los 7 Mappers
     /// de seguridad/auditoria a Services (ver CHANGELOG_Refactor_Arquitectura.md).
 
     public class Mapper_DV486LP : MapperBase486LP
     {
-        // Nombre del SP de lectura completa, por tabla protegida (15 tablas).
+        // Nombre del SP de lectura completa, por tabla protegida (23 tablas).
         private static readonly Dictionary<string, string> _spLeerPorTabla = new Dictionary<string, string>
         {
             { "BitacoraEvento",   "DV_Leer_BitacoraEvento" },
@@ -36,7 +39,16 @@ namespace Services
             { "DetalleCarrito",   "DV_Leer_DetalleCarrito" },
             { "Cliente",          "DV_Leer_Cliente" },
             { "Venta",            "DV_Leer_Venta" },
-            { "DetalleVenta",     "DV_Leer_DetalleVenta" }
+            { "DetalleVenta",     "DV_Leer_DetalleVenta" },
+            // Agregadas en RFN2 Compras (CUN05-08).
+            { "Proveedor",              "DV_Leer_Proveedor" },
+            { "SolicitudCompra",        "DV_Leer_SolicitudCompra" },
+            { "DetalleSolicitudCompra", "DV_Leer_DetalleSolicitudCompra" },
+            { "OrdenCompra",            "DV_Leer_OrdenCompra" },
+            { "DetalleOrdenCompra",     "DV_Leer_DetalleOrdenCompra" },
+            { "Recepcion",              "DV_Leer_Recepcion" },
+            { "DetalleRecepcion",       "DV_Leer_DetalleRecepcion" },
+            { "Factura",                "DV_Leer_Factura" }
         };
 
         // Nombre del SP que actualiza el DV de UNA fila, por tabla (solo las que llevan DVH por fila - las 3 puente quedan afuera).
@@ -53,7 +65,16 @@ namespace Services
             { "DetalleCarrito",  "DV_ActualizarFila_DetalleCarrito" },
             { "Cliente",         "DV_ActualizarFila_Cliente" },
             { "Venta",           "DV_ActualizarFila_Venta" },
-            { "DetalleVenta",    "DV_ActualizarFila_DetalleVenta" }
+            { "DetalleVenta",    "DV_ActualizarFila_DetalleVenta" },
+            // Agregadas en RFN2 Compras (CUN05-08).
+            { "Proveedor",              "DV_ActualizarFila_Proveedor" },
+            { "SolicitudCompra",        "DV_ActualizarFila_SolicitudCompra" },
+            { "DetalleSolicitudCompra", "DV_ActualizarFila_DetalleSolicitudCompra" },
+            { "OrdenCompra",            "DV_ActualizarFila_OrdenCompra" },
+            { "DetalleOrdenCompra",     "DV_ActualizarFila_DetalleOrdenCompra" },
+            { "Recepcion",              "DV_ActualizarFila_Recepcion" },
+            { "DetalleRecepcion",       "DV_ActualizarFila_DetalleRecepcion" },
+            { "Factura",                "DV_ActualizarFila_Factura" }
         };
 
         // Lee TODAS las columnas y filas de una tabla protegida (para calcular DVH/DVV). Elige el SP fijo correspondiente - nunca arma SQL con el

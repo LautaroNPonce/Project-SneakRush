@@ -113,8 +113,9 @@ namespace Sistema_SneakRush
             }
 
             bool verCompra = permisos.Contains("COMPRA_GENERAR_SOLICITUD")
-                          || permisos.Contains("COMPRA_REGISTRAR_ORDEN")
-                          || permisos.Contains("COMPRA_REGISTRAR_RECEPCION");
+              || permisos.Contains("COMPRA_REGISTRAR_ORDEN")
+              || permisos.Contains("COMPRA_REGISTRAR_RECEPCION")
+              || permisos.Contains("COMPRA_REGISTRAR_FACTURA");
 
             compraToolStripMenuItem.Visible = verCompra;
 
@@ -123,6 +124,7 @@ namespace Sistema_SneakRush
                 generarSolicitudDeCompraToolStripMenuItem.Visible = permisos.Contains("COMPRA_GENERAR_SOLICITUD");
                 registrarOrdenDeCompraToolStripMenuItem.Visible = permisos.Contains("COMPRA_REGISTRAR_ORDEN");
                 registrarRecepciónDeMercaderíaToolStripMenuItem.Visible = permisos.Contains("COMPRA_REGISTRAR_RECEPCION");
+                registrarFacturaYPagoDeCompraToolStripMenuItem.Visible = permisos.Contains("COMPRA_REGISTRAR_FACTURA");
             }
 
             bool verVenta = permisos.Contains("VENTA_GESTIONAR_CARRITO")
@@ -364,6 +366,7 @@ namespace Sistema_SneakRush
             generarSolicitudDeCompraToolStripMenuItem.Text = lm.ObtenerTexto(f, "generarSolicitudDeCompraToolStripMenuItem");
             registrarOrdenDeCompraToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarOrdenDeCompraToolStripMenuItem");
             registrarRecepciónDeMercaderíaToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarRecepciónDeMercaderíaToolStripMenuItem");
+            registrarFacturaYPagoDeCompraToolStripMenuItem.Text = lm.ObtenerTexto(f, "registrarFacturaYPagoDeCompraToolStripMenuItem");
 
             // Menú Venta
             ventaToolStripMenuItem.Text = lm.ObtenerTexto(f, "ventaToolStripMenuItem");

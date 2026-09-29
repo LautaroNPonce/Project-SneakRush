@@ -73,7 +73,8 @@
     "consultasAnalíticasToolStripMenuItem": "Consultas analíticas",
     "ayudaToolStripMenuItem": "Ayuda",
     "verDocumentaciónToolStripMenuItem": "Ver documentación",
-    "guíaDeUsuarioToolStripMenuItem": "Guía de usuario"
+    "guíaDeUsuarioToolStripMenuItem": "Guía de usuario",
+    "registrarFacturaYPagoDeCompraToolStripMenuItem": "Registrar factura y pago de compra"
   },
 
   "FrmCambiarIdioma486LP": {
@@ -406,7 +407,11 @@
     "modBit.CambiarContrasena": "Cambiar Contraseña",
     "modBit.GestionUsuarios": "Gestión Usuarios",
     "modBit.GestionPerfiles": "Gestión Perfiles",
-    "modBit.GestionFamilias": "Gestión Familias"
+    "modBit.GestionFamilias": "Gestión Familias",
+    "modBit.GestionRespaldos": "Gestión Respaldos",
+    "modBit.Ventas": "Ventas",
+    "modBit.DigitoVerificador": "Dígito Verificador",
+    "modBit.Compras": "Compras"
   },
 
   "FrmReparacionBD486LP": {
@@ -683,16 +688,16 @@
     "Frm.RegistrarFactura.Titulo": "Registrar factura y pago de compra",
     "Frm.RegistrarFactura.Ordenes": "Órdenes pendientes de facturación",
     "Frm.RegistrarFactura.DetalleFactura": "Detalle a facturar",
-    "Frm.RegistrarFactura.Total": "Total:",
     "Frm.RegistrarFactura.MedioPago": "Medio de pago",
-    "Frm.RegistrarFactura.MedioPagoLabel": "Medio de pago:",
     "Frm.RegistrarFactura.Efectivo": "Efectivo",
     "Frm.RegistrarFactura.Tarjeta": "Tarjeta",
     "Frm.RegistrarFactura.Transferencia": "Transferencia",
+    "Frm.RegistrarFactura.DatosTarjeta": "Datos de la tarjeta",
     "Frm.RegistrarFactura.Numero": "Número:",
-    "Frm.RegistrarFactura.Vencimiento": "Vencimiento:",
+    "Frm.RegistrarFactura.Vencimiento": "Vencimiento (MM/AA):",
     "Frm.RegistrarFactura.CVV": "CVV:",
     "Frm.RegistrarFactura.Procesando": "Procesando el pago...",
+    "Frm.RegistrarFactura.Total": "Total:",
     "Frm.RegistrarFactura.Cobrar": "Registrar factura y cobrar",
     "Frm.RegistrarFactura.VerComprobante": "Ver Comprobante",
     "Frm.RegistrarFactura.Cancelar": "Cancelar",
@@ -710,7 +715,8 @@
     "Frm.RegistrarFactura.Msg.SinPendientes": "No hay órdenes pendientes de facturación.",
     "Frm.RegistrarFactura.Msg.SeleccionarOrden": "Seleccione una orden de compra.",
     "Frm.RegistrarFactura.Msg.DatosTarjetaInvalidos": "Datos de tarjeta inválidos.",
-    "Frm.RegistrarFactura.Msg.PagoConfirmado": "Pago confirmado. Ya puede ver el comprobante.",
+    "Frm.RegistrarFactura.Msg.SinComprobante": "Todavía no se generó ningún comprobante.",
+    "Frm.RegistrarFactura.Msg.ErrorAbrirComprobante": "No se pudo abrir el comprobante: {0}",
     "Frm.RegistrarFactura.Msg.Validacion.Title": "Validación",
     "Frm.RegistrarFactura.Msg.Aviso.Title": "Aviso",
     "Frm.RegistrarFactura.Msg.Informacion.Title": "Información"

@@ -12,8 +12,6 @@ namespace Mappers
 {
     public class Mapper_Carrito486LP : MapperBase486LP
     {
-        // Guarda el carrito (cabecera) y sus detalles en una transaccion.
-        // Devuelve el IdCarrito generado (o 0 si falla).
         public int Guardar(Carrito486LP carrito, out string Mensaje)
         {
             int idGenerado = 0;
@@ -62,7 +60,7 @@ namespace Mappers
             return idGenerado;
         }
 
-        // Obtiene un carrito por su Id (cabecera + detalles).
+        // Obtiene un carrito por su Id (cabecera + detalles)
         public Carrito486LP Obtener(int idCarrito)
         {
             try
@@ -76,10 +74,7 @@ namespace Mappers
                 if (tablaCab.Rows.Count == 0) return null;
 
                 Carrito486LP carrito = ManejadorMapeo486LP.MapearEntidad<Carrito486LP>(tablaCab.Rows[0]);
-
-                // Detalles (Producto queda null: se resuelve aparte si hace falta,
-                // igual que hacia el codigo original).
-                SqlCommand cmdDet = new SqlCommand("DetalleCarrito_ListarPorCarrito");
+                SqlCommand cmdDet = new SqlCommand("DetalleCarrito_ListarPorCarrito"); // Detalles (Producto queda null: se resuelve aparte si hace falta, igual que hacia el codigo original).
                 cmdDet.CommandType = CommandType.StoredProcedure;
                 cmdDet.Parameters.Add(new SqlParameter("@IdCarrito", idCarrito));
 
@@ -94,8 +89,6 @@ namespace Mappers
             }
         }
 
-        // Busca el carrito "Activo" de un DNI (cabecera + detalles). NUEVO para CUN04: hasta ahora
-        // solo se buscaba por IdCarrito, nunca por DNI. Mismo patron que Obtener(idCarrito).
         public Carrito486LP ObtenerActivoPorDNI(string dni)
         {
             try
@@ -124,9 +117,8 @@ namespace Mappers
             }
         }
 
-        // Cambia el Estado del carrito (ej. "Activo" -> "Facturado" cuando CUN04 completa la venta).
-        // NUEVO para CUN04. No se compara el conteo de filas de ExecuteNonQuery para decidir exito -
-        // mismo criterio ya aplicado en el resto del proyecto (Usuarios, Familia, Perfil, Idioma).
+        // Cambia el Estado del carrito ("Activo" -> "Facturado" cuando CUN04 completa la venta).
+        // No compara filas afectadas para decidir éxito - mismo criterio de siempre.
         public bool ActualizarEstado(int idCarrito, string estado, out string mensaje)
         {
             mensaje = "";
