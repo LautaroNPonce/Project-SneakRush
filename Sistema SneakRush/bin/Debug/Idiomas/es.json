@@ -491,7 +491,8 @@
     "Msg.SinResultados": "No se encontraron productos con esos criterios.",
     "Msg.SinResultados.Title": "Sin resultados",
     "Msg.SeleccionarProducto": "Seleccione un producto de la grilla.",
-    "Msg.SeleccionarProducto.Title": "Aviso"
+    "Msg.SeleccionarProducto.Title": "Aviso",
+    "Msg.SinPermisoCarrito": "No tiene permiso para gestionar el carrito."
   },
 
   "FrmGestionCarrito486LP": {
@@ -519,15 +520,13 @@
     "Frm.GestionCarrito.Msg.SinPermiso.Title": "Acceso denegado",
     "Frm.GestionCarrito.Msg.DNIIncorrecto": "DNI incorrecto.",
     "Frm.GestionCarrito.Msg.Validacion.Title": "Validación",
-    "Frm.GestionCarrito.Msg.ClienteNoRegistrado": "El cliente con DNI {0} no está registrado. ¿Desea registrarlo ahora?",
-    "Frm.GestionCarrito.Msg.ClienteNoRegistrado.Title": "Cliente no registrado",
-    "Frm.GestionCarrito.Msg.ClienteAsignado": "Cliente asignado al carrito.",
+    "Frm.GestionCarrito.Msg.ClienteAsignado": "DNI asignado al carrito.",
     "Frm.GestionCarrito.Msg.Informacion.Title": "Información",
     "Frm.GestionCarrito.Msg.Aviso.Title": "Aviso",
     "Frm.GestionCarrito.Msg.SeleccionarParaEliminar": "Seleccione un producto del carrito para eliminar.",
     "Frm.GestionCarrito.Msg.SeleccionarParaModificar": "Seleccione un producto del carrito para modificar.",
     "Frm.GestionCarrito.Msg.SinStock": "Sin stock disponible para la cantidad solicitada.",
-    "Frm.GestionCarrito.Msg.DebeAsignarCliente": "Debe asignar un cliente antes de finalizar.",
+    "Frm.GestionCarrito.Msg.DebeAsignarCliente": "Debe asignar el DNI del cliente antes de finalizar.",
     "Frm.GestionCarrito.Msg.CarritoGuardado": "Carrito guardado con éxito."
   },
 
@@ -593,7 +592,12 @@
     "Frm.CobrarVenta.Msg.DatosTarjetaInvalidos": "Datos de tarjeta inválidos.",
     "Frm.CobrarVenta.Msg.Informacion.Title": "Información",
     "Frm.CobrarVenta.Msg.SinComprobante": "Todavía no se generó ningún comprobante.",
-    "Frm.CobrarVenta.Msg.ErrorAbrirComprobante": "No se pudo abrir el comprobante: {0}"
+    "Frm.CobrarVenta.Msg.ErrorAbrirComprobante": "No se pudo abrir el comprobante: {0}",
+    "Frm.CobrarVenta.Msg.ClienteNoRegistrado": "El cliente con DNI {0} no está registrado. Debe registrarlo para continuar con el cobro.",
+    "Frm.CobrarVenta.Msg.ClienteNoRegistrado.Title": "Cliente no registrado",
+    "Frm.CobrarVenta.Msg.ClienteSinRegistrar": "El cliente con DNI {0} sigue sin estar registrado, por lo que no se puede cobrar. Si el cliente no desea registrarse, use Cancelar para cancelar el carrito. Para volver a intentar el registro, use Seleccionar.",
+    "Frm.CobrarVenta.Msg.ConfirmarCancelarCarrito": "¿Confirma la cancelación del carrito del cliente con DNI {0}? El carrito quedará en estado Cancelado.",
+    "Frm.CobrarVenta.Msg.ConfirmarCancelarCarrito.Title": "Cancelar carrito"
   },
 
   "FrmGenerarSolicitud486LP": {

@@ -9,12 +9,68 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
+    // Copia
     public class BLL_Venta486LP
     {
         private Mapper_Venta486LP ObjetoMapper = new Mapper_Venta486LP();
         private BLL_Producto486LP ObjProducto = new BLL_Producto486LP();
         private BLL_Carrito486LP ObjCarrito = new BLL_Carrito486LP();
+        private BLL_Cliente486LP ObjCliente = new BLL_Cliente486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
+
+        // Indica si el cliente del carrito (por DNI) ya esta registrado. Lo usa el Cajero en CUN04 antes de elegir el medio de pago (G02 paso 9):
+        // si devuelve false, el form incluye CUN03 para registrarlo.
+        public bool ClienteRegistrado(string dni)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(dni)) return false;
+                return ObjCliente.Existe(dni.Trim());
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Venta.ClienteRegistrado(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
+            }
+        }
+
+        // Cancela el carrito activo (CUN04: el cliente no se registra o desiste de la compra). El carrito NO se elimina: pasa a Estado "Cancelado".
+        // BLL_Carrito.ActualizarEstado se ocupa de actualizar el DV del carrito y de registrar el evento en la bitacora.
+        public bool CancelarCarrito(int idCarrito, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                Carrito486LP carrito = ObjCarrito.ObtenerCarrito(idCarrito);
+                if (carrito == null)
+                {
+                    mensaje = "El carrito no existe.";
+                    return false;
+                }
+                if (carrito.Estado != "Activo")
+                {
+                    mensaje = "Solo se puede cancelar un carrito en estado Activo.";
+                    return false;
+                }
+
+                string mensajeEstado;
+                if (!ObjCarrito.ActualizarEstado(idCarrito, "Cancelado", out mensajeEstado))
+                {
+                    mensaje = mensajeEstado;
+                    return false;
+                }
+
+                mensaje = "Carrito cancelado correctamente.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = ex.Message;
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Venta.CancelarCarrito(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
+            }
+        }
 
         // Registra la venta desde un carrito ya armado: persiste cabecera+detalle, descuenta stock, cierra el carrito ("Facturado"), recalcula DV y registra bitácora.
         // La Venta queda persistida siempre  el pago nunca se rechaza en este proyecto, no hay reversión posible.
@@ -32,6 +88,12 @@ namespace BLL
                 if (string.IsNullOrEmpty(carrito.DNICliente))
                 {
                     mensaje = "El carrito no tiene un cliente asignado.";
+                    return null;
+                }
+                // El carrito se guarda solo con el DNI (el Vendedor no registra clientes): la venta exige que el cliente ya este registrado (FK Venta -> Cliente)
+                if (!ObjCliente.Existe(carrito.DNICliente))
+                {
+                    mensaje = $"El cliente con DNI {carrito.DNICliente} no esta registrado. Debe registrarlo antes de cobrar.";
                     return null;
                 }
 

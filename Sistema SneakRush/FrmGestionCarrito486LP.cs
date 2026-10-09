@@ -17,10 +17,9 @@ namespace Sistema_SneakRush
     {
         private BLL_Carrito486LP _bllCarrito = new BLL_Carrito486LP();
         private BLL_Producto486LP _bllProducto = new BLL_Producto486LP();
-        private BLL_Cliente486LP _bllCliente = new BLL_Cliente486LP();
         private readonly string f = "FrmGestionCarrito486LP";
         private Carrito486LP _carrito = new Carrito486LP();
-        private bool _clienteAsignado = false;
+        private bool _dniAsignado = false;
         private bool _puedeAsignar;
         private bool _puedeAgregar;
         private bool _puedeEliminar;
@@ -28,11 +27,36 @@ namespace Sistema_SneakRush
         private bool _puedeFinalizar;
         private bool _puedeCancelar;
 
+        // Producto que viene elegido desde CUN01 (Consultar productos abierto desde el menu): se carga en el carrito al abrir el form
+        private readonly Producto486LP _productoInicial;
+
         public FrmGestionCarrito486LP()
         {
             InitializeComponent();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionCarrito486LP_FormClosing;
+        }
+
+        public FrmGestionCarrito486LP(Producto486LP productoInicial) : this()
+        {
+            _productoInicial = productoInicial;
+        }
+
+        // Agrega un producto al carrito con la cantidad indicada en el selector (mismo criterio que el boton "Agregar"). Lo usa CUN01 al derivar un producto al carrito.
+        public void CargarProducto(Producto486LP producto)
+        {
+            if (producto == null) return;
+            var lm = Program.LanguageManager;
+
+            string mensaje;
+            if (!_bllCarrito.Agregar(_carrito, producto, (int)nudCantidad.Value, out mensaje))
+            {
+                MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            RefrescarGrilla();
+            ActualizarTotal();
         }
 
         private void FrmGestionCarrito486LP_Load(object sender, EventArgs e)
@@ -54,13 +78,16 @@ namespace Sistema_SneakRush
             }
 
             _carrito = new Carrito486LP();
-            _clienteAsignado = false;
+            _dniAsignado = false;
             ConfigurarColumnas();
             RefrescarGrilla();
             ActualizarTotal();
             AjustarBotonesSegunPerfil();
             AplicarPermisosBotones();
             ActualizarIdioma();
+
+            if (_productoInicial != null)
+                CargarProducto(_productoInicial);
         }
 
         // Verifica que el usuario en sesion tenga la patente de acceso al form.
@@ -115,31 +142,11 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // El cliente tiene que estar registrado antes de asignarlo al carrito.¿
-            if (!_bllCliente.Existe(dni))
-            {
-                DialogResult r = MessageBox.Show(
-                    string.Format(lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ClienteNoRegistrado", "El cliente con DNI {0} no está registrado. ¿Desea registrarlo ahora?"), dni),
-                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ClienteNoRegistrado.Title", "Cliente no registrado"),
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (r == DialogResult.Yes)
-                {
-                    using (FrmGestionClientes486LP frmClientes = new FrmGestionClientes486LP())
-                    {
-                        frmClientes.ShowDialog();
-                    }
-                }
-                if (!_bllCliente.Existe(dni))
-                {
-                    return;
-                }
-            }
-
+            // El Vendedor solo carga el DNI: no se verifica ni se registra el cliente acá. De eso se ocupa el Cajero al cobrar (CUN04).
             _carrito.DNICliente = dni;
-            _clienteAsignado = true;
+            _dniAsignado = true;
             MessageBox.Show(
-                lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ClienteAsignado", "Cliente asignado al carrito."),
+                lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ClienteAsignado", "DNI asignado al carrito."),
                 lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Informacion.Title", "Información"),
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -230,10 +237,10 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            if (!_clienteAsignado)
+            if (!_dniAsignado)
             {
                 MessageBox.Show(
-                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.DebeAsignarCliente", "Debe asignar un cliente antes de finalizar."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.DebeAsignarCliente", "Debe asignar el DNI del cliente antes de finalizar."),
                     lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;

@@ -141,8 +141,8 @@ namespace BLL
             }
         }
 
-        // Cambia el Estado del carrito (ej: a facturado cuando completa la venta, para que no vuelva a aparecer como activo)
-        // No recalcula DV acá lo hace BLL_Venta486LP.RegistrarVenta() junto con el resto de las tablas afectadas
+        // Cambia el Estado del carrito: "Facturado" cuando se completa la venta o "Cancelado" cuando el Cajero cancela la operacion (en ambos casos deja de aparecer como Activo)
+        // Actualiza el DV de la fila del carrito y registra el evento en la bitacora
         public bool ActualizarEstado(int idCarrito, string estado, out string mensaje)
         {
             mensaje = "";

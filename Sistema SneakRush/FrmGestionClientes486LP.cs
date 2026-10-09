@@ -25,11 +25,21 @@ namespace Sistema_SneakRush
         private bool _puedeLimpiar;
         private bool _puedeCerrar;
 
+        // DNI que viene precargado cuando el form se incluye desde CUN04 (Cobrar venta): el Cajero registra al cliente del carrito.
+        // Null cuando el form se abre desde el menu Maestro.
+        private readonly string _dniPrecargado;
+
         public FrmGestionClientes486LP()
         {
             InitializeComponent();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionClientes486LP_FormClosing;
+        }
+
+        // Include desde CUN04: el DNI del carrito llega precargado y no se puede modificar
+        public FrmGestionClientes486LP(string dniPrecargado) : this()
+        {
+            _dniPrecargado = dniPrecargado;
         }
 
         private void FrmGestionClientes486LP_Load(object sender, EventArgs e)
@@ -56,6 +66,13 @@ namespace Sistema_SneakRush
             AjustarBotonesSegunPerfil();
             AplicarPermisosBotones();
             ActualizarIdioma();
+
+            if (!string.IsNullOrEmpty(_dniPrecargado))
+            {
+                txtDNI.Text = _dniPrecargado;
+                txtDNI.ReadOnly = true;
+                txtNombre.Focus();
+            }
         }
 
         // Verifica que el usuario en sesion tenga la patente de acceso al form.
@@ -132,6 +149,7 @@ namespace Sistema_SneakRush
         private void dgvClientes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
+            if (!string.IsNullOrEmpty(_dniPrecargado)) return; // con el DNI del carrito precargado no se cambia de cliente
 
             Cliente486LP cli = dgvClientes.Rows[e.RowIndex].DataBoundItem as Cliente486LP;
             if (cli == null) return;
@@ -154,6 +172,15 @@ namespace Sistema_SneakRush
             if (_bllCliente.Agregar(cli, out mensaje))
             {
                 MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.GestionClientes.Msg.Title", "Gestión de clientes"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Incluido desde CUN04: el cliente quedó registrado, se vuelve a Cobrar venta
+                if (!string.IsNullOrEmpty(_dniPrecargado))
+                {
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                    return;
+                }
+
                 LimpiarCampos();
                 RefrescarGrilla();
             }
@@ -258,12 +285,16 @@ namespace Sistema_SneakRush
 
         private void LimpiarCampos()
         {
-            txtDNI.Clear();
+            if (string.IsNullOrEmpty(_dniPrecargado))
+                txtDNI.Clear(); // con el DNI del carrito precargado, Limpiar no lo borra
             txtNombre.Clear();
             txtApellido.Clear();
             txtCorreo.Clear();
             txtTelefono.Clear();
-            txtDNI.Focus();
+            if (string.IsNullOrEmpty(_dniPrecargado))
+                txtDNI.Focus();
+            else
+                txtNombre.Focus();
         }
 
         public void ActualizarIdioma()

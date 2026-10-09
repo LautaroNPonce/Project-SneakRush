@@ -29,6 +29,7 @@ namespace Sistema_SneakRush
         private bool _puedeCobrar;
         private bool _puedeVerComprobante;
         private bool _puedeCancelar;
+        private bool _clienteRegistrado; // el cliente del carrito seleccionado ya esta registrado (se verifica antes del medio de pago)
         private bool _formateandoNumero;
         private bool _formateandoVencimiento;
 
@@ -71,6 +72,7 @@ namespace Sistema_SneakRush
             btnVerComprobante.Enabled = false;
             AjustarBotonesSegunPerfil();
             AplicarPermisosBotones();
+            ActualizarHabilitacionCobro(); // sin carrito seleccionado no se puede cobrar
             ActualizarIdioma();
         }
 
@@ -109,7 +111,17 @@ namespace Sistema_SneakRush
         // habilita/deshabilita el panel de datos de tarjeta segun el medio de pago elegido
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
-            grpTarjeta.Enabled = rbTarjeta.Checked;
+            ActualizarHabilitacionCobro();
+        }
+
+        // "Cobrar" y el medio de pago solo se habilitan con un carrito seleccionado cuyo cliente ya esta registrado, y mientras la venta no se haya cobrado.
+        // Sin cliente registrado queda solo "Cancelar" (y "Seleccionar" para volver a intentar el registro).
+        private void ActualizarHabilitacionCobro()
+        {
+            bool listoParaCobrar = _carritoActual != null && _clienteRegistrado && _ventaGenerada == null;
+            btnCobrar.Enabled = listoParaCobrar && _puedeCobrar;
+            grpMedioPago.Enabled = listoParaCobrar;
+            grpTarjeta.Enabled = listoParaCobrar && rbTarjeta.Checked;
         }
 
         // Seleccionar (buscar carrito por DNI) 
@@ -128,13 +140,17 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Paso 4: recuperar el carrito activo de ese DNI. 
-            // El cliente ya quedó asignado en CUN02 (el include a CUN03 vive ahí)  acá no hace falta verificar/registrar cliente
+            // Paso 4: recuperar el carrito activo de ese DNI.
+            // Se descarta cualquier carrito seleccionado antes: si ahora no hay uno activo, "Cobrar" no debe operar sobre el anterior
+            _carritoActual = null;
+            _clienteRegistrado = false;
+            dgvDetalle.DataSource = null;
+            ActualizarHabilitacionCobro();
 
             Carrito486LP carrito = _bllCarrito.ObtenerActivoPorDNI(dni);
             if (carrito == null)
             {
-                // 3.2: sin carrito activo para ese DNI (o el DNI no corresponde a ningun cliente).
+                // 3.2: sin carrito activo para ese DNI.
                 MessageBox.Show(
                     lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.SinCarritoActivo", "Ese cliente no tiene un carrito activo para cobrar."),
                     lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Aviso.Title", "Aviso"),
@@ -153,6 +169,38 @@ namespace Sistema_SneakRush
 
             _carritoActual = carrito;
             MostrarDetalle();
+
+            // El Vendedor solo cargó el DNI en el carrito: acá el Cajero verifica que el cliente esté registrado (si no, incluye CUN03)
+            _clienteRegistrado = VerificarClienteRegistrado(carrito.DNICliente);
+            ActualizarHabilitacionCobro();
+        }
+
+        // G02 paso 9 (CUN04): el Cajero verifica que el cliente del carrito esté registrado.
+        // Si no lo está, incluye CUN03 (FrmGestionClientes486LP) con el DNI precargado y vuelve a verificar al cerrarlo.
+        // Si el cliente no se registra, el cobro no avanza: el Cajero puede reintentar o usar "Cancelar" para cancelar el carrito.
+        private bool VerificarClienteRegistrado(string dni)
+        {
+            var lm = Program.LanguageManager;
+
+            if (_bllVenta.ClienteRegistrado(dni)) return true;
+
+            MessageBox.Show(
+                string.Format(lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.ClienteNoRegistrado", "El cliente con DNI {0} no está registrado. Debe registrarlo para continuar con el cobro."), dni),
+                lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.ClienteNoRegistrado.Title", "Cliente no registrado"),
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            using (FrmGestionClientes486LP frmClientes = new FrmGestionClientes486LP(dni))
+            {
+                frmClientes.ShowDialog(this);
+            }
+
+            if (_bllVenta.ClienteRegistrado(dni)) return true;
+
+            MessageBox.Show(
+                string.Format(lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.ClienteSinRegistrar", "El cliente con DNI {0} sigue sin estar registrado, por lo que no se puede cobrar. Si el cliente no desea registrarse, use Cancelar para cancelar el carrito."), dni),
+                lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Aviso.Title", "Aviso"),
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return false;
         }
 
         private void MostrarDetalle()
@@ -334,10 +382,18 @@ namespace Sistema_SneakRush
         {
             lblProcesando.Visible = mostrando;
             pbProcesando.Visible = mostrando;
-            btnCobrar.Enabled = !mostrando && _puedeCobrar;
             btnSeleccionar.Enabled = !mostrando && _puedeSeleccionar;
-            grpMedioPago.Enabled = !mostrando;
-            grpTarjeta.Enabled = !mostrando && rbTarjeta.Checked;
+            btnCancelar.Enabled = !mostrando && _puedeCancelar; // no se puede cancelar el carrito mientras se procesa el pago
+            if (mostrando)
+            {
+                btnCobrar.Enabled = false;
+                grpMedioPago.Enabled = false;
+                grpTarjeta.Enabled = false;
+            }
+            else
+            {
+                ActualizarHabilitacionCobro();
+            }
         }
 
         private void btnVerComprobante_Click(object sender, EventArgs e)
@@ -366,9 +422,34 @@ namespace Sistema_SneakRush
             }
         }
 
+        // Cancelar: sin carrito seleccionado (o con la venta ya cobrada) solo cierra el form.
+        // Con un carrito activo seleccionado, pide confirmacion y lo pasa a Estado "Cancelado" (no se elimina).
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (_carritoActual == null || _ventaGenerada != null)
+            {
+                this.Close();
+                return;
+            }
+
+            var lm = Program.LanguageManager;
+
+            DialogResult r = MessageBox.Show(
+                string.Format(lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.ConfirmarCancelarCarrito", "¿Confirma la cancelación del carrito del cliente con DNI {0}? El carrito quedará en estado Cancelado."), _carritoActual.DNICliente),
+                lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.ConfirmarCancelarCarrito.Title", "Cancelar carrito"),
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (r != DialogResult.Yes) return;
+
+            string mensaje;
+            bool ok = _bllVenta.CancelarCarrito(_carritoActual.IdCarrito, out mensaje);
+
+            MessageBox.Show(
+                mensaje,
+                lm.ObtenerTexto(f, ok ? "Frm.CobrarVenta.Msg.Informacion.Title" : "Frm.CobrarVenta.Msg.Aviso.Title", ok ? "Información" : "Aviso"),
+                MessageBoxButtons.OK, ok ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+
+            if (ok) this.Close();
         }
 
         public void ActualizarIdioma()

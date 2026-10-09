@@ -179,7 +179,59 @@ namespace Sistema_SneakRush
             }
 
             ProductoSeleccionado = dgvProductos.CurrentRow.DataBoundItem as Producto486LP;
-            this.DialogResult = DialogResult.OK;
+
+            // Abierto desde el carrito (CUN02, como dialogo): devuelve el producto elegido
+            if (this.Modal)
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+                return;
+            }
+
+            // Abierto desde el menu: deriva el producto elegido a Gestionar carrito
+            DerivarProductoAlCarrito(ProductoSeleccionado);
+        }
+
+        // Consulta abierta desde el menu: el producto elegido se carga en Gestionar carrito (si ya hay un carrito abierto se suma a ese; si no, se abre uno nuevo)
+        private void DerivarProductoAlCarrito(Producto486LP producto)
+        {
+            var lm = Program.LanguageManager;
+            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
+            List<string> permisos = usuario == null ? new List<string>() : new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
+
+            if (!permisos.Contains("VENTA_GESTIONAR_CARRITO"))
+            {
+                MessageBox.Show(
+                    lm.ObtenerTexto(f, "Msg.SinPermisoCarrito", "No tiene permiso para gestionar el carrito."),
+                    lm.ObtenerTexto(f, "Msg.SinPermiso.Title", "Acceso denegado"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Form menu = this.MdiParent;
+
+            if (menu != null)
+            {
+                foreach (Form hijo in menu.MdiChildren)
+                {
+                    FrmGestionCarrito486LP carritoAbierto = hijo as FrmGestionCarrito486LP;
+                    if (carritoAbierto != null)
+                    {
+                        carritoAbierto.CargarProducto(producto);
+                        carritoAbierto.BringToFront();
+                        this.Close();
+                        return;
+                    }
+                }
+            }
+
+            FrmGestionCarrito486LP carrito = new FrmGestionCarrito486LP(producto);
+            if (menu != null)
+            {
+                carrito.MdiParent = menu;
+                carrito.WindowState = FormWindowState.Maximized;
+            }
+            carrito.Show();
             this.Close();
         }
 

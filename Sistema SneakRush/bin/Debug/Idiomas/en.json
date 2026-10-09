@@ -491,7 +491,8 @@
     "Msg.SinResultados": "No products found with those criteria.",
     "Msg.SinResultados.Title": "No results",
     "Msg.SeleccionarProducto": "Select a product from the grid.",
-    "Msg.SeleccionarProducto.Title": "Notice"
+    "Msg.SeleccionarProducto.Title": "Notice",
+    "Msg.SinPermisoCarrito": "You do not have permission to manage the cart."
   },
 
   "FrmGestionCarrito486LP": {
@@ -519,15 +520,13 @@
     "Frm.GestionCarrito.Msg.SinPermiso.Title": "Access denied",
     "Frm.GestionCarrito.Msg.DNIIncorrecto": "Invalid ID number.",
     "Frm.GestionCarrito.Msg.Validacion.Title": "Validation",
-    "Frm.GestionCarrito.Msg.ClienteNoRegistrado": "The customer with ID number {0} is not registered. Do you want to register them now?",
-    "Frm.GestionCarrito.Msg.ClienteNoRegistrado.Title": "Customer not registered",
-    "Frm.GestionCarrito.Msg.ClienteAsignado": "Customer assigned to the cart.",
+    "Frm.GestionCarrito.Msg.ClienteAsignado": "ID number assigned to the cart.",
     "Frm.GestionCarrito.Msg.Informacion.Title": "Information",
     "Frm.GestionCarrito.Msg.Aviso.Title": "Notice",
     "Frm.GestionCarrito.Msg.SeleccionarParaEliminar": "Select a product from the cart to remove.",
     "Frm.GestionCarrito.Msg.SeleccionarParaModificar": "Select a product from the cart to modify.",
     "Frm.GestionCarrito.Msg.SinStock": "Not enough stock for the requested quantity.",
-    "Frm.GestionCarrito.Msg.DebeAsignarCliente": "You must assign a customer before finishing.",
+    "Frm.GestionCarrito.Msg.DebeAsignarCliente": "You must assign the customer's ID number before finishing.",
     "Frm.GestionCarrito.Msg.CarritoGuardado": "Cart saved successfully."
   },
 
@@ -593,7 +592,12 @@
     "Frm.CobrarVenta.Msg.DatosTarjetaInvalidos": "Invalid card details.",
     "Frm.CobrarVenta.Msg.Informacion.Title": "Information",
     "Frm.CobrarVenta.Msg.SinComprobante": "No receipt has been generated yet.",
-    "Frm.CobrarVenta.Msg.ErrorAbrirComprobante": "The receipt could not be opened: {0}"
+    "Frm.CobrarVenta.Msg.ErrorAbrirComprobante": "The receipt could not be opened: {0}",
+    "Frm.CobrarVenta.Msg.ClienteNoRegistrado": "The customer with ID number {0} is not registered. You must register them to continue with the payment.",
+    "Frm.CobrarVenta.Msg.ClienteNoRegistrado.Title": "Customer not registered",
+    "Frm.CobrarVenta.Msg.ClienteSinRegistrar": "The customer with ID number {0} is still not registered, so the payment cannot be processed. If the customer does not want to register, use Cancel to cancel the cart. To try the registration again, use Select.",
+    "Frm.CobrarVenta.Msg.ConfirmarCancelarCarrito": "Do you confirm the cancellation of the cart of the customer with ID number {0}? The cart will be set to Cancelled.",
+    "Frm.CobrarVenta.Msg.ConfirmarCancelarCarrito.Title": "Cancel cart"
   },
 
   "FrmGenerarSolicitud486LP": {
