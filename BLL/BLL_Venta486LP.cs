@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    // Copia
     public class BLL_Venta486LP
     {
         private Mapper_Venta486LP ObjetoMapper = new Mapper_Venta486LP();
