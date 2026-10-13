@@ -4,6 +4,7 @@ using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,11 +24,11 @@ namespace BLL
             {
                 if (producto == null)
                 {
-                    Mensaje = "El producto no existe."; return false;
+                    Mensaje = Mensajes486LP.Obtener("Carrito.ProductoInexistente"); return false; // Muestra: El producto no existe.
                 }
                 if (cantidad <= 0)
                 {
-                    Mensaje = "La cantidad debe ser mayor a cero."; return false;
+                    Mensaje = Mensajes486LP.Obtener("Carrito.CantidadInvalida"); return false; // Muestra: La cantidad debe ser mayor a cero.
                 }
 
                 // Cantidad ya cargada de ese producto en el carrito
@@ -35,7 +36,9 @@ namespace BLL
 
                 if (!ObjProducto.VerificarStock(producto.IdProducto, yaCargado + cantidad))
                 {
-                    Mensaje = "Sin stock disponible para la cantidad solicitada."; return false;
+                    // Se informa cuantas unidades todavia se pueden sumar (el stock menos lo que ya esta en el carrito)
+                    int quedan = Math.Max(0, ObjProducto.ObtenerStockDisponible(producto.IdProducto) - yaCargado);
+                    Mensaje = Mensajes486LP.Obtener("Carrito.StockInsuficiente", quedan); return false; // Muestra: Stock insuficiente. Unidades disponibles: {0}.
                 }
 
                 DetalleCarrito486LP det = new DetalleCarrito486LP()
@@ -53,8 +56,44 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                Mensaje = ex.Message;
+                Mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Carrito.Agregar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
+            }
+        }
+
+        public bool ModificarCantidad(Carrito486LP carrito, DetalleCarrito486LP detalle, int nuevaCantidad, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+
+            try
+            {
+                if (carrito == null || detalle == null)
+                {
+                    Mensaje = Mensajes486LP.Obtener("Carrito.ProductoInexistente"); return false; // Muestra: El producto no existe.
+                }
+                if (nuevaCantidad <= 0)
+                {
+                    Mensaje = Mensajes486LP.Obtener("Carrito.CantidadInvalida"); return false; // Muestra: La cantidad debe ser mayor a cero.
+                }
+
+                int enOtrasLineas = carrito.Detalles.Where(d => d != detalle && d.IdProducto == detalle.IdProducto).Sum(d => d.Cantidad);
+
+                if (!ObjProducto.VerificarStock(detalle.IdProducto, enOtrasLineas + nuevaCantidad))
+                {
+                    int quedan = Math.Max(0, ObjProducto.ObtenerStockDisponible(detalle.IdProducto) - enOtrasLineas);
+                    Mensaje = Mensajes486LP.Obtener("Carrito.StockInsuficiente", quedan); return false; // Muestra: Stock insuficiente. Unidades disponibles: {0}.
+                }
+
+                detalle.Cantidad = nuevaCantidad;
+                detalle.Subtotal = detalle.Precio * nuevaCantidad;
+                carrito.Total = carrito.Detalles.Sum(d => d.Subtotal);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Carrito.ModificarCantidad(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return false;
             }
         }
@@ -74,19 +113,31 @@ namespace BLL
             {
                 if (string.IsNullOrEmpty(carrito.DNICliente))
                 {
-                    Mensaje = "Debe asignar un cliente al carrito."; return false;
+                    Mensaje = Mensajes486LP.Obtener("Carrito.SinCliente"); return false; // Muestra: Debe asignar el DNI del cliente al carrito.
+                }
+                if (!Regex.IsMatch(carrito.DNICliente, @"^\d{7,8}$"))
+                {
+                    Mensaje = Mensajes486LP.Obtener("Cliente.DNIInvalido"); return false; // Muestra: El DNI debe tener 7 u 8 dígitos numéricos.
                 }
                 if (carrito.Detalles == null || carrito.Detalles.Count == 0)
                 {
-                    Mensaje = "El carrito no tiene productos."; return false;
-                }
+                    Mensaje = Mensajes486LP.Obtener("Carrito.Vacio"); return false; // Muestra: El carrito no tiene productos.
+                } 
 
                 carrito.Fecha = DateTime.Now;
                 carrito.Estado = "Activo";
                 carrito.Total = carrito.Detalles.Sum(d => d.Subtotal);
 
-                int idGenerado = ObjetoMapper.Guardar(carrito, out Mensaje);
+                string mensajeMapper;
+                int idGenerado = ObjetoMapper.Guardar(carrito, out mensajeMapper);
                 bool resultado = idGenerado > 0;
+
+                if (!resultado)
+                {
+                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error al guardar el carrito (Cliente DNI: {carrito.DNICliente}): {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    Mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
+                }
 
                 if (resultado)
                 {
@@ -108,7 +159,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                Mensaje = ex.Message;
+                Mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Carrito.GuardarCarrito(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return false;
             }
@@ -148,7 +199,14 @@ namespace BLL
             mensaje = "";
             try
             {
-                bool ok = ObjetoMapper.ActualizarEstado(idCarrito, estado, out mensaje);
+                string mensajeMapper;
+                bool ok = ObjetoMapper.ActualizarEstado(idCarrito, estado, out mensajeMapper);
+
+                if (!ok)
+                {
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error al actualizar el estado del carrito #{idCarrito} a '{estado}': {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
+                }
 
                 if (ok)
                 {
@@ -165,7 +223,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                mensaje = ex.Message;
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error en BLL_Carrito.ActualizarEstado(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return false;
             }

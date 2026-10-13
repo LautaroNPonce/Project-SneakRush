@@ -127,5 +127,74 @@ namespace Mappers
                 return false;
             }
         }
+
+        // ----- ABM de productos (CUN10) -----
+        // Estos metodos no tragan la excepcion: la BLL la registra en bitacora y devuelve el mensaje general.
+
+        // Alta. Devuelve el Id generado
+        public int Agregar(Producto486LP producto)
+        {
+            SqlCommand cmd = new SqlCommand("Producto_Agregar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdMarca", producto.IdMarca));
+            cmd.Parameters.Add(new SqlParameter("@IdCategoria", producto.IdCategoria));
+            cmd.Parameters.Add(new SqlParameter("@Modelo", producto.Modelo));
+            cmd.Parameters.Add(new SqlParameter("@Color", producto.Color));
+            cmd.Parameters.Add(new SqlParameter("@Talle", producto.Talle));
+            cmd.Parameters.Add(new SqlParameter("@Precio", producto.Precio));
+            cmd.Parameters.Add(new SqlParameter("@Stock", producto.Stock));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
+        }
+
+        // Modifica los datos del producto, menos el stock (el stock solo cambia con ventas y compras)
+        public int Modificar(Producto486LP producto)
+        {
+            SqlCommand cmd = new SqlCommand("Producto_Modificar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdProducto", producto.IdProducto));
+            cmd.Parameters.Add(new SqlParameter("@IdMarca", producto.IdMarca));
+            cmd.Parameters.Add(new SqlParameter("@IdCategoria", producto.IdCategoria));
+            cmd.Parameters.Add(new SqlParameter("@Modelo", producto.Modelo));
+            cmd.Parameters.Add(new SqlParameter("@Color", producto.Color));
+            cmd.Parameters.Add(new SqlParameter("@Talle", producto.Talle));
+            cmd.Parameters.Add(new SqlParameter("@Precio", producto.Precio));
+
+            return Conexion486LP.EjecutarNoConsulta(cmd);
+        }
+
+        // Baja fisica
+        public int Eliminar(int idProducto)
+        {
+            SqlCommand cmd = new SqlCommand("Producto_Eliminar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdProducto", idProducto));
+
+            return Conexion486LP.EjecutarNoConsulta(cmd);
+        }
+
+        // Indica si ya existe otro producto con la misma marca, modelo, color y talle. idExcluir es el que se esta modificando (0 al dar de alta)
+        public bool ExisteCombinacion(int idMarca, string modelo, string color, string talle, int idExcluir)
+        {
+            SqlCommand cmd = new SqlCommand("Producto_ExisteCombinacion");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdMarca", idMarca));
+            cmd.Parameters.Add(new SqlParameter("@Modelo", modelo));
+            cmd.Parameters.Add(new SqlParameter("@Color", color));
+            cmd.Parameters.Add(new SqlParameter("@Talle", talle));
+            cmd.Parameters.Add(new SqlParameter("@IdExcluir", idExcluir));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
+        }
+
+        // Indica si el producto aparece en algun carrito, venta, solicitud, orden o recepcion
+        public bool TieneMovimientos(int idProducto)
+        {
+            SqlCommand cmd = new SqlCommand("Producto_TieneMovimientos");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdProducto", idProducto));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
+        }
     }
 }

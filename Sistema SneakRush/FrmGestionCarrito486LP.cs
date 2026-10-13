@@ -79,6 +79,8 @@ namespace Sistema_SneakRush
 
             _carrito = new Carrito486LP();
             _dniAsignado = false;
+            nudCantidad.Maximum = 100; // cantidad maxima por carga (tambien la limita el stock disponible)
+            txtDNI.MaxLength = 8;
             ConfigurarColumnas();
             RefrescarGrilla();
             ActualizarTotal();
@@ -214,20 +216,14 @@ namespace Sistema_SneakRush
             DetalleCarrito486LP det = dgvCarrito.CurrentRow.DataBoundItem as DetalleCarrito486LP;
             if (det != null)
             {
-                int nuevaCantidad = (int)nudCantidad.Value;
-
-                if (!_bllProducto.VerificarStock(det.IdProducto, nuevaCantidad))
+                // La BLL valida la cantidad contra el stock (contando las otras lineas del mismo producto) y recalcula el subtotal y el total
+                string mensaje;
+                if (!_bllCarrito.ModificarCantidad(_carrito, det, (int)nudCantidad.Value, out mensaje))
                 {
-                    MessageBox.Show(
-                        lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.SinStock", "Sin stock disponible para la cantidad solicitada."),
-                        lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"),
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Aviso.Title", "Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                det.Cantidad = nuevaCantidad;
-                det.Subtotal = det.Precio * nuevaCantidad;
-                _carrito.Total = _carrito.Detalles.Sum(d => d.Subtotal);
                 RefrescarGrilla();
                 ActualizarTotal();
             }

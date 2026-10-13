@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Services
 {
 
-    /// DV opera sobre 23 tablas distintas (15 de Ventas/Seguridad + 8 agregadas en RFN2 Compras:
+    /// DV opera sobre 27 tablas distintas (15 de Ventas/Seguridad + 8 agregadas en RFN2 Compras + 2 del Bloque 3: Categoria y Marca + 2 de la importacion de productos desde XML: ImportacionProducto y DetalleImportacion. Las de Compras:
     /// Proveedor, SolicitudCompra, DetalleSolicitudCompra, OrdenCompra, DetalleOrdenCompra,
     /// Recepcion, DetalleRecepcion, Factura), pero NUNCA arma el nombre de tabla como texto SQL
     /// dinamico: cada tabla tiene su propio SP fijo (DV_Leer_X, DV_ActualizarFila_X), y este
@@ -22,7 +22,7 @@ namespace Services
 
     public class Mapper_DV486LP : MapperBase486LP
     {
-        // Nombre del SP de lectura completa, por tabla protegida (23 tablas).
+        // Nombre del SP de lectura completa, por tabla protegida (27 tablas).
         private static readonly Dictionary<string, string> _spLeerPorTabla = new Dictionary<string, string>
         {
             { "BitacoraEvento",   "DV_Leer_BitacoraEvento" },
@@ -48,7 +48,13 @@ namespace Services
             { "DetalleOrdenCompra",     "DV_Leer_DetalleOrdenCompra" },
             { "Recepcion",              "DV_Leer_Recepcion" },
             { "DetalleRecepcion",       "DV_Leer_DetalleRecepcion" },
-            { "Factura",                "DV_Leer_Factura" }
+            { "Factura",                "DV_Leer_Factura" },
+            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
+            { "Categoria",              "DV_Leer_Categoria" },
+            { "Marca",                  "DV_Leer_Marca" },
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10).
+            { "ImportacionProducto",    "DV_Leer_ImportacionProducto" },
+            { "DetalleImportacion",     "DV_Leer_DetalleImportacion" }
         };
 
         // Nombre del SP que actualiza el DV de UNA fila, por tabla (solo las que llevan DVH por fila - las 3 puente quedan afuera).
@@ -74,7 +80,13 @@ namespace Services
             { "DetalleOrdenCompra",     "DV_ActualizarFila_DetalleOrdenCompra" },
             { "Recepcion",              "DV_ActualizarFila_Recepcion" },
             { "DetalleRecepcion",       "DV_ActualizarFila_DetalleRecepcion" },
-            { "Factura",                "DV_ActualizarFila_Factura" }
+            { "Factura",                "DV_ActualizarFila_Factura" },
+            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
+            { "Categoria",              "DV_ActualizarFila_Categoria" },
+            { "Marca",                  "DV_ActualizarFila_Marca" },
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10).
+            { "ImportacionProducto",    "DV_ActualizarFila_ImportacionProducto" },
+            { "DetalleImportacion",     "DV_ActualizarFila_DetalleImportacion" }
         };
 
         // Lee TODAS las columnas y filas de una tabla protegida (para calcular DVH/DVV). Elige el SP fijo correspondiente - nunca arma SQL con el

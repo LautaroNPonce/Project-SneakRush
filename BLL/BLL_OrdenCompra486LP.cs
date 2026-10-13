@@ -23,28 +23,44 @@ namespace BLL
             {
                 if (orden == null || orden.Detalles == null || orden.Detalles.Count == 0)
                 {
-                    mensaje = "La orden no tiene productos.";
+                    mensaje = Mensajes486LP.Obtener("Compra.OrdenSinProductos"); // Muestra: La orden no tiene productos
                     return null;
                 }
                 if (orden.IdProveedor <= 0)
                 {
-                    mensaje = "Debe seleccionar un proveedor.";
+                    mensaje = Mensajes486LP.Obtener("Compra.SinProveedor"); // Muestra: Debe seleccionar un proveedor
+                    return null;
+                }
+                if (orden.Detalles.Any(d => d.Cantidad < 1 || d.Cantidad > 9999))
+                {
+                    mensaje = Mensajes486LP.Obtener("Compra.CantidadInvalida"); // Muestra: La cantidad debe estar entre 1 y 9999
+                    return null;
+                }
+                if (orden.Detalles.Any(d => d.CostoUnitario <= 0 || d.CostoUnitario > 10000000m))
+                {
+                    mensaje = Mensajes486LP.Obtener("Compra.CostoInvalido"); // Muestra: El costo unitario debe ser mayor a cero y no puede superar $10.000.000
                     return null;
                 }
 
                 orden.Fecha = DateTime.Now;
                 orden.CostoTotal = orden.Detalles.Sum(d => d.Subtotal);
 
-                bool ok = ObjetoMapper.Agregar(orden, out mensaje);
+                string mensajeMapper;
+                bool ok = ObjetoMapper.Agregar(orden, out mensajeMapper);
                 if (!ok)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al registrar orden de compra: {mensaje}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al registrar orden de compra: {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                     return null;
                 }
 
                 // La solicitud de origen pasa a procesada xq no vuelve a aparecer como pendiente
                 string mensajeSolicitud;
-                ObjSolicitud.ActualizarEstado(orden.IdSolicitud, "Procesada", out mensajeSolicitud);
+                if (!ObjSolicitud.ActualizarEstado(orden.IdSolicitud, "Procesada", out mensajeSolicitud))
+                {
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"No se pudo pasar la Solicitud #{orden.IdSolicitud} a Procesada: {mensajeSolicitud}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                }
 
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
@@ -58,12 +74,12 @@ namespace BLL
                 bllDV.RecalcularDV("OrdenCompra", out mensajeDV);
                 bllDV.RecalcularDV("DetalleOrdenCompra", out mensajeDV);
 
-                mensaje = "Orden de compra registrada correctamente.";
+                mensaje = Mensajes486LP.Obtener("Compra.OrdenRegistrada"); // Muestra: Orden de compra registrada correctamente
                 return orden;
             }
             catch (Exception ex)
             {
-                mensaje = ex.Message;
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_OrdenCompra.RegistrarOrden(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return null;
             }
@@ -114,7 +130,14 @@ namespace BLL
             mensaje = "";
             try
             {
-                bool ok = ObjetoMapper.ActualizarEstado(idOrden, estado, out mensaje);
+                string mensajeMapper;
+                bool ok = ObjetoMapper.ActualizarEstado(idOrden, estado, out mensajeMapper);
+
+                if (!ok)
+                {
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al actualizar el estado de la orden #{idOrden} a '{estado}': {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
+                }
 
                 if (ok)
                 {
@@ -127,7 +150,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                mensaje = ex.Message;
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_OrdenCompra.ActualizarEstado(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return false;
             }

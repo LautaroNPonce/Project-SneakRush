@@ -113,6 +113,7 @@ namespace Sistema_SneakRush
             this.txtMarca.Location = new System.Drawing.Point(90, 62);
             this.txtMarca.Name = "txtMarca";
             this.txtMarca.Size = new System.Drawing.Size(150, 29);
+            this.txtMarca.MaxLength = 50;
             this.txtMarca.TabIndex = 2;
             // 
             // lblModelo
@@ -132,6 +133,7 @@ namespace Sistema_SneakRush
             this.txtModelo.Location = new System.Drawing.Point(320, 62);
             this.txtModelo.Name = "txtModelo";
             this.txtModelo.Size = new System.Drawing.Size(150, 29);
+            this.txtModelo.MaxLength = 50;
             this.txtModelo.TabIndex = 4;
             // 
             // lblColor
@@ -151,6 +153,7 @@ namespace Sistema_SneakRush
             this.txtColor.Location = new System.Drawing.Point(535, 62);
             this.txtColor.Name = "txtColor";
             this.txtColor.Size = new System.Drawing.Size(140, 29);
+            this.txtColor.MaxLength = 30;
             this.txtColor.TabIndex = 6;
             // 
             // lblTalle
@@ -170,6 +173,7 @@ namespace Sistema_SneakRush
             this.txtTalle.Location = new System.Drawing.Point(740, 62);
             this.txtTalle.Name = "txtTalle";
             this.txtTalle.Size = new System.Drawing.Size(90, 29);
+            this.txtTalle.MaxLength = 10;
             this.txtTalle.TabIndex = 8;
             // 
             // chkSoloStock

@@ -23,7 +23,12 @@ namespace BLL
             {
                 if (solicitud == null || solicitud.Detalles == null || solicitud.Detalles.Count == 0)
                 {
-                    mensaje = "La solicitud no tiene productos.";
+                    mensaje = Mensajes486LP.Obtener("Compra.SolicitudSinProductos"); // Muestra: La solicitud no tiene productos
+                    return null;
+                }
+                if (solicitud.Detalles.Any(d => d.CantidadSolicitada < 1 || d.CantidadSolicitada > 9999))
+                {
+                    mensaje = Mensajes486LP.Obtener("Compra.CantidadInvalida"); // Muestra: La cantidad debe estar entre 1 y 9999
                     return null;
                 }
 
@@ -34,10 +39,13 @@ namespace BLL
                 solicitud.DNIAdministrador = dni;
                 solicitud.Estado = "Pendiente";
 
-                bool ok = ObjetoMapper.Agregar(solicitud, out mensaje);
+                string mensajeMapper;
+                bool ok = ObjetoMapper.Agregar(solicitud, out mensajeMapper);
                 if (!ok)
                 {
-                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al registrar solicitud de compra: {mensaje}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al registrar solicitud de compra: {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                     return null;
                 }
 
@@ -50,12 +58,12 @@ namespace BLL
                 bllDV.RecalcularDV("SolicitudCompra", out mensajeDV);
                 bllDV.RecalcularDV("DetalleSolicitudCompra", out mensajeDV);
 
-                mensaje = "Solicitud de compra generada correctamente.";
+                mensaje = Mensajes486LP.Obtener("Compra.SolicitudGenerada"); // Muestra: Solicitud de compra generada correctamente
                 return solicitud;
             }
             catch (Exception ex)
             {
-                mensaje = ex.Message;
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_SolicitudCompra.RegistrarSolicitud(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return null;
             }
@@ -94,7 +102,14 @@ namespace BLL
             mensaje = "";
             try
             {
-                bool ok = ObjetoMapper.ActualizarEstado(idSolicitud, estado, out mensaje);
+                string mensajeMapper;
+                bool ok = ObjetoMapper.ActualizarEstado(idSolicitud, estado, out mensajeMapper);
+
+                if (!ok)
+                {
+                    ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al actualizar el estado de la solicitud #{idSolicitud} a '{estado}': {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                    mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
+                }
 
                 if (ok)
                 {
@@ -107,7 +122,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                mensaje = ex.Message;
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error en BLL_SolicitudCompra.ActualizarEstado(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 return false;
             }

@@ -30,6 +30,7 @@ namespace Sistema_SneakRush
         private Recepcion486LP _recepcionSeleccionada;
         private string _nombreProveedorSeleccionado;
         private Factura486LP _facturaGenerada;
+        private Factura486LP _facturaPendiente; // factura ya registrada cuyo pago todavia no se confirmo: si el pago falla y se reintenta, se reutiliza en vez de crear otra
         private string _rutaComprobante;
         private bool _puedeCobrar;
         private bool _puedeVerComprobante;
@@ -141,6 +142,10 @@ namespace Sistema_SneakRush
         {
             OrdenCompra486LP seleccionada = dgvOrdenes.CurrentRow?.DataBoundItem as OrdenCompra486LP;
             if (seleccionada == null) return;
+
+            // Una factura pendiente solo se reutiliza para la misma orden
+            if (_facturaPendiente != null && _facturaPendiente.IdOrden != seleccionada.IdOrden)
+                _facturaPendiente = null;
             _ordenSeleccionada = _bllOrden.ObtenerPorId(seleccionada.IdOrden);
             _recepcionSeleccionada = _bllRecepcion.ObtenerPorIdOrden(seleccionada.IdOrden);
             if (_ordenSeleccionada == null || _recepcionSeleccionada == null) return;
@@ -223,27 +228,27 @@ namespace Sistema_SneakRush
 
         // 7.1: valida los datos de la tarjeta (numero, vencimiento, CVV)
         // Solo se llama si el medio de pago elegido es Tarjeta.
-        // Mismo criterio que CUN04: valida formato y que no este vencida
-        private bool ValidarDatosTarjeta()
+        // Mismo criterio que CUN04: valida formato y que no este vencida. Devuelve el mensaje del primer dato incorrecto (ya traducido) o null si esta todo bien.
+        private string ValidarDatosTarjeta()
         {
             string numeroSinEspacios = txtNumeroTarjeta.Text.Replace(" ", "").Trim();
             if (!System.Text.RegularExpressions.Regex.IsMatch(numeroSinEspacios, @"^\d{16}$"))
-                return false;
+                return Mensajes486LP.Obtener("Tarjeta.Numero");
 
             var match = System.Text.RegularExpressions.Regex.Match(txtVencimiento.Text.Trim(), @"^(0[1-9]|1[0-2])/(\d{2})$");
             if (!match.Success)
-                return false;
+                return Mensajes486LP.Obtener("Tarjeta.Vencimiento");
 
             int mes = int.Parse(match.Groups[1].Value);
             int anio = 2000 + int.Parse(match.Groups[2].Value);
             DateTime finDeMes = new DateTime(anio, mes, DateTime.DaysInMonth(anio, mes));
             if (finDeMes < DateTime.Now.Date)
-                return false; // tarjeta vencida
+                return Mensajes486LP.Obtener("Tarjeta.Vencida"); // tarjeta vencida
 
             if (!System.Text.RegularExpressions.Regex.IsMatch(txtCVV.Text.Trim(), @"^\d{3}$"))
-                return false;
+                return Mensajes486LP.Obtener("Tarjeta.CVV");
 
-            return true;
+            return null;
         }
 
         private void txtNumeroTarjeta_TextChanged(object sender, EventArgs e)
@@ -308,27 +313,39 @@ namespace Sistema_SneakRush
 
             string medioPago = ObtenerMedioPagoSeleccionado();
 
-            if (medioPago == "Tarjeta" && !ValidarDatosTarjeta())
+            if (medioPago == "Tarjeta")
             {
-                MessageBox.Show(
-                    lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.DatosTarjetaInvalidos", "Datos de tarjeta inválidos."),
-                    lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Validacion.Title", "Validación"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                string errorTarjeta = ValidarDatosTarjeta();
+                if (errorTarjeta != null)
+                {
+                    MessageBox.Show(
+                        errorTarjeta,
+                        lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Validacion.Title", "Validación"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
             }
 
             // A diferencia de CUN04 (la venta se registra recién cuando el banco aprueba), acá la factura se registra antes del pago así lo define la especificación de CUN08
             // (paso 5 registra la factura, paso 8 procesa el pago)
             decimal total = _ordenSeleccionada.Detalles.Sum(d => d.Subtotal);
-            Factura486LP facturaNueva = new Factura486LP { IdOrden = _ordenSeleccionada.IdOrden, Total = total };
-
-            string mensajeFactura;
-            Factura486LP facturaRegistrada = _bllFactura.RegistrarFactura(facturaNueva, out mensajeFactura);
+            // Si el pago de un intento anterior fallo, la factura ya esta registrada: se reutiliza para no generar una segunda factura de la misma orden
+            Factura486LP facturaRegistrada = _facturaPendiente;
 
             if (facturaRegistrada == null)
             {
-                MessageBox.Show(mensajeFactura, lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Aviso.Title", "Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                Factura486LP facturaNueva = new Factura486LP { IdOrden = _ordenSeleccionada.IdOrden, Total = total };
+
+                string mensajeFactura;
+                facturaRegistrada = _bllFactura.RegistrarFactura(facturaNueva, out mensajeFactura);
+
+                if (facturaRegistrada == null)
+                {
+                    MessageBox.Show(mensajeFactura, lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Aviso.Title", "Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                _facturaPendiente = facturaRegistrada;
             }
 
             // A partir de acá el pago es asincrono (Efectivo resuelve al instante, Tarjeta/Transferencia usan un Hilo de 3s)con el indicador de "Procesando" mientras tanto.
@@ -348,9 +365,19 @@ namespace Sistema_SneakRush
                     if (ok)
                     {
                         _facturaGenerada = facturaRegistrada;
-                        _rutaComprobante = GeneradorComprobantePDF486LP.Generar(facturaRegistrada, _nombreProveedorSeleccionado, _ordenSeleccionada.Detalles);
+                        _facturaPendiente = null; // el pago quedo confirmado: ya no hay factura pendiente
+                        bool comprobanteGenerado = GenerarComprobante();
 
                         MessageBox.Show(mensajePago, lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Informacion.Title", "Información"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // El pago ya esta confirmado: si fallo el pdf se avisa, pero "Ver comprobante" queda habilitado para volver a intentarlo
+                        if (!comprobanteGenerado)
+                        {
+                            MessageBox.Show(
+                                Mensajes486LP.Obtener("Comprobante.ErrorGenerar"),
+                                lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Aviso.Title", "Aviso"),
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
 
                         // Una vez cobrada, no se puede volver a operar sobre la misma factura
                         dgvOrdenes.Enabled = false;
@@ -365,6 +392,24 @@ namespace Sistema_SneakRush
                     }
                 }
             });
+        }
+
+        // Genera el comprobante pdf de la factura ya pagada. Si falla, el pago no se pierde: el error va a la bitacora y se devuelve false.
+        private bool GenerarComprobante()
+        {
+            try
+            {
+                _rutaComprobante = GeneradorComprobantePDF486LP.Generar(_facturaGenerada, _nombreProveedorSeleccionado, _ordenSeleccionada.Detalles);
+                return !string.IsNullOrEmpty(_rutaComprobante);
+            }
+            catch (Exception ex)
+            {
+                _rutaComprobante = null;
+                new BLL_Bitacora486LP().Registrar(new BitacoraEvento486LP("Compras",
+                    $"Error al generar el comprobante PDF de la factura {_facturaGenerada.NroFactura}: {ex.Message}",
+                    Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
+            }
         }
 
         // Muestra/oculta el indicador visual de procesando el pago
@@ -383,6 +428,19 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
+            // Si el comprobante no se genero (o el archivo ya no esta), se vuelve a generar mientras haya una factura pagada
+            if ((string.IsNullOrEmpty(_rutaComprobante) || !System.IO.File.Exists(_rutaComprobante)) && _facturaGenerada != null)
+            {
+                if (!GenerarComprobante())
+                {
+                    MessageBox.Show(
+                        Mensajes486LP.Obtener("Comprobante.ErrorGenerar"),
+                        lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Aviso.Title", "Aviso"),
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             if (string.IsNullOrEmpty(_rutaComprobante) || !System.IO.File.Exists(_rutaComprobante))
             {
                 MessageBox.Show(
@@ -398,8 +456,11 @@ namespace Sistema_SneakRush
             }
             catch (Exception ex)
             {
+                new BLL_Bitacora486LP().Registrar(new BitacoraEvento486LP("Compras",
+                    $"Error al abrir el comprobante PDF {_rutaComprobante}: {ex.Message}",
+                    Criticidad486LP.Media, "Sistema", "Sistema"));
                 MessageBox.Show(
-                    string.Format(lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.ErrorAbrirComprobante", "No se pudo abrir el comprobante: {0}"), ex.Message),
+                    Mensajes486LP.Obtener("Comprobante.ErrorAbrir"),
                     lm.ObtenerTexto(f, "Frm.RegistrarFactura.Msg.Aviso.Title", "Aviso"),
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

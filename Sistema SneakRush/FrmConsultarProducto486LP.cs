@@ -113,6 +113,12 @@ namespace Sistema_SneakRush
 
             if (dgvProductos.Columns.Contains("IdProducto"))
                 dgvProductos.Columns["IdProducto"].Visible = false;
+            if (dgvProductos.Columns.Contains("IdMarca"))
+                dgvProductos.Columns["IdMarca"].Visible = false;
+            if (dgvProductos.Columns.Contains("IdCategoria"))
+                dgvProductos.Columns["IdCategoria"].Visible = false;
+            if (dgvProductos.Columns.Contains("Categoria"))
+                dgvProductos.Columns["Categoria"].HeaderText = lm.ObtenerTexto(f, "col.Categoria", "Categoría");
             if (dgvProductos.Columns.Contains("Marca"))
                 dgvProductos.Columns["Marca"].HeaderText = lm.ObtenerTexto(f, "col.Marca", "Marca");
             if (dgvProductos.Columns.Contains("Modelo"))

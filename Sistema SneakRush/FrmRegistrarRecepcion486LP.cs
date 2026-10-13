@@ -35,6 +35,7 @@ namespace Sistema_SneakRush
 
             dgvOrdenes.SelectionChanged += dgvOrdenes_SelectionChanged;
             dgvDetalleRecepcion.CellEndEdit += dgvDetalleRecepcion_CellEndEdit;
+            dgvDetalleRecepcion.DataError += dgvDetalleRecepcion_DataError;
             btnConfirmar.Click += btnConfirmar_Click;
             btnCancelar.Click += btnCancelar_Click;
         }
@@ -168,7 +169,7 @@ namespace Sistema_SneakRush
             if (det.CantidadRecibida < 0 || det.CantidadRecibida > det.CantidadPedida)
             {
                 MessageBox.Show(
-                    lm.ObtenerTexto(f, "Frm.RegistrarRecepcion.Msg.CantidadInvalida", "Cantidad inválida."),
+                    Mensajes486LP.Obtener("Compra.CantidadRecibidaInvalida"),
                     lm.ObtenerTexto(f, "Frm.RegistrarRecepcion.Msg.Validacion.Title", "Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 det.CantidadRecibida = det.CantidadPedida;
@@ -176,6 +177,21 @@ namespace Sistema_SneakRush
 
             det.CantidadFaltante = det.CantidadPedida - det.CantidadRecibida;
             dgvDetalleRecepcion.Refresh();
+        }
+
+        // Si se escribe algo que no es un numero en la Cantidad Recibida, avisa y deja el valor anterior,
+        // en vez de mostrar el cuadro de error por defecto de .NET (con texto tecnico)
+        private void dgvDetalleRecepcion_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+
+            var lm = Program.LanguageManager;
+            MessageBox.Show(
+                Mensajes486LP.Obtener("General.NumeroInvalido"),
+                lm.ObtenerTexto(f, "Frm.RegistrarRecepcion.Msg.Validacion.Title", "Validación"),
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            dgvDetalleRecepcion.CancelEdit();
         }
         private void btnConfirmar_Click(object sender, EventArgs e)
         {

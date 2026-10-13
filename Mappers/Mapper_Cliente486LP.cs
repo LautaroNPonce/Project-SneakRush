@@ -102,5 +102,15 @@ namespace Mappers
 
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
+
+        // Indica si el cliente tiene alguna venta asociada (en ese caso no se puede eliminar)
+        public bool TieneVentas(string dni)
+        {
+            SqlCommand cmd = new SqlCommand("Cliente_TieneVentas");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@DNI", dni));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
+        }
     }
 }

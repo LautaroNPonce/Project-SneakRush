@@ -45,8 +45,11 @@
     <Compile Include="ManejadorMapeo486LP.cs" />
     <Compile Include="MapperBase486LP.cs" />
     <Compile Include="Mapper_Carrito486LP.cs" />
+    <Compile Include="Mapper_Categoria486LP.cs" />
     <Compile Include="Mapper_Cliente486LP.cs" />
     <Compile Include="Mapper_Factura486LP.cs" />
+    <Compile Include="Mapper_ImportacionProducto486LP.cs" />
+    <Compile Include="Mapper_Marca486LP.cs" />
     <Compile Include="Mapper_OrdenCompra486LP.cs" />
     <Compile Include="Mapper_Producto486LP.cs" />
     <Compile Include="Mapper_Proveedor486LP.cs" />

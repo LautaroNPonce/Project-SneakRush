@@ -62,6 +62,7 @@
     <Compile Include="Idioma\IObserver486LP.cs" />
     <Compile Include="Idioma\ISubject486LP.cs" />
     <Compile Include="Idioma\LanguageManager486LP.cs" />
+    <Compile Include="Idioma\Mensajes486LP.cs" />
     <Compile Include="Permisos\Mapper_Familia486LP.cs" />
     <Compile Include="Permisos\Mapper_Perfil486LP.cs" />
     <Compile Include="Permisos\Mapper_Permiso486LP.cs" />

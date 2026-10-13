@@ -127,6 +127,7 @@ namespace Sistema_SneakRush
             this.txtDNI.Location = new System.Drawing.Point(115, 26);
             this.txtDNI.Name = "txtDNI";
             this.txtDNI.Size = new System.Drawing.Size(171, 29);
+            this.txtDNI.MaxLength = 8;
             this.txtDNI.TabIndex = 1;
             // 
             // btnSeleccionar

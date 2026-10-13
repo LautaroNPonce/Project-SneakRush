@@ -36,6 +36,7 @@ namespace Sistema_SneakRush
 
             dgvSolicitudes.SelectionChanged += dgvSolicitudes_SelectionChanged;
             dgvDetalleOrden.CellEndEdit += dgvDetalleOrden_CellEndEdit;
+            dgvDetalleOrden.DataError += dgvDetalleOrden_DataError;
             btnConfirmar.Click += btnConfirmar_Click;
             btnCancelar.Click += btnCancelar_Click;
         }
@@ -176,24 +177,40 @@ namespace Sistema_SneakRush
             if (!(dgvDetalleOrden.Rows[e.RowIndex].DataBoundItem is DetalleOrdenCompra486LP det)) return;
 
             var lm = Program.LanguageManager;
+            string titulo = lm.ObtenerTexto(f, "Frm.RegistrarOrden.Msg.Validacion.Title", "Validación");
 
-            if (det.CostoUnitario <= 0)
+            // Se valida solo lo que se acaba de editar: costo unitario mayor a cero y hasta 10.000.000
+            if (nombreColumna == "colCostoUnitario" && (det.CostoUnitario <= 0 || det.CostoUnitario > 10000000m))
             {
-                MessageBox.Show(
-                    lm.ObtenerTexto(f, "Frm.RegistrarOrden.Msg.CostoInvalido", "Costo inválido."),
-                    lm.ObtenerTexto(f, "Frm.RegistrarOrden.Msg.Validacion.Title", "Validación"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(Mensajes486LP.Obtener("Compra.CostoInvalido"), titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 det.CostoUnitario = 0;
             }
 
-            if (det.Cantidad <= 0)
+            // Cantidad entera entre 1 y 9999: si queda fuera de rango, avisa y la deja en el limite mas cercano
+            if (nombreColumna == "colCantidad" && (det.Cantidad < 1 || det.Cantidad > 9999))
             {
-                det.Cantidad = 1;
+                MessageBox.Show(Mensajes486LP.Obtener("Compra.CantidadInvalida"), titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                det.Cantidad = det.Cantidad < 1 ? 1 : 9999;
             }
 
             det.Subtotal = det.Cantidad * det.CostoUnitario;
             dgvDetalleOrden.Refresh();
             ActualizarCostoTotal();
+        }
+
+        // Si se escribe algo que no es un numero en una celda editable (cantidad o costo), avisa y deja el valor anterior,
+        // en vez de mostrar el cuadro de error por defecto de .NET (con texto tecnico)
+        private void dgvDetalleOrden_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+
+            var lm = Program.LanguageManager;
+            MessageBox.Show(
+                Mensajes486LP.Obtener("General.NumeroInvalido"),
+                lm.ObtenerTexto(f, "Frm.RegistrarOrden.Msg.Validacion.Title", "Validación"),
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            dgvDetalleOrden.CancelEdit();
         }
 
         private void ActualizarCostoTotal()

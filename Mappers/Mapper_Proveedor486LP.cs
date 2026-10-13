@@ -12,42 +12,82 @@ namespace Mappers
 {
     public class Mapper_Proveedor486LP : MapperBase486LP
     {
+        // Lista todos los proveedores ordenados por nombre. No traga la excepcion: la deja propagar para que la BLL la registre en bitacora.
         public List<Proveedor486LP> Listar()
         {
-            try
-            {
-                SqlCommand cmd = new SqlCommand("Proveedor_Listar");
-                cmd.CommandType = CommandType.StoredProcedure;
+            SqlCommand cmd = new SqlCommand("Proveedor_Listar");
+            cmd.CommandType = CommandType.StoredProcedure;
 
-                DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
-                return ManejadorMapeo486LP.MapearLista<Proveedor486LP>(tabla);
-            }
-            catch
-            {
-                return new List<Proveedor486LP>();
-            }
+            DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
+            return ManejadorMapeo486LP.MapearLista<Proveedor486LP>(tabla);
         }
 
-        // Suma stock (compra)  separado de ActualizarStock, que resta (usado por Ventas).
-        public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
+        // Alta. Devuelve el Id generado
+        public int Agregar(Proveedor486LP proveedor)
         {
-            mensaje = "";
-            try
-            {
-                SqlCommand cmd = new SqlCommand("Producto_AumentarStock");
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@IdProducto", idProducto));
-                cmd.Parameters.Add(new SqlParameter("@Cantidad", cantidad));
+            SqlCommand cmd = new SqlCommand("Proveedor_Agregar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@Nombre", proveedor.Nombre));
+            cmd.Parameters.Add(new SqlParameter("@CUIT", proveedor.CUIT));
+            cmd.Parameters.Add(new SqlParameter("@Telefono", string.IsNullOrWhiteSpace(proveedor.Telefono) ? (object)DBNull.Value : proveedor.Telefono));
+            cmd.Parameters.Add(new SqlParameter("@Correo", proveedor.Correo));
 
-                Conexion486LP.EjecutarNoConsulta(cmd);
-                mensaje = "Stock actualizado correctamente.";
-                return true;
-            }
-            catch (Exception ex)
-            {
-                mensaje = "Error: " + ex.Message;
-                return false;
-            }
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
+        }
+
+        public int Modificar(Proveedor486LP proveedor)
+        {
+            SqlCommand cmd = new SqlCommand("Proveedor_Modificar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdProveedor", proveedor.IdProveedor));
+            cmd.Parameters.Add(new SqlParameter("@Nombre", proveedor.Nombre));
+            cmd.Parameters.Add(new SqlParameter("@CUIT", proveedor.CUIT));
+            cmd.Parameters.Add(new SqlParameter("@Telefono", string.IsNullOrWhiteSpace(proveedor.Telefono) ? (object)DBNull.Value : proveedor.Telefono));
+            cmd.Parameters.Add(new SqlParameter("@Correo", proveedor.Correo));
+
+            return Conexion486LP.EjecutarNoConsulta(cmd);
+        }
+
+        // Baja fisica
+        public int Eliminar(int idProveedor)
+        {
+            SqlCommand cmd = new SqlCommand("Proveedor_Eliminar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdProveedor", idProveedor));
+
+            return Conexion486LP.EjecutarNoConsulta(cmd);
+        }
+
+        // Indica si ya existe otro proveedor con ese nombre. idExcluir es el que se esta modificando (0 al dar de alta)
+        public bool ExisteNombre(string nombre, int idExcluir)
+        {
+            SqlCommand cmd = new SqlCommand("Proveedor_ExisteNombre");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@Nombre", nombre));
+            cmd.Parameters.Add(new SqlParameter("@IdExcluir", idExcluir));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
+        }
+
+        // Indica si ya existe otro proveedor con ese CUIT
+        public bool ExisteCUIT(string cuit, int idExcluir)
+        {
+            SqlCommand cmd = new SqlCommand("Proveedor_ExisteCUIT");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@CUIT", cuit));
+            cmd.Parameters.Add(new SqlParameter("@IdExcluir", idExcluir));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
+        }
+
+        // Indica si el proveedor tiene ordenes de compra
+        public bool TieneMovimientos(int idProveedor)
+        {
+            SqlCommand cmd = new SqlCommand("Proveedor_TieneMovimientos");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdProveedor", idProveedor));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
         }
     }
 }

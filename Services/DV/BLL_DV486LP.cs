@@ -39,7 +39,13 @@ namespace Services
             { "DetalleOrdenCompra",     "IdDetalleOrden" },
             { "Recepcion",              "IdRecepcion" },
             { "DetalleRecepcion",       "IdDetalleRecepcion" },
-            { "Factura",                "IdFactura" }
+            { "Factura",                "IdFactura" },
+            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas)
+            { "Categoria",              "IdCategoria" },
+            { "Marca",                  "IdMarca" },
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10)
+            { "ImportacionProducto",    "IdImportacion" },
+            { "DetalleImportacion",     "IdDetalleImportacion" }
         };
 
         private static readonly string[] _tablasProtegidas = {
@@ -48,7 +54,11 @@ namespace Services
             "Producto", "Carrito", "DetalleCarrito", "Cliente", "Venta", "DetalleVenta",
             // Agregadas en RFN2 Compras (CUN05-08).
             "Proveedor", "SolicitudCompra", "DetalleSolicitudCompra",
-            "OrdenCompra", "DetalleOrdenCompra", "Recepcion", "DetalleRecepcion", "Factura"
+            "OrdenCompra", "DetalleOrdenCompra", "Recepcion", "DetalleRecepcion", "Factura",
+            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
+            "Categoria", "Marca",
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10).
+            "ImportacionProducto", "DetalleImportacion"
         };
         private static readonly List<string> _tablasSoloNivelTabla = new List<string> { "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
         private string ObtenerColumnaId(string tabla)

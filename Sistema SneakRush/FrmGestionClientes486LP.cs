@@ -61,6 +61,13 @@ namespace Sistema_SneakRush
                 return;
             }
 
+            // Largos maximos acordes a las reglas de validacion de la BLL (DNI 8 digitos, nombre y apellido 50, correo 100)
+            txtDNI.MaxLength = 8;
+            txtNombre.MaxLength = 50;
+            txtApellido.MaxLength = 50;
+            txtCorreo.MaxLength = 100;
+            txtTelefono.MaxLength = 20;
+
             ConfigurarColumnas();
             RefrescarGrilla();
             AjustarBotonesSegunPerfil();
@@ -155,6 +162,7 @@ namespace Sistema_SneakRush
             if (cli == null) return;
 
             txtDNI.Text = cli.DNI;
+            txtDNI.ReadOnly = true; // el DNI es la clave: con un cliente elegido no se puede cambiar (Limpiar lo habilita de nuevo)
             txtNombre.Text = cli.Nombre;
             txtApellido.Text = cli.Apellido;
             txtTelefono.Text = cli.Telefono;
@@ -253,8 +261,8 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // Valida solo lo que corresponde a la GUI (campos no vacios y DNI numerico).
-        // Las validaciones de negocio (DNI duplicado, etc.) las hace la BLL.
+        // Valida solo lo que corresponde a la GUI (campos obligatorios no vacios).
+        // Las validaciones de negocio (formato de DNI, nombre, correo y telefono, DNI duplicado, etc.) las hace la BLL y devuelve el mensaje ya traducido.
         private bool ValidarCampos()
         {
             var lm = Program.LanguageManager;
@@ -286,7 +294,10 @@ namespace Sistema_SneakRush
         private void LimpiarCampos()
         {
             if (string.IsNullOrEmpty(_dniPrecargado))
+            {
+                txtDNI.ReadOnly = false;
                 txtDNI.Clear(); // con el DNI del carrito precargado, Limpiar no lo borra
+            }
             txtNombre.Clear();
             txtApellido.Clear();
             txtCorreo.Clear();

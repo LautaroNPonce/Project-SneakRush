@@ -57,17 +57,58 @@ namespace BLL
             }
         }
 
-        // Indica si existe un cliente con ese DNI
         public bool Existe(string dni)
         {
             return ObjetoMapper.Existe(dni);
         }
 
-        // Valida el formato del DNI: solo numeros, entre 7 y 10 digitos
         public bool ValidarDNI(string dni)
         {
             if (string.IsNullOrWhiteSpace(dni)) return false;
-            return Regex.IsMatch(dni.Trim(), @"^\d{7,10}$");
+            return Regex.IsMatch(dni.Trim(), @"^\d{7,8}$");
+        }
+
+        // Nombre y apellido: solo letras (con tildes y ñ), espacios, guiones y apostrofes. Maximo 50 caracteres
+        public bool ValidarNombrePersona(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return false;
+            texto = texto.Trim();
+            return texto.Length <= 50 && Regex.IsMatch(texto, @"^\p{L}+(?:[ '\u2019\-]\p{L}+)*$");
+        }
+
+        public bool ValidarCorreo(string correo)
+        {
+            if (string.IsNullOrWhiteSpace(correo)) return false;
+            correo = correo.Trim();
+            return correo.Length <= 100 &&
+                   Regex.IsMatch(correo, @"^[A-Za-z0-9]+(?:[._%+\-][A-Za-z0-9]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}$");
+        }
+
+        public bool ValidarTelefono(string telefono)
+        {
+            if (string.IsNullOrWhiteSpace(telefono)) return true;
+            telefono = telefono.Trim();
+            if (!Regex.IsMatch(telefono, @"^\+?[\d\s\-()]+$")) return false;
+            int digitos = telefono.Count(char.IsDigit);
+            return digitos >= 8 && digitos <= 15;
+        }
+
+        private string ValidarDatos(Cliente486LP cliente)
+        {
+            if (cliente == null ||
+                string.IsNullOrWhiteSpace(cliente.DNI) ||
+                string.IsNullOrWhiteSpace(cliente.Nombre) ||
+                string.IsNullOrWhiteSpace(cliente.Apellido) ||
+                string.IsNullOrWhiteSpace(cliente.Correo))
+                return Mensajes486LP.Obtener("Cliente.CamposObligatorios"); // Muestra: Complete los campos obligatorios (DNI, nombre, apellido y correo)
+
+            if (!ValidarDNI(cliente.DNI)) return Mensajes486LP.Obtener("Cliente.DNIInvalido"); // Muestra: El DNI debe tener 7 u 8 dígitos numéricos
+            if (!ValidarNombrePersona(cliente.Nombre)) return Mensajes486LP.Obtener("Cliente.NombreInvalido"); // Muestra: El nombre solo admite letras, espacios, guiones y apóstrofes (máximo 50 caracteres)
+            if (!ValidarNombrePersona(cliente.Apellido)) return Mensajes486LP.Obtener("Cliente.ApellidoInvalido"); // Muestra: El apellido solo admite letras, espacios, guiones y apóstrofes (máximo 50 caracteres)
+            if (!ValidarCorreo(cliente.Correo)) return Mensajes486LP.Obtener("Cliente.CorreoInvalido"); // Muestra: El correo no tiene un formato válido. Debe ser del tipo usuario@dominio.com
+            if (!ValidarTelefono(cliente.Telefono)) return Mensajes486LP.Obtener("Cliente.TelefonoInvalido"); // Muestra: El teléfono solo admite números, espacios, +, - y paréntesis, y debe tener entre 8 y 15 dígitos
+
+            return null;
         }
 
         public bool Agregar(Cliente486LP cliente, out string mensaje)
@@ -75,26 +116,21 @@ namespace BLL
             mensaje = "";
 
             // Validaciones de negocio
-            if (!ValidarDNI(cliente.DNI))
+            string error = ValidarDatos(cliente);
+            if (error != null)
             {
-                mensaje = "El formato del DNI es invalido (debe tener entre 7 y 10 digitos numericos).";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(cliente.Nombre) ||
-                string.IsNullOrWhiteSpace(cliente.Apellido) ||
-                string.IsNullOrWhiteSpace(cliente.Correo))
-            {
-                mensaje = "Complete los campos obligatorios (Nombre, Apellido y Correo).";
-                return false;
-            }
-            if (ObjetoMapper.Existe(cliente.DNI))
-            {
-                mensaje = "Ya existe un cliente registrado con ese DNI.";
+                mensaje = error;
                 return false;
             }
 
             try
             {
+                if (ObjetoMapper.Existe(cliente.DNI))
+                {
+                    mensaje = Mensajes486LP.Obtener("Cliente.DNIDuplicado"); // Muestra: Ya existe un cliente registrado con ese DNI
+                    return false;
+                }
+
                 // Se cifra el correo antes de persistir
                 cliente.Correo = Encriptacion486LP.EncriptarAES(cliente.Correo.Trim());
 
@@ -104,13 +140,13 @@ namespace BLL
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
                     $"Alta de cliente DNI {cliente.DNI}", Criticidad486LP.Media, cliente.DNI, "Sistema"));
 
-                mensaje = "Cliente registrado correctamente.";
+                mensaje = Mensajes486LP.Obtener("Cliente.Agregado"); // Muestra: Cliente registrado correctamente
                 return true;
             }
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_Cliente.Agregar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                mensaje = "Ocurrio un error al registrar el cliente.";
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                 return false;
             }
         }
@@ -119,26 +155,21 @@ namespace BLL
         {
             mensaje = "";
 
-            if (!ValidarDNI(cliente.DNI))
+            string error = ValidarDatos(cliente);
+            if (error != null)
             {
-                mensaje = "El formato del DNI es invalido (debe tener entre 7 y 10 digitos numericos).";
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(cliente.Nombre) ||
-                string.IsNullOrWhiteSpace(cliente.Apellido) ||
-                string.IsNullOrWhiteSpace(cliente.Correo))
-            {
-                mensaje = "Complete los campos obligatorios (Nombre, Apellido y Correo).";
-                return false;
-            }
-            if (!ObjetoMapper.Existe(cliente.DNI))
-            {
-                mensaje = "No existe un cliente con ese DNI para modificar.";
+                mensaje = error;
                 return false;
             }
 
             try
             {
+                if (!ObjetoMapper.Existe(cliente.DNI))
+                {
+                    mensaje = Mensajes486LP.Obtener("Cliente.NoExisteModificar"); // Muestra: No existe un cliente con ese DNI para modificar
+                    return false;
+                }
+
                 cliente.Correo = Encriptacion486LP.EncriptarAES(cliente.Correo.Trim());
 
                 ObjetoMapper.Modificar(cliente);
@@ -147,13 +178,13 @@ namespace BLL
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
                     $"Modificacion de cliente DNI {cliente.DNI}", Criticidad486LP.Media, cliente.DNI, "Sistema"));
 
-                mensaje = "Cliente modificado correctamente.";
+                mensaje = Mensajes486LP.Obtener("Cliente.Modificado"); // Muestra: Cliente modificado correctamente
                 return true;
             }
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_Cliente.Modificar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                mensaje = "Ocurrio un error al modificar el cliente.";
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                 return false;
             }
         }
@@ -162,27 +193,34 @@ namespace BLL
         {
             mensaje = "";
 
-            if (!ObjetoMapper.Existe(dni))
-            {
-                mensaje = "No existe un cliente con ese DNI para eliminar.";
-                return false;
-            }
 
             try
             {
+                if (!ObjetoMapper.Existe(dni))
+                {
+                    mensaje = Mensajes486LP.Obtener("Cliente.NoExisteEliminar"); // Muestra: No existe un cliente con ese DNI para eliminar
+                    return false;
+                }
+
+                if (ObjetoMapper.TieneVentas(dni))
+                {
+                    mensaje = Mensajes486LP.Obtener("Cliente.TieneVentas"); // Muestra: No se puede eliminar el cliente: tiene ventas asociadas
+                    return false;
+                }
+
                 ObjetoMapper.Eliminar(dni);
 
                 RecalcularDVCliente();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
                     $"Baja de cliente DNI {dni}", Criticidad486LP.Alta, dni, "Sistema"));
 
-                mensaje = "Cliente eliminado correctamente.";
+                mensaje = Mensajes486LP.Obtener("Cliente.Eliminado"); // Muestra: Cliente eliminado correctamente
                 return true;
             }
             catch (Exception ex)
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_Cliente.Eliminar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                mensaje = "Ocurrio un error al eliminar el cliente.";
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                 return false;
             }
         }

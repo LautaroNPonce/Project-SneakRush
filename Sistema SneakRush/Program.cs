@@ -57,6 +57,9 @@ namespace Sistema_SneakRush
                 return; // sin base de datos no tiene sentido abrir la aplicacion
             }
 
+            // Las BLL leen sus mensajes (validaciones, avisos, errores) en el idioma activo a traves de esta clase.
+            Mensajes486LP.Configurar(LanguageManager);
+
             // Flujo normal de arranque.
             LanguageManager.CambiarIdioma(LanguageManager.ObtenerUltimoIdioma());
             Application.Run(new FrmIniciarSesionLP486());
