@@ -352,6 +352,10 @@ namespace BLL
 
             try
             {
+                // Los datos se toman antes de borrar para dejarlos en la bitacora
+                Producto486LP productoBaja = ObjetoMapper.ObtenerPorId(idProducto);
+                string descripcionProducto = productoBaja == null ? "" : $": {productoBaja.Marca} {productoBaja.Modelo} {productoBaja.Color} talle {productoBaja.Talle}";
+
                 if (ObjetoMapper.TieneMovimientos(idProducto))
                 {
                     mensaje = Mensajes486LP.Obtener("Producto.TieneMovimientos"); // Muestra: No se puede eliminar el producto: tiene movimientos asociados (carritos, ventas o compras)
@@ -366,7 +370,7 @@ namespace BLL
 
                 RecalcularDVProducto();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO_MAESTROS,
-                    $"Baja de producto Id {idProducto}", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
+                    $"Baja de producto Id {idProducto}{descripcionProducto}", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Producto.Eliminado"); // Muestra: Producto eliminado correctamente
                 return true;

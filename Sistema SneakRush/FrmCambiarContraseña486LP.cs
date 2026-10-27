@@ -15,8 +15,19 @@ namespace Sistema_SneakRush
     public partial class FrmCambiarContraseña486LP : Form, IObserver486LP
     {
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
-        public FrmCambiarContraseña486LP()
+
+        // Cuando el sistema obliga a cambiar la contraseña (primer ingreso o contraseña
+        // reiniciada) los botones no dependen de las patentes del perfil: si dependieran,
+        // un usuario sin patentes quedaría atrapado en esta pantalla sin poder avanzar.
+        private readonly bool _cambioObligatorio;
+
+        public FrmCambiarContraseña486LP() : this(false)
         {
+        }
+
+        public FrmCambiarContraseña486LP(bool cambioObligatorio)
+        {
+            _cambioObligatorio = cambioObligatorio;
             InitializeComponent();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmCambiarContraseña486LP_FormClosing;
@@ -119,6 +130,13 @@ namespace Sistema_SneakRush
 
         private void AjustarBotonesSegunPerfil()
         {
+            if (_cambioObligatorio)
+            {
+                btnAceptar.Enabled = true;
+                btnSalir.Enabled = true;
+                return;
+            }
+
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
             if (usuario == null) return;
 

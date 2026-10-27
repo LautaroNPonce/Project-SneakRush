@@ -136,6 +136,9 @@ namespace BLL
 
             try
             {
+                // El nombre se toma antes de borrar para dejarlo en la bitacora
+                string nombreMarca = ObjetoMapper.Listar().FirstOrDefault(m => m.IdMarca == idMarca)?.Nombre;
+
                 if (ObjetoMapper.EstaEnUso(idMarca))
                 {
                     mensaje = Mensajes486LP.Obtener("Marca.EnUso"); // Muestra: No se puede eliminar la marca: tiene productos asociados
@@ -150,7 +153,7 @@ namespace BLL
 
                 RecalcularDVMarca();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Baja de marca Id {idMarca}", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
+                    $"Baja de marca Id {idMarca}: '{nombreMarca}'", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Marca.Eliminada"); // Muestra: Marca eliminada correctamente
                 return true;

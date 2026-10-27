@@ -88,7 +88,7 @@ namespace Sistema_SneakRush
                                 lm.ObtenerTexto(f, "Msg.CambioRequerido", "Por seguridad, debe cambiar su contraseña antes de continuar."),
                                 lm.ObtenerTexto(f, "Msg.CambioRequerido.Titulo", "SneakRush — Cambio requerido"),
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
+                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP(true);
                             frmCambiar.ShowDialog();
                         }
 
@@ -111,7 +111,7 @@ namespace Sistema_SneakRush
                                 lm.ObtenerTexto(f, "Msg.CambioRequerido", "Por seguridad, debe cambiar su contraseña antes de continuar."),
                                 lm.ObtenerTexto(f, "Msg.CambioRequerido.Titulo", "SneakRush — Cambio requerido"),
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP();
+                            FrmCambiarContraseña486LP frmCambiar = new FrmCambiarContraseña486LP(true);
                             frmCambiar.ShowDialog();
                         }
 

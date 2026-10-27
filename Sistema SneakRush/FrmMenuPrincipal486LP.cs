@@ -218,15 +218,52 @@ namespace Sistema_SneakRush
         }
         private void registrarOrdenDeCompraToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
+            // Igual que en la recepción: si no hay solicitudes pendientes se avisa desde el menú y no se abre el formulario.
+            if (new BLL_SolicitudCompra486LP().ListarPendientes().Count == 0)
+            {
+                var lm = Program.LanguageManager;
+                string fOrd = "FrmRegistrarOrden486LP";
+                MessageBox.Show(
+                    lm.ObtenerTexto(fOrd, "Frm.RegistrarOrden.Msg.SinPendientes", "No hay solicitudes pendientes."),
+                    lm.ObtenerTexto(fOrd, "Frm.RegistrarOrden.Msg.Aviso.Title", "Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             AbrirFormulario(new FrmRegistrarOrden486LP());
         }
         private void registrarRecepciónDeMercaderíaToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
+            // Si no hay órdenes pendientes de recepción no se abre el formulario: se avisa directamente desde el menú
+            // (antes el formulario aparecía, mostraba el aviso y se cerraba solo).
+            if (new BLL_OrdenCompra486LP().ListarPendientesDeRecepcion().Count == 0)
+            {
+                var lm = Program.LanguageManager;
+                string fRec = "FrmRegistrarRecepcion486LP";
+                MessageBox.Show(
+                    lm.ObtenerTexto(fRec, "Frm.RegistrarRecepcion.Msg.SinPendientes", "No hay órdenes pendientes de recepción."),
+                    lm.ObtenerTexto(fRec, "Frm.RegistrarRecepcion.Msg.Aviso.Title", "Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             AbrirFormulario(new FrmRegistrarRecepcion486LP());
         }
 
         private void registrarFacturaYPagoDeCompraToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
+            // Si no hay órdenes pendientes de facturación se avisa desde el menú y no se abre el formulario.
+            if (new BLL_OrdenCompra486LP().ListarPendientesDeFacturacion().Count == 0)
+            {
+                var lm = Program.LanguageManager;
+                string fFac = "FrmRegistrarFactura486LP";
+                MessageBox.Show(
+                    lm.ObtenerTexto(fFac, "Frm.RegistrarFactura.Msg.SinPendientes", "No hay órdenes pendientes de facturación."),
+                    lm.ObtenerTexto(fFac, "Frm.RegistrarFactura.Msg.Aviso.Title", "Aviso"),
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             AbrirFormulario(new FrmRegistrarFactura486LP());
         }
 
@@ -279,6 +316,7 @@ namespace Sistema_SneakRush
                 if (f.GetType() == formulario.GetType())
                 {
                     f.BringToFront();
+                    (f as IRefrescable486LP)?.Refrescar();
                     formulario.Dispose();
                     return;
                 }
@@ -345,6 +383,11 @@ namespace Sistema_SneakRush
             iniciarSesionToolStripMenuItem.Text = lm.ObtenerTexto(f, "iniciarSesionToolStripMenuItem");
             cerrarSesiónToolStripMenuItem.Text = lm.ObtenerTexto(f, "cerrarSesiónToolStripMenuItem");
 
+            // Los idiomas se muestran siempre con su propio nombre, sin importar el idioma activo
+            españolToolStripMenuItem.Text = "Español";
+            inglesToolStripMenuItem.Text = "English";
+            portuguesToolStripMenuItem.Text = "Português";
+
             // Menú Administrador
             adminToolStripMenuItem.Text = lm.ObtenerTexto(f, "adminToolStripMenuItem");
             gestiónDeUsuariosToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestiónDeUsuariosToolStripMenuItem");
@@ -404,6 +447,31 @@ namespace Sistema_SneakRush
             };
             lblEstado.Invalidate();
             Menu.Invalidate();
+        }
+    }
+
+    // Forms hijos del MDI que, al volver a elegirse desde el menu estando ya abiertos, vuelven a cargar sus datos
+    // (si no, quedaban con la informacion de la primera vez que se abrieron)
+    public interface IRefrescable486LP
+    {
+        void Refrescar();
+    }
+
+    // Filtros de teclado compartidos por los formularios (se asignan al evento KeyPress del cuadro de texto)
+    public static class FiltrosTeclado486LP
+    {
+        // Solo digitos (DNI)
+        public static void SoloDigitos(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        // Digitos, espacio y los signos + - ( ) (telefono)
+        public static void Telefono(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && " +-()".IndexOf(e.KeyChar) < 0)
+                e.Handled = true;
         }
     }
 }

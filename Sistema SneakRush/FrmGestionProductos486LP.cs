@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGestionProductos486LP : Form, IObserver486LP
+    public partial class FrmGestionProductos486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Producto486LP _bllProducto = new BLL_Producto486LP();
         private BLL_Marca486LP _bllMarca = new BLL_Marca486LP();
@@ -35,6 +35,16 @@ namespace Sistema_SneakRush
         public FrmGestionProductos486LP()
         {
             InitializeComponent();
+
+            // Se agranda la grilla (y se corre el botón Cerrar para que siga alineado a su borde derecho)
+            // para que las 7 columnas entren completas sin scroll horizontal.
+            int anchoNecesario = 770;
+            if (dgvProductos.Width < anchoNecesario)
+            {
+                dgvProductos.Width = anchoNecesario;
+                btnCerrar.Left = dgvProductos.Right - btnCerrar.Width;
+            }
+
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionProductos486LP_FormClosing;
         }
@@ -132,19 +142,31 @@ namespace Sistema_SneakRush
             cmbCategoria.SelectedIndex = -1;
         }
 
+        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se recargan marcas, categorias y productos
+        // (por ejemplo, para ver una marca que se dio de alta mientras tanto)
+        public void Refrescar()
+        {
+            CargarCombos();
+            RefrescarGrilla();
+            LimpiarCampos();
+        }
+
         // Define las columnas de la grilla ligadas a las propiedades del Producto486LP.
         private void ConfigurarColumnas()
         {
             dgvProductos.AutoGenerateColumns = false;
             dgvProductos.Columns.Clear();
 
-            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Marca", Name = "colMarca", Width = 90 });
-            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Categoria", Name = "colCategoria", Width = 90 });
-            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Modelo", Name = "colModelo", Width = 120 });
-            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Color", Name = "colColor", Width = 70 });
-            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Talle", Name = "colTalle", Width = 50 });
-            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", Name = "colPrecio", Width = 80, DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" } });
-            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Stock", Name = "colStock", Width = 50 });
+            // Anchos fijos pensados para que Precio, Talle y Stock se vean completos (también en inglés y portugués);
+            // la grilla se agranda en el constructor para que entren todas las columnas sin scroll horizontal.
+            dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Marca", Name = "colMarca", Width = 100 });
+            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Categoria", Name = "colCategoria", Width = 110 });
+            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Modelo", Name = "colModelo", Width = 140 });
+            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Color", Name = "colColor", Width = 90 });
+            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Talle", Name = "colTalle", Width = 70 });
+            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", Name = "colPrecio", Width = 130, DefaultCellStyle = new DataGridViewCellStyle { Format = "C2" } });
+            dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Stock", Name = "colStock", Width = 70 });
 
             AplicarEncabezadosColumnas();
         }

@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmConsultarProducto486LP : Form, IObserver486LP
+    public partial class FrmConsultarProducto486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Producto486LP _bllProducto = new BLL_Producto486LP();
         private readonly string f = "FrmConsultarProducto486LP";
@@ -160,6 +160,13 @@ namespace Sistema_SneakRush
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             Buscar();
+        }
+
+        // Si el form ya estaba abierto (desde el menu) y se vuelve a elegir, vuelve a consultar con los filtros que tenga cargados,
+        // asi el stock y los precios que se ven son los actuales. Sin mensaje de "sin resultados".
+        public void Refrescar()
+        {
+            MostrarEnGrilla(_bllProducto.Buscar(txtMarca.Text, txtModelo.Text, txtColor.Text, txtTalle.Text, chkSoloStock.Checked));
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)

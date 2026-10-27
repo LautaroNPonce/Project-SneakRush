@@ -113,10 +113,10 @@
     "lblDNI": "CPF:",
     "lblNombre": "Nome:",
     "lblApellido": "Sobrenome:",
-    "lblNombreUsuario": "Nome de usuário",
+    "lblNombreUsuario": "Nome de usuário:",
     "lblCorreo": "E-mail:",
     "lblActivo": "Ativo:",
-    "lblRol": "Função",
+    "lblRol": "Função:",
     "lblModoConsulta": "Modo Consulta",
     "lblModoAñadir": "Modo Adicionar",
     "lblModoModificar": "Modo Modificar",
@@ -220,6 +220,7 @@
     "Msg.SeleccionarPermisoQuitar": "Você deve selecionar uma Permissão para remover.",
     "Msg.SeleccionarPermisoQuitar.Title": "Validação",
     "Msg.ComponenteExiste": "O componente já pertence a este elemento.",
+    "Msg.PatenteBaseFamilia": "Esta permissão é obrigatória em todas as famílias (alterar senha e encerrar sessão) e não pode ser removida.",
     "Msg.AdvertenciaPerfiles": "A família está atribuída a um ou mais perfis. Se excluída, será removida desses perfis. Deseja continuar?",
     "Msg.AdvertenciaPerfiles.Title": "Aviso",
     "Msg.AdvertenciaPermisos": "A família possui permissões atribuídas. Se excluída, todas as permissões associadas serão removidas. Deseja continuar?",
@@ -293,6 +294,9 @@
     "Msg.SeleccionarPermisoQuitar.Title": "Validação",
     "Msg.ComponenteExiste": "O componente já pertence a este elemento.",
     "Msg.NoEliminarPerfilActivo": "Você não pode excluir o perfil que está usando no momento.",
+    "Msg.PerfilConUsuarios": "Não é possível excluir o perfil: há usuários atribuídos a ele. Reatribua ou exclua esses usuários primeiro.",
+    "Msg.PerfilConUsuarios.Title": "Ação não permitida",
+    "Msg.PatenteBasePerfil": "Esta permissão é obrigatória em todos os perfis (alterar senha e encerrar sessão) e não pode ser removida.",
     "Msg.NoEliminarPerfilActivo.Title": "Erro",
     "Msg.AdvertenciaUsuarios": "Há usuários atribuídos a este perfil. Ao excluí-lo, ficarão sem perfil atribuído. Deseja continuar?",
     "Msg.AdvertenciaUsuarios.Title": "Aviso",
@@ -398,7 +402,9 @@
     "modBit.GestionRespaldos": "Gestão de Backups",
     "modBit.Ventas": "Vendas",
     "modBit.DigitoVerificador": "Dígito Verificador",
-    "modBit.Compras": "Compras"
+    "modBit.Compras": "Compras",
+    "modBit.Maestros": "Mestres",
+    "modBit.CambiarIdioma": "Alterar Idioma"
   },
 
   "FrmReparacionBD486LP": {
@@ -507,7 +513,7 @@
     "Frm.GestionCarrito.Col.Subtotal": "Subtotal",
     "Frm.GestionCarrito.Msg.SinPermiso": "Você não tem permissão para gerenciar o carrinho.",
     "Frm.GestionCarrito.Msg.SinPermiso.Title": "Acesso negado",
-    "Frm.GestionCarrito.Msg.DNIIncorrecto": "DNI inválido.",
+    "Frm.GestionCarrito.Msg.DNIIncorrecto": "DNI inválido. Deve ter 7 ou 8 dígitos numéricos (sem pontos nem espaços).",
     "Frm.GestionCarrito.Msg.Validacion.Title": "Validação",
     "Frm.GestionCarrito.Msg.ClienteAsignado": "DNI atribuído ao carrinho.",
     "Frm.GestionCarrito.Msg.Informacion.Title": "Informação",
@@ -516,7 +522,11 @@
     "Frm.GestionCarrito.Msg.SeleccionarParaModificar": "Selecione um produto do carrinho para modificar.",
     "Frm.GestionCarrito.Msg.SinStock": "Estoque insuficiente para a quantidade solicitada.",
     "Frm.GestionCarrito.Msg.DebeAsignarCliente": "Você deve atribuir o DNI do cliente antes de finalizar.",
-    "Frm.GestionCarrito.Msg.CarritoGuardado": "Carrinho salvo com sucesso."
+    "Frm.GestionCarrito.Msg.CarritoGuardado": "Carrinho salvo com sucesso.",
+    "Frm.GestionCarrito.Msg.ConfirmarEliminar": "Deseja remover {0} {1} (tamanho {2}) do carrinho?",
+    "Frm.GestionCarrito.Msg.ConfirmarEliminar.Title": "Remover produto",
+    "Frm.GestionCarrito.Msg.ConfirmarCancelar": "O carrinho tem dados que ainda não foram salvos. Se cancelar, eles serão perdidos. Deseja cancelar o carregamento?",
+    "Frm.GestionCarrito.Msg.ConfirmarCancelar.Title": "Cancelar carregamento"
   },
 
   "FrmGestionClientes486LP": {
@@ -573,7 +583,7 @@
     "Frm.CobrarVenta.Col.Subtotal": "Subtotal",
     "Frm.CobrarVenta.Msg.SinPermiso": "Você não tem permissão para cobrar vendas.",
     "Frm.CobrarVenta.Msg.SinPermiso.Title": "Acesso negado",
-    "Frm.CobrarVenta.Msg.DNIIncorrecto": "DNI inválido.",
+    "Frm.CobrarVenta.Msg.DNIIncorrecto": "DNI inválido. Deve ter 7 ou 8 dígitos numéricos (sem pontos nem espaços).",
     "Frm.CobrarVenta.Msg.Validacion.Title": "Validação",
     "Frm.CobrarVenta.Msg.SinCarritoActivo": "Esse cliente não tem um carrinho ativo para cobrar.",
     "Frm.CobrarVenta.Msg.Aviso.Title": "Aviso",

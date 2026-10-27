@@ -81,6 +81,7 @@ namespace Sistema_SneakRush
             _dniAsignado = false;
             nudCantidad.Maximum = 100; // cantidad maxima por carga (tambien la limita el stock disponible)
             txtDNI.MaxLength = 8;
+            txtDNI.KeyPress += FiltrosTeclado486LP.SoloDigitos; // el DNI solo admite numeros
             ConfigurarColumnas();
             RefrescarGrilla();
             ActualizarTotal();
@@ -138,7 +139,7 @@ namespace Sistema_SneakRush
             if (!System.Text.RegularExpressions.Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
                 MessageBox.Show(
-                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.DNIIncorrecto", "DNI incorrecto."),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.DNIIncorrecto", "DNI incorrecto. Debe tener 7 u 8 dígitos numéricos (sin puntos ni espacios)."),
                     lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.Validacion.Title", "Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -194,6 +195,13 @@ namespace Sistema_SneakRush
             DetalleCarrito486LP det = dgvCarrito.CurrentRow.DataBoundItem as DetalleCarrito486LP;
             if (det != null)
             {
+                // Quitar un producto es inmediato y no se puede deshacer: se pide confirmacion antes
+                DialogResult r = MessageBox.Show(
+                    string.Format(lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ConfirmarEliminar", "¿Desea quitar {0} {1} (talle {2}) del carrito?"), det.Marca, det.Modelo, det.Talle),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ConfirmarEliminar.Title", "Quitar producto"),
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (r != DialogResult.Yes) return;
+
                 _bllCarrito.QuitarProducto(_carrito, det);
                 RefrescarGrilla();
                 ActualizarTotal();
@@ -261,6 +269,17 @@ namespace Sistema_SneakRush
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
+            // Si ya hay productos cargados o un DNI asignado, cerrar descarta el carrito: se pide confirmacion. Sin nada cargado cierra directo.
+            if (_carrito.Detalles.Count > 0 || _dniAsignado)
+            {
+                var lm = Program.LanguageManager;
+                DialogResult r = MessageBox.Show(
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ConfirmarCancelar", "Hay datos cargados en el carrito que todavía no se guardaron. Si cancela, se pierden. ¿Desea cancelar la carga?"),
+                    lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ConfirmarCancelar.Title", "Cancelar carga"),
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (r != DialogResult.Yes) return;
+            }
+
             this.Close();
         }
 
@@ -314,8 +333,8 @@ namespace Sistema_SneakRush
             dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Color", Name = "colColor" });
             dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Talle", Name = "colTalle" });
             dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Cantidad", Name = "colCantidad" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", Name = "colPrecio" });
-            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", Name = "colSubtotal" });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", Name = "colPrecio", DefaultCellStyle = new DataGridViewCellStyle { Format = "C2", Alignment = DataGridViewContentAlignment.MiddleRight } });
+            dgvCarrito.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", Name = "colSubtotal", DefaultCellStyle = new DataGridViewCellStyle { Format = "C2", Alignment = DataGridViewContentAlignment.MiddleRight } });
 
             AplicarEncabezadosColumnas();
         }

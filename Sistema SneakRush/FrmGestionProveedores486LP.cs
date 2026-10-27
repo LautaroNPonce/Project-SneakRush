@@ -63,6 +63,9 @@ namespace Sistema_SneakRush
             // El CUIT solo admite numeros y guion
             txtCUIT.KeyPress += CUIT_KeyPress;
 
+            // El telefono admite numeros, espacio y + - ( )
+            txtTelefono.KeyPress += FiltrosTeclado486LP.Telefono;
+
             ConfigurarColumnas();
             RefrescarGrilla();
             AjustarBotonesSegunPerfil();
@@ -110,11 +113,13 @@ namespace Sistema_SneakRush
         {
             dgvProveedores.AutoGenerateColumns = false;
             dgvProveedores.Columns.Clear();
+            // Las columnas se reparten el ancho disponible (no hay anchos fijos que dependan de la escala de pantalla)
+            dgvProveedores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Nombre", Name = "colNombre", Width = 170 });
-            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "CUIT", Name = "colCUIT", Width = 110 });
-            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Telefono", Name = "colTelefono", Width = 110 });
-            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Correo", Name = "colCorreo", Width = 170 });
+            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Nombre", Name = "colNombre", FillWeight = 30 });
+            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "CUIT", Name = "colCUIT", FillWeight = 20 });
+            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Telefono", Name = "colTelefono", FillWeight = 20 });
+            dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Correo", Name = "colCorreo", FillWeight = 30 });
 
             // En la grilla el CUIT se ve con guiones (30-70123456-8), aunque se guarde solo con digitos
             dgvProveedores.CellFormatting += dgvProveedores_CellFormatting;

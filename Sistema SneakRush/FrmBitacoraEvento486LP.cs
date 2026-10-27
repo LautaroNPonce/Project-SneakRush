@@ -17,13 +17,13 @@ using PdfRectangle = iTextSharp.text.Rectangle;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmBitacoraEvento486LP : Form, IObserver486LP
+    public partial class FrmBitacoraEvento486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Bitacora486LP _bll = new BLL_Bitacora486LP();
         private readonly string[] _codigosModulo =
         {
             "", "Login", "Logout", "Cambiar Contraseña",
-            "Gestión Usuarios", "Gestión Perfiles", "Gestión Familias", "Gestión Respaldos", "Ventas", "Dígito Verificador", "Compras"
+            "Gestión Usuarios", "Gestión Perfiles", "Gestión Familias", "Gestión Respaldos", "Ventas", "Dígito Verificador", "Compras", "Maestros", "Cambiar Idioma"
         };
         private bool _filtroAplicado = true;   // arranca igual que el diseñador (botón = "Cancelar")
         private int _ultimoTotal = 0;
@@ -38,6 +38,18 @@ namespace Sistema_SneakRush
 
         private void FrmBitacoraEvento486LP_Load(object sender, EventArgs e)
         {
+            // La descripción de un evento puede ser larga: el cuadro pasa a ser de varias líneas (con barra de desplazamiento)
+            // y el grupo "Detalle del registro" crece lo necesario para alojarlo.
+            // Las fechas se muestran en formato corto para que no queden cortadas en el selector
+            dtpFechaDesde.Format = DateTimePickerFormat.Short;
+            dtpFechaHasta.Format = DateTimePickerFormat.Short;
+
+            int altoExtra = 70;
+            txtDetDescripcion.Multiline = true;
+            txtDetDescripcion.ScrollBars = ScrollBars.Vertical;
+            txtDetDescripcion.Height += altoExtra;
+            grpDetalle.Height += altoExtra;
+
             ConfigurarDgv();
             CargarCombos();
             CargarGrilla();
@@ -62,8 +74,28 @@ namespace Sistema_SneakRush
             dgtBitacoraEvento.Columns.Add(new DataGridViewTextBoxColumn { Name = "colCriticidad", DataPropertyName = "Criticidad", HeaderText = "Criticidad", Width = 110 });
 
             dgtBitacoraEvento.ShowCellToolTips = true;
+            dgtBitacoraEvento.CellFormatting += dgtBitacoraEvento_CellFormatting;
 
             TraducirColumnas();
+        }
+
+        // En la grilla la criticidad se muestra con su nombre ("1 - Muy Alta") en vez del numero suelto; usa los mismos textos (traducidos) del combo de filtro
+        private void dgtBitacoraEvento_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            if (dgtBitacoraEvento.Columns[e.ColumnIndex].Name != "colCriticidad") return;
+
+            if (e.Value is int n && n >= 1 && n < cmbCriticidad.Items.Count)
+            {
+                e.Value = cmbCriticidad.Items[n].ToString();
+                e.FormattingApplied = true;
+            }
+        }
+
+        // Si la bitacora ya estaba abierta y se vuelve a elegir desde el menu, se limpian los filtros y se recargan los eventos recientes
+        public void Refrescar()
+        {
+            Resetear();
         }
 
         private void CargarCombos()
@@ -87,7 +119,9 @@ namespace Sistema_SneakRush
                 lm.ObtenerTexto(f, "modBit.GestionRespaldos", "Gestión Respaldos"),
                 lm.ObtenerTexto(f, "modBit.Ventas", "Ventas"), 
                 lm.ObtenerTexto(f, "modBit.DigitoVerificador", "Dígito Verificador"), 
-                lm.ObtenerTexto(f, "modBit.Compras", "Compras")
+                lm.ObtenerTexto(f, "modBit.Compras", "Compras"),
+                lm.ObtenerTexto(f, "modBit.Maestros", "Maestros"),
+                lm.ObtenerTexto(f, "modBit.CambiarIdioma", "Cambiar Idioma")
 
             });
             cmbModulo.SelectedIndex = (idxModulo >= 0) ? idxModulo : 0;
@@ -218,7 +252,9 @@ namespace Sistema_SneakRush
             txtDetDNI.Text = ev.DNI;
             txtDetModulo.Text = ev.Modulo;
             txtDetDescripcion.Text = ev.Descripcion;
-            txtDetCriticidad.Text = $"{ev.Criticidad} - {Criticidad486LP.ATexto(ev.Criticidad)}";
+            txtDetCriticidad.Text = (ev.Criticidad >= 1 && ev.Criticidad < cmbCriticidad.Items.Count)
+                ? cmbCriticidad.Items[ev.Criticidad].ToString()
+                : $"{ev.Criticidad} - {Criticidad486LP.ATexto(ev.Criticidad)}";
         }
 
         private void btnExportarPDF_Click(object sender, EventArgs e)

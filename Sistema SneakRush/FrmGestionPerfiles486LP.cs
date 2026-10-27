@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGestionPerfiles486LP : Form, IObserver486LP
+    public partial class FrmGestionPerfiles486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Perfil486LP _bll = new BLL_Perfil486LP();
         private BLL_Familia486LP _bllFamilia = new BLL_Familia486LP();
@@ -373,14 +373,12 @@ namespace Sistema_SneakRush
                 return;
             }
 
+            // Un perfil con usuarios asignados no se puede eliminar (antes se advertía y después fallaba con un error técnico de la base)
             if (_bll.TieneUsuariosAsignados(_idPerfilSeleccionado))
             {
-                DialogResult confirm = MessageBox.Show(lm.ObtenerTexto(f, "Msg.AdvertenciaUsuarios", "Hay usuarios asignados a este perfil. Al eliminarlo quedarán sin perfil asignado. ¿Desea continuar?"),
-                    lm.ObtenerTexto(f, "Msg.AdvertenciaUsuarios.Title", "Advertencia"),MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (confirm == DialogResult.No) 
-                { 
-                    return; 
-                }
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.PerfilConUsuarios", "No se puede eliminar el perfil: hay usuarios asignados a él. Reasigne o elimine esos usuarios primero."),
+                    lm.ObtenerTexto(f, "Msg.PerfilConUsuarios.Title", "Acción no permitida"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
             if (_bll.TieneFamiliasAsignadas(_idPerfilSeleccionado) || _bll.TienePermisosAsignados(_idPerfilSeleccionado))
@@ -513,6 +511,8 @@ namespace Sistema_SneakRush
                 MessageBox.Show(lm.ObtenerTexto(f, "Msg.FamiliaQuitada", "Familia quitada correctamente."),
                     lm.ObtenerTexto(f, "Msg.Exito.Title", "Éxito"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarFamiliasAsignadas(_idPerfilSeleccionado);
+                // Al quitar la familia pueden haberse reasignado patentes base como permisos directos: se vuelve a leer esa lista
+                CargarPermisosAsignados(_idPerfilSeleccionado);
             }
             else
             {
@@ -823,6 +823,13 @@ namespace Sistema_SneakRush
             { 
                 lblPerfilSeleccionado.Text = lm.ObtenerTexto(f, "lbl.PerfilNinguno"); 
             }
+        }
+
+        // Si el form ya estaba abierto y se vuelve a elegir desde el menú, se recargan los datos
+        // (por ejemplo, perfiles o familias creados o modificados mientras tanto en otro formulario)
+        public void Refrescar()
+        {
+            Resetear();
         }
 
         private void FrmGestionPerfiles486LP_FormClosing(object sender, FormClosingEventArgs e)

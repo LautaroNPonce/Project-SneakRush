@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGestionUsuarios486LP : Form, IObserver486LP
+    public partial class FrmGestionUsuarios486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
         private string _modo = "Ninguno";
@@ -605,6 +605,32 @@ namespace Sistema_SneakRush
             MostrarColumna("Rol", lm.ObtenerTexto(f, "col.Rol"));
             MostrarColumna("Email", lm.ObtenerTexto(f, "col.Email"));
             MostrarColumna("Bloqueado", lm.ObtenerTexto(f, "col.Bloqueado"));
+
+            // Los anchos se reparten en proporción al ancho real de la grilla (que cambia según la escala de la pantalla),
+            // así Usuario, Correo y Rol se ven completos y no hace falta scroll horizontal.
+            dgvUsuarios.RowHeadersVisible = false;
+            dgvUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            Dictionary<string, int> pesos = new Dictionary<string, int>
+            {
+                { "DNI", 9 }, { "Nombre", 10 }, { "Apellido", 10 }, { "Email", 25 },
+                { "NombreUsuario", 13 }, { "Bloqueado", 9 }, { "Rol", 16 }
+            };
+            int sumaPesos = 0;
+            foreach (KeyValuePair<string, int> par in pesos)
+            {
+                if (dgvUsuarios.Columns.Contains(par.Key))
+                    sumaPesos += par.Value;
+            }
+            // Se descuenta el borde y la barra vertical (aparece cuando hay muchas filas) para que nunca sobre ancho.
+            int disponible = dgvUsuarios.ClientSize.Width - SystemInformation.VerticalScrollBarWidth - 2;
+            if (sumaPesos > 0 && disponible > 0)
+            {
+                foreach (KeyValuePair<string, int> par in pesos)
+                {
+                    if (dgvUsuarios.Columns.Contains(par.Key))
+                        dgvUsuarios.Columns[par.Key].Width = disponible * par.Value / sumaPesos;
+                }
+            }
         }
 
         private bool ValidarCampos()
@@ -731,6 +757,14 @@ namespace Sistema_SneakRush
 
             ConfigurarColumnas();
             ActualizarLabelModo();
+        }
+
+        // Si el form ya estaba abierto y se vuelve a elegir desde el menú, se recargan los datos
+        // (por ejemplo, perfiles o familias creados o modificados mientras tanto en otro formulario)
+        public void Refrescar()
+        {
+            CargarComboRol();
+            CargarDgv();
         }
 
         private void FrmGestionUsuarios486LP_FormClosing(object sender, FormClosingEventArgs e)

@@ -17,7 +17,7 @@ namespace BLL
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
         private BLL_DV486LP ObjDV = new BLL_DV486LP();
 
-        private const string MODULO = "Ventas";
+        private const string MODULO = "Maestros";
 
         // Lista todos los clientes, devolviendo el correo yA descifrado (para mostrar en la GUI)
         public List<Cliente486LP> Listar()
@@ -138,7 +138,7 @@ namespace BLL
 
                 RecalcularDVCliente();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Alta de cliente DNI {cliente.DNI}", Criticidad486LP.Media, cliente.DNI, "Sistema"));
+                    $"Alta de cliente DNI {cliente.DNI}", Criticidad486LP.Media, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Cliente.Agregado"); // Muestra: Cliente registrado correctamente
                 return true;
@@ -176,7 +176,7 @@ namespace BLL
 
                 RecalcularDVCliente();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Modificacion de cliente DNI {cliente.DNI}", Criticidad486LP.Media, cliente.DNI, "Sistema"));
+                    $"Modificacion de cliente DNI {cliente.DNI}", Criticidad486LP.Media, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Cliente.Modificado"); // Muestra: Cliente modificado correctamente
                 return true;
@@ -212,7 +212,7 @@ namespace BLL
 
                 RecalcularDVCliente();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Baja de cliente DNI {dni}", Criticidad486LP.Alta, dni, "Sistema"));
+                    $"Baja de cliente DNI {dni}", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Cliente.Eliminado"); // Muestra: Cliente eliminado correctamente
                 return true;
@@ -228,6 +228,17 @@ namespace BLL
         {
             string mensajeDV;
             ObjDV.RecalcularDV("Cliente", out mensajeDV);
+        }
+
+        // Usuario logueado para la bitacora (si no hay sesion, "Sistema")
+        private string UsuarioDNI()
+        {
+            return SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
+        }
+
+        private string UsuarioNombre()
+        {
+            return SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
         }
 
         // Descifra el correo con tolerancia si el dato no esta cifrado (o falla), devuelve el valor original para no romper la grilla.

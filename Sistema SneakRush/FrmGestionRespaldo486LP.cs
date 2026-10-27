@@ -70,9 +70,13 @@ namespace Sistema_SneakRush
 
             if (!_bllRespaldo.Backup(txtRutaBackup.Text, out ruta, out mensaje))
             {
+                // Las validaciones (campo vacío) se muestran como aviso y los errores reales como error,
+                // igual que en la restauración
+                bool esValidacion = mensaje == "Msg.Respaldo.CarpetaVacia" || mensaje == "Msg.Respaldo.ArchivoVacio";
                 MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
-                    lm.ObtenerTexto(f, "Msg.Backup.ErrorTitle", "Error"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    esValidacion ? lm.ObtenerTexto(f, "Msg.Restore.ArchivoInvalidoTitle", "Aviso")
+                                 : lm.ObtenerTexto(f, "Msg.Backup.ErrorTitle", "Error"),
+                    MessageBoxButtons.OK, esValidacion ? MessageBoxIcon.Warning : MessageBoxIcon.Error);
                 return;
             }
 
@@ -121,8 +125,11 @@ namespace Sistema_SneakRush
 
             if (!_bllRespaldo.Restore(txtRutaRestore.Text, out mensaje))
             {
-                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),lm.ObtenerTexto(f, "Msg.Restore.ErrorTitle", "Error"),
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                bool esValidacion = mensaje == "Msg.Respaldo.CarpetaVacia" || mensaje == "Msg.Respaldo.ArchivoVacio";
+                MessageBox.Show(lm.ObtenerTexto(f, mensaje, mensaje),
+                    esValidacion ? lm.ObtenerTexto(f, "Msg.Restore.ArchivoInvalidoTitle", "Aviso")
+                                 : lm.ObtenerTexto(f, "Msg.Restore.ErrorTitle", "Error"),
+                    MessageBoxButtons.OK, esValidacion ? MessageBoxIcon.Warning : MessageBoxIcon.Error);
                 return;
             }
 

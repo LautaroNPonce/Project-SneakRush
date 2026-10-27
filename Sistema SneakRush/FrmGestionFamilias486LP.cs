@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGestionFamilias486LP : Form, IObserver486LP
+    public partial class FrmGestionFamilias486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Familia486LP _bll = new BLL_Familia486LP();
         private List<Permiso486LP> _todasLasPatentes = new List<Permiso486LP>();
@@ -579,6 +579,13 @@ namespace Sistema_SneakRush
             { 
                 lblFamiliaSeleccionada.Text = lm.ObtenerTexto(f, "lbl.PermisosDeNinguna"); 
             }
+        }
+
+        // Si el form ya estaba abierto y se vuelve a elegir desde el menú, se recargan los datos
+        // (por ejemplo, perfiles o familias creados o modificados mientras tanto en otro formulario)
+        public void Refrescar()
+        {
+            Resetear();
         }
 
         private void FrmGestionFamilias486LP_FormClosing(object sender, FormClosingEventArgs e)

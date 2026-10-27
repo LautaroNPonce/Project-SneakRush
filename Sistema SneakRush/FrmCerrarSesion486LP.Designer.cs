@@ -171,13 +171,13 @@ namespace Sistema_SneakRush
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 13.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            this.label1.Location = new System.Drawing.Point(30, 66);
+            this.label1.Location = new System.Drawing.Point(8, 64);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(360, 46);
+            this.label1.Size = new System.Drawing.Size(400, 50);
             this.label1.TabIndex = 2;
-            this.label1.Text = "¿Seguro que quieres cerrar la sesion?";
+            this.label1.Text = "¿Está seguro que desea cerrar sesión?";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnlAccent

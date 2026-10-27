@@ -68,6 +68,10 @@ namespace Sistema_SneakRush
             txtCorreo.MaxLength = 100;
             txtTelefono.MaxLength = 20;
 
+            // Teclas permitidas: DNI solo numeros; telefono numeros, espacio y + - ( )
+            txtDNI.KeyPress += FiltrosTeclado486LP.SoloDigitos;
+            txtTelefono.KeyPress += FiltrosTeclado486LP.Telefono;
+
             ConfigurarColumnas();
             RefrescarGrilla();
             AjustarBotonesSegunPerfil();

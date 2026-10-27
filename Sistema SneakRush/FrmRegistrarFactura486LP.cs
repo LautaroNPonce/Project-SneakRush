@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmRegistrarFactura486LP : Form, IObserver486LP
+    public partial class FrmRegistrarFactura486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_OrdenCompra486LP _bllOrden = new BLL_OrdenCompra486LP();
         private BLL_Recepcion486LP _bllRecepcion = new BLL_Recepcion486LP();
@@ -113,7 +113,40 @@ namespace Sistema_SneakRush
         // Habilita/deshabilita el panel de datos de tarjeta segun el medio de pago elegido
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
+            // Al dejar de usar Tarjeta se borran los datos escritos, para que no queden cargados si se vuelve a elegir despues
+            if (!rbTarjeta.Checked) LimpiarDatosTarjeta();
             grpTarjeta.Enabled = rbTarjeta.Checked;
+        }
+
+        private void LimpiarDatosTarjeta()
+        {
+            txtNumeroTarjeta.Clear();
+            txtVencimiento.Clear();
+            txtCVV.Clear();
+        }
+
+        // Si el form ya estaba abierto con una factura pagada y se vuelve a elegir desde el menu, se recargan las ordenes pendientes y queda listo para otra.
+        // Mientras no haya una factura pagada (o se este procesando un pago) no se toca nada.
+        public void Refrescar()
+        {
+            if (_facturaGenerada == null || lblProcesando.Visible) return;
+
+            _facturaGenerada = null;
+            _facturaPendiente = null;
+            _rutaComprobante = null;
+            _ordenSeleccionada = null;
+            _recepcionSeleccionada = null;
+            _nombreProveedorSeleccionado = null;
+
+            dgvDetalleFactura.DataSource = null;
+            lblTotal.Text = 0m.ToString("C");
+            rbEfectivo.Checked = true;
+            LimpiarDatosTarjeta();
+            dgvOrdenes.Enabled = true;
+            grpMedioPago.Enabled = true;
+
+            AplicarPermisosBotones();
+            CargarOrdenesPendientes();
         }
 
         private void CargarOrdenesPendientes()
@@ -189,6 +222,9 @@ namespace Sistema_SneakRush
             dgvOrdenes.ReadOnly = true;
             dgvOrdenes.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "NroOrden", Name = "colNroOrden" });
             dgvOrdenes.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Fecha", Name = "colFechaOrden", DefaultCellStyle = { Format = "dd/MM/yyyy HH:mm" } });
+            // La fecha con hora se corta con el ancho por defecto: las dos columnas se ajustan a su contenido.
+            dgvOrdenes.Columns["colNroOrden"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            dgvOrdenes.Columns["colFechaOrden"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
             dgvDetalleFactura.AutoGenerateColumns = false;
             dgvDetalleFactura.Columns.Clear();

@@ -248,7 +248,7 @@
             this.dgvProveedores.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvProveedores.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvProveedores.MultiSelect = false;
-            this.dgvProveedores.Size = new System.Drawing.Size(560, 312);
+            this.dgvProveedores.Size = new System.Drawing.Size(560, 264);
             this.dgvProveedores.TabIndex = 7;
             this.dgvProveedores.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProveedores_CellClick);
             // 

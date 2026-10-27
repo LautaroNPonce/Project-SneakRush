@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmRegistrarOrden486LP : Form, IObserver486LP
+    public partial class FrmRegistrarOrden486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_SolicitudCompra486LP _bllSolicitud = new BLL_SolicitudCompra486LP();
         private BLL_Proveedor486LP _bllProveedor = new BLL_Proveedor486LP();
@@ -91,6 +91,13 @@ namespace Sistema_SneakRush
         {
             btnConfirmar.Enabled = _puedeConfirmar;
             btnCancelar.Enabled = _puedeCancelar;
+        }
+
+        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se vuelven a leer las solicitudes pendientes
+        // (por ejemplo, una solicitud que se confirmo mientras tanto en Generar solicitud)
+        public void Refrescar()
+        {
+            CargarSolicitudesPendientes();
         }
 
         private void CargarSolicitudesPendientes()
@@ -287,8 +294,8 @@ namespace Sistema_SneakRush
             dgvDetalleOrden.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Talle", Name = "colTalle", ReadOnly = true });
             dgvDetalleOrden.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Cantidad", Name = "colCantidad", ReadOnly = false });
             dgvDetalleOrden.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "UltimoCosto", Name = "colUltimoCosto", ReadOnly = true, DefaultCellStyle = { Format = "C" } });
-            dgvDetalleOrden.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "CostoUnitario", Name = "colCostoUnitario", ReadOnly = false });
-            dgvDetalleOrden.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", Name = "colSubtotal", ReadOnly = true });
+            dgvDetalleOrden.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "CostoUnitario", Name = "colCostoUnitario", ReadOnly = false, DefaultCellStyle = { Format = "C" } });
+            dgvDetalleOrden.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", Name = "colSubtotal", ReadOnly = true, DefaultCellStyle = { Format = "C" } });
 
             AplicarEncabezadosColumnas();
         }

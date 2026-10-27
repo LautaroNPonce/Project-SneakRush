@@ -113,10 +113,10 @@
     "lblDNI": "ID:",
     "lblNombre": "Name:",
     "lblApellido": "Last Name:",
-    "lblNombreUsuario": "Username",
+    "lblNombreUsuario": "Username:",
     "lblCorreo": "Email:",
     "lblActivo": "Active:",
-    "lblRol": "Role",
+    "lblRol": "Role:",
     "lblModoConsulta": "Query Mode",
     "lblModoAñadir": "Add Mode",
     "lblModoModificar": "Modify Mode",
@@ -220,6 +220,7 @@
     "Msg.SeleccionarPermisoQuitar": "You must select a Permission to remove.",
     "Msg.SeleccionarPermisoQuitar.Title": "Validation",
     "Msg.ComponenteExiste": "The component already belongs to this element.",
+    "Msg.PatenteBaseFamilia": "This permission is mandatory in every family (change password and log out) and cannot be removed.",
     "Msg.AdvertenciaPerfiles": "The family is assigned to one or more profiles. If deleted, it will be removed from those profiles. Do you want to continue?",
     "Msg.AdvertenciaPerfiles.Title": "Warning",
     "Msg.AdvertenciaPermisos": "The family has assigned permissions. If deleted, all associated permissions will be removed. Do you want to continue?",
@@ -293,6 +294,9 @@
     "Msg.SeleccionarPermisoQuitar.Title": "Validation",
     "Msg.ComponenteExiste": "The component already belongs to this element.",
     "Msg.NoEliminarPerfilActivo": "You cannot delete the profile you are currently using.",
+    "Msg.PerfilConUsuarios": "The profile cannot be deleted: there are users assigned to it. Reassign or delete those users first.",
+    "Msg.PerfilConUsuarios.Title": "Action not allowed",
+    "Msg.PatenteBasePerfil": "This permission is mandatory in every profile (change password and log out) and cannot be removed.",
     "Msg.NoEliminarPerfilActivo.Title": "Error",
     "Msg.AdvertenciaUsuarios": "There are users assigned to this profile. Deleting it will leave them without an assigned profile. Do you want to continue?",
     "Msg.AdvertenciaUsuarios.Title": "Warning",
@@ -398,7 +402,9 @@
     "modBit.GestionRespaldos": "Backup Management",
     "modBit.Ventas": "Sales",
     "modBit.DigitoVerificador": "Check Digit",
-    "modBit.Compras": "Purchases"
+    "modBit.Compras": "Purchases",
+    "modBit.Maestros": "Masters",
+    "modBit.CambiarIdioma": "Change Language"
   },
 
   "FrmReparacionBD486LP": {
@@ -506,7 +512,7 @@
     "Frm.GestionCarrito.Col.Subtotal": "Subtotal",
     "Frm.GestionCarrito.Msg.SinPermiso": "You do not have permission to manage the cart.",
     "Frm.GestionCarrito.Msg.SinPermiso.Title": "Access denied",
-    "Frm.GestionCarrito.Msg.DNIIncorrecto": "Invalid ID number.",
+    "Frm.GestionCarrito.Msg.DNIIncorrecto": "Invalid ID number. It must have 7 or 8 digits (no dots or spaces).",
     "Frm.GestionCarrito.Msg.Validacion.Title": "Validation",
     "Frm.GestionCarrito.Msg.ClienteAsignado": "ID number assigned to the cart.",
     "Frm.GestionCarrito.Msg.Informacion.Title": "Information",
@@ -515,7 +521,11 @@
     "Frm.GestionCarrito.Msg.SeleccionarParaModificar": "Select a product from the cart to modify.",
     "Frm.GestionCarrito.Msg.SinStock": "Not enough stock for the requested quantity.",
     "Frm.GestionCarrito.Msg.DebeAsignarCliente": "You must assign the customer's ID number before finishing.",
-    "Frm.GestionCarrito.Msg.CarritoGuardado": "Cart saved successfully."
+    "Frm.GestionCarrito.Msg.CarritoGuardado": "Cart saved successfully.",
+    "Frm.GestionCarrito.Msg.ConfirmarEliminar": "Do you want to remove {0} {1} (size {2}) from the cart?",
+    "Frm.GestionCarrito.Msg.ConfirmarEliminar.Title": "Remove product",
+    "Frm.GestionCarrito.Msg.ConfirmarCancelar": "The cart has data that has not been saved yet. If you cancel, it will be lost. Do you want to cancel the entry?",
+    "Frm.GestionCarrito.Msg.ConfirmarCancelar.Title": "Cancel entry"
   },
 
   "FrmGestionClientes486LP": {
@@ -572,7 +582,7 @@
     "Frm.CobrarVenta.Col.Subtotal": "Subtotal",
     "Frm.CobrarVenta.Msg.SinPermiso": "You do not have permission to charge sales.",
     "Frm.CobrarVenta.Msg.SinPermiso.Title": "Access denied",
-    "Frm.CobrarVenta.Msg.DNIIncorrecto": "Invalid ID number.",
+    "Frm.CobrarVenta.Msg.DNIIncorrecto": "Invalid ID number. It must have 7 or 8 digits (no dots or spaces).",
     "Frm.CobrarVenta.Msg.Validacion.Title": "Validation",
     "Frm.CobrarVenta.Msg.SinCarritoActivo": "This customer has no active cart to charge.",
     "Frm.CobrarVenta.Msg.Aviso.Title": "Notice",

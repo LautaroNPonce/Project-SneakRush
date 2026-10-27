@@ -136,6 +136,9 @@ namespace BLL
 
             try
             {
+                // El nombre se toma antes de borrar para dejarlo en la bitacora
+                string nombreCategoria = ObjetoMapper.Listar().FirstOrDefault(c => c.IdCategoria == idCategoria)?.Nombre;
+
                 if (ObjetoMapper.EstaEnUso(idCategoria))
                 {
                     mensaje = Mensajes486LP.Obtener("Categoria.EnUso"); // Muestra: No se puede eliminar la categoría: tiene productos asociados
@@ -150,7 +153,7 @@ namespace BLL
 
                 RecalcularDVCategoria();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Baja de categoria Id {idCategoria}", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
+                    $"Baja de categoria Id {idCategoria}: '{nombreCategoria}'", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Categoria.Eliminada"); // Muestra: Categoría eliminada correctamente
                 return true;

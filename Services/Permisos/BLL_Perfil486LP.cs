@@ -17,6 +17,10 @@ namespace Services
         private BLL_Patente486LP _bllPatente = new BLL_Patente486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
 
+        // Patentes mínimas que todo perfil debe conservar (igual que las familias): sin ellas el usuario
+        // no podría cambiar su contraseña ni cerrar sesión.
+        private readonly string[] _patentesBase = { "CAMBIAR_CONTRASENA_ACEPTAR", "CAMBIAR_CONTRASENA_SALIR", "CERRAR_SESION_ACEPTAR", "CERRAR_SESION_CANCELAR" };
+
         public List<Perfil486LP> ObtenerPerfiles()
         {
             return _mapperPerfil.Listar();
@@ -46,15 +50,23 @@ namespace Services
 
             if (resultado)
             {
+                // Perfil_Agregar no devuelve el id generado: se busca el perfil recién creado por su nombre (único)
+                Perfil486LP creado = _mapperPerfil.Listar().FirstOrDefault(p => p.Nombre.ToLower() == nombre.ToLower());
+                if (creado != null)
+                {
+                    GarantizarPatentesBase(creado.IdPerfil);
+                }
+
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se creó el perfil '{nombre}'.",
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se creó el perfil '{nombre}' con patentes base.",
                     Criticidad486LP.Alta, dni, nombreUsuario));
 
                 string mensajeDV;
                 BLL_DV486LP bllDV = new BLL_DV486LP();
                 bllDV.RecalcularDV("Perfil", out mensajeDV);
+                bllDV.RecalcularDV("Perfil_Permiso", out mensajeDV);
             }
 
             return resultado;
@@ -83,6 +95,8 @@ namespace Services
                 return false;
             }
 
+            string nombreAnterior = NombrePerfil(id);
+
             Perfil486LP perfil = new Perfil486LP();
             perfil.IdPerfil = id;
             perfil.Nombre = nuevoNombre;
@@ -94,7 +108,7 @@ namespace Services
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se modificó el perfil con id '{id}' al nombre '{nuevoNombre}'.",
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se modificó el perfil '{nombreAnterior}' al nombre '{nuevoNombre}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
 
                 string mensajeDV;
@@ -123,6 +137,28 @@ namespace Services
                 return false;
             }
 
+            // Un perfil con usuarios asignados no se puede eliminar: la base lo rechaza con un error de clave foránea
+            // y el usuario veía el mensaje técnico. Se valida acá y se devuelve un mensaje claro.
+            if (_mapperPerfil.TieneUsuarios(id))
+            {
+                mensaje = "Msg.PerfilConUsuarios"; // No se puede eliminar: hay usuarios asignados a este perfil.
+                return false;
+            }
+
+            string nombrePerfil = NombrePerfil(id);
+
+            // Se quitan antes las asociaciones (familias y permisos sueltos) para que el borrado no falle por las claves foráneas
+            foreach (Familia486LP fam in _mapperPerfil.ListarFamiliasDePerfil(id))
+            {
+                string mQuitar;
+                _mapperPerfil.QuitarFamilia(id, fam.Id, out mQuitar);
+            }
+            foreach (Permiso486LP perm in _mapperPerfil.ListarPermisosDePerfil(id))
+            {
+                string mQuitar;
+                _mapperPerfil.QuitarPermiso(id, perm.Id, out mQuitar);
+            }
+
             bool resultado = _mapperPerfil.Eliminar(id, out mensaje);
 
             if (resultado)
@@ -130,7 +166,7 @@ namespace Services
                 string dni = usuarioActual?.DNI ?? "";
                 string nombreUsuario = usuarioActual?.NombreUsuario ?? "Sistema";
                 _bllBitacora.Registrar(new BitacoraEvento486LP
-                    ("Gestión Perfiles", $"Se eliminó el perfil con id '{id}'.", Criticidad486LP.Alta, dni, nombreUsuario));
+                    ("Gestión Perfiles", $"Se eliminó el perfil '{nombrePerfil}'.", Criticidad486LP.Alta, dni, nombreUsuario));
 
                 string mensajeDV;
                 BLL_DV486LP bllDV = new BLL_DV486LP();
@@ -199,7 +235,7 @@ namespace Services
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se asignó la familia '{idFamilia}' al perfil '{idPerfil}'.",
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se asignó la familia '{NombreFamilia(idFamilia)}' al perfil '{NombrePerfil(idPerfil)}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
 
                 string mensajeDV;
@@ -246,12 +282,16 @@ namespace Services
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó la familia '{idFamilia}' del perfil '{idPerfil}'.",
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó la familia '{familia.Nombre}' del perfil '{NombrePerfil(idPerfil)}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
+
+                // Si las patentes base venían por esa familia, el perfil las perdería: se vuelven a asegurar
+                GarantizarPatentesBase(idPerfil);
 
                 string mensajeDV;
                 BLL_DV486LP bllDV = new BLL_DV486LP();
                 bllDV.RecalcularDV("Perfil_Familia", out mensajeDV);
+                bllDV.RecalcularDV("Perfil_Permiso", out mensajeDV);
             }
 
             return resultado;
@@ -303,7 +343,7 @@ namespace Services
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se asignó el permiso '{idPermiso}' al perfil '{idPerfil}'.",
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se asignó el permiso '{NombrePatente(idPermiso)}' al perfil '{NombrePerfil(idPerfil)}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
 
                 string mensajeDV;
@@ -315,6 +355,12 @@ namespace Services
         }
 
         public bool QuitarPermiso(int idPerfil, int idPermiso, out string mensaje)
+        {
+            return QuitarPermisoInterno(idPerfil, idPermiso, true, out mensaje);
+        }
+
+        // validarPatenteBase = false solo lo usa la propia BLL cuando la patente base queda cubierta por una familia (ver QuitarSueltosCubiertosPorFamilia).
+        private bool QuitarPermisoInterno(int idPerfil, int idPermiso, bool validarPatenteBase, out string mensaje)
         {
             mensaje = "";
 
@@ -337,6 +383,14 @@ namespace Services
                 return false;
             }
 
+            // Las patentes base (cambiar contraseña / cerrar sesión) no se pueden quitar de un perfil:
+            // el perfil quedaría sin poder cerrar sesión ni cambiar la contraseña.
+            if (validarPatenteBase && _patentesBase.Contains(NombrePatente(idPermiso)))
+            {
+                mensaje = "Msg.PatenteBasePerfil"; // Esta patente es obligatoria en todos los perfiles y no se puede quitar.
+                return false;
+            }
+
             // Composite remove() en memoria
             Perfil486LP perfil = new Perfil486LP();
             Permiso486LP permiso = permisosActuales.First(p => p.Id == idPermiso);
@@ -350,7 +404,7 @@ namespace Services
                 string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "";
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
-                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó el permiso '{idPermiso}' del perfil '{idPerfil}'.",
+                _bllBitacora.Registrar(new BitacoraEvento486LP("Gestión Perfiles", $"Se quitó el permiso '{permiso.Nombre}' del perfil '{NombrePerfil(idPerfil)}'.",
                     Criticidad486LP.Media, dni, nombreUsuario));
 
                 string mensajeDV;
@@ -407,7 +461,8 @@ namespace Services
                 if (idsFamilia.Contains(suelto.Id))
                 {
                     string m;
-                    if (QuitarPermiso(idPerfil, suelto.Id, out m)) // La BLL: valida, persiste y registra en bitácora
+                    // La patente base suelta se puede quitar acá porque la familia que se asigna la aporta (el perfil no la pierde)
+                    if (QuitarPermisoInterno(idPerfil, suelto.Id, false, out m)) // La BLL: valida, persiste y registra en bitácora
                     {
                         quitados.Add(suelto.Nombre);
                     }
@@ -433,6 +488,53 @@ namespace Services
             }
 
             return null; // ninguna familia asignada cubre ese permiso
+        }
+
+        // Asegura que el perfil tenga las patentes base, ya sea sueltas o a través de alguna familia asignada.
+        // Se usa al crear un perfil y cuando se le quita una familia (que podía aportarlas).
+        public void GarantizarPatentesBase(int idPerfil)
+        {
+            if (idPerfil <= 0) return;
+
+            HashSet<int> cubiertos = new HashSet<int>(_mapperPerfil.ListarPermisosDePerfil(idPerfil).Select(p => p.Id));
+            foreach (Familia486LP fam in _mapperPerfil.ListarFamiliasDePerfil(idPerfil))
+            {
+                foreach (Permiso486LP perm in _bllFamilia.ObtenerPermisosDeFamilia(fam.Id))
+                    cubiertos.Add(perm.Id);
+            }
+
+            List<Permiso486LP> todas = _bllPatente.ObtenerPatentes();
+            foreach (string codigo in _patentesBase)
+            {
+                Permiso486LP patente = todas.FirstOrDefault(x => x.Nombre == codigo);
+                if (patente != null && !cubiertos.Contains(patente.Id))
+                {
+                    string msgIgnorado;
+                    _mapperPerfil.AsignarPermiso(idPerfil, patente.Id, out msgIgnorado);
+                }
+            }
+
+            string mensajeDV;
+            new BLL_DV486LP().RecalcularDV("Perfil_Permiso", out mensajeDV);
+        }
+
+        // Nombres para la bitácora (se registran nombres legibles en vez de ids)
+        private string NombrePerfil(int idPerfil)
+        {
+            Perfil486LP p = _mapperPerfil.Listar().FirstOrDefault(x => x.IdPerfil == idPerfil);
+            return p != null ? p.Nombre : idPerfil.ToString();
+        }
+
+        private string NombreFamilia(int idFamilia)
+        {
+            Familia486LP f = _bllFamilia.ObtenerFamilias().FirstOrDefault(x => x.Id == idFamilia);
+            return f != null ? f.Nombre : idFamilia.ToString();
+        }
+
+        private string NombrePatente(int idPermiso)
+        {
+            Permiso486LP p = _bllPatente.ObtenerPatentes().FirstOrDefault(x => x.Id == idPermiso);
+            return p != null ? p.Nombre : idPermiso.ToString();
         }
 
         public bool TieneUsuariosAsignados(int idPerfil)

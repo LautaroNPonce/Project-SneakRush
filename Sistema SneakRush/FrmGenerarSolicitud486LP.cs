@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmGenerarSolicitud486LP : Form, IObserver486LP
+    public partial class FrmGenerarSolicitud486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Producto486LP _bllProducto = new BLL_Producto486LP();
         private BLL_SolicitudCompra486LP _bllSolicitud = new BLL_SolicitudCompra486LP();
@@ -41,6 +41,7 @@ namespace Sistema_SneakRush
             cmbMarca.SelectedIndexChanged += Filtro_SelectedIndexChanged;
             cmbTalle.SelectedIndexChanged += Filtro_SelectedIndexChanged;
             dgvCatalogo.SelectionChanged += dgvCatalogo_SelectionChanged;
+            dgvCatalogo.CellFormatting += dgvCatalogo_CellFormatting;
             btnAgregar.Click += btnAgregar_Click;
             btnQuitar.Click += btnQuitar_Click;
             btnConfirmar.Click += btnConfirmar_Click;
@@ -109,6 +110,14 @@ namespace Sistema_SneakRush
             MostrarCatalogo(_productosDisponibles);
         }
 
+        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se vuelve a leer el catalogo (el stock cambia con las ventas y las recepciones)
+        // y se mantienen los filtros elegidos. Lo que ya se agrego a la solicitud en construccion no se toca.
+        public void Refrescar()
+        {
+            CargarCatalogo();
+            AplicarFiltros();
+        }
+
         private void CargarCombosFiltro()
         {
             var lm = Program.LanguageManager;
@@ -157,34 +166,32 @@ namespace Sistema_SneakRush
             dgvCatalogo.AutoGenerateColumns = false;
             dgvCatalogo.DataSource = null;
             dgvCatalogo.DataSource = new BindingList<Producto486LP>(lista);
-            AplicarResaltadoStock();
         }
 
-        // Rojo si Stock=0, naranja si Stock<=UmbralStockBajo para que el Administrador detecte de un vistazo lo urgente, sin tener que leer columna por columna
-        private void AplicarResaltadoStock()
+        // Rojo si Stock=0, naranja si Stock<=UmbralStockBajo para que el Administrador detecte de un vistazo lo urgente, sin tener que leer columna por columna.
+        // Se pinta en CellFormatting (cada vez que se dibuja una celda) y no recorriendo las filas al cargar la grilla: al abrir el form las filas todavia
+        // no estaban creadas cuando se recorrian, y el resaltado recien aparecia despues de usar un filtro.
+        private void dgvCatalogo_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            foreach (DataGridViewRow fila in dgvCatalogo.Rows)
+            BindingList<Producto486LP> lista = dgvCatalogo.DataSource as BindingList<Producto486LP>;
+            if (lista == null || e.RowIndex < 0 || e.RowIndex >= lista.Count) return;
+
+            Producto486LP p = lista[e.RowIndex];
+
+            if (p.Stock == 0)
             {
-                Producto486LP p = fila.DataBoundItem as Producto486LP;
-                if (p == null) continue;
-
-                if (p.Stock == 0)
-                {
-                    fila.DefaultCellStyle.BackColor = Color.FromArgb(248, 215, 218);
-                    fila.DefaultCellStyle.ForeColor = Color.FromArgb(114, 28, 36);
-                    fila.DefaultCellStyle.SelectionBackColor = Color.FromArgb(220, 53, 69);
-                    fila.DefaultCellStyle.SelectionForeColor = Color.White;
-                }
-                else if (p.Stock <= UmbralStockBajo)
-                {
-                    fila.DefaultCellStyle.BackColor = Color.FromArgb(255, 236, 209);
-                    fila.DefaultCellStyle.ForeColor = Color.FromArgb(133, 77, 14);
-                    fila.DefaultCellStyle.SelectionBackColor = Color.FromArgb(240, 173, 78);
-                    fila.DefaultCellStyle.SelectionForeColor = Color.FromArgb(65, 40, 0);
-                }
+                e.CellStyle.BackColor = Color.FromArgb(248, 215, 218);
+                e.CellStyle.ForeColor = Color.FromArgb(114, 28, 36);
+                e.CellStyle.SelectionBackColor = Color.FromArgb(220, 53, 69);
+                e.CellStyle.SelectionForeColor = Color.White;
             }
-
-            dgvCatalogo.Refresh();
+            else if (p.Stock <= UmbralStockBajo)
+            {
+                e.CellStyle.BackColor = Color.FromArgb(255, 236, 209);
+                e.CellStyle.ForeColor = Color.FromArgb(133, 77, 14);
+                e.CellStyle.SelectionBackColor = Color.FromArgb(240, 173, 78);
+                e.CellStyle.SelectionForeColor = Color.FromArgb(65, 40, 0);
+            }
         }
 
         private void dgvCatalogo_SelectionChanged(object sender, EventArgs e)

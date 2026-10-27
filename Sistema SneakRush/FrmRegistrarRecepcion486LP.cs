@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmRegistrarRecepcion486LP : Form, IObserver486LP
+    public partial class FrmRegistrarRecepcion486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_OrdenCompra486LP _bllOrden = new BLL_OrdenCompra486LP();
         private BLL_Recepcion486LP _bllRecepcion = new BLL_Recepcion486LP();
@@ -89,6 +89,13 @@ namespace Sistema_SneakRush
         {
             btnConfirmar.Enabled = _puedeConfirmar;
             btnCancelar.Enabled = _puedeCancelar;
+        }
+
+        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se vuelven a leer las ordenes pendientes de recepcion
+        // (por ejemplo, una orden que se registro mientras tanto en Registrar orden de compra)
+        public void Refrescar()
+        {
+            CargarOrdenesPendientes();
         }
 
         private void CargarOrdenesPendientes()

@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    public partial class FrmCobrarVenta486LP : Form, IObserver486LP
+    public partial class FrmCobrarVenta486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Venta486LP _bllVenta = new BLL_Venta486LP();
         private BLL_Carrito486LP _bllCarrito = new BLL_Carrito486LP();
@@ -69,6 +69,8 @@ namespace Sistema_SneakRush
                 return;
             }
 
+            txtDNI.MaxLength = 8;
+            txtDNI.KeyPress += FiltrosTeclado486LP.SoloDigitos; // el DNI solo admite numeros
             ConfigurarColumnas();
             btnVerComprobante.Enabled = false;
             AjustarBotonesSegunPerfil();
@@ -112,7 +114,40 @@ namespace Sistema_SneakRush
         // habilita/deshabilita el panel de datos de tarjeta segun el medio de pago elegido
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
+            // Al dejar de usar Tarjeta se borran los datos escritos, para que no queden cargados si se vuelve a elegir despues
+            if (!rbTarjeta.Checked) LimpiarDatosTarjeta();
             ActualizarHabilitacionCobro();
+        }
+
+        private void LimpiarDatosTarjeta()
+        {
+            txtNumero.Clear();
+            txtVencimiento.Clear();
+            txtCVV.Clear();
+        }
+
+        // Si el form ya estaba abierto con una venta cobrada y se vuelve a elegir desde el menu, queda listo para una venta nueva.
+        // Mientras no haya una venta cobrada (o se este procesando un pago) no se toca nada, para no perder lo que se esta haciendo.
+        public void Refrescar()
+        {
+            if (_ventaGenerada == null || lblProcesando.Visible) return;
+
+            _carritoActual = null;
+            _ventaGenerada = null;
+            _rutaComprobante = null;
+            _clienteRegistrado = false;
+            _stockSuficiente = false;
+
+            txtDNI.Clear();
+            txtDNI.Enabled = true;
+            dgvDetalle.DataSource = null;
+            lblTotal.Text = 0m.ToString("C");
+            rbEfectivo.Checked = true;
+            LimpiarDatosTarjeta();
+
+            AplicarPermisosBotones();
+            ActualizarHabilitacionCobro();
+            txtDNI.Focus();
         }
 
         // "Cobrar" y el medio de pago solo se habilitan con un carrito seleccionado cuyo cliente ya esta registrado y con stock suficiente, y mientras la venta no se haya cobrado.
@@ -135,7 +170,7 @@ namespace Sistema_SneakRush
             if (!System.Text.RegularExpressions.Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
                 MessageBox.Show(
-                    lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.DNIIncorrecto", "DNI incorrecto."),
+                    lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.DNIIncorrecto", "DNI incorrecto. Debe tener 7 u 8 dígitos numéricos (sin puntos ni espacios)."),
                     lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Validacion.Title", "Validación"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -247,8 +282,8 @@ namespace Sistema_SneakRush
             dgvDetalle.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Color", Name = "colColor" });
             dgvDetalle.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Talle", Name = "colTalle" });
             dgvDetalle.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Cantidad", Name = "colCantidad" });
-            dgvDetalle.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", Name = "colPrecio" });
-            dgvDetalle.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", Name = "colSubtotal" });
+            dgvDetalle.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Precio", Name = "colPrecio", DefaultCellStyle = new DataGridViewCellStyle { Format = "C2", Alignment = DataGridViewContentAlignment.MiddleRight } });
+            dgvDetalle.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Subtotal", Name = "colSubtotal", DefaultCellStyle = new DataGridViewCellStyle { Format = "C2", Alignment = DataGridViewContentAlignment.MiddleRight } });
 
             AplicarEncabezadosColumnas();
         }

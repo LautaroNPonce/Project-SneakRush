@@ -15,7 +15,7 @@ namespace BLL
         {
             string carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Comprobantes");
             Directory.CreateDirectory(carpeta);
-            string rutaArchivo = Path.Combine(carpeta, $"Comprobante_{venta.NroComprobante}.pdf");
+            string rutaArchivo = Path.Combine(carpeta, $"Comprobante_Venta_{venta.NroComprobante}.pdf");
 
             //  mas renglones de detalle => ticket mas largo, para no dejar espacio de mas.
             float alto = 240f + (venta.Detalles.Count * 40f);
@@ -79,7 +79,7 @@ namespace BLL
         {
             string carpeta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Comprobantes");
             Directory.CreateDirectory(carpeta);
-            string rutaArchivo = Path.Combine(carpeta, $"Comprobante_{factura.NroFactura}.pdf");
+            string rutaArchivo = Path.Combine(carpeta, $"Comprobante_Compra_{factura.NroFactura}.pdf");
 
             float alto = 240f + (detalle.Count * 40f);
             Document doc = new Document(new Rectangle(AnchoTicket, alto), 10f, 10f, 10f, 10f);

@@ -206,6 +206,9 @@ namespace BLL
 
             try
             {
+                // El nombre se toma antes de borrar para dejarlo en la bitacora
+                string nombreProveedor = ObjetoMapper.Listar().FirstOrDefault(p => p.IdProveedor == idProveedor)?.Nombre;
+
                 if (ObjetoMapper.TieneMovimientos(idProveedor))
                 {
                     mensaje = Mensajes486LP.Obtener("Proveedor.TieneMovimientos"); // Muestra: No se puede eliminar el proveedor: tiene órdenes de compra asociadas
@@ -220,7 +223,7 @@ namespace BLL
 
                 RecalcularDVProveedor();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Baja de proveedor Id {idProveedor}", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
+                    $"Baja de proveedor Id {idProveedor}: '{nombreProveedor}'", Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Proveedor.Eliminado"); // Muestra: Proveedor eliminado correctamente
                 return true;

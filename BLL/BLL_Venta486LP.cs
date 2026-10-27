@@ -160,12 +160,20 @@ namespace BLL
 
                 foreach (DetalleCarrito486LP detCarrito in carrito.Detalles)
                 {
+                    // Marca/Modelo/Color/Talle no se guardan en DetalleVenta (vienen del JOIN al leer), pero el comprobante PDF se genera con esta
+                    // misma venta recien armada, asi que se completan desde el producto para que la linea no salga en blanco
+                    Producto486LP prod = detCarrito.Producto ?? ObjProducto.ObtenerPorId(detCarrito.IdProducto);
+
                     venta.Detalles.Add(new DetalleVenta486LP
                     {
                         IdProducto = detCarrito.IdProducto,
                         Cantidad = detCarrito.Cantidad,
                         PrecioUnitario = detCarrito.Precio,
-                        Subtotal = detCarrito.Subtotal
+                        Subtotal = detCarrito.Subtotal,
+                        Marca = prod?.Marca,
+                        Modelo = prod?.Modelo,
+                        Color = prod?.Color,
+                        Talle = prod?.Talle
                     });
                 }
 
