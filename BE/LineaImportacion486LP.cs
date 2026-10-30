@@ -13,6 +13,8 @@ namespace BE
         public const string RESULTADO_SUMA_STOCK = "SumaStock";
         public const string RESULTADO_RECHAZADA = "Rechazada";
         public const string RESULTADO_YA_IMPORTADA = "YaImportada";
+        // Solo para la vista previa (boton Ver): la linea se leyo del XML pero todavia no se importo
+        public const string RESULTADO_PENDIENTE = "Pendiente";
 
         public int Linea { get; set; }
         // Los datos tal como vinieron en el XML (texto), para mostrarlos y para poder exportar la linea rechazada sin perder nada

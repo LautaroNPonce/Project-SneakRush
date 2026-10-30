@@ -41,7 +41,6 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema S
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmRegistrarOrden486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReparacionBD486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReporteCompras486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReporteStock486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReporteVenta486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.Properties.Resources.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush486LP.csproj.GenerateResource.cache

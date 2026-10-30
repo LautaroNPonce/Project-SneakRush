@@ -141,7 +141,6 @@ namespace Sistema_SneakRush
             }
 
             bool verReporte = permisos.Contains("REPORTE_VENTAS")
-                           || permisos.Contains("REPORTE_STOCK")
                            || permisos.Contains("REPORTE_COMPRAS")
                            || permisos.Contains("REPORTE_ANALITICAS");
 
@@ -150,7 +149,6 @@ namespace Sistema_SneakRush
             if (verReporte)
             {
                 reporteDeVentasToolStripMenuItem.Visible = permisos.Contains("REPORTE_VENTAS");
-                reporteDeStockToolStripMenuItem.Visible = permisos.Contains("REPORTE_STOCK");
                 reporteDeComprasToolStripMenuItem.Visible = permisos.Contains("REPORTE_COMPRAS");
                 consultasAnalíticasToolStripMenuItem.Visible = permisos.Contains("REPORTE_ANALITICAS");
             }
@@ -284,15 +282,11 @@ namespace Sistema_SneakRush
         // Menu Reporte
         private void reporteDeVentasToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Reporte de Ventas");
-        }
-        private void reporteDeStockToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            MensajeEnDesarrollo("Reporte de Stock");
+            AbrirFormulario(new FrmReporteVenta486LP());
         }
         private void reporteDeComprasToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Reporte de Compras");
+            AbrirFormulario(new FrmReporteCompras486LP());
         }
         private void consultasAnalíticasToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -315,7 +309,11 @@ namespace Sistema_SneakRush
             {
                 if (f.GetType() == formulario.GetType())
                 {
+                    // Si el formulario quedo en tamano normal o minimizado, lo restauramos y lo volvemos a maximizar
+                    f.WindowState = FormWindowState.Normal;
+                    f.WindowState = FormWindowState.Maximized;
                     f.BringToFront();
+                    f.Activate();
                     (f as IRefrescable486LP)?.Refrescar();
                     formulario.Dispose();
                     return;
@@ -420,7 +418,6 @@ namespace Sistema_SneakRush
             // Menú Reporte
             reporteToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteToolStripMenuItem");
             reporteDeVentasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeVentasToolStripMenuItem");
-            reporteDeStockToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeStockToolStripMenuItem");
             reporteDeComprasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeComprasToolStripMenuItem");
             consultasAnalíticasToolStripMenuItem.Text = lm.ObtenerTexto(f, "consultasAnalíticasToolStripMenuItem");
 

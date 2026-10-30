@@ -84,7 +84,7 @@ namespace Mappers
             }
         }
 
-        // Descuenta stock tras una venta (CUN04). No compara filas afectadas para decidir éxito, mismo criterio de siempre.
+        // Descuenta stock tras una venta (CUN03). El procedimiento almacenado rechaza el descuento con un error si el stock no alcanza (nunca deja el stock en negativo), y ese error vuelve como false.
         public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -106,7 +106,7 @@ namespace Mappers
             }
         }
 
-        // Suma stock tras confirmarse el pago de una compra (CUN08) - separado de ActualizarStock, que resta (Ventas). Mismo criterio: no compara filas afectadas.
+        // Suma stock tras confirmarse el pago de una compra (CUN07) - separado de ActualizarStock, que resta (Ventas). Mismo criterio: no compara filas afectadas.
         public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -128,7 +128,7 @@ namespace Mappers
             }
         }
 
-        // ----- ABM de productos (CUN10) -----
+        // ----- ABM de productos (CUN09) -----
         // Estos metodos no tragan la excepcion: la BLL la registra en bitacora y devuelve el mensaje general.
 
         // Alta. Devuelve el Id generado

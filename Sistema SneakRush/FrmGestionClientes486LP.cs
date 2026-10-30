@@ -25,7 +25,7 @@ namespace Sistema_SneakRush
         private bool _puedeLimpiar;
         private bool _puedeCerrar;
 
-        // DNI que viene precargado cuando el form se incluye desde CUN04 (Cobrar venta): el Cajero registra al cliente del carrito.
+        // DNI que viene precargado cuando el form se incluye desde CUN03 (Cobrar venta): el Cajero registra al cliente del carrito.
         // Null cuando el form se abre desde el menu Maestro.
         private readonly string _dniPrecargado;
 
@@ -36,7 +36,7 @@ namespace Sistema_SneakRush
             this.FormClosing += FrmGestionClientes486LP_FormClosing;
         }
 
-        // Include desde CUN04: el DNI del carrito llega precargado y no se puede modificar
+        // Include desde CUN03: el DNI del carrito llega precargado y no se puede modificar
         public FrmGestionClientes486LP(string dniPrecargado) : this()
         {
             _dniPrecargado = dniPrecargado;
@@ -185,7 +185,7 @@ namespace Sistema_SneakRush
             {
                 MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.GestionClientes.Msg.Title", "Gestión de clientes"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Incluido desde CUN04: el cliente quedó registrado, se vuelve a Cobrar venta
+                // Incluido desde CUN03: el cliente quedó registrado, se vuelve a Cobrar venta
                 if (!string.IsNullOrEmpty(_dniPrecargado))
                 {
                     this.DialogResult = DialogResult.OK;
@@ -319,11 +319,12 @@ namespace Sistema_SneakRush
             this.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Titulo", "Gestión de clientes");
             lblTitulo.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Titulo", "Gestión de clientes");
             grpDatos.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Datos", "Datos del cliente");
-            lblDNI.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.DNI", "DNI:");
-            lblNombre.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Nombre", "Nombre:");
-            lblApellido.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Apellido", "Apellido:");
-            lblCorreo.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Correo", "Correo:");
+            lblDNI.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.DNI", "DNI:") + " *";
+            lblNombre.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Nombre", "Nombre:") + " *";
+            lblApellido.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Apellido", "Apellido:") + " *";
+            lblCorreo.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Correo", "Correo:") + " *";
             lblTelefono.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Telefono", "Teléfono:");
+            lblNota.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Nota", "* Campos obligatorios. El teléfono es opcional.");
             lblClientes.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Lista", "Clientes registrados:");
             btnAgregar.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Agregar", "Agregar");
             btnModificar.Text = lm.ObtenerTexto(f, "Frm.GestionClientes.Modificar", "Modificar");

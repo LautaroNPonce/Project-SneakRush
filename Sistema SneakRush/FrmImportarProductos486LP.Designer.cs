@@ -34,6 +34,7 @@
             this.btnExaminar = new System.Windows.Forms.Button();
             this.lblNota = new System.Windows.Forms.Label();
             this.btnImportar = new System.Windows.Forms.Button();
+            this.btnVer = new System.Windows.Forms.Button();
             this.lblResumen = new System.Windows.Forms.Label();
             this.lblDetalle = new System.Windows.Forms.Label();
             this.dgvLineas = new System.Windows.Forms.DataGridView();
@@ -144,7 +145,7 @@
             this.btnImportar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImportar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnImportar.ForeColor = System.Drawing.Color.White;
-            this.btnImportar.Location = new System.Drawing.Point(27, 184);
+            this.btnImportar.Location = new System.Drawing.Point(157, 184);
             this.btnImportar.Name = "btnImportar";
             this.btnImportar.Size = new System.Drawing.Size(150, 40);
             this.btnImportar.TabIndex = 2;
@@ -152,13 +153,28 @@
             this.btnImportar.UseVisualStyleBackColor = false;
             this.btnImportar.Click += new System.EventHandler(this.btnImportar_Click);
             // 
+            // btnVer
+            // 
+            this.btnVer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.btnVer.FlatAppearance.BorderSize = 0;
+            this.btnVer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVer.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnVer.ForeColor = System.Drawing.Color.White;
+            this.btnVer.Location = new System.Drawing.Point(27, 184);
+            this.btnVer.Name = "btnVer";
+            this.btnVer.Size = new System.Drawing.Size(120, 40);
+            this.btnVer.TabIndex = 8;
+            this.btnVer.Text = "Ver";
+            this.btnVer.UseVisualStyleBackColor = false;
+            this.btnVer.Click += new System.EventHandler(this.btnVer_Click);
+            // 
             // lblResumen
             // 
             this.lblResumen.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.lblResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            this.lblResumen.Location = new System.Drawing.Point(195, 184);
+            this.lblResumen.Location = new System.Drawing.Point(325, 184);
             this.lblResumen.Name = "lblResumen";
-            this.lblResumen.Size = new System.Drawing.Size(778, 40);
+            this.lblResumen.Size = new System.Drawing.Size(648, 40);
             this.lblResumen.TabIndex = 3;
             // 
             // lblDetalle
@@ -238,6 +254,7 @@
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.grpOrigen);
             this.Controls.Add(this.btnImportar);
+            this.Controls.Add(this.btnVer);
             this.Controls.Add(this.lblResumen);
             this.Controls.Add(this.lblDetalle);
             this.Controls.Add(this.dgvLineas);
@@ -269,6 +286,7 @@
         private System.Windows.Forms.Button btnExaminar;
         private System.Windows.Forms.Label lblNota;
         private System.Windows.Forms.Button btnImportar;
+        private System.Windows.Forms.Button btnVer;
         private System.Windows.Forms.Label lblResumen;
         private System.Windows.Forms.Label lblDetalle;
         private System.Windows.Forms.DataGridView dgvLineas;

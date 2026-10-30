@@ -11,8 +11,6 @@ namespace Services
     {
         private Mapper_Perfil486LP _mapperPerfil = new Mapper_Perfil486LP();
 
-        // CORRECCION: antes se accedia directo a DAL.DAL_Familia486LP (que ya no existe, se elimino al migrar Familia). Ahora se usa BLL_Familia486LP
-        // (su propia BLL, via sus metodos publicos) en vez de tocar el Mapper de otra entidad directamente - una BLL habla con otra BLL, no con el Mapper ajeno.
         private BLL_Familia486LP _bllFamilia = new BLL_Familia486LP();
         private BLL_Patente486LP _bllPatente = new BLL_Patente486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();

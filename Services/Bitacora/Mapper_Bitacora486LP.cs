@@ -10,14 +10,8 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-
-    /// Habla con SQL para BitacoraEvento. Reemplaza a DAL_Bitacora486LP.
-    /// UBICACION DEFINITIVA en Services (no en Mappers) - ver CHANGELOG_Refactor_Arquitectura.md.
-
     public class Mapper_Bitacora486LP : MapperBase486LP
     {
-        // Registra un evento nuevo en la bitacora. Devuelve el "Numero" (Id) generado, o 0 si fallo - antes devolvia bool, ahora devuelve el Id
-        // para que BLL_DV486LP pueda actualizar el DV de ESA fila puntual, sin tener que recorrer toda la tabla (que hoy tiene miles de filas).
         public int Registrar(BitacoraEvento486LP registro)
         {
             try
@@ -45,8 +39,6 @@ namespace Services
             }
         }
 
-        // Lista todos los eventos de la bitacora (con Nombre/Apellido del
-        // usuario relacionado, via LEFT JOIN), mas recientes primero.
         public List<BitacoraEvento486LP> Listar()
         {
             try

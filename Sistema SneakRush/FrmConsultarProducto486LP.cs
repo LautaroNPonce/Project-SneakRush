@@ -193,7 +193,7 @@ namespace Sistema_SneakRush
 
             ProductoSeleccionado = dgvProductos.CurrentRow.DataBoundItem as Producto486LP;
 
-            // Abierto desde el carrito (CUN02, como dialogo): devuelve el producto elegido
+            // Abierto desde el carrito (CUN01, como dialogo): devuelve el producto elegido
             if (this.Modal)
             {
                 this.DialogResult = DialogResult.OK;

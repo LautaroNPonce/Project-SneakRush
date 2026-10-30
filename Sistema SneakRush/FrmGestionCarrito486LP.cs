@@ -27,7 +27,7 @@ namespace Sistema_SneakRush
         private bool _puedeFinalizar;
         private bool _puedeCancelar;
 
-        // Producto que viene elegido desde CUN01 (Consultar productos abierto desde el menu): se carga en el carrito al abrir el form
+        // Producto que viene elegido desde la pantalla Consultar productos (parte de CUN01 Cargar carrito, abierta desde el menu): se carga en el carrito al abrir el form
         private readonly Producto486LP _productoInicial;
 
         public FrmGestionCarrito486LP()
@@ -42,7 +42,7 @@ namespace Sistema_SneakRush
             _productoInicial = productoInicial;
         }
 
-        // Agrega un producto al carrito con la cantidad indicada en el selector (mismo criterio que el boton "Agregar"). Lo usa CUN01 al derivar un producto al carrito.
+        // Agrega un producto al carrito con la cantidad indicada en el selector (mismo criterio que el boton "Agregar"). Lo usa Consultar productos (CUN01) al derivar un producto al carrito.
         public void CargarProducto(Producto486LP producto)
         {
             if (producto == null) return;
@@ -145,7 +145,7 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // El Vendedor solo carga el DNI: no se verifica ni se registra el cliente acá. De eso se ocupa el Cajero al cobrar (CUN04).
+            // El Vendedor solo carga el DNI: no se verifica ni se registra el cliente acá. De eso se ocupa el Cajero al cobrar (CUN03).
             _carrito.DNICliente = dni;
             _dniAsignado = true;
             MessageBox.Show(
@@ -158,7 +158,7 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // Abre el CUN01 "Consultar productos" para elegir el producto
+            // Abre Consultar productos (parte de CUN01 "Cargar carrito") para elegir el producto
             using (FrmConsultarProducto486LP frm = new FrmConsultarProducto486LP())
             {
                 if (frm.ShowDialog() == DialogResult.OK && frm.ProductoSeleccionado != null)

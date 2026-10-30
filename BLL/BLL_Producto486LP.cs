@@ -204,7 +204,7 @@ namespace BLL
             }
         }
 
-        // ----- ABM de productos (CUN10) -----
+        // ----- ABM de productos (CUN09) -----
 
         // Modelo: letras, numeros, espacios y los signos . & ' - / + ( ) (ej. "Air Max 90", "RS-X"). Maximo 50 caracteres
         public bool ValidarModelo(string modelo)

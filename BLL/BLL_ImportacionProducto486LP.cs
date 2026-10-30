@@ -222,7 +222,7 @@ namespace BLL
                 RecalcularDV("DetalleImportacion");
 
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Importacion de productos desde XML: proveedor Id {idProveedor}, remito {nroRemito}, archivo '{nombreArchivo}'. Altas: {resultado.Altas}, stock sumado: {resultado.Sumas}, rechazadas: {resultado.Rechazadas}, ya importadas: {resultado.YaImportadas}. Remito {resultado.EstadoRemito}",
+                    $"Importación de productos desde XML: proveedor {proveedor.Nombre} (Id {idProveedor}), remito {nroRemito}, archivo '{nombreArchivo}'. Productos nuevos: {resultado.Altas}, stock sumado: {resultado.Sumas}, líneas rechazadas: {resultado.Rechazadas}, ya importadas antes: {resultado.YaImportadas}. Estado del remito: {resultado.EstadoRemito}",
                     Criticidad486LP.Media, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Importacion.Resumen", resultado.Altas, resultado.Sumas, resultado.Rechazadas, resultado.YaImportadas); // Muestra: Importación terminada. Productos nuevos: {0}. Stock sumado: {1}. Líneas rechazadas: {2}. Ya importadas antes: {3}
@@ -232,6 +232,125 @@ namespace BLL
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_ImportacionProducto.Importar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
+                return false;
+            }
+        }
+
+        // Vista previa (boton "Ver"): lee el XML y valida cada linea con las mismas reglas que Importar, pero sin importar nada ni escribir en la base de datos.
+        // Las lineas validas quedan como "Pendiente" (se importarian) y las que tienen errores como "Rechazada", con el motivo en Detalle.
+        // Devuelve false solo si el archivo no se puede leer (mensaje trae el motivo).
+        public bool Previsualizar(string rutaArchivo, out string nroRemito, out List<LineaImportacion486LP> lineas, out string mensaje)
+        {
+            nroRemito = "";
+            lineas = new List<LineaImportacion486LP>();
+            mensaje = "";
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(rutaArchivo))
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.ArchivoObligatorio"); // Muestra: Seleccione el archivo XML a importar
+                    return false;
+                }
+
+                if (!File.Exists(rutaArchivo))
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.ArchivoNoExiste"); // Muestra: No se encontró el archivo seleccionado
+                    return false;
+                }
+
+                FileInfo info = new FileInfo(rutaArchivo);
+                if (!string.Equals(info.Extension, ".xml", StringComparison.OrdinalIgnoreCase) || info.Length == 0 || info.Length > TAMANIO_MAXIMO_BYTES)
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.ArchivoInvalido"); // Muestra: El archivo debe ser un .xml con contenido y no superar los 5 MB
+                    return false;
+                }
+
+                XDocument doc;
+                if (!LeerXml(rutaArchivo, out doc, out mensaje)) return false;
+
+                XElement raiz = doc.Root;
+                if (raiz == null || raiz.Name.LocalName != "remito")
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
+                    return false;
+                }
+
+                string numero = ((string)raiz.Attribute("numero") ?? "").Trim();
+                if (!Regex.IsMatch(numero, @"^[A-Za-z0-9][A-Za-z0-9\-_/.]{0,29}$"))
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.RemitoInvalido"); // Muestra: El número de remito es obligatorio, admite letras, números y los signos - _ / . y hasta 30 caracteres
+                    return false;
+                }
+
+                List<XElement> items = raiz.Elements("item").ToList();
+                if (items.Count == 0)
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
+                    return false;
+                }
+                if (items.Count > LINEAS_MAXIMO)
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.DemasiadasLineas", LINEAS_MAXIMO); // Muestra: El archivo supera el máximo de {0} líneas por remito
+                    return false;
+                }
+
+                int[] numeros;
+                if (!NumerarLineas(items, out numeros))
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.NumeracionInvalida"); // Muestra: La numeración de las líneas (atributo linea) está incompleta, repetida o no es válida
+                    return false;
+                }
+
+                Dictionary<string, Marca486LP> marcas = ObjMarca.Listar()
+                    .GroupBy(m => m.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+                Dictionary<string, Categoria486LP> categorias = ObjCategoria.Listar()
+                    .GroupBy(c => c.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
+                Dictionary<string, int> lineaDeProducto = new Dictionary<string, int>();
+
+                for (int i = 0; i < items.Count; i++)
+                {
+                    lineas.Add(new LineaImportacion486LP
+                    {
+                        Linea = numeros[i],
+                        Marca = Texto(items[i], "marca"),
+                        Categoria = Texto(items[i], "categoria"),
+                        Modelo = Texto(items[i], "modelo"),
+                        Color = Texto(items[i], "color"),
+                        Talle = Texto(items[i], "talle"),
+                        Cantidad = Texto(items[i], "cantidad"),
+                        Precio = Texto(items[i], "precio"),
+                        Resultado = LineaImportacion486LP.RESULTADO_PENDIENTE,
+                        Exportable = false
+                    });
+                }
+
+                // Misma validacion que hace Importar con cada linea (marca y categoria existentes, formatos, cantidad, precio y producto repetido en el remito)
+                foreach (LineaImportacion486LP l in lineas)
+                {
+                    LineaValidada v;
+                    string motivo = ValidarLinea(l, marcas, categorias, lineaDeProducto, out v);
+                    if (motivo != null)
+                    {
+                        l.Resultado = LineaImportacion486LP.RESULTADO_RECHAZADA;
+                        l.Detalle = motivo;
+                    }
+                    else
+                    {
+                        lineaDeProducto[ClaveProducto(v.Marca, v.Modelo, v.Color, v.Talle)] = l.Linea;
+                    }
+                }
+
+                nroRemito = numero;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_ImportacionProducto.Previsualizar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
+                lineas = new List<LineaImportacion486LP>();
                 return false;
             }
         }
@@ -273,7 +392,7 @@ namespace BLL
                 new XDocument(new XDeclaration("1.0", "utf-8", null), raiz).Save(rutaDestino);
 
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Exportacion de lineas rechazadas: remito {resultado.NroRemito}, {rechazadas.Count} lineas",
+                    $"Exportación de líneas rechazadas: remito {resultado.NroRemito}, {rechazadas.Count} líneas",
                     Criticidad486LP.Media, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Importacion.Exportado", rechazadas.Count); // Muestra: Se exportaron {0} líneas rechazadas. Corríjalas en el archivo y vuelva a importarlo

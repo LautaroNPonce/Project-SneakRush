@@ -30,7 +30,7 @@ namespace Services
             { "Cliente",        "DNI"          },
             { "Venta",          "IdVenta"      },
             { "DetalleVenta",   "IdDetalleVenta" },
-            // Agregadas en RFN2 Compras (CUN05-08) - antes de esto nunca se registraron aca,
+            // Agregadas en RFN2 Compras (CUN04-07) - antes de esto nunca se registraron aca,
             // por eso RecalcularDV/RegistrarDVDeFilaNueva nunca actualizaban nada para ellas.
             { "Proveedor",              "IdProveedor" },
             { "SolicitudCompra",        "IdSolicitud" },
@@ -43,7 +43,7 @@ namespace Services
             // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas)
             { "Categoria",              "IdCategoria" },
             { "Marca",                  "IdMarca" },
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10)
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09)
             { "ImportacionProducto",    "IdImportacion" },
             { "DetalleImportacion",     "IdDetalleImportacion" }
         };
@@ -52,12 +52,12 @@ namespace Services
             "BitacoraEvento", "Usuarios", "Perfil", "Familia", "Permiso", "Idioma",
             "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso",
             "Producto", "Carrito", "DetalleCarrito", "Cliente", "Venta", "DetalleVenta",
-            // Agregadas en RFN2 Compras (CUN05-08).
+            // Agregadas en RFN2 Compras (CUN04-07).
             "Proveedor", "SolicitudCompra", "DetalleSolicitudCompra",
             "OrdenCompra", "DetalleOrdenCompra", "Recepcion", "DetalleRecepcion", "Factura",
             // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
             "Categoria", "Marca",
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10).
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09).
             "ImportacionProducto", "DetalleImportacion"
         };
         private static readonly List<string> _tablasSoloNivelTabla = new List<string> { "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };

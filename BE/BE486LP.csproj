@@ -60,6 +60,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proveedor486LP.cs" />
     <Compile Include="Recepcion486LP.cs" />
+    <Compile Include="ReporteClienteFrecuente486LP.cs" />
+    <Compile Include="ReporteStockProducto486LP.cs" />
     <Compile Include="ResultadoImportacion486LP.cs" />
     <Compile Include="SolicitudCompra486LP.cs" />
     <Compile Include="Venta486LP.cs" />

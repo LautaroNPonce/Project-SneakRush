@@ -74,7 +74,7 @@ namespace Mappers
                 }
             }
 
-            // Trae la Recepcion de una Orden puntual, con su detalle completo (CUN08 la necesita
+            // Trae la Recepcion de una Orden puntual, con su detalle completo (CUN07 la necesita
             // para saber la Cantidad Recibida real de cada producto, y asi aumentar el stock).
             public Recepcion486LP ObtenerPorIdOrden(int idOrden)
             {

@@ -40,7 +40,7 @@ namespace Services
             { "Cliente",          "DV_Leer_Cliente" },
             { "Venta",            "DV_Leer_Venta" },
             { "DetalleVenta",     "DV_Leer_DetalleVenta" },
-            // Agregadas en RFN2 Compras (CUN05-08).
+            // Agregadas en RFN2 Compras (CUN04-07).
             { "Proveedor",              "DV_Leer_Proveedor" },
             { "SolicitudCompra",        "DV_Leer_SolicitudCompra" },
             { "DetalleSolicitudCompra", "DV_Leer_DetalleSolicitudCompra" },
@@ -52,7 +52,7 @@ namespace Services
             // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
             { "Categoria",              "DV_Leer_Categoria" },
             { "Marca",                  "DV_Leer_Marca" },
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10).
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09).
             { "ImportacionProducto",    "DV_Leer_ImportacionProducto" },
             { "DetalleImportacion",     "DV_Leer_DetalleImportacion" }
         };
@@ -72,7 +72,7 @@ namespace Services
             { "Cliente",         "DV_ActualizarFila_Cliente" },
             { "Venta",           "DV_ActualizarFila_Venta" },
             { "DetalleVenta",    "DV_ActualizarFila_DetalleVenta" },
-            // Agregadas en RFN2 Compras (CUN05-08).
+            // Agregadas en RFN2 Compras (CUN04-07).
             { "Proveedor",              "DV_ActualizarFila_Proveedor" },
             { "SolicitudCompra",        "DV_ActualizarFila_SolicitudCompra" },
             { "DetalleSolicitudCompra", "DV_ActualizarFila_DetalleSolicitudCompra" },
@@ -84,7 +84,7 @@ namespace Services
             // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
             { "Categoria",              "DV_ActualizarFila_Categoria" },
             { "Marca",                  "DV_ActualizarFila_Marca" },
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN10).
+            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09).
             { "ImportacionProducto",    "DV_ActualizarFila_ImportacionProducto" },
             { "DetalleImportacion",     "DV_ActualizarFila_DetalleImportacion" }
         };

@@ -84,6 +84,7 @@ namespace Sistema_SneakRush
             this.lblCorreo = new System.Windows.Forms.Label();
             this.txtCorreo = new System.Windows.Forms.TextBox();
             this.lblTelefono = new System.Windows.Forms.Label();
+            this.lblNota = new System.Windows.Forms.Label();
             this.txtTelefono = new System.Windows.Forms.TextBox();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.btnModificar = new System.Windows.Forms.Button();
@@ -118,6 +119,7 @@ namespace Sistema_SneakRush
             this.grpDatos.Controls.Add(this.lblCorreo);
             this.grpDatos.Controls.Add(this.txtCorreo);
             this.grpDatos.Controls.Add(this.lblTelefono);
+            this.grpDatos.Controls.Add(this.lblNota);
             this.grpDatos.Controls.Add(this.txtTelefono);
             this.grpDatos.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.grpDatos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
@@ -222,6 +224,17 @@ namespace Sistema_SneakRush
             this.txtTelefono.Name = "txtTelefono";
             this.txtTelefono.Size = new System.Drawing.Size(220, 25);
             this.txtTelefono.TabIndex = 9;
+            // 
+            // lblNota
+            // 
+            this.lblNota.AutoSize = false;
+            this.lblNota.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Italic);
+            this.lblNota.ForeColor = System.Drawing.Color.FromArgb(70, 70, 70);
+            this.lblNota.Location = new System.Drawing.Point(20, 240);
+            this.lblNota.Name = "lblNota";
+            this.lblNota.Size = new System.Drawing.Size(320, 34);
+            this.lblNota.TabIndex = 10;
+            this.lblNota.Text = "* Campos obligatorios. El teléfono es opcional.";
             // 
             // btnAgregar
             // 
@@ -379,6 +392,7 @@ namespace Sistema_SneakRush
         private System.Windows.Forms.Label lblCorreo;
         private System.Windows.Forms.TextBox txtCorreo;
         private System.Windows.Forms.Label lblTelefono;
+        private System.Windows.Forms.Label lblNota;
         private System.Windows.Forms.TextBox txtTelefono;
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Button btnModificar;

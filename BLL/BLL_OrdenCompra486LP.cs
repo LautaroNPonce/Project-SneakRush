@@ -123,7 +123,7 @@ namespace BLL
             }
         }
 
-        // Cambia el Estado de la orden (recibida en CUN07 y facturada en CUN08)
+        // Cambia el Estado de la orden (recibida en CUN06 y facturada en CUN07)
         // No se compara el conteo de filas afectadas para decidir éxito - mismo criterio de siempre
         public bool ActualizarEstado(int idOrden, string estado, out string mensaje)
         {

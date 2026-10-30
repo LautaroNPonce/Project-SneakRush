@@ -49,6 +49,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -184,12 +185,6 @@
     <Compile Include="FrmRegistrarFactura486LP.Designer.cs">
       <DependentUpon>FrmRegistrarFactura486LP.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmRegistrarOperacion486LP.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmRegistrarOperacion486LP.Designer.cs">
-      <DependentUpon>FrmRegistrarOperacion486LP.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmRegistrarOrden486LP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -213,12 +208,6 @@
     </Compile>
     <Compile Include="FrmReporteCompras486LP.Designer.cs">
       <DependentUpon>FrmReporteCompras486LP.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FrmReporteStock486LP.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmReporteStock486LP.Designer.cs">
-      <DependentUpon>FrmReporteStock486LP.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmReporteVenta486LP.cs">
       <SubType>Form</SubType>
@@ -300,9 +289,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmReporteCompras486LP.resx">
       <DependentUpon>FrmReporteCompras486LP.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmReporteStock486LP.resx">
-      <DependentUpon>FrmReporteStock486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmReporteVenta486LP.resx">
       <DependentUpon>FrmReporteVenta486LP.cs</DependentUpon>

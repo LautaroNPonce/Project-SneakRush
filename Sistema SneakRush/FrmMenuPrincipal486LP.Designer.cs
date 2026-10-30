@@ -60,7 +60,6 @@
             this.consultarProductosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reporteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reporteDeVentasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.reporteDeStockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reporteDeComprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.consultasAnalíticasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -319,7 +318,6 @@
             // 
             this.reporteToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.reporteDeVentasToolStripMenuItem,
-            this.reporteDeStockToolStripMenuItem,
             this.reporteDeComprasToolStripMenuItem,
             this.consultasAnalíticasToolStripMenuItem});
             this.reporteToolStripMenuItem.ForeColor = System.Drawing.Color.White;
@@ -334,18 +332,11 @@
             this.reporteDeVentasToolStripMenuItem.Text = "Ventas";
             this.reporteDeVentasToolStripMenuItem.Click += new System.EventHandler(this.reporteDeVentasToolStripMenuItem_Click);
             // 
-            // reporteDeStockToolStripMenuItem
-            // 
-            this.reporteDeStockToolStripMenuItem.Name = "reporteDeStockToolStripMenuItem";
-            this.reporteDeStockToolStripMenuItem.Size = new System.Drawing.Size(221, 26);
-            this.reporteDeStockToolStripMenuItem.Text = "Stock";
-            this.reporteDeStockToolStripMenuItem.Click += new System.EventHandler(this.reporteDeStockToolStripMenuItem_Click);
-            // 
             // reporteDeComprasToolStripMenuItem
             // 
             this.reporteDeComprasToolStripMenuItem.Name = "reporteDeComprasToolStripMenuItem";
             this.reporteDeComprasToolStripMenuItem.Size = new System.Drawing.Size(221, 26);
-            this.reporteDeComprasToolStripMenuItem.Text = "Compras";
+            this.reporteDeComprasToolStripMenuItem.Text = "Estado de stock";
             this.reporteDeComprasToolStripMenuItem.Click += new System.EventHandler(this.reporteDeComprasToolStripMenuItem_Click);
             // 
             // consultasAnalíticasToolStripMenuItem
@@ -445,7 +436,6 @@
         private System.Windows.Forms.ToolStripMenuItem registrarOperaciónDeVentaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem consultarProductosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reporteDeVentasToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem reporteDeStockToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reporteDeComprasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem consultasAnalíticasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem verDocumentaciónToolStripMenuItem;

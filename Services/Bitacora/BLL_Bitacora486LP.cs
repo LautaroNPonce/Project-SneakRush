@@ -12,12 +12,8 @@ namespace Services
     public class BLL_Bitacora486LP
     {
         private Mapper_Bitacora486LP Mapper = new Mapper_Bitacora486LP();
-
-        // Firma publica SIN CAMBIOS (sigue devolviendo bool) - no rompe a ninguno de los lugares que ya llaman ObjBitacora.Registrar(...) en el resto del sistema.
         public bool Registrar(BitacoraEvento486LP registro)
         {
-            // Mapper.Registrar ahora devuelve el "Numero" (Id) generado, no un bool - lo necesitamos para actualizar el DV de ESA fila
-            // puntual, sin recorrer toda la tabla (que hoy tiene miles de filas y hacia fallar el recalculo completo en cada evento).
             int numeroGenerado = Mapper.Registrar(registro);
             bool resultado = numeroGenerado > 0;
 

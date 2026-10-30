@@ -55,6 +55,7 @@
     <Compile Include="BLL_Producto486LP.cs" />
     <Compile Include="BLL_Proveedor486LP.cs" />
     <Compile Include="BLL_Recepcion486LP.cs" />
+    <Compile Include="BLL_Reporte486LP.cs" />
     <Compile Include="BLL_SolicitudCompra486LP.cs" />
     <Compile Include="BLL_Venta486LP.cs" />
     <Compile Include="GeneradorComprobantePDF486LP.cs" />

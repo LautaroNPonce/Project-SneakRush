@@ -91,7 +91,7 @@ namespace Mappers
             }
         }
 
-        // Costo mas reciente pagado por este producto, dato de referencia para CUN06.
+        // Costo mas reciente pagado por este producto, dato de referencia para CUN05.
         public decimal? ObtenerUltimoCosto(int idProducto)
         {
             try
@@ -109,7 +109,7 @@ namespace Mappers
             }
         }
 
-        // Lista las ordenes en estado "Pendiente de Recepción" (CUN07 las necesita)
+        // Lista las ordenes en estado "Pendiente de Recepción" (CUN06 las necesita)
         public List<OrdenCompra486LP> ListarPendientesDeRecepcion()
         {
             try
@@ -126,7 +126,7 @@ namespace Mappers
             }
         }
 
-        // Cambia el Estado de la orden (ej: a "Recibida" cuando CUN07 registra la recepcion, o a "Facturada" cuando CUN08 registra la factura).
+        // Cambia el Estado de la orden (ej: a "Recibida" cuando CUN06 registra la recepcion, o a "Facturada" cuando CUN07 registra la factura).
         public bool ActualizarEstado(int idOrden, string estado, out string mensaje)
         {
             mensaje = "";
@@ -148,7 +148,7 @@ namespace Mappers
             }
         }
 
-        // Lista las ordenes en estado "Recibida" (CUN08 las necesita para armar la lista de seleccion de facturacion).
+        // Lista las ordenes en estado "Recibida" (CUN07 las necesita para armar la lista de seleccion de facturacion).
         public List<OrdenCompra486LP> ListarPendientesDeFacturacion()
         {
             try

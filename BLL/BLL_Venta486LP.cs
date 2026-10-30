@@ -18,8 +18,8 @@ namespace BLL
         private BLL_Cliente486LP ObjCliente = new BLL_Cliente486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Indica si el cliente del carrito (por DNI) ya esta registrado. Lo usa el Cajero en CUN04 antes de elegir el medio de pago (G02 paso 9):
-        // si devuelve false, el form incluye CUN03 para registrarlo.
+        // Indica si el cliente del carrito (por DNI) ya esta registrado. Lo usa el Cajero en CUN03 antes de elegir el medio de pago (G02 paso 9):
+        // si devuelve false, el form incluye CUN02 para registrarlo.
         public bool ClienteRegistrado(string dni)
         {
             try
@@ -34,7 +34,7 @@ namespace BLL
             }
         }
 
-        // Control de stock de CUN04: verifica que cada producto del carrito tenga stock suficiente (suma las lineas del mismo producto).
+        // Control de stock de CUN03: verifica que cada producto del carrito tenga stock suficiente (suma las lineas del mismo producto).
         // Devuelve true si alcanza para todo. Si no, devuelve false y en mensaje la lista de productos con faltante (pedidas vs. disponibles), ya traducida.
         public bool VerificarStockCarrito(Carrito486LP carrito, out string mensaje)
         {
@@ -78,7 +78,7 @@ namespace BLL
             }
         }
 
-        // Cancela el carrito activo (CUN04: el cliente no se registra o desiste de la compra). El carrito NO se elimina: pasa a Estado "Cancelado".
+        // Cancela el carrito activo (CUN03: el cliente no se registra o desiste de la compra). El carrito NO se elimina: pasa a Estado "Cancelado".
         // BLL_Carrito.ActualizarEstado se ocupa de actualizar el DV del carrito y de registrar el evento en la bitacora.
         public bool CancelarCarrito(int idCarrito, out string mensaje)
         {

@@ -117,7 +117,7 @@ namespace Mappers
             }
         }
 
-        // Cambia el Estado del carrito ("Activo" -> "Facturado" cuando CUN04 completa la venta).
+        // Cambia el Estado del carrito ("Activo" -> "Facturado" cuando CUN03 completa la venta).
         // No compara filas afectadas para decidir éxito - mismo criterio de siempre.
         public bool ActualizarEstado(int idCarrito, string estado, out string mensaje)
         {

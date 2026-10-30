@@ -23,8 +23,13 @@ namespace Sistema_SneakRush
         // Resultado de la ultima importacion: de aca sale lo que se exporta como "rechazadas"
         private ResultadoImportacion486LP _resultado;
 
+        // Lo que se mostro con el boton Ver (vista previa del XML, sin importar). Se usa solo mientras no haya un resultado de importacion
+        private List<LineaImportacion486LP> _vistaPrevia;
+        private string _remitoVistaPrevia = "";
+
         // Patentes granulares por boton (ademas de la patente de acceso al dialogo, MAESTRO_PRODUCTOS_IMPORTAR).
         private bool _puedeExaminar;
+        private bool _puedeVer;
         private bool _puedeEjecutar;
         private bool _puedeExportar;
         private bool _puedeCerrar;
@@ -85,6 +90,7 @@ namespace Sistema_SneakRush
             List<string> permisos = bllPerfil.ObtenerPermisosPorRol(usuario.Rol);
 
             _puedeExaminar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_EXAMINAR");
+            _puedeVer = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_VER");
             _puedeEjecutar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_EJECUTAR");
             _puedeExportar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_EXPORTAR");
             _puedeCerrar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_CERRAR");
@@ -147,6 +153,59 @@ namespace Sistema_SneakRush
             }
         }
 
+        // Muestra en la grilla todas las lineas del XML elegido, sin importar nada (para revisar el archivo antes de tocar "Importar")
+        private void btnVer_Click(object sender, EventArgs e)
+        {
+            var lm = Program.LanguageManager;
+
+            if (string.IsNullOrWhiteSpace(txtArchivo.Text))
+            {
+                MostrarAviso(lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.ArchivoObligatorio", "Seleccione el archivo XML del remito con el botón Examinar."));
+                btnExaminar.Focus();
+                return;
+            }
+
+            string nroRemito;
+            List<LineaImportacion486LP> lineas;
+            string mensaje;
+
+            if (!_bllImportacion.Previsualizar(txtArchivo.Text.Trim(), out nroRemito, out lineas, out mensaje))
+            {
+                MostrarAviso(mensaje);
+                return;
+            }
+
+            // La vista previa reemplaza al resultado de la importacion anterior (si habia uno)
+            _resultado = null;
+            _vistaPrevia = lineas;
+            _remitoVistaPrevia = nroRemito;
+            MostrarGrilla();
+            ActualizarBotones();
+
+            // Si hay lineas con errores, se avisa cuales no se van a importar y por que
+            List<LineaImportacion486LP> conErrores = lineas.Where(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA).ToList();
+            if (conErrores.Count > 0)
+            {
+                const int MAXIMO_EN_AVISO = 10;
+                StringBuilder texto = new StringBuilder();
+                texto.AppendLine(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.NoSeImportan", "Estas líneas no se van a importar porque tienen errores:"));
+                texto.AppendLine();
+
+                foreach (LineaImportacion486LP l in conErrores.Take(MAXIMO_EN_AVISO))
+                {
+                    texto.AppendLine(string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.LineaError", "Línea {0} ({1} {2} {3}, talle {4}): {5}"),
+                        l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Detalle));
+                }
+                if (conErrores.Count > MAXIMO_EN_AVISO)
+                {
+                    texto.AppendLine();
+                    texto.AppendLine(string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.Mas", "... y {0} más (revise la grilla)."), conErrores.Count - MAXIMO_EN_AVISO));
+                }
+
+                MessageBox.Show(texto.ToString(), lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar productos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private void btnImportar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -179,7 +238,8 @@ namespace Sistema_SneakRush
             }
 
             _resultado = resultado;
-            MostrarResultado();
+            _vistaPrevia = null;
+            MostrarGrilla();
             txtArchivo.Clear();
             ActualizarBotones();
 
@@ -245,6 +305,48 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
+        // Muestra lo que corresponda: el resultado de la importacion o, si todavia no hubo, la vista previa del archivo
+        private void MostrarGrilla()
+        {
+            if (_resultado == null && _vistaPrevia != null)
+                MostrarVistaPrevia();
+            else
+                MostrarResultado();
+        }
+
+        // Vuelca la vista previa del XML en la grilla (una fila por linea); el precio y la categoria van en el detalle
+        private void MostrarVistaPrevia()
+        {
+            var lm = Program.LanguageManager;
+
+            dgvLineas.Rows.Clear();
+            int rechazadas = 0;
+            foreach (LineaImportacion486LP l in _vistaPrevia)
+            {
+                int i;
+                if (l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA)
+                {
+                    // Linea con errores: no se importaria; el motivo va en el detalle
+                    rechazadas++;
+                    i = dgvLineas.Rows.Add(l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Cantidad, TextoResultado(l.Resultado), l.Detalle);
+                    dgvLineas.Rows[i].DefaultCellStyle.BackColor = ColorResultado(l.Resultado);
+                }
+                else
+                {
+                    // Linea valida: se importaria; en el detalle se ve la categoria y el precio que trae el XML
+                    string detalle = string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.Detalle", "Categoría: {0} | Precio: {1}"), l.Categoria, l.Precio);
+                    i = dgvLineas.Rows.Add(l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Cantidad,
+                        lm.ObtenerTexto(f, "Frm.ImportarProductos.Res.Pendiente", "Por importar"), detalle);
+                    dgvLineas.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 248, 225);
+                }
+            }
+            dgvLineas.ClearSelection();
+
+            lblResumen.Text = string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.Resumen",
+                "Vista previa del remito {0}: {1} líneas. Se importarían {2} y no se importarían {3}. Todavía no se importó nada: elija el proveedor y use Importar para cargarlas."),
+                _remitoVistaPrevia, _vistaPrevia.Count, _vistaPrevia.Count - rechazadas, rechazadas);
+        }
+
         // Vuelca el reporte en la grilla (una fila por linea del XML) y arma el resumen
         private void MostrarResultado()
         {
@@ -302,6 +404,7 @@ namespace Sistema_SneakRush
         private void ActualizarBotones()
         {
             btnExaminar.Enabled = _puedeExaminar;
+            btnVer.Enabled = _puedeVer;
             btnImportar.Enabled = _puedeEjecutar;
             btnCerrar.Enabled = _puedeCerrar;
             btnExportar.Enabled = _puedeExportar && _resultado != null &&
@@ -327,12 +430,13 @@ namespace Sistema_SneakRush
                 "Cada línea suma stock si el producto ya existe (no cambia el precio) o lo da de alta si es nuevo. Las líneas con errores se informan y no se importan.");
             btnExaminar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Examinar", "Examinar...");
             btnImportar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Importar", "Importar");
+            btnVer.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver", "Ver");
             lblDetalle.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Reporte", "Detalle de la importación:");
             btnExportar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Exportar", "Exportar rechazadas");
             btnCerrar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Cerrar", "Cerrar");
 
             AplicarEncabezadosColumnas();
-            MostrarResultado();
+            MostrarGrilla();
         }
 
         private void FrmImportarProductos486LP_FormClosing(object sender, FormClosingEventArgs e)

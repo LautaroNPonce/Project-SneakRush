@@ -207,10 +207,10 @@ namespace Sistema_SneakRush
             _carritoActual = carrito;
             MostrarDetalle();
 
-            // El Vendedor solo cargó el DNI en el carrito: acá el Cajero verifica que el cliente esté registrado (si no, incluye CUN03)
+            // El Vendedor solo cargó el DNI en el carrito: acá el Cajero verifica que el cliente esté registrado (si no, incluye CUN02)
             _clienteRegistrado = VerificarClienteRegistrado(carrito.DNICliente);
 
-            // Control de stock (CUN04): si algun producto no alcanza, se informa y "Cobrar" queda deshabilitado (el Cajero puede cancelar el carrito o volver a seleccionar)
+            // Control de stock (CUN03): si algun producto no alcanza, se informa y "Cobrar" queda deshabilitado (el Cajero puede cancelar el carrito o volver a seleccionar)
             if (_clienteRegistrado)
                 _stockSuficiente = VerificarStockCarrito(true);
 
@@ -235,8 +235,8 @@ namespace Sistema_SneakRush
             return alcanza;
         }
 
-        // G02 paso 9 (CUN04): el Cajero verifica que el cliente del carrito esté registrado.
-        // Si no lo está, incluye CUN03 (FrmGestionClientes486LP) con el DNI precargado y vuelve a verificar al cerrarlo.
+        // G02 paso 9 (CUN03): el Cajero verifica que el cliente del carrito esté registrado.
+        // Si no lo está, incluye CUN02 (FrmGestionClientes486LP) con el DNI precargado y vuelve a verificar al cerrarlo.
         // Si el cliente no se registra, el cobro no avanza: el Cajero puede reintentar o usar "Cancelar" para cancelar el carrito.
         private bool VerificarClienteRegistrado(string dni)
         {
@@ -387,7 +387,7 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Control de stock (CUN04): se vuelve a verificar antes de iniciar el pago, porque el stock pudo cambiar desde que se selecciono el carrito
+            // Control de stock (CUN03): se vuelve a verificar antes de iniciar el pago, porque el stock pudo cambiar desde que se selecciono el carrito
             if (!VerificarStockCarrito(true))
             {
                 _stockSuficiente = false;

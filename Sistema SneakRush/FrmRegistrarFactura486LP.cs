@@ -264,7 +264,7 @@ namespace Sistema_SneakRush
 
         // 7.1: valida los datos de la tarjeta (numero, vencimiento, CVV)
         // Solo se llama si el medio de pago elegido es Tarjeta.
-        // Mismo criterio que CUN04: valida formato y que no este vencida. Devuelve el mensaje del primer dato incorrecto (ya traducido) o null si esta todo bien.
+        // Mismo criterio que CUN03: valida formato y que no este vencida. Devuelve el mensaje del primer dato incorrecto (ya traducido) o null si esta todo bien.
         private string ValidarDatosTarjeta()
         {
             string numeroSinEspacios = txtNumeroTarjeta.Text.Replace(" ", "").Trim();
@@ -362,7 +362,7 @@ namespace Sistema_SneakRush
                 }
             }
 
-            // A diferencia de CUN04 (la venta se registra recién cuando el banco aprueba), acá la factura se registra antes del pago así lo define la especificación de CUN08
+            // A diferencia de CUN03 (la venta se registra recién cuando el banco aprueba), acá la factura se registra antes del pago así lo define la especificación de CUN07
             // (paso 5 registra la factura, paso 8 procesa el pago)
             decimal total = _ordenSeleccionada.Detalles.Sum(d => d.Subtotal);
             // Si el pago de un intento anterior fallo, la factura ya esta registrada: se reutiliza para no generar una segunda factura de la misma orden
