@@ -15,10 +15,6 @@ namespace Sistema_SneakRush
     public partial class FrmCambiarContraseña486LP : Form, IObserver486LP
     {
         private BLL_Usuarios486LP _bll = new BLL_Usuarios486LP();
-
-        // Cuando el sistema obliga a cambiar la contraseña (primer ingreso o contraseña
-        // reiniciada) los botones no dependen de las patentes del perfil: si dependieran,
-        // un usuario sin patentes quedaría atrapado en esta pantalla sin poder avanzar.
         private readonly bool _cambioObligatorio;
 
         public FrmCambiarContraseña486LP() : this(false)

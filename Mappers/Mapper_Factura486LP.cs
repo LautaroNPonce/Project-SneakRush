@@ -12,7 +12,6 @@ namespace Mappers
 {
     public class Mapper_Factura486LP : MapperBase486LP
     {
-        // arranca en "Pendiente de Pago" con MedioPago en null (se completa recien cuando se confirma el pago, via ActualizarEstadoYPago).
         public bool Agregar(Factura486LP factura, out string mensaje)
         {
             mensaje = "";
@@ -28,7 +27,6 @@ namespace Mappers
                 int idFactura = Convert.ToInt32(resultado);
 
                 factura.IdFactura = idFactura;
-                // Mismo padding (6 digitos) que el SP genera.
                 factura.NroFactura = idFactura.ToString("D6");
                 factura.Estado = "Pendiente de Pago";
 
@@ -42,7 +40,6 @@ namespace Mappers
             }
         }
 
-        // Cambia el Estado a "Pagada" y guarda el MedioPago usado, en un solo UPDATE.
         public bool ActualizarEstadoYPago(int idFactura, string estado, string medioPago, out string mensaje)
         {
             mensaje = "";

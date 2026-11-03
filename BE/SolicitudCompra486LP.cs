@@ -16,8 +16,6 @@ namespace BE
         public string DNIAdministrador { get; set; }
         [ColumnaTabla486LP]
         public string Estado { get; set; }
-
-        // no lleva [ColumnaTabla486LP] xq no es una columna de la tabla SolicitudCompra, es la coleccion de detalles relacionados (se llena aparte).
         public List<DetalleSolicitudCompra486LP> Detalles { get; set; }
 
         public SolicitudCompra486LP()

@@ -15,11 +15,9 @@ using System.Xml.Serialization;
 
 namespace BLL
 {
-    // Importacion masiva de productos desde el XML de un remito de proveedor (extension del CUN10 Procesar productos).
-    // Por cada linea: si el producto existe (marca + modelo + color + talle) le suma el stock sin tocar el precio; si no existe lo da de alta con ese stock.
     // Las lineas validas se importan y las rechazadas se informan una por una. Un mismo remito nunca suma dos veces la misma linea.
     // El XML se lee (deserializacion) y se escribe (serializacion) con XmlSerializer y las clases RemitoXml486LP y CatalogoXml486LP.
-    // Tambien exporta a XML los productos que estan a la venta.
+
     public class BLL_ImportacionProducto486LP
     {
         private Mapper_ImportacionProducto486LP ObjetoMapper = new Mapper_ImportacionProducto486LP();
@@ -53,14 +51,11 @@ namespace BLL
             public decimal Precio;
         }
 
-        // Proveedores para el combo del formulario de importacion
         public List<Proveedor486LP> ListarProveedores()
         {
             return ObjProveedor.Listar();
         }
 
-        // Importa el XML. Devuelve false solo si se rechaza el archivo completo (mensaje con el motivo y resultado en null).
-        // Devuelve true si se procesó, aunque haya lineas rechazadas: el detalle esta en resultado y mensaje trae el resumen.
         public bool Importar(int idProveedor, string rutaArchivo, out ResultadoImportacion486LP resultado, out string mensaje)
         {
             resultado = null;
@@ -137,7 +132,6 @@ namespace BLL
                     return false;
                 }
 
-                // Un remito ya importado completo no se puede volver a subir
                 ImportacionProducto486LP remito = ObjetoMapper.ObtenerPorRemito(idProveedor, nroRemito);
                 if (remito != null && remito.Estado == ImportacionProducto486LP.ESTADO_COMPLETO)
                 {
@@ -145,9 +139,6 @@ namespace BLL
                     return false;
                 }
 
-                // Huella del contenido (productos y cantidades, sin importar el numero de remito ni el nombre del archivo).
-                // Si es un remito nuevo y el mismo contenido ya se importo con otro numero, se rechaza: seria cargar dos veces el mismo stock.
-                // Un remito que ya existe (con rechazos pendientes) no se compara: es justamente el que se esta corrigiendo.
                 string huella = CalcularHuella(idProveedor, items);
                 if (remito == null)
                 {
@@ -161,22 +152,16 @@ namespace BLL
 
                 string nombreArchivo = Path.GetFileName(rutaArchivo);
 
-                // Lineas que el remito ya tiene registradas de pasadas anteriores
                 List<DetalleImportacion486LP> previas = remito == null ? new List<DetalleImportacion486LP>() : ObjetoMapper.ListarDetalle(remito.IdImportacion);
-                Dictionary<int, DetalleImportacion486LP> importadas = previas
-                    .Where(d => d.Accion != DetalleImportacion486LP.ACCION_RECHAZADA)
-                    .ToDictionary(d => d.Linea);
+                Dictionary<int, DetalleImportacion486LP> importadas = previas.Where(d => d.Accion != DetalleImportacion486LP.ACCION_RECHAZADA).ToDictionary(d => d.Linea);
 
-                // Producto -> numero de linea que ya lo trae (en pasadas anteriores o en esta). Sirve para rechazar el producto repetido dentro del mismo remito
                 Dictionary<string, int> lineaDeProducto = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
                 foreach (DetalleImportacion486LP d in importadas.Values)
                     lineaDeProducto[ClaveProducto(d.Marca, d.Modelo, d.Color, d.Talle)] = d.Linea;
 
-                Dictionary<string, Marca486LP> marcas = ObjMarca.Listar()
-                    .GroupBy(m => m.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
+                Dictionary<string, Marca486LP> marcas = ObjMarca.Listar().GroupBy(m => m.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
                     .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
-                Dictionary<string, Categoria486LP> categorias = ObjCategoria.Listar()
-                    .GroupBy(c => c.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
+                Dictionary<string, Categoria486LP> categorias = ObjCategoria.Listar().GroupBy(c => c.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
                     .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
                 int idImportacion = remito != null
@@ -214,7 +199,6 @@ namespace BLL
                     }
                     catch (Exception ex)
                     {
-                        // Una linea que falla no corta las demas: queda rechazada con el motivo general
                         ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_ImportacionProducto.Importar() linea {linea.Linea} del remito {nroRemito}: {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                         linea.Resultado = LineaImportacion486LP.RESULTADO_RECHAZADA;
                         linea.Detalle = Mensajes486LP.Obtener("Importacion.Linea.ErrorInesperado"); // Muestra: Ocurrió un error inesperado al procesar la línea. El detalle quedó registrado en la bitácora
@@ -249,9 +233,8 @@ namespace BLL
             }
         }
 
-        // Vista previa (boton "Ver"): lee el XML y valida cada linea con las mismas reglas que Importar, pero sin importar nada ni escribir en la base de datos.
-        // Las lineas validas quedan como "Pendiente" (se importarian) y las que tienen errores como "Rechazada", con el motivo en Detalle.
-        // Devuelve false solo si el archivo no se puede leer (mensaje trae el motivo).
+        // Previsualiza el XML sin importar nada. Devuelve false si el archivo no se puede leer o tiene errores de validación (mensaje con el motivo y lineas vacías).
+        // Es del boton Ver
         public bool Previsualizar(string rutaArchivo, out string nroRemito, out List<LineaImportacion486LP> lineas, out string mensaje)
         {
             nroRemito = "";
@@ -308,11 +291,9 @@ namespace BLL
                     return false;
                 }
 
-                Dictionary<string, Marca486LP> marcas = ObjMarca.Listar()
-                    .GroupBy(m => m.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
+                Dictionary<string, Marca486LP> marcas = ObjMarca.Listar().GroupBy(m => m.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
                     .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
-                Dictionary<string, Categoria486LP> categorias = ObjCategoria.Listar()
-                    .GroupBy(c => c.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
+                Dictionary<string, Categoria486LP> categorias = ObjCategoria.Listar().GroupBy(c => c.Nombre.Trim(), StringComparer.OrdinalIgnoreCase)
                     .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
                 Dictionary<string, int> lineaDeProducto = new Dictionary<string, int>();
 
@@ -333,7 +314,6 @@ namespace BLL
                     });
                 }
 
-                // Misma validacion que hace Importar con cada linea (marca y categoria existentes, formatos, cantidad, precio y producto repetido en el remito)
                 foreach (LineaImportacion486LP l in lineas)
                 {
                     LineaValidada v;
@@ -362,7 +342,6 @@ namespace BLL
         }
 
         // Genera un XML con solo las lineas rechazadas (mismo remito, mismo proveedor y mismo numero de linea) para corregirlas y volver a subirlas.
-        // Serializa un RemitoXml486LP: tiene la misma forma que el archivo que se importa.
         public bool ExportarRechazadas(ResultadoImportacion486LP resultado, string rutaDestino, out string mensaje)
         {
             mensaje = "";
@@ -416,7 +395,6 @@ namespace BLL
         }
 
         // Exporta a un XML los productos que estan a la venta (los que tienen stock). Serializa un CatalogoXml486LP.
-        // Devuelve false con el motivo en mensaje si no hay productos con stock o no se pudo guardar el archivo.
         public bool ExportarProductosEnVenta(string rutaDestino, out int cantidad, out string mensaje)
         {
             cantidad = 0;
@@ -479,8 +457,6 @@ namespace BLL
             }
         }
 
-        // ----- Lectura del archivo -----
-
         // Lee el XML y lo deserializa a un RemitoXml486LP, sin permitir DTD ni entidades externas.
         // Si el archivo no es un XML valido o no tiene la forma de un remito, devuelve false con el motivo en mensaje.
         private bool LeerRemito(string ruta, out RemitoXml486LP remito, out string mensaje)
@@ -511,7 +487,6 @@ namespace BLL
             }
             catch (InvalidOperationException ex)
             {
-                // XmlSerializer envuelve el error: si adentro hay un XmlException el XML esta mal escrito; si no, no tiene la forma de un remito
                 remito = null;
                 XmlException xml = ex.InnerException as XmlException;
                 if (xml != null && xml.LineNumber == 0)
@@ -562,7 +537,6 @@ namespace BLL
         }
 
         // Numero de cada linea: el atributo linea si todas lo traen (es lo que pasa con el XML de rechazadas), o la posicion en el archivo si ninguna lo trae.
-        // Mezclar las dos formas, repetir un numero o poner uno invalido rechaza el archivo completo.
         private bool NumerarLineas(List<ItemRemitoXml486LP> items, out int[] numeros)
         {
             numeros = new int[items.Count];
@@ -594,12 +568,9 @@ namespace BLL
             return (valor ?? "").Trim();
         }
 
-        // ----- Procesamiento de una linea -----
-
         private void ProcesarItem(int idImportacion, LineaImportacion486LP linea, Dictionary<int, DetalleImportacion486LP> importadas,
             Dictionary<string, int> lineaDeProducto, Dictionary<string, Marca486LP> marcas, Dictionary<string, Categoria486LP> categorias)
         {
-            // Esta linea ya se importo en una pasada anterior: no se vuelve a tocar el stock
             DetalleImportacion486LP previa;
             if (importadas.TryGetValue(linea.Linea, out previa))
             {
@@ -651,7 +622,6 @@ namespace BLL
             }
         }
 
-        // Devuelve el motivo del rechazo, o null si la linea es valida. Cada motivo dice cual es el dato y que esta mal
         private string ValidarLinea(LineaImportacion486LP linea, Dictionary<string, Marca486LP> marcas, Dictionary<string, Categoria486LP> categorias,
             Dictionary<string, int> lineaDeProducto, out LineaValidada v)
         {
@@ -713,7 +683,6 @@ namespace BLL
             return null;
         }
 
-        // Deja registrada la linea rechazada (con su motivo) para poder corregirla y reenviarla despues
         private void GuardarRechazo(int idImportacion, LineaImportacion486LP linea)
         {
             try
@@ -728,9 +697,6 @@ namespace BLL
             }
         }
 
-        // ----- Auxiliares -----
-
-        // Mismo producto, misma cantidad: es la misma linea que ya se importo
         private bool MismoContenido(LineaImportacion486LP linea, DetalleImportacion486LP previa)
         {
             int cantidadNueva, cantidadPrevia;
@@ -758,7 +724,6 @@ namespace BLL
             return Encriptacion486LP.GenerarHash(idProveedor.ToString(CultureInfo.InvariantCulture) + "#" + string.Join(";", lineas));
         }
 
-        // "05" y "5" son la misma cantidad
         private string NormalizarCantidad(string cantidad)
         {
             int numero;

@@ -12,7 +12,6 @@ namespace Mappers
 {
     public class Mapper_Proveedor486LP : MapperBase486LP
     {
-        // Lista todos los proveedores ordenados por nombre. No traga la excepcion: la deja propagar para que la BLL la registre en bitacora.
         public List<Proveedor486LP> Listar()
         {
             SqlCommand cmd = new SqlCommand("Proveedor_Listar");
@@ -21,8 +20,6 @@ namespace Mappers
             DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
             return ManejadorMapeo486LP.MapearLista<Proveedor486LP>(tabla);
         }
-
-        // Alta. Devuelve el Id generado
         public int Agregar(Proveedor486LP proveedor)
         {
             SqlCommand cmd = new SqlCommand("Proveedor_Agregar");
@@ -48,7 +45,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Baja fisica
         public int Eliminar(int idProveedor)
         {
             SqlCommand cmd = new SqlCommand("Proveedor_Eliminar");
@@ -58,7 +54,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Indica si ya existe otro proveedor con ese nombre. idExcluir es el que se esta modificando (0 al dar de alta)
         public bool ExisteNombre(string nombre, int idExcluir)
         {
             SqlCommand cmd = new SqlCommand("Proveedor_ExisteNombre");
@@ -69,7 +64,6 @@ namespace Mappers
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
         }
 
-        // Indica si ya existe otro proveedor con ese CUIT
         public bool ExisteCUIT(string cuit, int idExcluir)
         {
             SqlCommand cmd = new SqlCommand("Proveedor_ExisteCUIT");
@@ -80,7 +74,6 @@ namespace Mappers
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
         }
 
-        // Indica si el proveedor tiene ordenes de compra
         public bool TieneMovimientos(int idProveedor)
         {
             SqlCommand cmd = new SqlCommand("Proveedor_TieneMovimientos");

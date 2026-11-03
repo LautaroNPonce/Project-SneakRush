@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 namespace Mappers
 {
 
-    // Mapea un DataRow (de un DataTable devuelto por Conexion486LP.EjecutarConsulta) a una entidad, de forma generica, mirando que propiedades tienen el atributo [ColumnaTabla486LP].
-    // Reemplaza los metodos "Mapear(...)" que antes se repetian, escritos a mano, en cada Mapper de cada entidad.
     public class ManejadorMapeo486LP
     {
         // Mapea una fila (DataRow) a una entidad T.
@@ -29,7 +27,6 @@ namespace Mappers
 
                 if (valor == null || valor == DBNull.Value)
                 {
-                    // Columna nullable en null (ej: Telefono): se deja el valor por defecto de la propiedad, no se intenta convertir.
                     continue;
                 }
 

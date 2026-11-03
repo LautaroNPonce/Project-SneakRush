@@ -14,21 +14,13 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    // Dialogo que se abre con el boton "Importar / exportar" de Procesar productos (CUN10): importa el remito de un proveedor desde un XML
-    // y exporta a XML los productos a la venta y las lineas rechazadas para corregir
     public partial class FrmImportarProductos486LP : Form, IObserver486LP
     {
         private BLL_ImportacionProducto486LP _bllImportacion = new BLL_ImportacionProducto486LP();
         private readonly string f = "FrmImportarProductos486LP";
-
-        // Resultado de la ultima importacion: de aca sale lo que se exporta como "rechazadas"
         private ResultadoImportacion486LP _resultado;
-
-        // Lo que se mostro con el boton Ver (vista previa del XML, sin importar). Se usa solo mientras no haya un resultado de importacion
         private List<LineaImportacion486LP> _vistaPrevia;
         private string _remitoVistaPrevia = "";
-
-        // Patentes granulares por boton (ademas de la patente de acceso al dialogo, MAESTRO_PRODUCTOS_IMPORTAR).
         private bool _puedeExaminar;
         private bool _puedeVer;
         private bool _puedeEjecutar;
@@ -48,7 +40,6 @@ namespace Sistema_SneakRush
             this.FormClosing += FrmImportarProductos486LP_FormClosing;
         }
 
-        // Los botones de colores propios se ven claramente deshabilitados (fondo gris y texto legible) cuando no se pueden usar
         private static void EstiloBotonHabilitacion(Button boton)
         {
             Color colorActivo = boton.BackColor;
@@ -75,7 +66,6 @@ namespace Sistema_SneakRush
 
         private void FrmImportarProductos486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al dialogo (mismo patron que los otros forms de Maestro).
             if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
@@ -92,7 +82,6 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // El cuadro del archivo es de solo lectura (se completa con Examinar); el largo maximo es el de una ruta de Windows
             txtArchivo.MaxLength = 260;
 
             CargarProveedores();
@@ -102,7 +91,6 @@ namespace Sistema_SneakRush
             ActualizarBotones();
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al dialogo.
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -112,7 +100,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR");
         }
 
-        // Patentes granulares por boton.
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -208,14 +195,12 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // La vista previa reemplaza al resultado de la importacion anterior (si habia uno)
             _resultado = null;
             _vistaPrevia = lineas;
             _remitoVistaPrevia = nroRemito;
             MostrarGrilla();
             ActualizarBotones();
 
-            // Si hay lineas con errores, se avisa cuales no se van a importar y por que
             List<LineaImportacion486LP> conErrores = lineas.Where(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA).ToList();
             if (conErrores.Count > 0)
             {
@@ -249,7 +234,6 @@ namespace Sistema_SneakRush
                 btnImportar.Enabled = _puedeEjecutar;
             }
 
-            // Archivo rechazado completo (no se importo nada)
             if (!ok)
             {
                 MostrarAviso(mensaje);
@@ -276,7 +260,6 @@ namespace Sistema_SneakRush
             MessageBox.Show(texto, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar y exportar productos"), MessageBoxButtons.OK, icono);
         }
 
-        // Lista las lineas rechazadas con su motivo (hasta 10; el resto se ve en la grilla)
         private string TextoRechazadas(List<LineaImportacion486LP> rechazadas)
         {
             var lm = Program.LanguageManager;
@@ -300,7 +283,6 @@ namespace Sistema_SneakRush
             return texto.ToString().TrimEnd();
         }
 
-        // Valida solo lo que corresponde a la GUI (proveedor elegido y archivo seleccionado). Las reglas del archivo y de cada linea las hace la BLL
         private bool ValidarEntrada()
         {
             var lm = Program.LanguageManager;
@@ -394,7 +376,6 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // Muestra lo que corresponda: el resultado de la importacion o, si todavia no hubo, la vista previa del archivo
         private void MostrarGrilla()
         {
             ActualizarFiltro();
@@ -405,7 +386,6 @@ namespace Sistema_SneakRush
                 MostrarResultado();
         }
 
-        // El filtro "Mostrar solo rechazadas" solo se habilita si hay lineas rechazadas en lo que muestra la grilla
         private void ActualizarFiltro()
         {
             List<LineaImportacion486LP> lineas = LineasActuales();
@@ -417,7 +397,6 @@ namespace Sistema_SneakRush
             _actualizando = false;
         }
 
-        // Lineas que corresponden mostrar en la grilla (la vista previa o el resultado de la importacion)
         private List<LineaImportacion486LP> LineasActuales()
         {
             if (_resultado != null) return _resultado.Lineas;
@@ -425,7 +404,6 @@ namespace Sistema_SneakRush
             return new List<LineaImportacion486LP>();
         }
 
-        // Aplica el filtro de la grilla
         private IEnumerable<LineaImportacion486LP> LineasVisibles(List<LineaImportacion486LP> lineas)
         {
             return chkSoloRechazadas.Checked
@@ -433,7 +411,6 @@ namespace Sistema_SneakRush
                 : lineas;
         }
 
-        // Vuelca la vista previa del XML en la grilla (una fila por linea); el precio y la categoria van en el detalle
         private void MostrarVistaPrevia()
         {
             var lm = Program.LanguageManager;
@@ -445,13 +422,13 @@ namespace Sistema_SneakRush
                 int i;
                 if (l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA)
                 {
-                    // Linea con errores: no se importaria; el motivo va en el detalle
+                    // Linea con errores: no se importaria el motivo va en el detalle
                     i = dgvLineas.Rows.Add(l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Cantidad, TextoResultado(l.Resultado), l.Detalle);
                     dgvLineas.Rows[i].DefaultCellStyle.BackColor = ColorResultado(l.Resultado);
                 }
                 else
                 {
-                    // Linea valida: se importaria; en el detalle se ve la categoria y el precio que trae el XML
+                    // Linea valida: se importaria en el detalle se ve la categoria y el precio que trae el XML
                     string detalle = string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.Detalle", "Categoría: {0} | Precio: {1}"), l.Categoria, l.Precio);
                     i = dgvLineas.Rows.Add(l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Cantidad,
                         lm.ObtenerTexto(f, "Frm.ImportarProductos.Res.Pendiente", "Por importar"), detalle);
@@ -465,7 +442,6 @@ namespace Sistema_SneakRush
                 _remitoVistaPrevia, _vistaPrevia.Count, _vistaPrevia.Count - rechazadas, rechazadas);
         }
 
-        // Vuelca el reporte en la grilla (una fila por linea del XML) y arma el resumen
         private void MostrarResultado()
         {
             var lm = Program.LanguageManager;
@@ -518,7 +494,6 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Cada boton depende de su patente. "Exportar para corregir" ademas solo se habilita si la ultima importacion dejo lineas rechazadas que se puedan corregir
         private void ActualizarBotones()
         {
             btnExaminar.Enabled = _puedeExaminar;

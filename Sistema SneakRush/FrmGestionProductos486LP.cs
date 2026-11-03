@@ -20,24 +20,18 @@ namespace Sistema_SneakRush
         private BLL_Marca486LP _bllMarca = new BLL_Marca486LP();
         private BLL_Categoria486LP _bllCategoria = new BLL_Categoria486LP();
         private readonly string f = "FrmGestionProductos486LP";
-
-        // Patentes granulares por boton (ademas de la patente de acceso al form, MAESTRO_PRODUCTOS).
         private bool _puedeAgregar;
         private bool _puedeModificar;
         private bool _puedeEliminar;
         private bool _puedeLimpiar;
         private bool _puedeCerrar;
         private bool _puedeImportar;
-
-        // Id del producto elegido en la grilla (0 = ninguno). Con uno elegido el stock no se edita: solo cambia con ventas y compras.
         private int _idSeleccionado;
 
         public FrmGestionProductos486LP()
         {
             InitializeComponent();
 
-            // Se agranda la grilla (y se corre el botón Cerrar para que siga alineado a su borde derecho)
-            // para que las 7 columnas entren completas sin scroll horizontal.
             int anchoNecesario = 770;
             if (dgvProductos.Width < anchoNecesario)
             {
@@ -51,7 +45,6 @@ namespace Sistema_SneakRush
 
         private void FrmGestionProductos486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al form completo (mismo patron que los otros CUN de Maestro).
             if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
@@ -89,7 +82,6 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al form.
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -99,7 +91,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("MAESTRO_PRODUCTOS");
         }
 
-        // Patentes granulares por boton.
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -125,8 +116,6 @@ namespace Sistema_SneakRush
             btnCerrar.Enabled = _puedeCerrar;
             btnImportar.Enabled = _puedeImportar;
         }
-
-        // Carga los combos de marca y categoria con lo que hay en las tablas Marca y Categoria
         private void CargarCombos()
         {
             cmbMarca.DataSource = null;
@@ -142,8 +131,6 @@ namespace Sistema_SneakRush
             cmbCategoria.SelectedIndex = -1;
         }
 
-        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se recargan marcas, categorias y productos
-        // (por ejemplo, para ver una marca que se dio de alta mientras tanto)
         public void Refrescar()
         {
             CargarCombos();
@@ -151,14 +138,10 @@ namespace Sistema_SneakRush
             LimpiarCampos();
         }
 
-        // Define las columnas de la grilla ligadas a las propiedades del Producto486LP.
         private void ConfigurarColumnas()
         {
             dgvProductos.AutoGenerateColumns = false;
             dgvProductos.Columns.Clear();
-
-            // Anchos fijos pensados para que Precio, Talle y Stock se vean completos (también en inglés y portugués);
-            // la grilla se agranda en el constructor para que entren todas las columnas sin scroll horizontal.
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Marca", Name = "colMarca", Width = 100 });
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Categoria", Name = "colCategoria", Width = 110 });
@@ -171,8 +154,6 @@ namespace Sistema_SneakRush
             AplicarEncabezadosColumnas();
         }
 
-        // Traduce los encabezados de la grilla - separado de ConfigurarColumnas() para poder
-        // llamarlo tambien desde ActualizarIdioma() cuando el idioma cambia en caliente.
         private void AplicarEncabezadosColumnas()
         {
             if (dgvProductos.Columns.Count == 0) return;
@@ -187,7 +168,6 @@ namespace Sistema_SneakRush
             dgvProductos.Columns["colStock"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionProductos.Col.Stock", "Stock");
         }
 
-        // Trae la lista de productos y la bindea a la grilla.
         private void RefrescarGrilla()
         {
             dgvProductos.DataSource = null;
@@ -195,8 +175,6 @@ namespace Sistema_SneakRush
             dgvProductos.ClearSelection();
         }
 
-        // Al hacer clic en una fila, carga los datos del producto en los controles para poder Modificar o Eliminar.
-        // El stock se muestra pero no se puede editar.
         private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -305,7 +283,7 @@ namespace Sistema_SneakRush
             LimpiarCampos();
         }
 
-        // Abre el dialogo de importacion masiva desde el XML del proveedor. Al volver, la grilla se refresca porque el stock y los productos pudieron cambiar
+        // Abro el dialogo de importacion masiva desde el XML del proveedor. Al volver, la grilla se refresca porque el stock y los productos pudieron cambiar
         private void btnImportar_Click(object sender, EventArgs e)
         {
             using (FrmImportarProductos486LP dialogo = new FrmImportarProductos486LP())
@@ -347,7 +325,6 @@ namespace Sistema_SneakRush
                 return false;
             }
 
-            // El stock solo se carga al dar de alta; vacio cuenta como cero
             int stock = 0;
             if (esAlta && !string.IsNullOrWhiteSpace(txtStock.Text) && !int.TryParse(txtStock.Text.Trim(), out stock))
             {
@@ -384,7 +361,6 @@ namespace Sistema_SneakRush
             cmbMarca.Focus();
         }
 
-        // "Stock inicial" al dar de alta, "Stock actual" cuando hay un producto elegido
         private void ActualizarEtiquetaStock()
         {
             var lm = Program.LanguageManager;

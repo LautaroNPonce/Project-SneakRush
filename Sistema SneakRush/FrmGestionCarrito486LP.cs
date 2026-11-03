@@ -26,8 +26,6 @@ namespace Sistema_SneakRush
         private bool _puedeModificar;
         private bool _puedeFinalizar;
         private bool _puedeCancelar;
-
-        // Producto que viene elegido desde la pantalla Consultar productos (parte de CUN01 Cargar carrito, abierta desde el menu): se carga en el carrito al abrir el form
         private readonly Producto486LP _productoInicial;
 
         public FrmGestionCarrito486LP()
@@ -42,7 +40,6 @@ namespace Sistema_SneakRush
             _productoInicial = productoInicial;
         }
 
-        // Agrega un producto al carrito con la cantidad indicada en el selector (mismo criterio que el boton "Agregar"). Lo usa Consultar productos (CUN01) al derivar un producto al carrito.
         public void CargarProducto(Producto486LP producto)
         {
             if (producto == null) return;
@@ -93,7 +90,6 @@ namespace Sistema_SneakRush
                 CargarProducto(_productoInicial);
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al form.
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -103,7 +99,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("VENTA_GESTIONAR_CARRITO");
         }
 
-        // Patentes granulares por boton.
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -135,7 +130,6 @@ namespace Sistema_SneakRush
             var lm = Program.LanguageManager;
             string dni = txtDNI.Text.Trim();
 
-            // Validar formato del dni (solo numeros, 7 u 8 digitos)
             if (!System.Text.RegularExpressions.Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
                 MessageBox.Show(
@@ -145,7 +139,6 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // El Vendedor solo carga el DNI: no se verifica ni se registra el cliente acá. De eso se ocupa el Cajero al cobrar (CUN03).
             _carrito.DNICliente = dni;
             _dniAsignado = true;
             MessageBox.Show(
@@ -158,7 +151,6 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // Abre Consultar productos (parte de CUN01 "Cargar carrito") para elegir el producto
             using (FrmConsultarProducto486LP frm = new FrmConsultarProducto486LP())
             {
                 if (frm.ShowDialog() == DialogResult.OK && frm.ProductoSeleccionado != null)
@@ -195,7 +187,6 @@ namespace Sistema_SneakRush
             DetalleCarrito486LP det = dgvCarrito.CurrentRow.DataBoundItem as DetalleCarrito486LP;
             if (det != null)
             {
-                // Quitar un producto es inmediato y no se puede deshacer: se pide confirmacion antes
                 DialogResult r = MessageBox.Show(
                     string.Format(lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ConfirmarEliminar", "¿Desea quitar {0} {1} (talle {2}) del carrito?"), det.Marca, det.Modelo, det.Talle),
                     lm.ObtenerTexto(f, "Frm.GestionCarrito.Msg.ConfirmarEliminar.Title", "Quitar producto"),
@@ -224,7 +215,6 @@ namespace Sistema_SneakRush
             DetalleCarrito486LP det = dgvCarrito.CurrentRow.DataBoundItem as DetalleCarrito486LP;
             if (det != null)
             {
-                // La BLL valida la cantidad contra el stock (contando las otras lineas del mismo producto) y recalcula el subtotal y el total
                 string mensaje;
                 if (!_bllCarrito.ModificarCantidad(_carrito, det, (int)nudCantidad.Value, out mensaje))
                 {
@@ -269,7 +259,6 @@ namespace Sistema_SneakRush
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            // Si ya hay productos cargados o un DNI asignado, cerrar descarta el carrito: se pide confirmacion. Sin nada cargado cierra directo.
             if (_carrito.Detalles.Count > 0 || _dniAsignado)
             {
                 var lm = Program.LanguageManager;
@@ -285,7 +274,6 @@ namespace Sistema_SneakRush
 
         private void RefrescarGrilla()
         {
-            // Se bindea la lista REAL de DetalleCarrito (no una proyeccion anonima), para que dgvCarrito.CurrentRow.DataBoundItem devuelva un DetalleCarrito486LP
             dgvCarrito.AutoGenerateColumns = false;
             dgvCarrito.DataSource = null;
             dgvCarrito.DataSource = new BindingList<DetalleCarrito486LP>(_carrito.Detalles);
@@ -322,7 +310,6 @@ namespace Sistema_SneakRush
             Program.LanguageManager.Quitar(this);
         }
 
-        // Define las columnas de la grilla ligadas a las propiedades reales del DetalleCarrito486LP (Marca/Modelo/Color/Talle son de solo lectura en el BE)
         private void ConfigurarColumnas()
         {
             dgvCarrito.AutoGenerateColumns = false;

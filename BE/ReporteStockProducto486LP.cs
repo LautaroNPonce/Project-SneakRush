@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    // Una fila del reporte "Estado de stock y reposicion": no es una tabla de la BD, es el resultado del SP Reporte_EstadoStock (producto + su valor de stock y su estado).
-    // Los nombres de las propiedades coinciden con las columnas que devuelve el SP.
     public class ReporteStockProducto486LP
     {
-        // Estados posibles segun la cantidad de stock
         public const int SIN_STOCK = 0;    // 0 unidades
         public const int STOCK_BAJO = 1;   // de 1 hasta el umbral (5 unidades)
         public const int NORMAL = 2;       // mas que el umbral

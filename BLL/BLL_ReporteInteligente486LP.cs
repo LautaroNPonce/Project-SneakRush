@@ -9,33 +9,20 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    // Reporte inteligente: ventas por periodo, comparacion con el periodo anterior y proyeccion de ventas.
-    // La proyeccion se calcula aca, en C#, con dos metodos simples y explicables (tendencia lineal y promedio movil).
     public class BLL_ReporteInteligente486LP
     {
         private Mapper_ReporteInteligente486LP ObjetoMapper = new Mapper_ReporteInteligente486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
         private const string MODULO = "Ventas";
-
-        // Como se agrupan las ventas
         public const int AGRUPAR_MES = 1;
         public const int AGRUPAR_SEMANA = 2;
-
-        // Como se proyecta
         public const int METODO_TENDENCIA = 1;
         public const int METODO_PROMEDIO_MOVIL = 2;
-
-        // Periodos completos que hacen falta para poder proyectar
         public const int MIN_PERIODOS = 3;
-        // Cuantos periodos futuros se pueden proyectar como maximo
         public const int MAX_PERIODOS_PROYECTAR = 6;
-        // Cuantos periodos usa el promedio movil
         public const int VENTANA_PROMEDIO = 3;
-        // Cuantos modelos se muestran en el grafico de mas vendidos
         public const int CANTIDAD_TOP = 5;
-
-        // ===================== Validaciones =====================
 
         public bool ValidarRangoFechas(DateTime desde, DateTime hasta)
         {
@@ -57,8 +44,6 @@ namespace BLL
             return periodos >= 1 && periodos <= MAX_PERIODOS_PROYECTAR;
         }
 
-        // ===================== Periodos =====================
-
         // Primer dia del periodo que contiene la fecha: dia 1 del mes, o el lunes de esa semana
         public static DateTime InicioPeriodo(DateTime fecha, int agrupacion)
         {
@@ -68,19 +53,16 @@ namespace BLL
             return new DateTime(fecha.Year, fecha.Month, 1);
         }
 
-        // Primer dia del periodo que sigue
         public static DateTime SiguientePeriodo(DateTime inicio, int agrupacion)
         {
             return agrupacion == AGRUPAR_SEMANA ? inicio.AddDays(7) : inicio.AddMonths(1);
         }
 
-        // Ultimo dia del periodo
         public static DateTime FinPeriodo(DateTime inicio, int agrupacion)
         {
             return SiguientePeriodo(inicio, agrupacion).AddDays(-1);
         }
 
-        // El rango pedido se ajusta a periodos enteros (para no comparar un mes completo con medio mes) y no pasa del periodo de hoy
         public static void RangoEfectivo(DateTime desde, DateTime hasta, int agrupacion, DateTime hoy, out DateTime desdeEfectivo, out DateTime hastaEfectivo)
         {
             DateTime tope = hasta.Date > hoy.Date ? hoy.Date : hasta.Date;
@@ -88,9 +70,7 @@ namespace BLL
             hastaEfectivo = FinPeriodo(InicioPeriodo(tope, agrupacion), agrupacion);
         }
 
-        // ===================== Generar =====================
-
-        // Devuelve el reporte armado, un reporte vacio si los filtros no son validos, o null si hubo un error (queda registrado en la bitacora).
+        // Esto devuelve el reporte armado, un reporte vacio si los filtros no son validos, o null si hubo un error (queda registrado en la bitacora).
         public ReporteInteligente486LP Generar(DateTime desde, DateTime hasta, int agrupacion, int metodo, int periodosAProyectar)
         {
             try
@@ -116,8 +96,7 @@ namespace BLL
             }
         }
 
-        // Arma el reporte a partir de los datos ya leidos de la base. No toca la base, asi se puede probar solo.
-        // "hoy" es el dia desde el que se mira: los periodos que terminaron antes son completos, el que incluye hoy esta en curso.
+        // Armo el reporte a partir de los datos ya leidos de la base. No toca la base, asi se puede probar solo.
         public ReporteInteligente486LP Calcular(DateTime desdeEfectivo, DateTime hastaEfectivo, int agrupacion, int metodo, int periodosAProyectar, DateTime hoy,
             List<ReporteVentaPeriodo486LP> ventas, ReporteResumenVentas486LP resumen, List<ReporteTopProducto486LP> top, List<ReporteMedioPago486LP> medios)
         {
@@ -139,7 +118,6 @@ namespace BLL
                 foreach (ReporteVentaPeriodo486LP v in ventas) porPeriodo[v.Periodo.Date] = v;
             }
 
-            // Serie real: un punto por cada periodo del rango, tambien los que no tuvieron ventas (valen 0)
             List<decimal> completos = new List<decimal>();
             DateTime ultimoInicio = InicioPeriodo(hastaEfectivo, agrupacion);
             DateTime inicio = InicioPeriodo(desdeEfectivo, agrupacion);
@@ -168,7 +146,7 @@ namespace BLL
                 }
                 else
                 {
-                    break;   // periodo que todavia no empezo: no hay nada real que mostrar
+                    break; 
                 }
 
                 r.Serie.Add(punto);
@@ -178,7 +156,6 @@ namespace BLL
             r.PeriodosCompletos = completos.Count;
             r.DatosSuficientes = completos.Count >= MIN_PERIODOS;
 
-            // Ultimo periodo completo y comparacion con el anterior
             if (completos.Count > 0)
             {
                 r.PeriodoUltimoCompleto = inicioUltimoCompleto;
@@ -215,7 +192,6 @@ namespace BLL
                 {
                     if (i == 0 && enCurso != null)
                     {
-                        // el cierre del periodo en curso nunca puede ser menor a lo que ya se vendio
                         decimal cierre = Math.Max(proyectados[i], r.MontoEnCurso);
                         enCurso.MontoProyectado = cierre;
                         r.ProyeccionCierre = cierre;
@@ -244,12 +220,7 @@ namespace BLL
             return r;
         }
 
-        // ===================== Proyeccion =====================
-
         // Proyecta los "pasos" periodos siguientes a partir del historico (un monto por periodo completo, en orden).
-        //  - Tendencia lineal: recta de minimos cuadrados y = a + b*x sobre los periodos pasados, prolongada hacia adelante.
-        //  - Promedio movil: promedio de los ultimos 3 periodos; para proyectar mas de uno, cada proyeccion entra en el promedio siguiente.
-        // Nunca devuelve montos negativos.
         public static List<decimal> Proyectar(List<decimal> historico, int pasos, int metodo)
         {
             List<decimal> resultado = new List<decimal>();
@@ -282,8 +253,8 @@ namespace BLL
                     sxx += (double)i * i;
                 }
                 double denominador = n * sxx - sx * sx;
-                double b = denominador == 0 ? 0 : (n * sxy - sx * sy) / denominador;   // pendiente
-                double a = (sy - b * sx) / n;                                             // ordenada
+                double b = denominador == 0 ? 0 : (n * sxy - sx * sy) / denominador;   
+                double a = (sy - b * sx) / n;                                            
 
                 for (int k = 1; k <= pasos; k++)
                 {
@@ -296,9 +267,6 @@ namespace BLL
             return resultado;
         }
 
-        // ===================== Bitacora =====================
-
-        // Deja constancia en la bitacora de que se exporto el reporte a PDF
         public void RegistrarExportacion(int periodos)
         {
             try

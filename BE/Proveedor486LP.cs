@@ -12,7 +12,6 @@ namespace BE
         public int IdProveedor { get; set; }
         [ColumnaTabla486LP]
         public string Nombre { get; set; }
-        // CUIT guardado solo con los 11 digitos (sin guiones)
         [ColumnaTabla486LP]
         public string CUIT { get; set; }
         [ColumnaTabla486LP]

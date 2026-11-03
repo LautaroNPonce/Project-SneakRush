@@ -19,7 +19,6 @@ namespace BLL
 
         private const string MODULO_MAESTROS = "Maestros";
 
-        // Lista todos los productos
         public List<Producto486LP> Listar()
         {
             try
@@ -88,7 +87,6 @@ namespace BLL
             }
         }
 
-        // Descuenta stock (venta). Nunca deja el stock en negativo: si no alcanza, no descuenta y avisa.
         public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -96,16 +94,14 @@ namespace BLL
             {
                 if (cantidad <= 0)
                 {
-                    // Muestra: La cantidad debe ser mayor a cero.
-                    mensaje = Mensajes486LP.Obtener("Carrito.CantidadInvalida");
+                    mensaje = Mensajes486LP.Obtener("Carrito.CantidadInvalida"); // Muestra: La cantidad debe ser mayor a cero.
                     return false;
                 }
 
                 int stockActual = ObtenerStockDisponible(idProducto);
                 if (stockActual < cantidad)
                 {
-                    // Muestra: Stock insuficiente. Unidades disponibles: {0}.
-                    mensaje = Mensajes486LP.Obtener("Carrito.StockInsuficiente", stockActual);
+                    mensaje = Mensajes486LP.Obtener("Carrito.StockInsuficiente", stockActual); // Muestra: Stock insuficiente. Unidades disponibles: {0}.
                     return false;
                 }
 
@@ -115,8 +111,7 @@ namespace BLL
                 if (!ok)
                 {
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error al descontar stock del producto Id {idProducto}: {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
-                    // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la
-                    // bitácora.
+                    // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
                     mensaje = Mensajes486LP.Obtener("General.ErrorInesperado");
                 }
 
@@ -142,8 +137,6 @@ namespace BLL
             }
         }
 
-        // Obtiene un producto por su Id. Hace falta para completar el Producto de cada DetalleCarrito486LP (llega en null desde el Mapper de Carrito) y así mostrar
-        // Marca/Modelo/Color/Talle en la grilla de Cobrar venta
         public Producto486LP ObtenerPorId(int idProducto)
         {
             try
@@ -157,7 +150,6 @@ namespace BLL
             }
         }
 
-        // Aumenta stock tras confirmarse el pago de una compra. Mismo criterio que actualizarStock: recalcula el DV de esa única fila, porque esto corre en cada compra pagada
         public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -203,9 +195,6 @@ namespace BLL
             }
         }
 
-        // ----- ABM de productos (CUN09) -----
-
-        // Modelo: letras, numeros, espacios y los signos . & ' - / + ( ) (ej. "Air Max 90", "RS-X"). Maximo 50 caracteres
         public bool ValidarModelo(string modelo)
         {
             if (string.IsNullOrWhiteSpace(modelo)) return false;
@@ -213,7 +202,6 @@ namespace BLL
             return modelo.Length <= 50 && Regex.IsMatch(modelo, @"^[\p{L}\d][\p{L}\d .&'\u2019\-/+()]*$");
         }
 
-        // Color: solo letras, y puede combinar con espacio, guion o barra (ej. "Negro", "Blanco/Rojo"). Maximo 30 caracteres
         public bool ValidarColor(string color)
         {
             if (string.IsNullOrWhiteSpace(color)) return false;
@@ -221,7 +209,6 @@ namespace BLL
             return color.Length <= 30 && Regex.IsMatch(color, @"^\p{L}+(?:[ \-/]\p{L}+)*$");
         }
 
-        // Talle: numero entre 30 y 50, con medio talle opcional (ej. "42" o "42.5"; tambien acepta la coma)
         public bool ValidarTalle(string talle)
         {
             if (string.IsNullOrWhiteSpace(talle)) return false;
@@ -231,7 +218,6 @@ namespace BLL
             return valor >= 30 && valor <= 50;
         }
 
-        // Precio: mayor a cero, con hasta 2 decimales y hasta 99.999.999,99
         public bool ValidarPrecio(decimal precio)
         {
             return precio > 0 && precio <= 99999999.99m && decimal.Round(precio, 2) == precio;
@@ -302,7 +288,6 @@ namespace BLL
             }
         }
 
-        // No toca el stock: el stock solo cambia con ventas y compras
         public bool Modificar(Producto486LP producto, out string mensaje)
         {
             mensaje = "";

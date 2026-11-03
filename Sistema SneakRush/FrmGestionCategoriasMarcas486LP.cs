@@ -18,8 +18,6 @@ namespace Sistema_SneakRush
         private BLL_Categoria486LP _bllCategoria = new BLL_Categoria486LP();
         private BLL_Marca486LP _bllMarca = new BLL_Marca486LP();
         private readonly string f = "FrmGestionCategoriasMarcas486LP";
-
-        // Patentes granulares por boton (ademas de la patente de acceso al form, MAESTRO_CATEGORIAS).
         private bool _puedeAgregarCategoria;
         private bool _puedeModificarCategoria;
         private bool _puedeEliminarCategoria;
@@ -39,7 +37,6 @@ namespace Sistema_SneakRush
 
         private void FrmGestionCategoriasMarcas486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al form completo (mismo patron que los otros CUN de Maestro).
             if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
@@ -56,7 +53,6 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Largo maximo acorde a la regla de validacion de la BLL (nombre 50)
             txtCategoria.MaxLength = 50;
             txtMarca.MaxLength = 50;
 
@@ -69,7 +65,6 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al form.
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -79,7 +74,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("MAESTRO_CATEGORIAS");
         }
 
-        // Patentes granulares por boton.
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -112,9 +106,6 @@ namespace Sistema_SneakRush
             btnCerrar.Enabled = _puedeCerrar;
         }
 
-        // ===================== CATEGORIAS =====================
-
-        // Id de la categoria elegida en la grilla (0 = ninguna)
         private int _idCategoriaSeleccionada;
 
         private void ConfigurarCategoriaColumnas()
@@ -125,7 +116,6 @@ namespace Sistema_SneakRush
             AplicarCategoriaEncabezado();
         }
 
-        // Traduce el encabezado de la grilla - separado para poder llamarlo tambien desde ActualizarIdioma()
         private void AplicarCategoriaEncabezado()
         {
             if (dgvCategorias.Columns.Count == 0) return;
@@ -141,7 +131,6 @@ namespace Sistema_SneakRush
             dgvCategorias.ClearSelection();
         }
 
-        // Al hacer clic en una fila, carga el nombre en el cuadro de texto para poder Modificar o Eliminar.
         private void dgvCategorias_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -157,7 +146,6 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // Con una categoria elegida en la grilla hay que limpiar antes de cargar una nueva
             if (_idCategoriaSeleccionada != 0)
             {
                 MostrarAviso(lm.ObtenerTexto(f, "Frm.GestionCategoriasMarcas.Msg.LimpiarAntesDeAgregarCategoria", "Hay una categoría elegida en la grilla. Presione Limpiar antes de agregar una nueva."));
@@ -239,7 +227,6 @@ namespace Sistema_SneakRush
             LimpiarCategoria();
         }
 
-        // Valida solo lo que corresponde a la GUI (nombre no vacio). Las reglas de negocio (formato, repetida) las hace la BLL
         private bool ValidarCategoria()
         {
             var lm = Program.LanguageManager;
@@ -260,9 +247,6 @@ namespace Sistema_SneakRush
             txtCategoria.Focus();
         }
 
-        // ===================== MARCAS =====================
-
-        // Id de la marca elegida en la grilla (0 = ninguna)
         private int _idMarcaSeleccionada;
 
         private void ConfigurarMarcaColumnas()
@@ -273,7 +257,6 @@ namespace Sistema_SneakRush
             AplicarMarcaEncabezado();
         }
 
-        // Traduce el encabezado de la grilla - separado para poder llamarlo tambien desde ActualizarIdioma()
         private void AplicarMarcaEncabezado()
         {
             if (dgvMarcas.Columns.Count == 0) return;
@@ -289,7 +272,6 @@ namespace Sistema_SneakRush
             dgvMarcas.ClearSelection();
         }
 
-        // Al hacer clic en una fila, carga el nombre en el cuadro de texto para poder Modificar o Eliminar.
         private void dgvMarcas_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -305,7 +287,6 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // Con una marca elegida en la grilla hay que limpiar antes de cargar una nueva
             if (_idMarcaSeleccionada != 0)
             {
                 MostrarAviso(lm.ObtenerTexto(f, "Frm.GestionCategoriasMarcas.Msg.LimpiarAntesDeAgregarMarca", "Hay una marca elegida en la grilla. Presione Limpiar antes de agregar una nueva."));
@@ -387,7 +368,6 @@ namespace Sistema_SneakRush
             LimpiarMarca();
         }
 
-        // Valida solo lo que corresponde a la GUI (nombre no vacio). Las reglas de negocio (formato, repetida) las hace la BLL
         private bool ValidarMarca()
         {
             var lm = Program.LanguageManager;

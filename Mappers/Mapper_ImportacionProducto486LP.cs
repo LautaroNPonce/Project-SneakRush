@@ -12,9 +12,6 @@ namespace Mappers
 {
     public class Mapper_ImportacionProducto486LP : MapperBase486LP
     {
-        // Estos metodos no tragan la excepcion: la BLL la registra en bitacora y devuelve el mensaje general.
-
-        // Busca el remito de ese proveedor. Devuelve null si nunca se importo
         public ImportacionProducto486LP ObtenerPorRemito(int idProveedor, string nroRemito)
         {
             SqlCommand cmd = new SqlCommand("ImportacionProducto_ObtenerPorRemito");
@@ -26,7 +23,6 @@ namespace Mappers
             return tabla.Rows.Count > 0 ? ManejadorMapeo486LP.MapearEntidad<ImportacionProducto486LP>(tabla.Rows[0]) : null;
         }
 
-        // Busca una importacion anterior de ese proveedor con el mismo contenido (misma huella). Devuelve null si no hay
         public ImportacionProducto486LP ObtenerPorHuella(int idProveedor, string huella)
         {
             SqlCommand cmd = new SqlCommand("ImportacionProducto_ObtenerPorHuella");
@@ -38,7 +34,6 @@ namespace Mappers
             return tabla.Rows.Count > 0 ? ManejadorMapeo486LP.MapearEntidad<ImportacionProducto486LP>(tabla.Rows[0]) : null;
         }
 
-        // Registra el remito la primera vez que llega (con la huella de su contenido). Devuelve el Id generado
         public int Crear(int idProveedor, string nroRemito, string usuario, string nombreArchivo, string huella)
         {
             SqlCommand cmd = new SqlCommand("ImportacionProducto_Crear");
@@ -52,7 +47,6 @@ namespace Mappers
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
         }
 
-        // Cuenta las lineas del remito, deja el estado (Completo / ConRechazos), la fecha y el usuario de esta pasada. Devuelve el estado
         public string Cerrar(int idImportacion, string usuario, string nombreArchivo)
         {
             SqlCommand cmd = new SqlCommand("ImportacionProducto_Cerrar");
@@ -64,7 +58,6 @@ namespace Mappers
             return Convert.ToString(Conexion486LP.EjecutarEscalar(cmd));
         }
 
-        // Lineas que ya tiene el remito (importadas y rechazadas)
         public List<DetalleImportacion486LP> ListarDetalle(int idImportacion)
         {
             SqlCommand cmd = new SqlCommand("DetalleImportacion_ListarPorImportacion");
@@ -75,8 +68,6 @@ namespace Mappers
             return ManejadorMapeo486LP.MapearLista<DetalleImportacion486LP>(tabla);
         }
 
-        // Importa UNA linea valida en una sola transaccion: crea el producto o le suma el stock, y deja la linea registrada.
-        // Devuelve la accion realizada (Alta, SumaStock o YaImportada si la linea ya estaba importada) y el Id del producto.
         public string ProcesarLinea(int idImportacion, int linea, int idMarca, int idCategoria, string marca, string categoria, string modelo, string color, string talle, int cantidad, decimal precio, out int idProducto)
         {
             SqlCommand cmd = new SqlCommand("DetalleImportacion_ProcesarLinea");
@@ -99,7 +90,6 @@ namespace Mappers
             return Convert.ToString(fila["Accion"]);
         }
 
-        // Deja registrada una linea rechazada con su motivo. Si la linea ya estaba importada no la toca
         public int RegistrarRechazo(int idImportacion, int linea, string marca, string categoria, string modelo, string color, string talle, string cantidad, string precio, string motivo)
         {
             SqlCommand cmd = new SqlCommand("DetalleImportacion_RegistrarRechazo");

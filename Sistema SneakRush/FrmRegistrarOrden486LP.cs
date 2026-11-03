@@ -93,8 +93,6 @@ namespace Sistema_SneakRush
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se vuelven a leer las solicitudes pendientes
-        // (por ejemplo, una solicitud que se confirmo mientras tanto en Generar solicitud)
         public void Refrescar()
         {
             CargarSolicitudesPendientes();
@@ -104,7 +102,6 @@ namespace Sistema_SneakRush
         {
             _solicitudesPendientes = _bllSolicitud.ListarPendientes();
 
-            // 2.1: no hay solicitudes pendientes
             if (_solicitudesPendientes.Count == 0)
             {
                 var lm = Program.LanguageManager;
@@ -151,7 +148,7 @@ namespace Sistema_SneakRush
                     Modelo = detSol.Modelo,
                     Color = detSol.Color,
                     Talle = detSol.Talle,
-                    // Dato de referencia: ultimo costo pagado por este producto en una orden anterior (null si nunca se compro antes) solo para guiar al Administrador.
+                    // Dato de referencia: ultimo costo pagado por este producto en una orden anterior (null si nunca se compro antes) solo para guiar al Administrador
                     UltimoCosto = _bllOrden.ObtenerUltimoCosto(detSol.IdProducto)
                 });
             }
@@ -175,7 +172,6 @@ namespace Sistema_SneakRush
             ActualizarCostoTotal();
         }
 
-        // 6.1: valida el Costo Unitario apenas el Administrador termina de editar una celda
         private void dgvDetalleOrden_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             string nombreColumna = dgvDetalleOrden.Columns[e.ColumnIndex].Name;
@@ -186,14 +182,12 @@ namespace Sistema_SneakRush
             var lm = Program.LanguageManager;
             string titulo = lm.ObtenerTexto(f, "Frm.RegistrarOrden.Msg.Validacion.Title", "Validación");
 
-            // Se valida solo lo que se acaba de editar: costo unitario mayor a cero y hasta 10.000.000
             if (nombreColumna == "colCostoUnitario" && (det.CostoUnitario <= 0 || det.CostoUnitario > 10000000m))
             {
                 MessageBox.Show(Mensajes486LP.Obtener("Compra.CostoInvalido"), titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 det.CostoUnitario = 0;
             }
 
-            // Cantidad entera entre 1 y 9999: si queda fuera de rango, avisa y la deja en el limite mas cercano
             if (nombreColumna == "colCantidad" && (det.Cantidad < 1 || det.Cantidad > 9999))
             {
                 MessageBox.Show(Mensajes486LP.Obtener("Compra.CantidadInvalida"), titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -205,8 +199,7 @@ namespace Sistema_SneakRush
             ActualizarCostoTotal();
         }
 
-        // Si se escribe algo que no es un numero en una celda editable (cantidad o costo), avisa y deja el valor anterior,
-        // en vez de mostrar el cuadro de error por defecto de .NET (con texto tecnico)
+
         private void dgvDetalleOrden_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             e.ThrowException = false;

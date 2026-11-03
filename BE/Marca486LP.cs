@@ -21,7 +21,6 @@ namespace BE
             Nombre = nombre;
         }
 
-        // Se usa tal cual en el combo de seleccion del Form (cmbMarca): que se vea el Nombre, no "BE.Marca486LP".
         public override string ToString()
         {
             return Nombre;

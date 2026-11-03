@@ -12,7 +12,6 @@ namespace Mappers
 {
     public class Mapper_Producto486LP : MapperBase486LP
     {
-        // Lista todos los productos.
         public List<Producto486LP> Listar()
         {
             try
@@ -29,8 +28,6 @@ namespace Mappers
             }
         }
 
-        // Busca productos por filtros opcionales. Un filtro vacío se manda como NULL al SP, que lo ignora.
-        // No traga la excepción: la deja propagar para que BLL_Producto.Buscar la registre en bitácora.
         public List<Producto486LP> Buscar(string marca, string modelo, string color, string talle, bool soloConStock)
         {
             SqlCommand cmd = new SqlCommand("Producto_Buscar");
@@ -45,7 +42,6 @@ namespace Mappers
             return ManejadorMapeo486LP.MapearLista<Producto486LP>(tabla);
         }
 
-        // Obtiene un producto por sus atributos (Marca, Modelo, Color, Talle).
         public Producto486LP ObtenerPorAtributos(string marca, string modelo, string color, string talle)
         {
             try
@@ -66,7 +62,6 @@ namespace Mappers
             }
         }
 
-        // Obtiene un producto por su Id.
         public Producto486LP ObtenerPorId(int idProducto)
         {
             try
@@ -84,7 +79,6 @@ namespace Mappers
             }
         }
 
-        // Descuenta stock tras una venta (CUN03). El procedimiento almacenado rechaza el descuento con un error si el stock no alcanza (nunca deja el stock en negativo), y ese error vuelve como false.
         public bool ActualizarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -106,7 +100,6 @@ namespace Mappers
             }
         }
 
-        // Suma stock tras confirmarse el pago de una compra (CUN07) - separado de ActualizarStock, que resta (Ventas). Mismo criterio: no compara filas afectadas.
         public bool AumentarStock(int idProducto, int cantidad, out string mensaje)
         {
             mensaje = "";
@@ -128,10 +121,6 @@ namespace Mappers
             }
         }
 
-        // ----- ABM de productos (CUN09) -----
-        // Estos metodos no tragan la excepcion: la BLL la registra en bitacora y devuelve el mensaje general.
-
-        // Alta. Devuelve el Id generado
         public int Agregar(Producto486LP producto)
         {
             SqlCommand cmd = new SqlCommand("Producto_Agregar");
@@ -147,7 +136,6 @@ namespace Mappers
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
         }
 
-        // Modifica los datos del producto, menos el stock (el stock solo cambia con ventas y compras)
         public int Modificar(Producto486LP producto)
         {
             SqlCommand cmd = new SqlCommand("Producto_Modificar");
@@ -163,7 +151,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Baja fisica
         public int Eliminar(int idProducto)
         {
             SqlCommand cmd = new SqlCommand("Producto_Eliminar");
@@ -173,7 +160,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Indica si ya existe otro producto con la misma marca, modelo, color y talle. idExcluir es el que se esta modificando (0 al dar de alta)
         public bool ExisteCombinacion(int idMarca, string modelo, string color, string talle, int idExcluir)
         {
             SqlCommand cmd = new SqlCommand("Producto_ExisteCombinacion");
@@ -187,7 +173,6 @@ namespace Mappers
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
         }
 
-        // Indica si el producto aparece en algun carrito, venta, solicitud, orden o recepcion
         public bool TieneMovimientos(int idProducto)
         {
             SqlCommand cmd = new SqlCommand("Producto_TieneMovimientos");

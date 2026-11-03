@@ -31,7 +31,6 @@ namespace BLL
             }
         }
 
-        // Nombre / razon social: letras, numeros, espacios y los signos . , & ' - (ej. "Distribuidora Calzado S.A."). Maximo 100 caracteres
         public bool ValidarNombre(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre)) return false;
@@ -39,14 +38,12 @@ namespace BLL
             return nombre.Length <= 100 && Regex.IsMatch(nombre, @"^[\p{L}\d][\p{L}\d .,&'\u2019\-]*$");
         }
 
-        // Deja el CUIT solo con digitos (acepta 30-70123456-8, 30 70123456 8 o 30701234568)
         public string NormalizarCUIT(string cuit)
         {
             if (string.IsNullOrWhiteSpace(cuit)) return "";
             return new string(cuit.Where(char.IsDigit).ToArray());
         }
 
-        // CUIT: 11 digitos, prefijo valido (20, 23, 24, 27, 30, 33 o 34) y digito verificador correcto (modulo 11)
         public bool ValidarCUIT(string cuit)
         {
             string c = NormalizarCUIT(cuit);
@@ -73,7 +70,6 @@ namespace BLL
                    Regex.IsMatch(correo, @"^[A-Za-z0-9]+(?:[._%+\-][A-Za-z0-9]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}$");
         }
 
-        // El telefono es opcional
         public bool ValidarTelefono(string telefono)
         {
             if (string.IsNullOrWhiteSpace(telefono)) return true;

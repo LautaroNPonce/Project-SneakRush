@@ -17,11 +17,9 @@ namespace BE
         [ColumnaTabla486LP]
         public int IdProveedor { get; set; }
         [ColumnaTabla486LP]
-        public string NroRemito { get; set; }
-        // Completo: todas las lineas del remito se importaron. ConRechazos: quedan lineas rechazadas pendientes de corregir
+        public string NroRemito { get; set; } // Todas las lineas del remito se importaron. ConRechazos: quedan lineas rechazadas pendientes de corregir
         [ColumnaTabla486LP]
         public string Estado { get; set; }
-        // Fecha de la ultima importacion de este remito
         [ColumnaTabla486LP]
         public DateTime FechaImportacion { get; set; }
         [ColumnaTabla486LP]

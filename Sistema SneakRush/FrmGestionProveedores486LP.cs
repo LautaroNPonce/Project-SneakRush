@@ -17,15 +17,11 @@ namespace Sistema_SneakRush
     {
         private BLL_Proveedor486LP _bllProveedor = new BLL_Proveedor486LP();
         private readonly string f = "FrmGestionProveedores486LP";
-
-        // Patentes granulares por boton (ademas de la patente de acceso al form, MAESTRO_PROVEEDORES).
         private bool _puedeAgregar;
         private bool _puedeModificar;
         private bool _puedeEliminar;
         private bool _puedeLimpiar;
         private bool _puedeCerrar;
-
-        // Id del proveedor elegido en la grilla (0 = ninguno)
         private int _idSeleccionado;
 
         public FrmGestionProveedores486LP()
@@ -37,7 +33,6 @@ namespace Sistema_SneakRush
 
         private void FrmGestionProveedores486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al form completo (mismo patron que los otros CUN de Maestro).
             if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
@@ -73,7 +68,6 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al form.
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -83,7 +77,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("MAESTRO_PROVEEDORES");
         }
 
-        // Patentes granulares por boton.
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -108,12 +101,10 @@ namespace Sistema_SneakRush
             btnCerrar.Enabled = _puedeCerrar;
         }
 
-        // Define las columnas de la grilla ligadas a las propiedades del Proveedor486LP.
         private void ConfigurarColumnas()
         {
             dgvProveedores.AutoGenerateColumns = false;
             dgvProveedores.Columns.Clear();
-            // Las columnas se reparten el ancho disponible (no hay anchos fijos que dependan de la escala de pantalla)
             dgvProveedores.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
             dgvProveedores.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Nombre", Name = "colNombre", FillWeight = 30 });
@@ -127,8 +118,6 @@ namespace Sistema_SneakRush
             AplicarEncabezadosColumnas();
         }
 
-        // Traduce los encabezados de la grilla - separado de ConfigurarColumnas() para poder
-        // llamarlo tambien desde ActualizarIdioma() cuando el idioma cambia en caliente.
         private void AplicarEncabezadosColumnas()
         {
             if (dgvProveedores.Columns.Count == 0) return;
@@ -157,7 +146,6 @@ namespace Sistema_SneakRush
             return cuit;
         }
 
-        // Trae la lista de proveedores y la bindea a la grilla.
         private void RefrescarGrilla()
         {
             dgvProveedores.DataSource = null;
@@ -165,7 +153,6 @@ namespace Sistema_SneakRush
             dgvProveedores.ClearSelection();
         }
 
-        // Al hacer clic en una fila, carga los datos del proveedor en los cuadros de texto para poder Modificar o Eliminar.
         private void dgvProveedores_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -276,8 +263,6 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // Valida solo lo que corresponde a la GUI (campos obligatorios no vacios).
-        // Las validaciones de negocio (formato de nombre, CUIT, correo y telefono, proveedor repetido, etc.) las hace la BLL y devuelve el mensaje ya traducido.
         private bool ValidarCampos()
         {
             var lm = Program.LanguageManager;

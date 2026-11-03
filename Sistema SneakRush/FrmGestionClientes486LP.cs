@@ -17,16 +17,11 @@ namespace Sistema_SneakRush
     {
         private BLL_Cliente486LP _bllCliente = new BLL_Cliente486LP();
         private readonly string f = "FrmGestionClientes486LP";
-
-        // Patentes granulares por boton (ademas de la patente de acceso al form, MAESTRO_CLIENTES).
         private bool _puedeAgregar;
         private bool _puedeModificar;
         private bool _puedeEliminar;
         private bool _puedeLimpiar;
         private bool _puedeCerrar;
-
-        // DNI que viene precargado cuando el form se incluye desde CUN03 (Cobrar venta): el Cajero registra al cliente del carrito.
-        // Null cuando el form se abre desde el menu Maestro.
         private readonly string _dniPrecargado;
 
         public FrmGestionClientes486LP()
@@ -36,7 +31,7 @@ namespace Sistema_SneakRush
             this.FormClosing += FrmGestionClientes486LP_FormClosing;
         }
 
-        // Include desde CUN03: el DNI del carrito llega precargado y no se puede modificar
+        // Include el DNI del carrito llega precargado y no se puede modificar
         public FrmGestionClientes486LP(string dniPrecargado) : this()
         {
             _dniPrecargado = dniPrecargado;
@@ -44,7 +39,6 @@ namespace Sistema_SneakRush
 
         private void FrmGestionClientes486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al form completo (mismo patron que los otros 2 CUN).
             if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
@@ -61,14 +55,11 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Largos maximos acordes a las reglas de validacion de la BLL (DNI 8 digitos, nombre y apellido 50, correo 100)
             txtDNI.MaxLength = 8;
             txtNombre.MaxLength = 50;
             txtApellido.MaxLength = 50;
             txtCorreo.MaxLength = 100;
             txtTelefono.MaxLength = 20;
-
-            // Teclas permitidas: DNI solo numeros; telefono numeros, espacio y + - ( )
             txtDNI.KeyPress += FiltrosTeclado486LP.SoloDigitos;
             txtTelefono.KeyPress += FiltrosTeclado486LP.Telefono;
 
@@ -85,8 +76,6 @@ namespace Sistema_SneakRush
                 txtNombre.Focus();
             }
         }
-
-        // Verifica que el usuario en sesion tenga la patente de acceso al form.
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -96,7 +85,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("MAESTRO_CLIENTES");
         }
 
-        // Patentes granulares por boton.
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -121,8 +109,6 @@ namespace Sistema_SneakRush
             btnCerrar.Enabled = _puedeCerrar;
         }
 
-        // Define las columnas de la grilla ligadas a las propiedades del Cliente486LP.
-        // El Correo NO se muestra (esta cifrado en AES); se maneja solo en los cuadros de texto.
         private void ConfigurarColumnas()
         {
             dgvClientes.AutoGenerateColumns = false;
@@ -136,8 +122,6 @@ namespace Sistema_SneakRush
             AplicarEncabezadosColumnas();
         }
 
-        // Traduce los encabezados de la grilla - separado de ConfigurarColumnas() para poder
-        // llamarlo tambien desde ActualizarIdioma() cuando el idioma cambia en caliente.
         private void AplicarEncabezadosColumnas()
         {
             if (dgvClientes.Columns.Count == 0) return;
@@ -149,14 +133,12 @@ namespace Sistema_SneakRush
             dgvClientes.Columns["colTelefono"].HeaderText = lm.ObtenerTexto(f, "Frm.GestionClientes.Col.Telefono", "Teléfono");
         }
 
-        // Trae la lista de clientes y la bindea a la grilla.
         private void RefrescarGrilla()
         {
             dgvClientes.DataSource = null;
             dgvClientes.DataSource = _bllCliente.Listar();
         }
 
-        // Al hacer clic en una fila, carga los datos del cliente en los cuadros de texto para poder Modificar o Eliminar. El Correo se muestra desencriptado.
         private void dgvClientes_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -185,7 +167,6 @@ namespace Sistema_SneakRush
             {
                 MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.GestionClientes.Msg.Title", "Gestión de clientes"), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Incluido desde CUN03: el cliente quedó registrado, se vuelve a Cobrar venta
                 if (!string.IsNullOrEmpty(_dniPrecargado))
                 {
                     this.DialogResult = DialogResult.OK;
@@ -265,8 +246,6 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // Valida solo lo que corresponde a la GUI (campos obligatorios no vacios).
-        // Las validaciones de negocio (formato de DNI, nombre, correo y telefono, DNI duplicado, etc.) las hace la BLL y devuelve el mensaje ya traducido.
         private bool ValidarCampos()
         {
             var lm = Program.LanguageManager;

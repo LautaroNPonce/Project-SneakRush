@@ -14,7 +14,6 @@ namespace BLL
         private Mapper_SolicitudCompra486LP ObjetoMapper = new Mapper_SolicitudCompra486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Registra la solicitud armada en pantalla. Fecha, DNIAdministrador y Estado los pone la BLL, no el Form  el Administrador es siempre el usuario en sesión, y el Estado arranca en "Pendiente"
         public SolicitudCompra486LP RegistrarSolicitud(SolicitudCompra486LP solicitud, out string mensaje)
         {
             mensaje = "";
@@ -43,7 +42,6 @@ namespace BLL
                 bool ok = ObjetoMapper.Agregar(solicitud, out mensajeMapper);
                 if (!ok)
                 {
-                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al registrar solicitud de compra: {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                     mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                     return null;
@@ -69,7 +67,6 @@ namespace BLL
             }
         }
 
-        // Trae una solicitud ya registrada, con su detalle
         public SolicitudCompra486LP ObtenerPorId(int idSolicitud)
         {
             try

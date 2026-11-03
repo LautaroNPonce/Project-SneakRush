@@ -21,7 +21,6 @@ namespace BE
             Nombre = nombre;
         }
 
-        // Se usa tal cual en el combo de seleccion del Form (cmbCategoria): que se vea el Nombre, no "BE.Categoria486LP".
         public override string ToString()
         {
             return Nombre;

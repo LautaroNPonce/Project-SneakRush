@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace BLL
 {
-    // Efectivo es instantaneo (no hay conexion con ningun banco), mientras que Tarjeta/Transferencia simulan ~3 segundos de conexion con la Entidad Bancaria usando un Hilo real,
-    // para no bloquear la UI mientras tanto.
-
     public interface IEstrategiaPago486LP
     {
-        // Se invoca siempre en el mismo hilo desde el que se llamo a ProcesarPago (el de UI en la practica), para que quien lo use pueda tocar controles sin problema.
+        // Primero invoco siempre en el mismo hilo desde el que se llamo a ProcesarPago (el de UI en la practica), para que quien lo use pueda tocar controles sin problema.
         void ProcesarPago(decimal monto, Action<bool> callback);
     }
 
@@ -28,7 +25,6 @@ namespace BLL
     {
         public void ProcesarPago(decimal monto, Action<bool> callback)
         {
-            // Se captura el contexto de sincronizacion del hilo actual (el de UI) ANTES de lanzar el hilo secundario
             SynchronizationContext contextoLlamador = SynchronizationContext.Current;
 
             Thread hilo = new Thread(() =>
@@ -39,7 +35,6 @@ namespace BLL
 
                 if (contextoLlamador != null)
                 {
-                    // Vuelve al hilo original (de UI) para que el callback pueda tocar controles
                     contextoLlamador.Post(_ => callback(aprobado), null);
                 }
                 else
@@ -56,7 +51,6 @@ namespace BLL
 
     public class EstrategiaPagoTransferencia486LP : EstrategiaPagoConBancoBase486LP { }
 
-    // Elige la estrategia correcta segun el medio de pago seleccionado en el form.
     public static class FabricaEstrategiaPago486LP
     {
         public static IEstrategiaPago486LP Crear(string medioPago)

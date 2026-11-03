@@ -15,23 +15,16 @@ using PdfRectangle = iTextSharp.text.Rectangle;
 
 namespace Sistema_SneakRush
 {
-    // Reporte "Estado de stock y reposicion" (menu Reporte > Estado de stock). Se mantiene el nombre de clase FrmReporteCompras486LP.
     public partial class FrmReporteCompras486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_Reporte486LP _bll = new BLL_Reporte486LP();
         private readonly string f = "FrmReporteCompras486LP";
-
-        // Patentes granulares por boton (ademas de la patente de acceso al form, REPORTE_COMPRAS).
         private bool _puedeGenerar;
         private bool _puedeLimpiar;
         private bool _puedeExportar;
         private bool _puedeCerrar;
-
-        // Opciones de los filtros de marca y talle (salen de los productos cargados)
         private List<string> _marcas = new List<string>();
         private List<string> _talles = new List<string>();
-
-        // Ultimo reporte generado (es lo que se ve en la grilla y el grafico, y lo que se exporta)
         private List<ReporteStockProducto486LP> _datos = new List<ReporteStockProducto486LP>();
         private bool _generado = false;
 
@@ -53,7 +46,6 @@ namespace Sistema_SneakRush
 
         private void FrmReporteCompras486LP_Load(object sender, EventArgs e)
         {
-            // Verificacion de acceso al form completo: un usuario sin la patente REPORTE_COMPRAS (ej. el Cajero) no puede entrar.
             if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
@@ -78,7 +70,6 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al form.
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -88,7 +79,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("REPORTE_COMPRAS");
         }
 
-        // Patentes granulares por boton.
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -110,7 +100,6 @@ namespace Sistema_SneakRush
             btnCerrar.Enabled = _puedeCerrar;
         }
 
-        // Las marcas y talles del filtro salen de todos los productos cargados
         private void CargarOpcionesFiltros()
         {
             List<ReporteStockProducto486LP> todos = _bll.EstadoStock(null, null, null, false);
@@ -126,7 +115,6 @@ namespace Sistema_SneakRush
             _talles = _bll.TallesDe(todos);
         }
 
-        // Llena los 3 combos (la primera opcion de cada uno es "Todos"/"Todas"); conserva lo que estaba elegido
         private void LlenarCombos()
         {
             var lm = Program.LanguageManager;
@@ -245,7 +233,6 @@ namespace Sistema_SneakRush
             TraducirColumnas();
         }
 
-        // El estado viene como numero (0, 1 o 2): en la grilla se muestra su nombre (traducido) y con el color de su estado
         private void dgvProductos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
@@ -364,7 +351,6 @@ namespace Sistema_SneakRush
             Resetear();
         }
 
-        // Si el reporte ya estaba abierto y se vuelve a elegir desde el menu, se limpian los filtros y el resultado
         public void Refrescar()
         {
             Resetear();
@@ -441,8 +427,6 @@ namespace Sistema_SneakRush
                     });
                     doc.Add(encabezado);
                     doc.Add(new Paragraph(" "));
-
-                    // Grafico de barras (se toma la imagen del grafico que se ve en pantalla)
                     using (MemoryStream ms = new MemoryStream())
                     {
                         chartEstado.SaveImage(ms, Charting.ChartImageFormat.Png);
@@ -554,8 +538,6 @@ namespace Sistema_SneakRush
             chkSoloReponer.Text = lm.ObtenerTexto(f, "chkSoloReponer", "Solo productos a reponer");
 
             LlenarCombos();
-
-            // los controles se acomodan uno a continuacion del otro, porque cada texto puede cambiar de largo segun el idioma
             lblMarca.Left = 18;
             cmbMarca.Left = lblMarca.Right + 8;
             lblTalle.Left = cmbMarca.Right + 20;

@@ -110,8 +110,6 @@ namespace Sistema_SneakRush
             MostrarCatalogo(_productosDisponibles);
         }
 
-        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se vuelve a leer el catalogo (el stock cambia con las ventas y las recepciones)
-        // y se mantienen los filtros elegidos. Lo que ya se agrego a la solicitud en construccion no se toca.
         public void Refrescar()
         {
             CargarCatalogo();
@@ -169,8 +167,6 @@ namespace Sistema_SneakRush
         }
 
         // Rojo si Stock=0, naranja si Stock<=UmbralStockBajo para que el Administrador detecte de un vistazo lo urgente, sin tener que leer columna por columna.
-        // Se pinta en CellFormatting (cada vez que se dibuja una celda) y no recorriendo las filas al cargar la grilla: al abrir el form las filas todavia
-        // no estaban creadas cuando se recorrian, y el resaltado recien aparecia despues de usar un filtro.
         private void dgvCatalogo_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             BindingList<Producto486LP> lista = dgvCatalogo.DataSource as BindingList<Producto486LP>;
@@ -214,7 +210,6 @@ namespace Sistema_SneakRush
 
             int cantidad = (int)numCantidad.Value;
 
-            // 4.1: cantidad invalida (el NumericUpDown ya tiene Minimum=1, esto es una guarda extra)
             if (cantidad <= 0)
             {
                 MessageBox.Show(
@@ -224,7 +219,6 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Si el producto ya estaba en la solicitud, se suma la cantidad en vez de duplicar la fila
             DetalleSolicitudCompra486LP existente = _solicitudEnConstruccion.Detalles
                 .FirstOrDefault(d => d.IdProducto == _productoSeleccionado.IdProducto);
 
@@ -269,7 +263,6 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // 7.1: solicitud sin productos
             if (_solicitudEnConstruccion.Detalles.Count == 0)
             {
                 MessageBox.Show(
@@ -363,7 +356,6 @@ namespace Sistema_SneakRush
             btnConfirmar.Text = lm.ObtenerTexto(f, "Frm.GenerarSolicitud.Confirmar", "Confirmar solicitud");
             btnCancelar.Text = lm.ObtenerTexto(f, "Frm.GenerarSolicitud.Cancelar", "Cancelar");
 
-            // Los combos de filtro llevan textos traducibles ("(Todas)"/"(Todos)") se rearman.
             CargarCombosFiltro();
             AplicarEncabezadosColumnas();
         }

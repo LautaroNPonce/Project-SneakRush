@@ -18,7 +18,6 @@ namespace BLL
 
         private const string MODULO = "Maestros";
 
-        // Lista todas las categorías (para la grilla y para el combo del form de productos)
         public List<Categoria486LP> Listar()
         {
             try
@@ -32,7 +31,6 @@ namespace BLL
             }
         }
 
-        // Nombre: letras (con tildes y ñ), numeros, espacios y los signos . & ' - (ej. "New Balance", "Dr. Martens"). Maximo 50 caracteres
         public bool ValidarNombre(string nombre)
         {
             if (string.IsNullOrWhiteSpace(nombre)) return false;

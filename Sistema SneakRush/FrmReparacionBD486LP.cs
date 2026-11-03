@@ -19,7 +19,7 @@ namespace Sistema_SneakRush
         private List<string> _tablas;
         private List<InconsistenciaDV486LP> _inconsistencias = new List<InconsistenciaDV486LP>();
 
-        // recibe todas las tablas con inconsistencia.
+        // recibe todas las tablas con inconsistencia
         public FrmReparacionBD486LP(List<string> tablas)
         {
             InitializeComponent();
@@ -28,7 +28,7 @@ namespace Sistema_SneakRush
             this.FormClosing += FrmReparacionBD486LP_FormClosing;
         }
 
-        // si en algún lado todavía se llama con una sola tabla.
+        // si en algún lado todavía se llama con una sola tabla
         public FrmReparacionBD486LP(DV486LP dv) : this(new List<string> { dv.TablaAfectada }) { }
 
         private void FrmReparacionBD486LP_Load(object sender, EventArgs e)

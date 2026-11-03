@@ -22,7 +22,6 @@ namespace Mappers
 
             try
             {
-                // Insertar la cabecera del carrito y recuperar su Id
                 SqlCommand cmdCab = new SqlCommand("Carrito_Agregar");
                 cmdCab.CommandType = CommandType.StoredProcedure;
                 cmdCab.Parameters.Add(new SqlParameter("@DNICliente", carrito.DNICliente));
@@ -31,7 +30,6 @@ namespace Mappers
                 cmdCab.Parameters.Add(new SqlParameter("@Estado", carrito.Estado));
                 idGenerado = (int)Conexion486LP.EjecutarEscalarEnTransaccion(cmdCab, con, tran);
 
-                // Insertar cada renglon del detalle
                 foreach (DetalleCarrito486LP det in carrito.Detalles)
                 {
                     SqlCommand cmdDet = new SqlCommand("DetalleCarrito_Agregar");
@@ -65,7 +63,6 @@ namespace Mappers
         {
             try
             {
-                // Cabecera
                 SqlCommand cmdCab = new SqlCommand("Carrito_Obtener");
                 cmdCab.CommandType = CommandType.StoredProcedure;
                 cmdCab.Parameters.Add(new SqlParameter("@IdCarrito", idCarrito));

@@ -91,8 +91,6 @@ namespace Sistema_SneakRush
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // Si el form ya estaba abierto y se vuelve a elegir desde el menu, se vuelven a leer las ordenes pendientes de recepcion
-        // (por ejemplo, una orden que se registro mientras tanto en Registrar orden de compra)
         public void Refrescar()
         {
             CargarOrdenesPendientes();
@@ -102,7 +100,6 @@ namespace Sistema_SneakRush
         {
             _ordenesPendientes = _bllOrden.ListarPendientesDeRecepcion();
 
-            // 2.1: no hay ordenes pendientes de recepcion
             if (_ordenesPendientes.Count == 0)
             {
                 var lm = Program.LanguageManager;
@@ -130,8 +127,6 @@ namespace Sistema_SneakRush
             ArmarRecepcionDesdeDetalleOrden();
         }
 
-        // Arranca asumiendo que llegó todo lo pedido (CantidadRecibida = CantidadPedida)
-        // el Encargado de Depósito solo ajusta si algo no llegó completo, sin tipear todo desde cero.
         private void ArmarRecepcionDesdeDetalleOrden()
         {
             _recepcionEnConstruccion = new Recepcion486LP
@@ -164,7 +159,6 @@ namespace Sistema_SneakRush
             dgvDetalleRecepcion.DataSource = new BindingList<DetalleRecepcion486LP>(_recepcionEnConstruccion.Detalles);
         }
 
-        // 5.1: valida la Cantidad Recibida apenas el Encargado de Deposito termina de editar
         private void dgvDetalleRecepcion_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (dgvDetalleRecepcion.Columns[e.ColumnIndex].Name != "colCantidadRecibida") return;
@@ -186,8 +180,6 @@ namespace Sistema_SneakRush
             dgvDetalleRecepcion.Refresh();
         }
 
-        // Si se escribe algo que no es un numero en la Cantidad Recibida, avisa y deja el valor anterior,
-        // en vez de mostrar el cuadro de error por defecto de .NET (con texto tecnico)
         private void dgvDetalleRecepcion_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             e.ThrowException = false;

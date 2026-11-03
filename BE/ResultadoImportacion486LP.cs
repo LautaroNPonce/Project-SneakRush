@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    // Reporte completo de una importacion de XML: lo arma la BLL y lo muestra el formulario
     public class ResultadoImportacion486LP
     {
         public int IdImportacion { get; set; }
@@ -14,7 +13,6 @@ namespace BE
         public string NroRemito { get; set; }
         public string CUITProveedor { get; set; }
         public string NombreArchivo { get; set; }
-        // Estado en que quedo el remito: Completo o ConRechazos
         public string EstadoRemito { get; set; }
         public int Altas { get; set; }
         public int Sumas { get; set; }

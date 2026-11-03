@@ -24,7 +24,6 @@ namespace BE
         [ColumnaTabla486LP]
         public string Estado { get; set; }
 
-        // no lleva [ColumnaTabla486LP] xq no es una columna de la tabla OrdenCompra, es la  coleccion de detalles relacionados (se llena aparte).
         public List<DetalleOrdenCompra486LP> Detalles { get; set; }
 
         public OrdenCompra486LP()

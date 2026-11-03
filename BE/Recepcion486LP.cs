@@ -17,7 +17,6 @@ namespace BE
         [ColumnaTabla486LP]
         public int IdOrden { get; set; }
 
-        // no lleva [ColumnaTabla486LP] xq no es una columna de la tabla Recepcion, es la coleccion de detalles relacionados (se llena aparte).
         public List<DetalleRecepcion486LP> Detalles { get; set; }
 
         public Recepcion486LP()

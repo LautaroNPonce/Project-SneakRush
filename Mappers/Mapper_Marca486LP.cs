@@ -12,7 +12,6 @@ namespace Mappers
 {
     public class Mapper_Marca486LP : MapperBase486LP
     {
-        // Lista todas las marcas ordenadas por nombre. No traga la excepcion: la deja propagar para que la BLL la registre en bitacora.
         public List<Marca486LP> Listar()
         {
             SqlCommand cmd = new SqlCommand("Marca_Listar");
@@ -22,7 +21,6 @@ namespace Mappers
             return ManejadorMapeo486LP.MapearLista<Marca486LP>(tabla);
         }
 
-        // Alta. Devuelve el Id generado
         public int Agregar(Marca486LP marca)
         {
             SqlCommand cmd = new SqlCommand("Marca_Agregar");
@@ -42,7 +40,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Baja fisica
         public int Eliminar(int idMarca)
         {
             SqlCommand cmd = new SqlCommand("Marca_Eliminar");
@@ -52,7 +49,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Indica si ya existe otra marca con ese nombre. idExcluir es la que se esta modificando (0 al dar de alta)
         public bool ExisteNombre(string nombre, int idExcluir)
         {
             SqlCommand cmd = new SqlCommand("Marca_ExisteNombre");
@@ -63,7 +59,6 @@ namespace Mappers
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
         }
 
-        // Indica si algun producto usa esta marca
         public bool EstaEnUso(int idMarca)
         {
             SqlCommand cmd = new SqlCommand("Marca_EstaEnUso");

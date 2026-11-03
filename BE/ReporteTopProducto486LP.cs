@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    // Una fila del SP Reporte_TopProductos: lo vendido de un modelo (suma todos sus colores y talles).
     public class ReporteTopProducto486LP
     {
         [ColumnaTabla486LP]

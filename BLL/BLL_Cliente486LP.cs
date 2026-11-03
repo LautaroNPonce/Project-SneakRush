@@ -19,7 +19,6 @@ namespace BLL
 
         private const string MODULO = "Maestros";
 
-        // Lista todos los clientes, devolviendo el correo yA descifrado (para mostrar en la GUI)
         public List<Cliente486LP> Listar()
         {
             try
@@ -76,7 +75,6 @@ namespace BLL
             return Regex.IsMatch(dni.Trim(), @"^\d{7,8}$");
         }
 
-        // Nombre y apellido: solo letras (con tildes y ñ), espacios, guiones y apostrofes. Maximo 50 caracteres
         public bool ValidarNombrePersona(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto)) return false;
@@ -123,7 +121,6 @@ namespace BLL
         {
             mensaje = "";
 
-            // Validaciones de negocio
             string error = ValidarDatos(cliente);
             if (error != null)
             {
@@ -238,7 +235,6 @@ namespace BLL
             ObjDV.RecalcularDV("Cliente", out mensajeDV);
         }
 
-        // Usuario logueado para la bitacora (si no hay sesion, "Sistema")
         private string UsuarioDNI()
         {
             return SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
@@ -249,7 +245,7 @@ namespace BLL
             return SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
         }
 
-        // Descifra el correo con tolerancia si el dato no esta cifrado (o falla), devuelve el valor original para no romper la grilla.
+        // Descifra el correo con tolerancia si el dato no esta cifrado (o falla), devuelve el valor original para no romper la grilla
         private string DescifrarCorreo(string correo)
         {
             try

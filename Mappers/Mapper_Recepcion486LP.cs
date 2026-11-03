@@ -12,7 +12,6 @@ namespace Mappers
 {
     public class Mapper_Recepcion486LP : MapperBase486LP
     {
-        // Alta de la recepcion (cabecera + detalle), todo en una sola transaccion.
         public bool Agregar(Recepcion486LP recepcion, out string mensaje)
         {
             mensaje = "";
@@ -30,8 +29,7 @@ namespace Mappers
                 int idRecepcion = (int)Conexion486LP.EjecutarEscalarEnTransaccion(cmdCab, con, tran);
                 recepcion.IdRecepcion = idRecepcion;
 
-                // Mismo padding (6 digitos) que el SP genera - se replica aca para no tener que
-                // hacer una consulta extra solo para leerlo.
+                // Mismo padding (6 digitos) que el SP genera - se replica aca para no tener que hacer una consulta extra solo para leerlo.
                 recepcion.NroRecepcion = idRecepcion.ToString("D6");
 
                 foreach (DetalleRecepcion486LP det in recepcion.Detalles)
@@ -62,8 +60,6 @@ namespace Mappers
             }
         }
 
-        // Trae la Recepcion de una Orden puntual, con su detalle completo (CUN07 la necesita
-        // para saber la Cantidad Recibida real de cada producto, y asi aumentar el stock).
         public Recepcion486LP ObtenerPorIdOrden(int idOrden)
         {
             try

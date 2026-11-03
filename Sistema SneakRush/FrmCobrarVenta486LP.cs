@@ -81,7 +81,7 @@ namespace Sistema_SneakRush
 
         private void FrmCobrarVenta486LP_Load(object sender, EventArgs e)
         {
-            if (!TienePatenteAcceso()) // Verificacion de acceso al form completo (mismo patron que los otros 3 CUN)
+            if (!TienePatenteAcceso())
             {
                 var lm = Program.LanguageManager;
                 MessageBox.Show(
@@ -107,7 +107,6 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente de acceso al form
         private bool TienePatenteAcceso()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -117,7 +116,6 @@ namespace Sistema_SneakRush
             return permisos.Contains("VENTA_REGISTRAR_OPERACION");
         }
 
-        // Patentes granulares por boton
         private void AjustarBotonesSegunPerfil()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -135,14 +133,12 @@ namespace Sistema_SneakRush
         {
             btnSeleccionar.Enabled = _puedeSeleccionar;
             btnCobrar.Enabled = _puedeCobrar;
-            btnVerComprobante.Enabled = _puedeVerComprobante && _ventaGenerada != null; // "Ver comprobante" ademas depende de que ya haya una venta generada
+            btnVerComprobante.Enabled = _puedeVerComprobante && _ventaGenerada != null; 
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // habilita/deshabilita el panel de datos de tarjeta segun el medio de pago elegido
         private void MedioPago_CheckedChanged(object sender, EventArgs e)
         {
-            // Al dejar de usar Tarjeta se borran los datos escritos, para que no queden cargados si se vuelve a elegir despues
             if (!rbTarjeta.Checked) LimpiarDatosTarjeta();
             ActualizarHabilitacionCobro();
         }
@@ -154,8 +150,6 @@ namespace Sistema_SneakRush
             txtCVV.Clear();
         }
 
-        // Si el form ya estaba abierto con una venta cobrada y se vuelve a elegir desde el menu, queda listo para una venta nueva.
-        // Mientras no haya una venta cobrada (o se este procesando un pago) no se toca nada, para no perder lo que se esta haciendo.
         public void Refrescar()
         {
             if (_ventaGenerada == null || lblProcesando.Visible) return;
@@ -178,8 +172,6 @@ namespace Sistema_SneakRush
             txtDNI.Focus();
         }
 
-        // "Cobrar" y el medio de pago solo se habilitan con un carrito seleccionado cuyo cliente ya esta registrado y con stock suficiente, y mientras la venta no se haya cobrado.
-        // Sin cliente registrado o sin stock queda solo "Cancelar" (y "Seleccionar" para volver a intentar).
         private void ActualizarHabilitacionCobro()
         {
             bool listoParaCobrar = _carritoActual != null && _clienteRegistrado && _stockSuficiente && _ventaGenerada == null;
@@ -188,13 +180,11 @@ namespace Sistema_SneakRush
             grpTarjeta.Enabled = listoParaCobrar && rbTarjeta.Checked;
         }
 
-        // Seleccionar (buscar carrito por DNI) 
         private void btnSeleccionar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
             string dni = txtDNI.Text.Trim();
 
-            // 3.1: formato de DNI invalido
             if (!System.Text.RegularExpressions.Regex.IsMatch(dni, @"^\d{7,8}$"))
             {
                 MessageBox.Show(
@@ -203,9 +193,6 @@ namespace Sistema_SneakRush
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            // Paso 4: recuperar el carrito activo de ese DNI.
-            // Se descarta cualquier carrito seleccionado antes: si ahora no hay uno activo, "Cobrar" no debe operar sobre el anterior
             _carritoActual = null;
             _clienteRegistrado = false;
             _stockSuficiente = false;
@@ -215,7 +202,6 @@ namespace Sistema_SneakRush
             Carrito486LP carrito = _bllCarrito.ObtenerActivoPorDNI(dni);
             if (carrito == null)
             {
-                // 3.2: sin carrito activo para ese DNI.
                 MessageBox.Show(
                     lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.SinCarritoActivo", "Ese cliente no tiene un carrito activo para cobrar."),
                     lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Aviso.Title", "Aviso"),
@@ -223,7 +209,6 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // El Producto de cada detalle llega en null desde el Mapper de Carrito - se resuelve acá para mostrar Marca/Modelo/Color/Talle en la grilla
             foreach (DetalleCarrito486LP det in carrito.Detalles)
             {
                 if (det.Producto == null)
@@ -234,18 +219,13 @@ namespace Sistema_SneakRush
 
             _carritoActual = carrito;
             MostrarDetalle();
-
-            // El Vendedor solo cargó el DNI en el carrito: acá el Cajero verifica que el cliente esté registrado (si no, incluye CUN02)
             _clienteRegistrado = VerificarClienteRegistrado(carrito.DNICliente);
-
-            // Control de stock (CUN03): si algun producto no alcanza, se informa y "Cobrar" queda deshabilitado (el Cajero puede cancelar el carrito o volver a seleccionar)
             if (_clienteRegistrado)
                 _stockSuficiente = VerificarStockCarrito(true);
 
             ActualizarHabilitacionCobro();
         }
 
-        // Verifica contra la base que haya stock para todo lo que tiene el carrito seleccionado. Con mostrarMensaje, avisa que productos faltan y cuantas unidades hay.
         private bool VerificarStockCarrito(bool mostrarMensaje)
         {
             string mensaje;
@@ -263,9 +243,6 @@ namespace Sistema_SneakRush
             return alcanza;
         }
 
-        // G02 paso 9 (CUN03): el Cajero verifica que el cliente del carrito esté registrado.
-        // Si no lo está, incluye CUN02 (FrmGestionClientes486LP) con el DNI precargado y vuelve a verificar al cerrarlo.
-        // Si el cliente no se registra, el cobro no avanza: el Cajero puede reintentar o usar "Cancelar" para cancelar el carrito.
         private bool VerificarClienteRegistrado(string dni)
         {
             var lm = Program.LanguageManager;
@@ -330,8 +307,7 @@ namespace Sistema_SneakRush
             dgvDetalle.Columns["colSubtotal"].HeaderText = lm.ObtenerTexto(f, "Frm.CobrarVenta.Col.Subtotal", "Subtotal");
         }
 
-        // 8.1: valida los datos de la tarjeta (numero, vencimiento, CVV). Solo se llama si el medio de pago elegido es Tarjeta.
-        // Devuelve el mensaje del primer dato incorrecto (ya traducido) o null si los tres estan bien.
+
         private string ValidarDatosTarjeta()
         {
             string numeroSinEspacios = txtNumero.Text.Replace(" ", "").Trim();
@@ -354,7 +330,6 @@ namespace Sistema_SneakRush
             return null;
         }
 
-        // Formatea el numero de tarjeta en grupos de 4 mientras se escribe (ej. "1234 5678 9012 3456").
         private void txtNumero_TextChanged(object sender, EventArgs e)
         {
             if (_formateandoNumero) return;
@@ -376,7 +351,6 @@ namespace Sistema_SneakRush
             _formateandoNumero = false;
         }
 
-        // Inserta el "/" automaticamente despues de los primeros 2 digitos (mm/aa)
         private void txtVencimiento_TextChanged(object sender, EventArgs e)
         {
             if (_formateandoVencimiento) return;
@@ -415,7 +389,6 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Control de stock (CUN03): se vuelve a verificar antes de iniciar el pago, porque el stock pudo cambiar desde que se selecciono el carrito
             if (!VerificarStockCarrito(true))
             {
                 _stockSuficiente = false;
@@ -438,8 +411,6 @@ namespace Sistema_SneakRush
                 }
             }
 
-            // A partir de acá el pago es asincrono (efectivo resuelve al instante, tarjeta/transferencia usan un hilo de 3s), con el indicador de "Procesando" mientras tanto
-            // La estrategia vuelve sola al hilo de UI (SynchronizationContext), por eso el callback puede tocar el form sin problema
             MostrarProcesando(true);
 
             IEstrategiaPago486LP estrategia = FabricaEstrategiaPago486LP.Crear(medioPago);
@@ -455,13 +426,9 @@ namespace Sistema_SneakRush
                     if (venta != null)
                     {
                         _ventaGenerada = venta;
-
-                        // Paso 6/12: se genera el comprobante pdf apenas se confirma la venta, "Ver comprobante" despues solo lo vuelve a abrir
                         bool comprobanteGenerado = GenerarComprobante();
 
                         MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Informacion.Title", "Información"), MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // La venta ya esta registrada: si fallo el pdf se avisa, pero "Ver comprobante" queda habilitado para volver a intentarlo
                         if (!comprobanteGenerado)
                         {
                             MessageBox.Show(
@@ -470,7 +437,6 @@ namespace Sistema_SneakRush
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
 
-                        // Una vez cobrada, no se puede volver a operar sobre la misma venta
                         txtDNI.Enabled = false;
                         btnSeleccionar.Enabled = false;
                         grpMedioPago.Enabled = false;
@@ -481,8 +447,6 @@ namespace Sistema_SneakRush
                     else
                     {
                         MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.CobrarVenta.Msg.Aviso.Title", "Aviso"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                        // Si la venta no se registro, se vuelve a controlar el stock: si ya no alcanza, "Cobrar" queda deshabilitado
                         string detalleStock;
                         _stockSuficiente = _bllVenta.VerificarStockCarrito(_carritoActual, out detalleStock);
                         ActualizarHabilitacionCobro();
@@ -491,7 +455,6 @@ namespace Sistema_SneakRush
             });
         }
 
-        // Genera el comprobante pdf de la venta ya registrada. Si falla, la venta no se pierde: el error va a la bitacora y se devuelve false.
         private bool GenerarComprobante()
         {
             try
@@ -510,7 +473,6 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Muestra/oculta el indicador visual de procesando pago
         private void MostrarProcesando(bool mostrando)
         {
             lblProcesando.Visible = mostrando;
@@ -533,7 +495,6 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // Si el comprobante no se genero (o el archivo ya no esta), se vuelve a generar mientras haya una venta registrada
             if ((string.IsNullOrEmpty(_rutaComprobante) || !System.IO.File.Exists(_rutaComprobante)) && _ventaGenerada != null)
             {
                 if (!GenerarComprobante())
@@ -571,8 +532,6 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Cancelar: sin carrito seleccionado (o con la venta ya cobrada) solo cierra el form.
-        // Con un carrito activo seleccionado, pide confirmacion y lo pasa a Estado "Cancelado" (no se elimina).
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             if (_carritoActual == null || _ventaGenerada != null)

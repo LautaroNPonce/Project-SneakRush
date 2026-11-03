@@ -13,7 +13,6 @@ namespace Mappers
 
     public class Mapper_Cliente486LP : MapperBase486LP
     {
-        // Lista todos los clientes. Si falla la base de datos la excepcion se propaga, la BLL la registra en la bitacora
         public List<Cliente486LP> Listar()
         {
             SqlCommand cmd = new SqlCommand("Cliente_Listar");
@@ -23,7 +22,6 @@ namespace Mappers
             return ManejadorMapeo486LP.MapearLista<Cliente486LP>(tabla);
         }
 
-        // Obtiene un cliente por su dni (devuelve null si no existe). Si falla la base de datos la excepcion se propaga a la BLL
         public Cliente486LP Obtener(string dni)
         {
             SqlCommand cmd = new SqlCommand("Cliente_Obtener");
@@ -34,7 +32,6 @@ namespace Mappers
             return tabla.Rows.Count > 0 ? ManejadorMapeo486LP.MapearEntidad<Cliente486LP>(tabla.Rows[0]) : null;
         }
 
-        // Indica si ya existe un cliente con ese dni. Si falla la base de datos la excepcion se propaga a la BLL (no se puede asumir que no existe)
         public bool Existe(string dni)
         {
             SqlCommand cmd = new SqlCommand("Cliente_Existe");
@@ -58,7 +55,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Modifica los datos de un cliente por dni. El Correo llega ya cifrado desde la BLL
         public int Modificar(Cliente486LP cliente)
         {
             SqlCommand cmd = new SqlCommand("Cliente_Modificar");
@@ -72,7 +68,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Baja fisica de un cliente por dni
         public int Eliminar(string dni)
         {
             SqlCommand cmd = new SqlCommand("Cliente_Eliminar");
@@ -82,7 +77,6 @@ namespace Mappers
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }
 
-        // Indica si el cliente tiene alguna venta asociada (en ese caso no se puede eliminar)
         public bool TieneVentas(string dni)
         {
             SqlCommand cmd = new SqlCommand("Cliente_TieneVentas");

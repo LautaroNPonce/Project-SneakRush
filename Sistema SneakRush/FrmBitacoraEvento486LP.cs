@@ -38,9 +38,7 @@ namespace Sistema_SneakRush
 
         private void FrmBitacoraEvento486LP_Load(object sender, EventArgs e)
         {
-            // La descripción de un evento puede ser larga: el cuadro pasa a ser de varias líneas (con barra de desplazamiento)
-            // y el grupo "Detalle del registro" crece lo necesario para alojarlo.
-            // Las fechas se muestran en formato corto para que no queden cortadas en el selector
+
             dtpFechaDesde.Format = DateTimePickerFormat.Short;
             dtpFechaHasta.Format = DateTimePickerFormat.Short;
 

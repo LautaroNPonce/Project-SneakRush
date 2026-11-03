@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace BE
 {
-    // Forma del XML con los productos que estan a la venta (los que tienen stock). XmlSerializer lo usa para exportarlos (serializacion).
+    // Forma del XML con los productos que estan a la venta (los que tienen stock) y XmlSerializer lo usa para exportarlos (serializacion)
     [XmlRoot("catalogo")]
     public class CatalogoXml486LP
     {
@@ -26,7 +26,6 @@ namespace BE
         public CatalogoXml486LP() { }
     }
 
-    // Un producto a la venta
     public class ProductoCatalogoXml486LP
     {
         [XmlElement("marca")]

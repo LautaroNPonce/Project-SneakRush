@@ -21,7 +21,7 @@ namespace BE
         [ColumnaTabla486LP]
         public decimal Total { get; set; }
 
-        // "Pendiente de Pago" -> "Pagada" (mismo patron que Estado en las demas entidades).
+        // Pendiente de Pago -> Pagada (mismo patron que Estado en las demas entidades).
         [ColumnaTabla486LP]
         public string Estado { get; set; }
 

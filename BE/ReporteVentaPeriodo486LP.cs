@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    // Una fila del SP Reporte_VentasPorPeriodo: lo vendido en un periodo (un mes o una semana).
     public class ReporteVentaPeriodo486LP
     {
         // Primer dia del periodo (dia 1 del mes, o lunes de la semana)

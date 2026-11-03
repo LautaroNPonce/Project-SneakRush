@@ -16,7 +16,6 @@ namespace BLL
         private BLL_Producto486LP ObjProducto = new BLL_Producto486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Registra la factura (solo cabecera) con el total ya calculado en pantalla. El pago se confirma aparte, en confirmarpago recién ahí se actualiza stock y se cierra la orden
         public Factura486LP RegistrarFactura(Factura486LP factura, out string mensaje)
         {
             mensaje = "";
@@ -35,7 +34,6 @@ namespace BLL
                 bool ok = ObjetoMapper.Agregar(factura, out mensajeMapper);
                 if (!ok)
                 {
-                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al registrar factura de compra: {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                     mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                     return null;
@@ -63,7 +61,6 @@ namespace BLL
             }
         }
 
-        // Confirma el pago y pasa la factura a pagada, aumenta stock según lo recibido (detalleRecepcion) y cierra la orden facturada
         public bool ConfirmarPago(Factura486LP factura, string medioPago, List<DetalleRecepcion486LP> detalleRecepcion, out string mensaje)
         {
             mensaje = "";
@@ -74,7 +71,6 @@ namespace BLL
                 bool ok = ObjetoMapper.ActualizarEstadoYPago(factura.IdFactura, "Pagada", medioPago, out mensajeMapper);
                 if (!ok)
                 {
-                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al confirmar el pago de la factura: {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                     mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                     return false;
@@ -86,7 +82,6 @@ namespace BLL
 
                 foreach (DetalleRecepcion486LP det in detalleRecepcion)
                 {
-                    // Un producto que no llego (CantidadRecibida = 0) no suma stock
                     if (det.CantidadRecibida <= 0) continue;
 
                     string mensajeStock;

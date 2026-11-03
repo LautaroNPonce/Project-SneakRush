@@ -22,8 +22,6 @@ namespace Sistema_SneakRush
         private bool _puedeLimpiar;
         private bool _puedeSeleccionar;
         private bool _puedeCancelar;
-
-        // Producto elegido por el usuario. El carrito lo lee tras cerrar con DialogResult.OK.
         public Producto486LP ProductoSeleccionado { get; private set; }
 
         public FrmConsultarProducto486LP()
@@ -35,7 +33,6 @@ namespace Sistema_SneakRush
 
         private void FrmConsultarProducto486LP_Load(object sender, EventArgs e)
         {
-            // Flujo alternativo 2.1: usuario sin patente VENTA_CONSULTAR_PRODUCTOS
             if (!TienePatenteConsulta())
             {
                 var lm = Program.LanguageManager;
@@ -44,7 +41,6 @@ namespace Sistema_SneakRush
                     lm.ObtenerTexto(f, "Msg.SinPermiso.Title", "Acceso denegado"),
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                // Se cierra despues del Load para evitar problemas al cerrar durante la carga
                 this.BeginInvoke(new Action(() =>
                 {
                     this.DialogResult = DialogResult.Cancel;
@@ -59,7 +55,6 @@ namespace Sistema_SneakRush
             ActualizarIdioma();
         }
 
-        // Verifica que el usuario en sesion tenga la patente para consultar productos
         private bool TienePatenteConsulta()
         {
             var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
@@ -91,13 +86,11 @@ namespace Sistema_SneakRush
             btnCancelar.Enabled = _puedeCancelar;
         }
 
-        // Carga la grilla con el catalogo completo (paso 3 del escenario principal)
         private void CargarGrilla()
         {
             MostrarEnGrilla(_bllProducto.Listar());
         }
 
-        // Vuelca la lista en la grilla y aplica formato de columnas
         private void MostrarEnGrilla(List<Producto486LP> lista)
         {
             dgvProductos.DataSource = null;
@@ -138,7 +131,6 @@ namespace Sistema_SneakRush
             dgvProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        // aplica los filtros ingresados (pasos 4 a 7 + alternativos 6.1 y 7.1)
         private void Buscar()
         {
             List<Producto486LP> lista = _bllProducto.Buscar(
@@ -146,7 +138,6 @@ namespace Sistema_SneakRush
 
             MostrarEnGrilla(lista);
 
-            // Flujo alternativo 7.1: sin resultados
             if (lista.Count == 0)
             {
                 var lm = Program.LanguageManager;
@@ -162,8 +153,6 @@ namespace Sistema_SneakRush
             Buscar();
         }
 
-        // Si el form ya estaba abierto (desde el menu) y se vuelve a elegir, vuelve a consultar con los filtros que tenga cargados,
-        // asi el stock y los precios que se ven son los actuales. Sin mensaje de "sin resultados".
         public void Refrescar()
         {
             MostrarEnGrilla(_bllProducto.Buscar(txtMarca.Text, txtModelo.Text, txtColor.Text, txtTalle.Text, chkSoloStock.Checked));
@@ -193,7 +182,6 @@ namespace Sistema_SneakRush
 
             ProductoSeleccionado = dgvProductos.CurrentRow.DataBoundItem as Producto486LP;
 
-            // Abierto desde el carrito (CUN01, como dialogo): devuelve el producto elegido
             if (this.Modal)
             {
                 this.DialogResult = DialogResult.OK;
@@ -201,11 +189,9 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Abierto desde el menu: deriva el producto elegido a Gestionar carrito
             DerivarProductoAlCarrito(ProductoSeleccionado);
         }
 
-        // Consulta abierta desde el menu: el producto elegido se carga en Gestionar carrito (si ya hay un carrito abierto se suma a ese; si no, se abre uno nuevo)
         private void DerivarProductoAlCarrito(Producto486LP producto)
         {
             var lm = Program.LanguageManager;

@@ -22,9 +22,6 @@ namespace Sistema_SneakRush
         private BLL_Proveedor486LP _bllProveedor = new BLL_Proveedor486LP();
         private BLL_Perfil486LP _bllPerfil = new BLL_Perfil486LP();
         private readonly string f = "FrmRegistrarFactura486LP";
-
-        // La orden que se está facturando (llenada al seleccionarla, junto con su Recepción), la
-        // factura ya generada, y la ruta del pdf ya generado para esa factura
         private List<OrdenCompra486LP> _ordenesPendientes = new List<OrdenCompra486LP>();
         private OrdenCompra486LP _ordenSeleccionada;
         private Recepcion486LP _recepcionSeleccionada;
@@ -132,7 +129,7 @@ namespace Sistema_SneakRush
         private void AplicarPermisosBotones()
         {
             btnCobrar.Enabled = _puedeCobrar;
-            // "Ver comprobante" ademas depende de que ya haya una factura generada.
+            // "Ver comprobante" ademas depende de que ya haya una factura generada
             btnVerComprobante.Enabled = _puedeVerComprobante && _facturaGenerada != null;
             btnCancelar.Enabled = _puedeCancelar;
         }
@@ -152,8 +149,6 @@ namespace Sistema_SneakRush
             txtCVV.Clear();
         }
 
-        // Si el form ya estaba abierto con una factura pagada y se vuelve a elegir desde el menu, se recargan las ordenes pendientes y queda listo para otra.
-        // Mientras no haya una factura pagada (o se este procesando un pago) no se toca nada.
         public void Refrescar()
         {
             if (_facturaGenerada == null || lblProcesando.Visible) return;
@@ -180,7 +175,6 @@ namespace Sistema_SneakRush
         {
             _ordenesPendientes = _bllOrden.ListarPendientesDeFacturacion();
 
-            // 2.1: no hay ordenes pendientes de facturacion.
             if (_ordenesPendientes.Count == 0)
             {
                 var lm = Program.LanguageManager;
@@ -203,7 +197,6 @@ namespace Sistema_SneakRush
             OrdenCompra486LP seleccionada = dgvOrdenes.CurrentRow?.DataBoundItem as OrdenCompra486LP;
             if (seleccionada == null) return;
 
-            // Una factura pendiente solo se reutiliza para la misma orden
             if (_facturaPendiente != null && _facturaPendiente.IdOrden != seleccionada.IdOrden)
                 _facturaPendiente = null;
             _ordenSeleccionada = _bllOrden.ObtenerPorId(seleccionada.IdOrden);
@@ -217,8 +210,6 @@ namespace Sistema_SneakRush
             ArmarDetalleAFacturar();
         }
 
-        // Combina costo unitario (orden) con Cantidad Recibida (recepción): el total tiene que reflejar lo que realmente entró, no lo pedido si hubo faltantes, se paga menos
-        // Se reutiliza el mismo DetalleOrdenCompra486LP solo para mostrar, sin volver a persistirlo
         private void ArmarDetalleAFacturar()
         {
             Dictionary<int, int> cantidadRecibidaPorProducto = _recepcionSeleccionada.Detalles
@@ -249,7 +240,6 @@ namespace Sistema_SneakRush
             dgvOrdenes.ReadOnly = true;
             dgvOrdenes.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "NroOrden", Name = "colNroOrden" });
             dgvOrdenes.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Fecha", Name = "colFechaOrden", DefaultCellStyle = { Format = "dd/MM/yyyy HH:mm" } });
-            // La fecha con hora se corta con el ancho por defecto: las dos columnas se ajustan a su contenido.
             dgvOrdenes.Columns["colNroOrden"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dgvOrdenes.Columns["colFechaOrden"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
@@ -289,9 +279,6 @@ namespace Sistema_SneakRush
             dgvDetalleFactura.Columns["colSubtotal"].HeaderText = lm.ObtenerTexto(f, "Frm.RegistrarFactura.Col.Subtotal", "Subtotal");
         }
 
-        // 7.1: valida los datos de la tarjeta (numero, vencimiento, CVV)
-        // Solo se llama si el medio de pago elegido es Tarjeta.
-        // Mismo criterio que CUN03: valida formato y que no este vencida. Devuelve el mensaje del primer dato incorrecto (ya traducido) o null si esta todo bien.
         private string ValidarDatosTarjeta()
         {
             string numeroSinEspacios = txtNumeroTarjeta.Text.Replace(" ", "").Trim();
@@ -335,7 +322,6 @@ namespace Sistema_SneakRush
             _formateandoNumero = false;
         }
 
-        // Inserta el "/" automaticamente despues de los primeros 2 digitos (mm/aa).
         private void txtVencimiento_TextChanged(object sender, EventArgs e)
         {
             if (_formateandoVencimiento) return;
@@ -389,10 +375,7 @@ namespace Sistema_SneakRush
                 }
             }
 
-            // A diferencia de CUN03 (la venta se registra recién cuando el banco aprueba), acá la factura se registra antes del pago así lo define la especificación de CUN07
-            // (paso 5 registra la factura, paso 8 procesa el pago)
             decimal total = _ordenSeleccionada.Detalles.Sum(d => d.Subtotal);
-            // Si el pago de un intento anterior fallo, la factura ya esta registrada: se reutiliza para no generar una segunda factura de la misma orden
             Factura486LP facturaRegistrada = _facturaPendiente;
 
             if (facturaRegistrada == null)
@@ -411,8 +394,6 @@ namespace Sistema_SneakRush
                 _facturaPendiente = facturaRegistrada;
             }
 
-            // A partir de acá el pago es asincrono (Efectivo resuelve al instante, Tarjeta/Transferencia usan un Hilo de 3s)con el indicador de "Procesando" mientras tanto.
-            // La estrategia vuelve sola al hilo de UI (SynchronizationContext), por eso el callback puede tocar el form sin problema.
             MostrarProcesando(true);
 
             IEstrategiaPago486LP estrategia = FabricaEstrategiaPago486LP.Crear(medioPago);
@@ -442,7 +423,6 @@ namespace Sistema_SneakRush
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
 
-                        // Una vez cobrada, no se puede volver a operar sobre la misma factura
                         dgvOrdenes.Enabled = false;
                         grpMedioPago.Enabled = false;
                         grpTarjeta.Enabled = false;
@@ -457,7 +437,6 @@ namespace Sistema_SneakRush
             });
         }
 
-        // Genera el comprobante pdf de la factura ya pagada. Si falla, el pago no se pierde: el error va a la bitacora y se devuelve false.
         private bool GenerarComprobante()
         {
             try
@@ -475,7 +454,6 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Muestra/oculta el indicador visual de procesando el pago
         private void MostrarProcesando(bool mostrando)
         {
             lblProcesando.Visible = mostrando;
@@ -491,7 +469,6 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            // Si el comprobante no se genero (o el archivo ya no esta), se vuelve a generar mientras haya una factura pagada
             if ((string.IsNullOrEmpty(_rutaComprobante) || !System.IO.File.Exists(_rutaComprobante)) && _facturaGenerada != null)
             {
                 if (!GenerarComprobante())

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace BE
 {
-    // Una fila del SP Reporte_VentasMedioPago: lo vendido con cada medio de pago.
     public class ReporteMedioPago486LP
     {
         [ColumnaTabla486LP]

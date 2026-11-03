@@ -36,7 +36,6 @@ namespace BLL
 
                 if (!ObjProducto.VerificarStock(producto.IdProducto, yaCargado + cantidad))
                 {
-                    // Se informa cuantas unidades todavia se pueden sumar (el stock menos lo que ya esta en el carrito)
                     int quedan = Math.Max(0, ObjProducto.ObtenerStockDisponible(producto.IdProducto) - yaCargado);
                     Mensaje = Mensajes486LP.Obtener("Carrito.StockInsuficiente", quedan); return false; // Muestra: Stock insuficiente. Unidades disponibles: {0}.
                 }
@@ -134,7 +133,6 @@ namespace BLL
 
                 if (!resultado)
                 {
-                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error al guardar el carrito (Cliente DNI: {carrito.DNICliente}): {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                     Mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora.
                 }
@@ -143,12 +141,10 @@ namespace BLL
                 {
                     carrito.IdCarrito = idGenerado;
 
-                    // Registrar en bitacora
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Alta de carrito de venta #{idGenerado} (Cliente DNI: {carrito.DNICliente}, Total: {carrito.Total}).", Criticidad486LP.Alta,
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema",
                         SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema"));
 
-                    // Recalcular DV de las tablas afectadas
                     string mensajeDV;
                     BLL_DV486LP bllDV = new BLL_DV486LP();
                     bllDV.RecalcularDV("Carrito", out mensajeDV);
@@ -192,8 +188,6 @@ namespace BLL
             }
         }
 
-        // Cambia el Estado del carrito: "Facturado" cuando se completa la venta o "Cancelado" cuando el Cajero cancela la operacion (en ambos casos deja de aparecer como Activo)
-        // Actualiza el DV de la fila del carrito y registra el evento en la bitacora
         public bool ActualizarEstado(int idCarrito, string estado, out string mensaje)
         {
             mensaje = "";

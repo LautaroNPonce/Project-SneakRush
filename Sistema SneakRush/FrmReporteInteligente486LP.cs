@@ -16,7 +16,6 @@ using PdfRectangle = iTextSharp.text.Rectangle;
 
 namespace Sistema_SneakRush
 {
-    // Reporte inteligente: ventas por periodo, comparacion con el periodo anterior y proyeccion de ventas
     public partial class FrmReporteInteligente486LP : Form, IObserver486LP, IRefrescable486LP
     {
         private BLL_ReporteInteligente486LP _bll = new BLL_ReporteInteligente486LP();
@@ -103,12 +102,12 @@ namespace Sistema_SneakRush
         {
             dtpHasta.Value = DateTime.Today;
             dtpDesde.Value = DateTime.Today.AddMonths(-12);
-            cmbAgrupar.SelectedIndex = 0;                 // por mes
+            cmbAgrupar.SelectedIndex = 0;// por mes
             nudProyectar.Value = 3;
-            cmbMetodo.SelectedIndex = 0;                  // tendencia lineal
+            cmbMetodo.SelectedIndex = 0; // tendencia lineal
         }
 
-        // Los combos guardan la opcion por posicion (0 = mes / tendencia lineal, 1 = semana / promedio movil); solo cambia el texto segun el idioma
+        // Los combos guardan la opcion por posicion (0 = mes / tendencia lineal, 1 = semana / promedio movil) solo cambia el texto segun el idioma
         private void RellenarCombos()
         {
             var lm = Program.LanguageManager;
@@ -155,8 +154,6 @@ namespace Sistema_SneakRush
             control.Left = etiqueta.Right + 8;
             x = control.Right + 26;
         }
-
-        // ===================== Grilla y graficos =====================
 
         private void ConfigurarGrilla()
         {
@@ -215,7 +212,6 @@ namespace Sistema_SneakRush
 
         private void ConfigurarGraficos()
         {
-            // --- Ventas por periodo (columnas = real, linea punteada = proyeccion) ---
             chartVentas.Series.Clear();
             chartVentas.ChartAreas.Clear();
             chartVentas.Legends.Clear();
@@ -257,8 +253,6 @@ namespace Sistema_SneakRush
             chartVentas.Series.Add(serieProy);
 
             chartVentas.Titles.Add(new Charting.Title("", Charting.Docking.Top, new System.Drawing.Font("Segoe UI", 10F, FontStyle.Bold), Azul));
-
-            // --- Modelos mas vendidos ---
             chartTop.Series.Clear();
             chartTop.ChartAreas.Clear();
             chartTop.Legends.Clear();
@@ -267,7 +261,7 @@ namespace Sistema_SneakRush
             Charting.ChartArea areaT = new Charting.ChartArea("areaTop");
             areaT.BackColor = Color.White;
             areaT.AxisX.MajorGrid.Enabled = false;
-            areaT.AxisX.IsReversed = true;                       // el mas vendido queda arriba
+            areaT.AxisX.IsReversed = true;  // el mas vendido queda arriba
             areaT.AxisX.LabelStyle.Interval = 1;
             areaT.AxisX.LabelStyle.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             areaT.AxisY.LabelStyle.Format = "N0";
@@ -285,8 +279,6 @@ namespace Sistema_SneakRush
             chartTop.Series.Add(serieTop);
 
             chartTop.Titles.Add(new Charting.Title("", Charting.Docking.Top, new System.Drawing.Font("Segoe UI", 10F, FontStyle.Bold), Azul));
-
-            // --- Ventas por medio de pago ---
             chartMedios.Series.Clear();
             chartMedios.ChartAreas.Clear();
             chartMedios.Legends.Clear();
@@ -339,7 +331,6 @@ namespace Sistema_SneakRush
             return lm.ObtenerTexto(f, "estado.Completo", "Completo");
         }
 
-        // Arma las filas de la grilla a partir de la serie del reporte
         private List<FilaPeriodo486LP> ArmarFilas()
         {
             List<FilaPeriodo486LP> filas = new List<FilaPeriodo486LP>();
@@ -392,14 +383,12 @@ namespace Sistema_SneakRush
 
             if (!_generado) return;
 
-            // con pocos periodos se muestran los montos arriba de las columnas
             bool conEtiquetas = _reporte.Serie.Count <= 14;
             real.IsValueShownAsLabel = conEtiquetas;
             real.LabelFormat = "C0";
             chartVentas.ChartAreas["areaVentas"].AxisX.LabelStyle.Interval = _reporte.Serie.Count <= 26 ? 1 : 0;
             chartVentas.ChartAreas["areaVentas"].AxisX.LabelStyle.Angle = conEtiquetas ? 0 : -45;
 
-            // la linea de proyeccion arranca desde el ultimo periodo completo para que se vea que sigue a lo real
             int indiceUltimoCompleto = -1;
             for (int i = 0; i < _reporte.Serie.Count; i++)
             {
@@ -466,7 +455,6 @@ namespace Sistema_SneakRush
             }
         }
 
-        // ===================== Tarjetas y resumen =====================
 
         private string Variacion(decimal variacion)
         {
@@ -590,8 +578,6 @@ namespace Sistema_SneakRush
             lblResumen.Text = TextoResumen();
         }
 
-        // ===================== Botones =====================
-
         private void btnGenerar_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
@@ -665,8 +651,7 @@ namespace Sistema_SneakRush
             this.Close();
         }
 
-        // ===================== PDF =====================
-
+        // Todo esto es lo de PDF
         private iTextSharp.text.Image ImagenDe(Charting.Chart grafico, float ancho, float alto)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -712,8 +697,6 @@ namespace Sistema_SneakRush
                     PdfFont fuenteCardValor = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 11f, new BaseColor(12, 68, 124));
                     PdfFont fuenteCardDetalle = FontFactory.GetFont(FontFactory.HELVETICA, 6.5f, new BaseColor(90, 90, 90));
                     PdfFont fuenteNota = FontFactory.GetFont(FontFactory.HELVETICA_OBLIQUE, 7.5f, new BaseColor(80, 80, 80));
-
-                    // Encabezado
                     PdfPTable encabezado = new PdfPTable(1) { WidthPercentage = 100 };
                     encabezado.AddCell(new PdfPCell(new Phrase("SneakRush — " + lm.ObtenerTexto(f, "pdf.Titulo", "Reporte inteligente: ventas y proyección"), fuenteTitulo))
                     {
@@ -739,11 +722,8 @@ namespace Sistema_SneakRush
                     });
                     doc.Add(encabezado);
                     doc.Add(new Paragraph(" ", fuenteNota));
-
-                    // Tarjetas
                     string[] titulos = { lblCardTitulo1.Text, lblCardTitulo2.Text, lblCardTitulo3.Text, lblCardTitulo4.Text, lblCardTitulo5.Text, lblCardTitulo6.Text };
                     string[] valores = { lblCardValor1.Text, lblCardValor2.Text, lblCardValor3.Text, lblCardValor4.Text, lblCardValor5.Text, lblCardValor6.Text };
-                    // la fuente Helvetica del PDF no tiene los triangulos, se reemplazan por signos
                     string[] detalles = { lblCardDetalle1.Text, lblCardDetalle2.Text, lblCardDetalle3.Text, lblCardDetalle4.Text, lblCardDetalle5.Text, lblCardDetalle6.Text };
                     for (int k = 0; k < detalles.Length; k++)
                         detalles[k] = detalles[k].Replace("▲ ", "+").Replace("▼ ", "-");
@@ -765,10 +745,8 @@ namespace Sistema_SneakRush
                     doc.Add(tarjetas);
                     doc.Add(new Paragraph(" ", fuenteNota));
 
-                    // Grafico principal
                     doc.Add(ImagenDe(chartVentas, 600f, 190f));
 
-                    // Los otros dos graficos, lado a lado
                     PdfPTable graficos = new PdfPTable(2) { WidthPercentage = 100, SpacingBefore = 4f };
                     graficos.AddCell(new PdfPCell(ImagenDe(chartTop, 390f, 150f), true) { Border = PdfRectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER });
                     graficos.AddCell(new PdfPCell(ImagenDe(chartMedios, 390f, 150f), true) { Border = PdfRectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER });
@@ -780,7 +758,6 @@ namespace Sistema_SneakRush
                     doc.Add(nota);
                     doc.Add(new Paragraph(" ", fuenteNota));
 
-                    // Tabla de periodos
                     float[] anchos = { 22f, 14f, 22f, 22f, 20f };
                     PdfPTable tabla = new PdfPTable(anchos.Length) { WidthPercentage = 100, SpacingBefore = 4f };
                     tabla.SetWidths(anchos);
@@ -856,8 +833,6 @@ namespace Sistema_SneakRush
             });
         }
 
-        // ===================== Idioma =====================
-
         public void ActualizarIdioma()
         {
             var lm = Program.LanguageManager;
@@ -907,7 +882,6 @@ namespace Sistema_SneakRush
         }
     }
 
-    // Una fila de la grilla de periodos (lo que se ve en pantalla y en el PDF)
     public class FilaPeriodo486LP
     {
         public string Periodo { get; set; }

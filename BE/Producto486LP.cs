@@ -10,7 +10,6 @@ namespace BE
     {
         [ColumnaTabla486LP]
         public int IdProducto { get; set; }
-        // IdMarca / IdCategoria son las FK de la tabla Producto; Marca y Categoria son los nombres, que traen los SP con JOIN
         [ColumnaTabla486LP]
         public int IdMarca { get; set; }
         [ColumnaTabla486LP]

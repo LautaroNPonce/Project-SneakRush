@@ -18,9 +18,6 @@ namespace BE
         public int CantidadRecibida { get; set; }
         [ColumnaTabla486LP]
         public int CantidadFaltante { get; set; }
-
-        // Vienen del JOIN con Producto (no son columnas reales de DetalleRecepcion, por eso el DV  no las controla).
-        // Llevan [ColumnaTabla486LP] igual para que el mapeo las complete solas.
         [ColumnaTabla486LP]
         public string Marca { get; set; }
         [ColumnaTabla486LP]

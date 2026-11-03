@@ -18,8 +18,6 @@ namespace BLL
         private BLL_Cliente486LP ObjCliente = new BLL_Cliente486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Indica si el cliente del carrito (por DNI) ya esta registrado. Lo usa el Cajero en CUN03 antes de elegir el medio de pago (G02 paso 9):
-        // si devuelve false, el form incluye CUN02 para registrarlo.
         public bool ClienteRegistrado(string dni)
         {
             try
@@ -34,8 +32,6 @@ namespace BLL
             }
         }
 
-        // Control de stock de CUN03: verifica que cada producto del carrito tenga stock suficiente (suma las lineas del mismo producto).
-        // Devuelve true si alcanza para todo. Si no, devuelve false y en mensaje la lista de productos con faltante (pedidas vs. disponibles), ya traducida.
         public bool VerificarStockCarrito(Carrito486LP carrito, out string mensaje)
         {
             mensaje = "";
@@ -78,8 +74,6 @@ namespace BLL
             }
         }
 
-        // Cancela el carrito activo (CUN03: el cliente no se registra o desiste de la compra). El carrito NO se elimina: pasa a Estado "Cancelado".
-        // BLL_Carrito.ActualizarEstado se ocupa de actualizar el DV del carrito y de registrar el evento en la bitacora.
         public bool CancelarCarrito(int idCarrito, out string mensaje)
         {
             mensaje = "";
@@ -116,8 +110,6 @@ namespace BLL
             }
         }
 
-        // Registra la venta desde un carrito ya armado: persiste cabecera+detalle, descuenta stock, cierra el carrito ("Facturado"), recalcula DV y registra bitácora.
-        // La Venta queda persistida siempre  el pago nunca se rechaza en este proyecto, no hay reversión posible.
         public Venta486LP RegistrarVenta(Carrito486LP carrito, string medioPago, out string mensaje)
         {
             mensaje = "";
@@ -134,14 +126,12 @@ namespace BLL
                     mensaje = Mensajes486LP.Obtener("Venta.SinClienteAsignado"); // Muestra: El carrito no tiene un cliente asignado
                     return null;
                 }
-                // El carrito se guarda solo con el DNI (el Vendedor no registra clientes): la venta exige que el cliente ya este registrado (FK Venta -> Cliente)
                 if (!ObjCliente.Existe(carrito.DNICliente))
                 {
                     mensaje = Mensajes486LP.Obtener("Venta.ClienteNoRegistrado", carrito.DNICliente); // Muestra: El cliente con DNI {0} no está registrado. Debe registrarlo antes de cobrar
                     return null;
                 }
 
-                // Ultimo control de stock antes de grabar: cubre el tiempo que tarda el pago (3 s simulados en tarjeta y transferencia)
                 string detalleStock;
                 if (!VerificarStockCarrito(carrito, out detalleStock))
                 {
@@ -160,8 +150,6 @@ namespace BLL
 
                 foreach (DetalleCarrito486LP detCarrito in carrito.Detalles)
                 {
-                    // Marca/Modelo/Color/Talle no se guardan en DetalleVenta (vienen del JOIN al leer), pero el comprobante PDF se genera con esta
-                    // misma venta recien armada, asi que se completan desde el producto para que la linea no salga en blanco
                     Producto486LP prod = detCarrito.Producto ?? ObjProducto.ObtenerPorId(detCarrito.IdProducto);
 
                     venta.Detalles.Add(new DetalleVenta486LP
@@ -181,13 +169,10 @@ namespace BLL
                 bool ok = ObjetoMapper.Agregar(venta, out mensajeMapper);
                 if (!ok)
                 {
-                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Ventas", $"Error al registrar venta (Cliente DNI {carrito.DNICliente}): {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                     mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                     return null;
                 }
-
-                // se actualiza el stock de cada producto vendido
                 foreach (DetalleVenta486LP det in venta.Detalles)
                 {
                     string mensajeStock;
@@ -197,7 +182,6 @@ namespace BLL
                     }
                 }
 
-                // El carrito de origen pasa a "Facturado" xq no vuelve a aparecer como Activo
                 string mensajeCarrito;
                 ObjCarrito.ActualizarEstado(carrito.IdCarrito, "Facturado", out mensajeCarrito);
 
@@ -224,7 +208,6 @@ namespace BLL
             }
         }
 
-        // Trae una venta ya registrada, con su detalle (para "Ver comprobante").
         public Venta486LP ObtenerPorId(int idVenta)
         {
             try

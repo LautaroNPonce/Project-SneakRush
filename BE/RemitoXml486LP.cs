@@ -7,9 +7,7 @@ using System.Xml.Serialization;
 
 namespace BE
 {
-    // Forma del XML de un remito de proveedor. XmlSerializer lo usa para leer el archivo que se importa (deserializacion)
-    // y para armar el archivo de lineas rechazadas que se exporta para corregir (serializacion).
-    // Todos los datos son texto a proposito: asi cada linea se valida por separado y un dato mal escrito no rechaza el archivo completo.
+    // XmlSerializer lo usa para leer el archivo que se importa (deserializacion) y para armar el archivo de lineas rechazadas que se exporta para corregir (serializacion).
     [XmlRoot("remito")]
     public class RemitoXml486LP
     {
@@ -25,7 +23,6 @@ namespace BE
         public RemitoXml486LP() { }
     }
 
-    // Una linea (item) del remito
     public class ItemRemitoXml486LP
     {
         // Numero de linea. Si el archivo no lo trae queda en null y se numera por posicion

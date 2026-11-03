@@ -49,13 +49,11 @@ namespace BLL
                 bool ok = ObjetoMapper.Agregar(orden, out mensajeMapper);
                 if (!ok)
                 {
-                    // El texto del Mapper es tecnico: va a la bitacora y el usuario ve un mensaje general
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Compras", $"Error al registrar orden de compra: {mensajeMapper}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                     mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrió un error inesperado. El detalle quedó registrado en la bitácora
                     return null;
                 }
 
-                // La solicitud de origen pasa a procesada xq no vuelve a aparecer como pendiente
                 string mensajeSolicitud;
                 if (!ObjSolicitud.ActualizarEstado(orden.IdSolicitud, "Procesada", out mensajeSolicitud))
                 {
@@ -123,8 +121,6 @@ namespace BLL
             }
         }
 
-        // Cambia el Estado de la orden (recibida en CUN06 y facturada en CUN07)
-        // No se compara el conteo de filas afectadas para decidir éxito - mismo criterio de siempre
         public bool ActualizarEstado(int idOrden, string estado, out string mensaje)
         {
             mensaje = "";
