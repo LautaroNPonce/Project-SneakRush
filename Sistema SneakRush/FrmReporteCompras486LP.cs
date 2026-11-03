@@ -216,27 +216,27 @@ namespace Sistema_SneakRush
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colColor", DataPropertyName = "Color", FillWeight = 11 });
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "colTalle", DataPropertyName = "Talle", FillWeight = 8,
+                Name = "colTalle", DataPropertyName = "Talle", FillWeight = 8, MinimumWidth = 55,
                 DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "colStock", DataPropertyName = "Stock", FillWeight = 9,
+                Name = "colStock", DataPropertyName = "Stock", FillWeight = 9, MinimumWidth = 60,
                 DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "colPrecio", DataPropertyName = "Precio", FillWeight = 13,
+                Name = "colPrecio", DataPropertyName = "Precio", FillWeight = 13, MinimumWidth = 120,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "C2", Alignment = DataGridViewContentAlignment.MiddleRight }
             });
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "colValorStock", DataPropertyName = "ValorStock", FillWeight = 14,
+                Name = "colValorStock", DataPropertyName = "ValorStock", FillWeight = 14, MinimumWidth = 140,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "C2", Alignment = DataGridViewContentAlignment.MiddleRight }
             });
             dgvProductos.Columns.Add(new DataGridViewTextBoxColumn
             {
-                Name = "colEstado", DataPropertyName = "Estado", FillWeight = 12,
+                Name = "colEstado", DataPropertyName = "Estado", FillWeight = 12, MinimumWidth = 110,
                 DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 

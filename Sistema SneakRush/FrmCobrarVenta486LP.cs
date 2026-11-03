@@ -37,6 +37,9 @@ namespace Sistema_SneakRush
         public FrmCobrarVenta486LP()
         {
             InitializeComponent();
+            EstiloBotonHabilitacion(btnSeleccionar);
+            EstiloBotonHabilitacion(btnCobrar);
+            EstiloBotonHabilitacion(btnVerComprobante);
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmCobrarVenta486LP_FormClosing;
             this.Load += FrmCobrarVenta486LP_Load;
@@ -49,6 +52,31 @@ namespace Sistema_SneakRush
             rbTransferencia.CheckedChanged += MedioPago_CheckedChanged;
             txtNumero.TextChanged += txtNumero_TextChanged;
             txtVencimiento.TextChanged += txtVencimiento_TextChanged;
+        }
+
+        // Los botones de colores propios se ven claramente deshabilitados (fondo gris y texto legible) cuando no se pueden usar
+        private static void EstiloBotonHabilitacion(Button boton)
+        {
+            Color colorActivo = boton.BackColor;
+            Color colorInactivo = Color.FromArgb(222, 224, 228);
+
+            boton.EnabledChanged += (s, e) =>
+            {
+                boton.BackColor = boton.Enabled ? colorActivo : colorInactivo;
+                boton.Invalidate();
+            };
+            boton.Paint += (s, e) =>
+            {
+                if (boton.Enabled)
+                {
+                    return;
+                }
+                e.Graphics.Clear(colorInactivo);
+                TextRenderer.DrawText(e.Graphics, boton.Text, boton.Font, boton.ClientRectangle, Color.FromArgb(95, 99, 108),
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+            };
+
+            boton.BackColor = boton.Enabled ? colorActivo : colorInactivo;
         }
 
         private void FrmCobrarVenta486LP_Load(object sender, EventArgs e)

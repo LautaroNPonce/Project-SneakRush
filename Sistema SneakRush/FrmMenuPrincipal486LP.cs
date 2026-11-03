@@ -13,6 +13,7 @@ namespace Sistema_SneakRush
         {
             InitializeComponent();
             this.IsMdiContainer = true;
+            this.MdiChildActivate += FrmMenuPrincipal486LP_MdiChildActivate;
             _hayInconsistencia = hayInconsistencia;
             Program.LanguageManager.Agregar(this);
         }
@@ -142,7 +143,7 @@ namespace Sistema_SneakRush
 
             bool verReporte = permisos.Contains("REPORTE_VENTAS")
                            || permisos.Contains("REPORTE_COMPRAS")
-                           || permisos.Contains("REPORTE_ANALITICAS");
+                           || permisos.Contains("REPORTE_INTELIGENTE");
 
             reporteToolStripMenuItem.Visible = verReporte;
 
@@ -150,7 +151,7 @@ namespace Sistema_SneakRush
             {
                 reporteDeVentasToolStripMenuItem.Visible = permisos.Contains("REPORTE_VENTAS");
                 reporteDeComprasToolStripMenuItem.Visible = permisos.Contains("REPORTE_COMPRAS");
-                consultasAnalíticasToolStripMenuItem.Visible = permisos.Contains("REPORTE_ANALITICAS");
+                reporteInteligenteToolStripMenuItem.Visible = permisos.Contains("REPORTE_INTELIGENTE");
             }
         }
 
@@ -288,9 +289,9 @@ namespace Sistema_SneakRush
         {
             AbrirFormulario(new FrmReporteCompras486LP());
         }
-        private void consultasAnalíticasToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void reporteInteligenteToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Consultas Analíticas");
+            AbrirFormulario(new FrmReporteInteligente486LP());
         }
 
         // Menu Ayuda
@@ -309,9 +310,16 @@ namespace Sistema_SneakRush
             {
                 if (f.GetType() == formulario.GetType())
                 {
-                    // Si el formulario quedo en tamano normal o minimizado, lo restauramos y lo volvemos a maximizar
-                    f.WindowState = FormWindowState.Normal;
-                    f.WindowState = FormWindowState.Maximized;
+                    // Si estaba minimizado se restaura y se maximiza. No se pasa por "Normal" con los demas abiertos:
+                    // en un MDI eso restaura a todos los hijos y quedan chicos al volver a abrirlos.
+                    if (f.WindowState == FormWindowState.Minimized)
+                    {
+                        f.WindowState = FormWindowState.Normal;
+                    }
+                    if (f.WindowState != FormWindowState.Maximized)
+                    {
+                        f.WindowState = FormWindowState.Maximized;
+                    }
                     f.BringToFront();
                     f.Activate();
                     (f as IRefrescable486LP)?.Refrescar();
@@ -323,6 +331,33 @@ namespace Sistema_SneakRush
             formulario.MdiParent = this;
             formulario.WindowState = FormWindowState.Maximized;
             formulario.Show();
+        }
+
+        // Cada vez que se activa una ventana hija se asegura que quede maximizada, asi ninguna aparece mas chica
+        private bool _ajustandoMdi;
+
+        private void FrmMenuPrincipal486LP_MdiChildActivate(object sender, System.EventArgs e)
+        {
+            if (_ajustandoMdi)
+            {
+                return;
+            }
+
+            Form hijo = this.ActiveMdiChild;
+            if (hijo == null || hijo is FrmIniciarSesionLP486 || hijo.WindowState == FormWindowState.Maximized)
+            {
+                return;
+            }
+
+            try
+            {
+                _ajustandoMdi = true;
+                hijo.WindowState = FormWindowState.Maximized;
+            }
+            finally
+            {
+                _ajustandoMdi = false;
+            }
         }
 
         private void MensajeEnDesarrollo(string modulo)
@@ -419,7 +454,7 @@ namespace Sistema_SneakRush
             reporteToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteToolStripMenuItem");
             reporteDeVentasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeVentasToolStripMenuItem");
             reporteDeComprasToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteDeComprasToolStripMenuItem");
-            consultasAnalíticasToolStripMenuItem.Text = lm.ObtenerTexto(f, "consultasAnalíticasToolStripMenuItem");
+            reporteInteligenteToolStripMenuItem.Text = lm.ObtenerTexto(f, "reporteInteligenteToolStripMenuItem");
 
             // Menú Ayuda
             ayudaToolStripMenuItem.Text = lm.ObtenerTexto(f, "ayudaToolStripMenuItem");

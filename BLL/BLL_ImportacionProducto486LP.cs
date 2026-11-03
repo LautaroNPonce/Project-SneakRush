@@ -11,12 +11,15 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace BLL
 {
     // Importacion masiva de productos desde el XML de un remito de proveedor (extension del CUN10 Procesar productos).
     // Por cada linea: si el producto existe (marca + modelo + color + talle) le suma el stock sin tocar el precio; si no existe lo da de alta con ese stock.
     // Las lineas validas se importan y las rechazadas se informan una por una. Un mismo remito nunca suma dos veces la misma linea.
+    // El XML se lee (deserializacion) y se escribe (serializacion) con XmlSerializer y las clases RemitoXml486LP y CatalogoXml486LP.
+    // Tambien exporta a XML los productos que estan a la venta.
     public class BLL_ImportacionProducto486LP
     {
         private Mapper_ImportacionProducto486LP ObjetoMapper = new Mapper_ImportacionProducto486LP();
@@ -32,6 +35,9 @@ namespace BLL
         private const int LINEAS_MAXIMO = 2000;
         private const int NUMERO_LINEA_MAXIMO = 100000;
         private const int CANTIDAD_MAXIMA = 10000;
+
+        private static readonly XmlSerializer SerializadorRemito = new XmlSerializer(typeof(RemitoXml486LP));
+        private static readonly XmlSerializer SerializadorCatalogo = new XmlSerializer(typeof(CatalogoXml486LP));
 
         // Lo que se pudo interpretar de una linea valida
         private class LineaValidada
@@ -94,17 +100,10 @@ namespace BLL
                     return false;
                 }
 
-                XDocument doc;
-                if (!LeerXml(rutaArchivo, out doc, out mensaje)) return false;
+                RemitoXml486LP remitoXml;
+                if (!LeerRemito(rutaArchivo, out remitoXml, out mensaje)) return false;
 
-                XElement raiz = doc.Root;
-                if (raiz == null || raiz.Name.LocalName != "remito")
-                {
-                    mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
-                    return false;
-                }
-
-                string nroRemito = ((string)raiz.Attribute("numero") ?? "").Trim();
+                string nroRemito = Texto(remitoXml.Numero);
                 if (!Regex.IsMatch(nroRemito, @"^[A-Za-z0-9][A-Za-z0-9\-_/.]{0,29}$"))
                 {
                     mensaje = Mensajes486LP.Obtener("Importacion.RemitoInvalido"); // Muestra: El número de remito es obligatorio, admite letras, números y los signos - _ / . y hasta 30 caracteres
@@ -112,14 +111,14 @@ namespace BLL
                 }
 
                 // Si el XML trae el CUIT del proveedor tiene que ser el del proveedor elegido (evita cargar el remito de uno a nombre de otro)
-                string cuitArchivo = ((string)raiz.Attribute("cuitProveedor") ?? "").Trim();
+                string cuitArchivo = Texto(remitoXml.CuitProveedor);
                 if (cuitArchivo != "" && ObjProveedor.NormalizarCUIT(cuitArchivo) != ObjProveedor.NormalizarCUIT(proveedor.CUIT))
                 {
                     mensaje = Mensajes486LP.Obtener("Importacion.ProveedorNoCoincide", cuitArchivo, proveedor.CUIT); // Muestra: El CUIT del archivo ({0}) no coincide con el del proveedor elegido ({1})
                     return false;
                 }
 
-                List<XElement> items = raiz.Elements("item").ToList();
+                List<ItemRemitoXml486LP> items = remitoXml.Items ?? new List<ItemRemitoXml486LP>();
                 if (items.Count == 0)
                 {
                     mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
@@ -146,6 +145,20 @@ namespace BLL
                     return false;
                 }
 
+                // Huella del contenido (productos y cantidades, sin importar el numero de remito ni el nombre del archivo).
+                // Si es un remito nuevo y el mismo contenido ya se importo con otro numero, se rechaza: seria cargar dos veces el mismo stock.
+                // Un remito que ya existe (con rechazos pendientes) no se compara: es justamente el que se esta corrigiendo.
+                string huella = CalcularHuella(idProveedor, items);
+                if (remito == null)
+                {
+                    ImportacionProducto486LP igual = ObjetoMapper.ObtenerPorHuella(idProveedor, huella);
+                    if (igual != null)
+                    {
+                        mensaje = Mensajes486LP.Obtener("Importacion.ContenidoDuplicado", igual.NroRemito, proveedor.Nombre, igual.FechaImportacion.ToString("dd/MM/yyyy HH:mm")); // Muestra: Este contenido ya fue importado como remito {0} de {1} el {2}. No se importó nada
+                        return false;
+                    }
+                }
+
                 string nombreArchivo = Path.GetFileName(rutaArchivo);
 
                 // Lineas que el remito ya tiene registradas de pasadas anteriores
@@ -168,7 +181,7 @@ namespace BLL
 
                 int idImportacion = remito != null
                     ? remito.IdImportacion
-                    : ObjetoMapper.Crear(idProveedor, nroRemito, UsuarioNombre(), nombreArchivo);
+                    : ObjetoMapper.Crear(idProveedor, nroRemito, UsuarioNombre(), nombreArchivo, huella);
 
                 resultado = new ResultadoImportacion486LP
                 {
@@ -184,13 +197,13 @@ namespace BLL
                     LineaImportacion486LP linea = new LineaImportacion486LP
                     {
                         Linea = numeros[i],
-                        Marca = Texto(items[i], "marca"),
-                        Categoria = Texto(items[i], "categoria"),
-                        Modelo = Texto(items[i], "modelo"),
-                        Color = Texto(items[i], "color"),
-                        Talle = Texto(items[i], "talle"),
-                        Cantidad = Texto(items[i], "cantidad"),
-                        Precio = Texto(items[i], "precio"),
+                        Marca = Texto(items[i].Marca),
+                        Categoria = Texto(items[i].Categoria),
+                        Modelo = Texto(items[i].Modelo),
+                        Color = Texto(items[i].Color),
+                        Talle = Texto(items[i].Talle),
+                        Cantidad = Texto(items[i].Cantidad),
+                        Precio = Texto(items[i].Precio),
                         Exportable = true
                     };
                     resultado.Lineas.Add(linea);
@@ -266,24 +279,17 @@ namespace BLL
                     return false;
                 }
 
-                XDocument doc;
-                if (!LeerXml(rutaArchivo, out doc, out mensaje)) return false;
+                RemitoXml486LP remitoXml;
+                if (!LeerRemito(rutaArchivo, out remitoXml, out mensaje)) return false;
 
-                XElement raiz = doc.Root;
-                if (raiz == null || raiz.Name.LocalName != "remito")
-                {
-                    mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
-                    return false;
-                }
-
-                string numero = ((string)raiz.Attribute("numero") ?? "").Trim();
+                string numero = Texto(remitoXml.Numero);
                 if (!Regex.IsMatch(numero, @"^[A-Za-z0-9][A-Za-z0-9\-_/.]{0,29}$"))
                 {
                     mensaje = Mensajes486LP.Obtener("Importacion.RemitoInvalido"); // Muestra: El número de remito es obligatorio, admite letras, números y los signos - _ / . y hasta 30 caracteres
                     return false;
                 }
 
-                List<XElement> items = raiz.Elements("item").ToList();
+                List<ItemRemitoXml486LP> items = remitoXml.Items ?? new List<ItemRemitoXml486LP>();
                 if (items.Count == 0)
                 {
                     mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
@@ -315,13 +321,13 @@ namespace BLL
                     lineas.Add(new LineaImportacion486LP
                     {
                         Linea = numeros[i],
-                        Marca = Texto(items[i], "marca"),
-                        Categoria = Texto(items[i], "categoria"),
-                        Modelo = Texto(items[i], "modelo"),
-                        Color = Texto(items[i], "color"),
-                        Talle = Texto(items[i], "talle"),
-                        Cantidad = Texto(items[i], "cantidad"),
-                        Precio = Texto(items[i], "precio"),
+                        Marca = Texto(items[i].Marca),
+                        Categoria = Texto(items[i].Categoria),
+                        Modelo = Texto(items[i].Modelo),
+                        Color = Texto(items[i].Color),
+                        Talle = Texto(items[i].Talle),
+                        Cantidad = Texto(items[i].Cantidad),
+                        Precio = Texto(items[i].Precio),
                         Resultado = LineaImportacion486LP.RESULTADO_PENDIENTE,
                         Exportable = false
                     });
@@ -355,7 +361,8 @@ namespace BLL
             }
         }
 
-        // Genera un XML con solo las lineas rechazadas (mismo remito, mismo proveedor y mismo numero de linea) para corregirlas y volver a subirlas
+        // Genera un XML con solo las lineas rechazadas (mismo remito, mismo proveedor y mismo numero de linea) para corregirlas y volver a subirlas.
+        // Serializa un RemitoXml486LP: tiene la misma forma que el archivo que se importa.
         public bool ExportarRechazadas(ResultadoImportacion486LP resultado, string rutaDestino, out string mensaje)
         {
             mensaje = "";
@@ -372,24 +379,26 @@ namespace BLL
                     return false;
                 }
 
-                XElement raiz = new XElement("remito", new XAttribute("numero", resultado.NroRemito));
+                RemitoXml486LP remito = new RemitoXml486LP { Numero = resultado.NroRemito };
                 if (!string.IsNullOrEmpty(resultado.CUITProveedor))
-                    raiz.Add(new XAttribute("cuitProveedor", resultado.CUITProveedor));
+                    remito.CuitProveedor = resultado.CUITProveedor;
 
                 foreach (LineaImportacion486LP l in rechazadas)
                 {
-                    raiz.Add(new XElement("item",
-                        new XAttribute("linea", l.Linea),
-                        new XElement("marca", l.Marca),
-                        new XElement("categoria", l.Categoria),
-                        new XElement("modelo", l.Modelo),
-                        new XElement("color", l.Color),
-                        new XElement("talle", l.Talle),
-                        new XElement("cantidad", l.Cantidad),
-                        new XElement("precio", l.Precio)));
+                    remito.Items.Add(new ItemRemitoXml486LP
+                    {
+                        Linea = l.Linea.ToString(CultureInfo.InvariantCulture),
+                        Marca = l.Marca,
+                        Categoria = l.Categoria,
+                        Modelo = l.Modelo,
+                        Color = l.Color,
+                        Talle = l.Talle,
+                        Cantidad = l.Cantidad,
+                        Precio = l.Precio
+                    });
                 }
 
-                new XDocument(new XDeclaration("1.0", "utf-8", null), raiz).Save(rutaDestino);
+                GuardarXml(SerializadorRemito, remito, rutaDestino);
 
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
                     $"Exportación de líneas rechazadas: remito {resultado.NroRemito}, {rechazadas.Count} líneas",
@@ -406,12 +415,77 @@ namespace BLL
             }
         }
 
+        // Exporta a un XML los productos que estan a la venta (los que tienen stock). Serializa un CatalogoXml486LP.
+        // Devuelve false con el motivo en mensaje si no hay productos con stock o no se pudo guardar el archivo.
+        public bool ExportarProductosEnVenta(string rutaDestino, out int cantidad, out string mensaje)
+        {
+            cantidad = 0;
+            mensaje = "";
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(rutaDestino))
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.ErrorExportar"); // Muestra: No se pudo guardar el archivo. Verifique la ubicación y vuelva a intentar
+                    return false;
+                }
+
+                List<Producto486LP> productos = ObjProducto.Buscar("", "", "", "", true)
+                    .OrderBy(p => p.Marca).ThenBy(p => p.Modelo).ThenBy(p => p.Color).ThenBy(p => p.Talle).ToList();
+
+                if (productos.Count == 0)
+                {
+                    mensaje = Mensajes486LP.Obtener("Exportacion.SinProductos"); // Muestra: No hay productos con stock para exportar
+                    return false;
+                }
+
+                CatalogoXml486LP catalogo = new CatalogoXml486LP
+                {
+                    Fecha = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                    Usuario = UsuarioNombre(),
+                    Cantidad = productos.Count
+                };
+
+                foreach (Producto486LP p in productos)
+                {
+                    catalogo.Productos.Add(new ProductoCatalogoXml486LP
+                    {
+                        Marca = p.Marca,
+                        Categoria = p.Categoria,
+                        Modelo = p.Modelo,
+                        Color = p.Color,
+                        Talle = p.Talle,
+                        Precio = p.Precio,
+                        Stock = p.Stock
+                    });
+                }
+
+                GuardarXml(SerializadorCatalogo, catalogo, rutaDestino);
+
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
+                    $"Exportación de productos a la venta: {productos.Count} productos, archivo '{Path.GetFileName(rutaDestino)}'",
+                    Criticidad486LP.Media, UsuarioDNI(), UsuarioNombre()));
+
+                cantidad = productos.Count;
+                mensaje = Mensajes486LP.Obtener("Exportacion.Ok", productos.Count); // Muestra: Se exportaron {0} productos a la venta
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_ImportacionProducto.ExportarProductosEnVenta(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                mensaje = Mensajes486LP.Obtener("Importacion.ErrorExportar"); // Muestra: No se pudo guardar el archivo. Verifique la ubicación y vuelva a intentar
+                cantidad = 0;
+                return false;
+            }
+        }
+
         // ----- Lectura del archivo -----
 
-        // Lee el XML sin permitir DTD ni entidades externas
-        private bool LeerXml(string ruta, out XDocument doc, out string mensaje)
+        // Lee el XML y lo deserializa a un RemitoXml486LP, sin permitir DTD ni entidades externas.
+        // Si el archivo no es un XML valido o no tiene la forma de un remito, devuelve false con el motivo en mensaje.
+        private bool LeerRemito(string ruta, out RemitoXml486LP remito, out string mensaje)
         {
-            doc = null;
+            remito = null;
             mensaje = "";
 
             try
@@ -425,33 +499,74 @@ namespace BLL
 
                 using (XmlReader lector = XmlReader.Create(ruta, configuracion))
                 {
-                    doc = XDocument.Load(lector);
+                    remito = (RemitoXml486LP)SerializadorRemito.Deserialize(lector);
+                }
+
+                if (remito == null)
+                {
+                    mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
+                    return false;
                 }
                 return true;
             }
+            catch (InvalidOperationException ex)
+            {
+                // XmlSerializer envuelve el error: si adentro hay un XmlException el XML esta mal escrito; si no, no tiene la forma de un remito
+                remito = null;
+                XmlException xml = ex.InnerException as XmlException;
+                if (xml != null && xml.LineNumber == 0)
+                    mensaje = Mensajes486LP.Obtener("Importacion.XmlNoPermitido"); // Muestra: El archivo contiene una declaración DTD o entidades, que no están permitidas por seguridad
+                else if (xml != null)
+                    mensaje = Mensajes486LP.Obtener("Importacion.XmlMalFormado", xml.LineNumber, xml.LinePosition); // Muestra: El archivo no es un XML válido (error en la línea {0}, posición {1})
+                else
+                    mensaje = Mensajes486LP.Obtener("Importacion.EstructuraInvalida"); // Muestra: El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item
+                return false;
+            }
             catch (XmlException ex)
             {
-                mensaje = Mensajes486LP.Obtener("Importacion.XmlMalFormado", ex.LineNumber, ex.LinePosition); // Muestra: El archivo no es un XML válido (error en la línea {0}, posición {1})
+                remito = null;
+                mensaje = ex.LineNumber == 0
+                    ? Mensajes486LP.Obtener("Importacion.XmlNoPermitido") // Muestra: El archivo contiene una declaración DTD o entidades, que no están permitidas por seguridad
+                    : Mensajes486LP.Obtener("Importacion.XmlMalFormado", ex.LineNumber, ex.LinePosition); // Muestra: El archivo no es un XML válido (error en la línea {0}, posición {1})
                 return false;
             }
             catch (IOException)
             {
+                remito = null;
                 mensaje = Mensajes486LP.Obtener("Importacion.ArchivoNoLegible"); // Muestra: No se pudo leer el archivo. Verifique que no esté abierto en otro programa
                 return false;
             }
             catch (UnauthorizedAccessException)
             {
+                remito = null;
                 mensaje = Mensajes486LP.Obtener("Importacion.ArchivoNoLegible"); // Muestra: No se pudo leer el archivo. Verifique que no esté abierto en otro programa
                 return false;
             }
         }
 
+        // Escribe un objeto como XML (serializacion), indentado, en UTF-8 y sin los xmlns que agrega XmlSerializer por defecto
+        private void GuardarXml(XmlSerializer serializador, object contenido, string ruta)
+        {
+            XmlWriterSettings configuracion = new XmlWriterSettings
+            {
+                Indent = true,
+                Encoding = new UTF8Encoding(false)
+            };
+            XmlSerializerNamespaces sinNamespaces = new XmlSerializerNamespaces();
+            sinNamespaces.Add("", "");
+
+            using (XmlWriter escritor = XmlWriter.Create(ruta, configuracion))
+            {
+                serializador.Serialize(escritor, contenido, sinNamespaces);
+            }
+        }
+
         // Numero de cada linea: el atributo linea si todas lo traen (es lo que pasa con el XML de rechazadas), o la posicion en el archivo si ninguna lo trae.
         // Mezclar las dos formas, repetir un numero o poner uno invalido rechaza el archivo completo.
-        private bool NumerarLineas(List<XElement> items, out int[] numeros)
+        private bool NumerarLineas(List<ItemRemitoXml486LP> items, out int[] numeros)
         {
             numeros = new int[items.Count];
-            int conAtributo = items.Count(i => i.Attribute("linea") != null);
+            int conAtributo = items.Count(i => i.Linea != null);
 
             if (conAtributo == 0)
             {
@@ -465,7 +580,7 @@ namespace BLL
             for (int i = 0; i < items.Count; i++)
             {
                 int numero;
-                string texto = ((string)items[i].Attribute("linea")).Trim();
+                string texto = items[i].Linea.Trim();
                 if (!int.TryParse(texto, NumberStyles.None, CultureInfo.InvariantCulture, out numero) ||
                     numero < 1 || numero > NUMERO_LINEA_MAXIMO || !usados.Add(numero))
                     return false;
@@ -474,9 +589,9 @@ namespace BLL
             return true;
         }
 
-        private string Texto(XElement item, string nombre)
+        private string Texto(string valor)
         {
-            return ((string)item.Element(nombre) ?? "").Trim();
+            return (valor ?? "").Trim();
         }
 
         // ----- Procesamiento de una linea -----
@@ -497,7 +612,7 @@ namespace BLL
                 else
                 {
                     linea.Resultado = LineaImportacion486LP.RESULTADO_RECHAZADA;
-                    linea.Detalle = Mensajes486LP.Obtener("Importacion.Linea.ContenidoDistinto", Describir(previa)); // Muestra: Ese número de línea ya se importó con otros datos ({0}) y no se modificó
+                    linea.Detalle = Mensajes486LP.Obtener("Importacion.Linea.ContenidoDistinto", Describir(previa)) + " " + Mensajes486LP.Obtener("Importacion.Linea.NoSeCorrige"); // Muestra: Ese número de línea ya se importó con otros datos ({0}) y no se modificó. No se incluye en el archivo de corrección.
                 }
                 return;
             }
@@ -630,6 +745,26 @@ namespace BLL
         private string ClaveProducto(string marca, string modelo, string color, string talle)
         {
             return string.Join("|", (marca ?? "").Trim(), (modelo ?? "").Trim(), (color ?? "").Trim(), (talle ?? "").Trim().Replace(',', '.')).ToLowerInvariant();
+        }
+
+        // Huella del contenido de un remito: proveedor + producto y cantidad de cada linea, ordenadas. No depende del numero de remito, del numero de linea ni del nombre del archivo
+        private string CalcularHuella(int idProveedor, List<ItemRemitoXml486LP> items)
+        {
+            List<string> lineas = items
+                .Select(i => ClaveProducto(Texto(i.Marca), Texto(i.Modelo), Texto(i.Color), Texto(i.Talle)) + "|" + NormalizarCantidad(Texto(i.Cantidad)))
+                .OrderBy(t => t, StringComparer.Ordinal)
+                .ToList();
+
+            return Encriptacion486LP.GenerarHash(idProveedor.ToString(CultureInfo.InvariantCulture) + "#" + string.Join(";", lineas));
+        }
+
+        // "05" y "5" son la misma cantidad
+        private string NormalizarCantidad(string cantidad)
+        {
+            int numero;
+            return int.TryParse(cantidad, NumberStyles.None, CultureInfo.InvariantCulture, out numero)
+                ? numero.ToString(CultureInfo.InvariantCulture)
+                : cantidad;
         }
 
         private string Describir(DetalleImportacion486LP d)

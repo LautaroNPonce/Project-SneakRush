@@ -59,7 +59,15 @@ namespace BLL
 
         public bool Existe(string dni)
         {
-            return ObjetoMapper.Existe(dni);
+            try
+            {
+                return ObjetoMapper.Existe(dni);
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_Cliente.Existe(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return false;
+            }
         }
 
         public bool ValidarDNI(string dni)

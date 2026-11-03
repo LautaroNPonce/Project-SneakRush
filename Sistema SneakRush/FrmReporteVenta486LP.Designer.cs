@@ -56,7 +56,7 @@
             this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.lblTitulo.Location = new System.Drawing.Point(24, 14);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(210, 30);
+            this.lblTitulo.Size = new System.Drawing.Size(260, 37);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Clientes frecuentes";
             // 
@@ -82,9 +82,9 @@
             this.lblDesde.AutoSize = true;
             this.lblDesde.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lblDesde.ForeColor = System.Drawing.Color.Black;
-            this.lblDesde.Location = new System.Drawing.Point(18, 34);
+            this.lblDesde.Location = new System.Drawing.Point(7, 34);
             this.lblDesde.Name = "lblDesde";
-            this.lblDesde.Size = new System.Drawing.Size(46, 17);
+            this.lblDesde.Size = new System.Drawing.Size(57, 23);
             this.lblDesde.TabIndex = 0;
             this.lblDesde.Text = "Desde";
             // 
@@ -94,7 +94,7 @@
             this.dtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpDesde.Location = new System.Drawing.Point(70, 30);
             this.dtpDesde.Name = "dtpDesde";
-            this.dtpDesde.Size = new System.Drawing.Size(130, 25);
+            this.dtpDesde.Size = new System.Drawing.Size(130, 29);
             this.dtpDesde.TabIndex = 1;
             // 
             // lblHasta
@@ -102,9 +102,9 @@
             this.lblHasta.AutoSize = true;
             this.lblHasta.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.lblHasta.ForeColor = System.Drawing.Color.Black;
-            this.lblHasta.Location = new System.Drawing.Point(228, 34);
+            this.lblHasta.Location = new System.Drawing.Point(219, 32);
             this.lblHasta.Name = "lblHasta";
-            this.lblHasta.Size = new System.Drawing.Size(43, 17);
+            this.lblHasta.Size = new System.Drawing.Size(53, 23);
             this.lblHasta.TabIndex = 2;
             this.lblHasta.Text = "Hasta";
             // 
@@ -114,7 +114,7 @@
             this.dtpHasta.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpHasta.Location = new System.Drawing.Point(278, 30);
             this.dtpHasta.Name = "dtpHasta";
-            this.dtpHasta.Size = new System.Drawing.Size(130, 25);
+            this.dtpHasta.Size = new System.Drawing.Size(130, 29);
             this.dtpHasta.TabIndex = 3;
             // 
             // lblMinCompras
@@ -124,20 +124,32 @@
             this.lblMinCompras.ForeColor = System.Drawing.Color.Black;
             this.lblMinCompras.Location = new System.Drawing.Point(438, 34);
             this.lblMinCompras.Name = "lblMinCompras";
-            this.lblMinCompras.Size = new System.Drawing.Size(121, 17);
+            this.lblMinCompras.Size = new System.Drawing.Size(162, 23);
             this.lblMinCompras.TabIndex = 4;
             this.lblMinCompras.Text = "Mínimo de compras";
             // 
             // nudMinCompras
             // 
             this.nudMinCompras.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.nudMinCompras.Location = new System.Drawing.Point(580, 30);
-            this.nudMinCompras.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
-            this.nudMinCompras.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            this.nudMinCompras.Location = new System.Drawing.Point(606, 30);
+            this.nudMinCompras.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudMinCompras.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudMinCompras.Name = "nudMinCompras";
-            this.nudMinCompras.Size = new System.Drawing.Size(70, 25);
+            this.nudMinCompras.Size = new System.Drawing.Size(70, 29);
             this.nudMinCompras.TabIndex = 5;
-            this.nudMinCompras.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            this.nudMinCompras.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // btnGenerar
             // 
@@ -202,16 +214,20 @@
             // 
             // dgvClientes
             // 
-            this.dgvClientes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvClientes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvClientes.ColumnHeadersHeight = 29;
             this.dgvClientes.Location = new System.Drawing.Point(27, 200);
             this.dgvClientes.Name = "dgvClientes";
+            this.dgvClientes.RowHeadersWidth = 51;
             this.dgvClientes.Size = new System.Drawing.Size(560, 330);
             this.dgvClientes.TabIndex = 6;
             // 
             // chartTop
             // 
-            this.chartTop.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.chartTop.BackColor = System.Drawing.Color.White;
+            this.chartTop.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chartTop.Location = new System.Drawing.Point(600, 200);
             this.chartTop.Name = "chartTop";
             this.chartTop.Size = new System.Drawing.Size(373, 330);
@@ -226,13 +242,13 @@
             this.lblResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.lblResumen.Location = new System.Drawing.Point(27, 542);
             this.lblResumen.Name = "lblResumen";
-            this.lblResumen.Size = new System.Drawing.Size(200, 17);
+            this.lblResumen.Size = new System.Drawing.Size(238, 23);
             this.lblResumen.TabIndex = 8;
             this.lblResumen.Text = "Aún no se generó el reporte.";
             // 
             // FrmReporteVenta486LP
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(1000, 580);

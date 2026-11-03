@@ -36,11 +36,15 @@
             this.btnImportar = new System.Windows.Forms.Button();
             this.btnVer = new System.Windows.Forms.Button();
             this.lblResumen = new System.Windows.Forms.Label();
-            this.lblDetalle = new System.Windows.Forms.Label();
-            this.dgvLineas = new System.Windows.Forms.DataGridView();
+            this.grpExportar = new System.Windows.Forms.GroupBox();
+            this.btnExportarVenta = new System.Windows.Forms.Button();
             this.btnExportar = new System.Windows.Forms.Button();
+            this.lblDetalle = new System.Windows.Forms.Label();
+            this.chkSoloRechazadas = new System.Windows.Forms.CheckBox();
+            this.dgvLineas = new System.Windows.Forms.DataGridView();
             this.btnCerrar = new System.Windows.Forms.Button();
             this.grpOrigen.SuspendLayout();
+            this.grpExportar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLineas)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,7 +57,7 @@
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(340, 30);
             this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "Importar productos desde XML";
+            this.lblTitulo.Text = "Importar y exportar productos";
             // 
             // grpOrigen
             // 
@@ -63,14 +67,17 @@
             this.grpOrigen.Controls.Add(this.txtArchivo);
             this.grpOrigen.Controls.Add(this.btnExaminar);
             this.grpOrigen.Controls.Add(this.lblNota);
+            this.grpOrigen.Controls.Add(this.btnVer);
+            this.grpOrigen.Controls.Add(this.btnImportar);
+            this.grpOrigen.Controls.Add(this.lblResumen);
             this.grpOrigen.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.grpOrigen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.grpOrigen.Location = new System.Drawing.Point(27, 62);
             this.grpOrigen.Name = "grpOrigen";
-            this.grpOrigen.Size = new System.Drawing.Size(946, 110);
+            this.grpOrigen.Size = new System.Drawing.Size(946, 160);
             this.grpOrigen.TabIndex = 1;
             this.grpOrigen.TabStop = false;
-            this.grpOrigen.Text = "Remito del proveedor";
+            this.grpOrigen.Text = "Importar remito del proveedor";
             // 
             // lblProveedor
             // 
@@ -132,9 +139,9 @@
             // 
             this.lblNota.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
             this.lblNota.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.lblNota.Location = new System.Drawing.Point(20, 70);
+            this.lblNota.Location = new System.Drawing.Point(20, 68);
             this.lblNota.Name = "lblNota";
-            this.lblNota.Size = new System.Drawing.Size(905, 32);
+            this.lblNota.Size = new System.Drawing.Size(905, 30);
             this.lblNota.TabIndex = 5;
             this.lblNota.Text = "Cada línea suma stock si el producto ya existe (no cambia el precio) o lo da de alta si es nuevo. Las líneas con errores se informan y no se importan.";
             // 
@@ -145,9 +152,9 @@
             this.btnImportar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnImportar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnImportar.ForeColor = System.Drawing.Color.White;
-            this.btnImportar.Location = new System.Drawing.Point(157, 184);
+            this.btnImportar.Location = new System.Drawing.Point(160, 108);
             this.btnImportar.Name = "btnImportar";
-            this.btnImportar.Size = new System.Drawing.Size(150, 40);
+            this.btnImportar.Size = new System.Drawing.Size(150, 38);
             this.btnImportar.TabIndex = 2;
             this.btnImportar.Text = "Importar";
             this.btnImportar.UseVisualStyleBackColor = false;
@@ -160,11 +167,11 @@
             this.btnVer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnVer.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnVer.ForeColor = System.Drawing.Color.White;
-            this.btnVer.Location = new System.Drawing.Point(27, 184);
+            this.btnVer.Location = new System.Drawing.Point(20, 108);
             this.btnVer.Name = "btnVer";
-            this.btnVer.Size = new System.Drawing.Size(120, 40);
+            this.btnVer.Size = new System.Drawing.Size(130, 38);
             this.btnVer.TabIndex = 8;
-            this.btnVer.Text = "Ver";
+            this.btnVer.Text = "Vista previa";
             this.btnVer.UseVisualStyleBackColor = false;
             this.btnVer.Click += new System.EventHandler(this.btnVer_Click);
             // 
@@ -172,9 +179,9 @@
             // 
             this.lblResumen.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.lblResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            this.lblResumen.Location = new System.Drawing.Point(325, 184);
+            this.lblResumen.Location = new System.Drawing.Point(325, 104);
             this.lblResumen.Name = "lblResumen";
-            this.lblResumen.Size = new System.Drawing.Size(648, 40);
+            this.lblResumen.Size = new System.Drawing.Size(605, 46);
             this.lblResumen.TabIndex = 3;
             // 
             // lblDetalle
@@ -182,11 +189,24 @@
             this.lblDetalle.AutoSize = true;
             this.lblDetalle.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
             this.lblDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.lblDetalle.Location = new System.Drawing.Point(27, 236);
+            this.lblDetalle.Location = new System.Drawing.Point(27, 322);
             this.lblDetalle.Name = "lblDetalle";
             this.lblDetalle.Size = new System.Drawing.Size(197, 20);
-            this.lblDetalle.TabIndex = 4;
+            this.lblDetalle.TabIndex = 3;
             this.lblDetalle.Text = "Detalle de la importación:";
+            // 
+            // chkSoloRechazadas
+            // 
+            this.chkSoloRechazadas.AutoSize = true;
+            this.chkSoloRechazadas.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.chkSoloRechazadas.ForeColor = System.Drawing.Color.Black;
+            this.chkSoloRechazadas.Location = new System.Drawing.Point(810, 324);
+            this.chkSoloRechazadas.Name = "chkSoloRechazadas";
+            this.chkSoloRechazadas.Size = new System.Drawing.Size(163, 21);
+            this.chkSoloRechazadas.TabIndex = 4;
+            this.chkSoloRechazadas.Text = "Mostrar solo rechazadas";
+            this.chkSoloRechazadas.UseVisualStyleBackColor = true;
+            this.chkSoloRechazadas.CheckedChanged += new System.EventHandler(this.chkSoloRechazadas_CheckedChanged);
             // 
             // dgvLineas
             // 
@@ -202,7 +222,7 @@
             this.dgvLineas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvLineas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLineas.EnableHeadersVisualStyles = false;
-            this.dgvLineas.Location = new System.Drawing.Point(27, 262);
+            this.dgvLineas.Location = new System.Drawing.Point(27, 350);
             this.dgvLineas.MultiSelect = false;
             this.dgvLineas.Name = "dgvLineas";
             this.dgvLineas.ReadOnly = true;
@@ -212,8 +232,36 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
             this.dgvLineas.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvLineas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLineas.Size = new System.Drawing.Size(946, 232);
+            this.dgvLineas.Size = new System.Drawing.Size(946, 200);
             this.dgvLineas.TabIndex = 5;
+            // 
+            // grpExportar
+            // 
+            this.grpExportar.Controls.Add(this.btnExportarVenta);
+            this.grpExportar.Controls.Add(this.btnExportar);
+            this.grpExportar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.grpExportar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            this.grpExportar.Location = new System.Drawing.Point(27, 232);
+            this.grpExportar.Name = "grpExportar";
+            this.grpExportar.Size = new System.Drawing.Size(946, 76);
+            this.grpExportar.TabIndex = 2;
+            this.grpExportar.TabStop = false;
+            this.grpExportar.Text = "Exportar";
+            // 
+            // btnExportarVenta
+            // 
+            this.btnExportarVenta.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            this.btnExportarVenta.FlatAppearance.BorderSize = 0;
+            this.btnExportarVenta.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExportarVenta.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnExportarVenta.ForeColor = System.Drawing.Color.White;
+            this.btnExportarVenta.Location = new System.Drawing.Point(20, 28);
+            this.btnExportarVenta.Name = "btnExportarVenta";
+            this.btnExportarVenta.Size = new System.Drawing.Size(250, 34);
+            this.btnExportarVenta.TabIndex = 0;
+            this.btnExportarVenta.Text = "Exportar productos a la venta";
+            this.btnExportarVenta.UseVisualStyleBackColor = false;
+            this.btnExportarVenta.Click += new System.EventHandler(this.btnExportarVenta_Click);
             // 
             // btnExportar
             // 
@@ -222,11 +270,11 @@
             this.btnExportar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExportar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnExportar.ForeColor = System.Drawing.Color.White;
-            this.btnExportar.Location = new System.Drawing.Point(27, 506);
+            this.btnExportar.Location = new System.Drawing.Point(282, 28);
             this.btnExportar.Name = "btnExportar";
             this.btnExportar.Size = new System.Drawing.Size(200, 34);
-            this.btnExportar.TabIndex = 6;
-            this.btnExportar.Text = "Exportar rechazadas";
+            this.btnExportar.TabIndex = 1;
+            this.btnExportar.Text = "Exportar para corregir";
             this.btnExportar.UseVisualStyleBackColor = false;
             this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
             // 
@@ -237,10 +285,10 @@
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCerrar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnCerrar.ForeColor = System.Drawing.Color.White;
-            this.btnCerrar.Location = new System.Drawing.Point(863, 506);
+            this.btnCerrar.Location = new System.Drawing.Point(863, 562);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(110, 34);
-            this.btnCerrar.TabIndex = 7;
+            this.btnCerrar.TabIndex = 6;
             this.btnCerrar.Text = "Cerrar";
             this.btnCerrar.UseVisualStyleBackColor = false;
             this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
@@ -250,15 +298,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
-            this.ClientSize = new System.Drawing.Size(1000, 556);
+            this.ClientSize = new System.Drawing.Size(1000, 612);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.grpOrigen);
-            this.Controls.Add(this.btnImportar);
-            this.Controls.Add(this.btnVer);
-            this.Controls.Add(this.lblResumen);
+            this.Controls.Add(this.grpExportar);
             this.Controls.Add(this.lblDetalle);
+            this.Controls.Add(this.chkSoloRechazadas);
             this.Controls.Add(this.dgvLineas);
-            this.Controls.Add(this.btnExportar);
             this.Controls.Add(this.btnCerrar);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -266,10 +312,11 @@
             this.MinimizeBox = false;
             this.Name = "FrmImportarProductos486LP";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Importar productos desde XML";
+            this.Text = "Importar y exportar productos";
             this.Load += new System.EventHandler(this.FrmImportarProductos486LP_Load);
             this.grpOrigen.ResumeLayout(false);
             this.grpOrigen.PerformLayout();
+            this.grpExportar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLineas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -288,9 +335,12 @@
         private System.Windows.Forms.Button btnImportar;
         private System.Windows.Forms.Button btnVer;
         private System.Windows.Forms.Label lblResumen;
-        private System.Windows.Forms.Label lblDetalle;
-        private System.Windows.Forms.DataGridView dgvLineas;
+        private System.Windows.Forms.GroupBox grpExportar;
+        private System.Windows.Forms.Button btnExportarVenta;
         private System.Windows.Forms.Button btnExportar;
+        private System.Windows.Forms.Label lblDetalle;
+        private System.Windows.Forms.CheckBox chkSoloRechazadas;
+        private System.Windows.Forms.DataGridView dgvLineas;
         private System.Windows.Forms.Button btnCerrar;
     }
 }

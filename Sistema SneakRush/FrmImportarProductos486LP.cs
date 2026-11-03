@@ -14,7 +14,8 @@ using System.Windows.Forms;
 
 namespace Sistema_SneakRush
 {
-    // Dialogo que se abre con el boton "Importar XML" de Procesar productos (CUN10)
+    // Dialogo que se abre con el boton "Importar / exportar" de Procesar productos (CUN10): importa el remito de un proveedor desde un XML
+    // y exporta a XML los productos a la venta y las lineas rechazadas para corregir
     public partial class FrmImportarProductos486LP : Form, IObserver486LP
     {
         private BLL_ImportacionProducto486LP _bllImportacion = new BLL_ImportacionProducto486LP();
@@ -32,13 +33,44 @@ namespace Sistema_SneakRush
         private bool _puedeVer;
         private bool _puedeEjecutar;
         private bool _puedeExportar;
+        private bool _puedeExportarVenta;
         private bool _puedeCerrar;
+
+        // Evita que al recargar la grilla se dispare el filtro "solo rechazadas" varias veces
+        private bool _actualizando;
 
         public FrmImportarProductos486LP()
         {
             InitializeComponent();
+            EstiloBotonHabilitacion(btnExportarVenta);
+            EstiloBotonHabilitacion(btnExportar);
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmImportarProductos486LP_FormClosing;
+        }
+
+        // Los botones de colores propios se ven claramente deshabilitados (fondo gris y texto legible) cuando no se pueden usar
+        private static void EstiloBotonHabilitacion(Button boton)
+        {
+            Color colorActivo = boton.BackColor;
+            Color colorInactivo = Color.FromArgb(222, 224, 228);
+
+            boton.EnabledChanged += (s, e) =>
+            {
+                boton.BackColor = boton.Enabled ? colorActivo : colorInactivo;
+                boton.Invalidate();
+            };
+            boton.Paint += (s, e) =>
+            {
+                if (boton.Enabled)
+                {
+                    return;
+                }
+                e.Graphics.Clear(colorInactivo);
+                TextRenderer.DrawText(e.Graphics, boton.Text, boton.Font, boton.ClientRectangle, Color.FromArgb(95, 99, 108),
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+            };
+
+            boton.BackColor = boton.Enabled ? colorActivo : colorInactivo;
         }
 
         private void FrmImportarProductos486LP_Load(object sender, EventArgs e)
@@ -93,6 +125,7 @@ namespace Sistema_SneakRush
             _puedeVer = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_VER");
             _puedeEjecutar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_EJECUTAR");
             _puedeExportar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_EXPORTAR");
+            _puedeExportarVenta = permisos.Contains("MAESTRO_PRODUCTOS_EXPORTAR_VENTA");
             _puedeCerrar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR_CERRAR");
         }
 
@@ -186,23 +219,9 @@ namespace Sistema_SneakRush
             List<LineaImportacion486LP> conErrores = lineas.Where(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA).ToList();
             if (conErrores.Count > 0)
             {
-                const int MAXIMO_EN_AVISO = 10;
-                StringBuilder texto = new StringBuilder();
-                texto.AppendLine(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.NoSeImportan", "Estas líneas no se van a importar porque tienen errores:"));
-                texto.AppendLine();
-
-                foreach (LineaImportacion486LP l in conErrores.Take(MAXIMO_EN_AVISO))
-                {
-                    texto.AppendLine(string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.LineaError", "Línea {0} ({1} {2} {3}, talle {4}): {5}"),
-                        l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Detalle));
-                }
-                if (conErrores.Count > MAXIMO_EN_AVISO)
-                {
-                    texto.AppendLine();
-                    texto.AppendLine(string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.Mas", "... y {0} más (revise la grilla)."), conErrores.Count - MAXIMO_EN_AVISO));
-                }
-
-                MessageBox.Show(texto.ToString(), lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar productos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string texto = lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.NoSeImportan", "Estas líneas no se van a importar porque tienen errores:")
+                    + Environment.NewLine + Environment.NewLine + TextoRechazadasSinTitulo(conErrores);
+                MessageBox.Show(texto, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar y exportar productos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -244,12 +263,41 @@ namespace Sistema_SneakRush
             ActualizarBotones();
 
             string texto = mensaje;
+            MessageBoxIcon icono = MessageBoxIcon.Information;
             if (resultado.Rechazadas > 0)
-                texto += Environment.NewLine + Environment.NewLine + lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.HayRechazadas",
-                    "Revise la grilla: cada línea rechazada indica el motivo. Puede exportarlas a un XML, corregirlas y volver a importarlo; las líneas ya importadas no se repiten.");
+            {
+                icono = MessageBoxIcon.Warning;
+                texto += Environment.NewLine + Environment.NewLine + TextoRechazadas(resultado.Lineas.Where(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA).ToList());
+                if (resultado.Lineas.Any(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA && l.Exportable))
+                    texto += Environment.NewLine + Environment.NewLine + lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.HayRechazadas",
+                        "Puede usar \"Exportar para corregir\", editar el archivo y volver a importarlo. Las líneas ya importadas no se repiten.");
+            }
 
-            MessageBox.Show(texto, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar productos"), MessageBoxButtons.OK,
-                resultado.Rechazadas > 0 ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
+            MessageBox.Show(texto, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar y exportar productos"), MessageBoxButtons.OK, icono);
+        }
+
+        // Lista las lineas rechazadas con su motivo (hasta 10; el resto se ve en la grilla)
+        private string TextoRechazadas(List<LineaImportacion486LP> rechazadas)
+        {
+            var lm = Program.LanguageManager;
+            return lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.ListaRechazadas", "Líneas rechazadas:") + Environment.NewLine + TextoRechazadasSinTitulo(rechazadas);
+        }
+
+        private string TextoRechazadasSinTitulo(List<LineaImportacion486LP> rechazadas)
+        {
+            var lm = Program.LanguageManager;
+            const int MAXIMO_EN_AVISO = 10;
+            StringBuilder texto = new StringBuilder();
+
+            foreach (LineaImportacion486LP l in rechazadas.Take(MAXIMO_EN_AVISO))
+            {
+                texto.AppendLine(string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.LineaError", "Línea {0} ({1} {2} {3}, talle {4}): {5}"),
+                    l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Detalle));
+            }
+            if (rechazadas.Count > MAXIMO_EN_AVISO)
+                texto.AppendLine(string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.Mas", "... y {0} más (revise la grilla)."), rechazadas.Count - MAXIMO_EN_AVISO));
+
+            return texto.ToString().TrimEnd();
         }
 
         // Valida solo lo que corresponde a la GUI (proveedor elegido y archivo seleccionado). Las reglas del archivo y de cada linea las hace la BLL
@@ -278,13 +326,13 @@ namespace Sistema_SneakRush
             var lm = Program.LanguageManager;
             if (_resultado == null) return;
 
-            string nombreSugerido = "remito_" + _resultado.NroRemito + "_rechazadas.xml";
+            string nombreSugerido = "remito_" + _resultado.NroRemito + "_para_corregir.xml";
             foreach (char c in Path.GetInvalidFileNameChars())
                 nombreSugerido = nombreSugerido.Replace(c, '_');
 
             using (SaveFileDialog dialogo = new SaveFileDialog())
             {
-                dialogo.Title = lm.ObtenerTexto(f, "Frm.ImportarProductos.Exportar.Title", "Guardar las líneas rechazadas");
+                dialogo.Title = lm.ObtenerTexto(f, "Frm.ImportarProductos.Exportar.Title", "Guardar las líneas para corregir");
                 dialogo.Filter = lm.ObtenerTexto(f, "Frm.ImportarProductos.Filtro", "Archivos XML (*.xml)|*.xml");
                 dialogo.FileName = nombreSugerido;
                 dialogo.OverwritePrompt = true;
@@ -294,10 +342,51 @@ namespace Sistema_SneakRush
                 string mensaje;
                 bool ok = _bllImportacion.ExportarRechazadas(_resultado, dialogo.FileName, out mensaje);
                 if (ok)
-                    MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar productos"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar y exportar productos"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                 else
                     MostrarAviso(mensaje);
             }
+        }
+
+        // Exporta a un XML los productos que estan a la venta (los que tienen stock)
+        private void btnExportarVenta_Click(object sender, EventArgs e)
+        {
+            var lm = Program.LanguageManager;
+
+            using (SaveFileDialog dialogo = new SaveFileDialog())
+            {
+                dialogo.Title = lm.ObtenerTexto(f, "Frm.ImportarProductos.ExportarVenta.Title", "Guardar los productos a la venta");
+                dialogo.Filter = lm.ObtenerTexto(f, "Frm.ImportarProductos.Filtro", "Archivos XML (*.xml)|*.xml");
+                dialogo.FileName = "productos_a_la_venta_" + DateTime.Now.ToString("yyyyMMdd") + ".xml";
+                dialogo.OverwritePrompt = true;
+
+                if (dialogo.ShowDialog(this) != DialogResult.OK) return;
+
+                int cantidad;
+                string mensaje;
+                bool ok;
+
+                Cursor = Cursors.WaitCursor;
+                try
+                {
+                    ok = _bllImportacion.ExportarProductosEnVenta(dialogo.FileName, out cantidad, out mensaje);
+                }
+                finally
+                {
+                    Cursor = Cursors.Default;
+                }
+
+                if (ok)
+                    MessageBox.Show(mensaje, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar y exportar productos"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                else
+                    MostrarAviso(mensaje);
+            }
+        }
+
+        private void chkSoloRechazadas_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_actualizando) return;
+            MostrarGrilla();
         }
 
         private void btnCerrar_Click(object sender, EventArgs e)
@@ -308,10 +397,40 @@ namespace Sistema_SneakRush
         // Muestra lo que corresponda: el resultado de la importacion o, si todavia no hubo, la vista previa del archivo
         private void MostrarGrilla()
         {
+            ActualizarFiltro();
+
             if (_resultado == null && _vistaPrevia != null)
                 MostrarVistaPrevia();
             else
                 MostrarResultado();
+        }
+
+        // El filtro "Mostrar solo rechazadas" solo se habilita si hay lineas rechazadas en lo que muestra la grilla
+        private void ActualizarFiltro()
+        {
+            List<LineaImportacion486LP> lineas = LineasActuales();
+            bool hayRechazadas = lineas.Any(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA);
+
+            _actualizando = true;
+            if (!hayRechazadas) chkSoloRechazadas.Checked = false;
+            chkSoloRechazadas.Enabled = hayRechazadas;
+            _actualizando = false;
+        }
+
+        // Lineas que corresponden mostrar en la grilla (la vista previa o el resultado de la importacion)
+        private List<LineaImportacion486LP> LineasActuales()
+        {
+            if (_resultado != null) return _resultado.Lineas;
+            if (_vistaPrevia != null) return _vistaPrevia;
+            return new List<LineaImportacion486LP>();
+        }
+
+        // Aplica el filtro de la grilla
+        private IEnumerable<LineaImportacion486LP> LineasVisibles(List<LineaImportacion486LP> lineas)
+        {
+            return chkSoloRechazadas.Checked
+                ? lineas.Where(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA)
+                : lineas;
         }
 
         // Vuelca la vista previa del XML en la grilla (una fila por linea); el precio y la categoria van en el detalle
@@ -320,14 +439,13 @@ namespace Sistema_SneakRush
             var lm = Program.LanguageManager;
 
             dgvLineas.Rows.Clear();
-            int rechazadas = 0;
-            foreach (LineaImportacion486LP l in _vistaPrevia)
+            int rechazadas = _vistaPrevia.Count(x => x.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA);
+            foreach (LineaImportacion486LP l in LineasVisibles(_vistaPrevia))
             {
                 int i;
                 if (l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA)
                 {
                     // Linea con errores: no se importaria; el motivo va en el detalle
-                    rechazadas++;
                     i = dgvLineas.Rows.Add(l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Cantidad, TextoResultado(l.Resultado), l.Detalle);
                     dgvLineas.Rows[i].DefaultCellStyle.BackColor = ColorResultado(l.Resultado);
                 }
@@ -343,7 +461,7 @@ namespace Sistema_SneakRush
             dgvLineas.ClearSelection();
 
             lblResumen.Text = string.Format(lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver.Resumen",
-                "Vista previa del remito {0}: {1} líneas. Se importarían {2} y no se importarían {3}. Todavía no se importó nada: elija el proveedor y use Importar para cargarlas."),
+                "Vista previa del remito {0}: {1} líneas. Se importarían {2} y no se importarían {3}. Todavía no se importó nada."),
                 _remitoVistaPrevia, _vistaPrevia.Count, _vistaPrevia.Count - rechazadas, rechazadas);
         }
 
@@ -359,7 +477,7 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            foreach (LineaImportacion486LP l in _resultado.Lineas)
+            foreach (LineaImportacion486LP l in LineasVisibles(_resultado.Lineas))
             {
                 int i = dgvLineas.Rows.Add(l.Linea, l.Marca, l.Modelo, l.Color, l.Talle, l.Cantidad, TextoResultado(l.Resultado), l.Detalle);
                 dgvLineas.Rows[i].DefaultCellStyle.BackColor = ColorResultado(l.Resultado);
@@ -400,13 +518,14 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Cada boton depende de su patente. Exportar ademas solo tiene sentido si la ultima importacion dejo lineas rechazadas que se puedan corregir
+        // Cada boton depende de su patente. "Exportar para corregir" ademas solo se habilita si la ultima importacion dejo lineas rechazadas que se puedan corregir
         private void ActualizarBotones()
         {
             btnExaminar.Enabled = _puedeExaminar;
             btnVer.Enabled = _puedeVer;
             btnImportar.Enabled = _puedeEjecutar;
             btnCerrar.Enabled = _puedeCerrar;
+            btnExportarVenta.Enabled = _puedeExportarVenta;
             btnExportar.Enabled = _puedeExportar && _resultado != null &&
                 _resultado.Lineas.Any(l => l.Resultado == LineaImportacion486LP.RESULTADO_RECHAZADA && l.Exportable);
         }
@@ -414,25 +533,28 @@ namespace Sistema_SneakRush
         private void MostrarAviso(string texto)
         {
             var lm = Program.LanguageManager;
-            MessageBox.Show(texto, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar productos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(texto, lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.Title", "Importar y exportar productos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         public void ActualizarIdioma()
         {
             var lm = Program.LanguageManager;
 
-            this.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Titulo", "Importar productos desde XML");
-            lblTitulo.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Titulo", "Importar productos desde XML");
-            grpOrigen.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Origen", "Remito del proveedor");
+            this.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Titulo", "Importar y exportar productos");
+            lblTitulo.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Titulo", "Importar y exportar productos");
+            grpOrigen.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Origen", "Importar remito del proveedor");
+            grpExportar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.GrupoExportar", "Exportar");
+            btnExportarVenta.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.ExportarVenta", "Exportar productos a la venta");
+            chkSoloRechazadas.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.SoloRechazadas", "Mostrar solo rechazadas");
             lblProveedor.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Proveedor", "Proveedor:");
             lblArchivo.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Archivo", "Archivo XML:");
             lblNota.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Nota",
                 "Cada línea suma stock si el producto ya existe (no cambia el precio) o lo da de alta si es nuevo. Las líneas con errores se informan y no se importan.");
             btnExaminar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Examinar", "Examinar...");
             btnImportar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Importar", "Importar");
-            btnVer.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver", "Ver");
+            btnVer.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Ver", "Vista previa");
             lblDetalle.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Reporte", "Detalle de la importación:");
-            btnExportar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Exportar", "Exportar rechazadas");
+            btnExportar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Exportar", "Exportar para corregir");
             btnCerrar.Text = lm.ObtenerTexto(f, "Frm.ImportarProductos.Cerrar", "Cerrar");
 
             AplicarEncabezadosColumnas();

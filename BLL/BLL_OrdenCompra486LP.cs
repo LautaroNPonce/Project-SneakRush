@@ -66,7 +66,7 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Compras",
-                    $"Orden de compra {orden.NroOrden} generada a partir de la Solicitud #{orden.IdSolicitud}, Costo Total ${orden.CostoTotal}.",
+                    $"Orden de compra {orden.NroOrden} generada a partir de la Solicitud #{orden.IdSolicitud}, Costo Total ${orden.CostoTotal.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"))}.",
                     Criticidad486LP.Alta, dni, nombreUsuario));
 
                 string mensajeDV;

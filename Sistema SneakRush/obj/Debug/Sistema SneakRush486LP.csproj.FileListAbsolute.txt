@@ -23,7 +23,6 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema S
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmCambiarContraseña486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmCerrarSesion486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmCobrarVenta486LP.resources
-C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmConsultarAnaliticas486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmConsultarProducto486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmDocumentacion486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmGenerarSolicitud486LP.resources
@@ -50,3 +49,4 @@ C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema S
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema SneakRush.pdb
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmImportarProductos486LP.resources
 C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmMenuPrincipal486LP.resources
+C:\Users\lauch\OneDrive\Documents\Proyecto SneakRush\Sistema SneakRush\Sistema SneakRush\obj\Debug\Sistema_SneakRush.FrmReporteInteligente486LP.resources

@@ -211,7 +211,7 @@ namespace BLL
 
                 if (ObjetoMapper.TieneMovimientos(idProveedor))
                 {
-                    mensaje = Mensajes486LP.Obtener("Proveedor.TieneMovimientos"); // Muestra: No se puede eliminar el proveedor: tiene órdenes de compra asociadas
+                    mensaje = Mensajes486LP.Obtener("Proveedor.TieneMovimientos"); // Muestra: No se puede eliminar el proveedor: tiene órdenes de compra o importaciones asociadas
                     return false;
                 }
 

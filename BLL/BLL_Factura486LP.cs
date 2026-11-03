@@ -41,6 +41,13 @@ namespace BLL
                     return null;
                 }
 
+                string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
+                string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
+
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Compras",
+                    $"Alta de factura {factura.NroFactura} de la Orden #{factura.IdOrden}, Total ${factura.Total.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"))}.",
+                    Criticidad486LP.Media, dni, nombreUsuario));
+
                 string mensajeDV;
                 BLL_DV486LP bllDV = new BLL_DV486LP();
                 bllDV.RecalcularDV("Factura", out mensajeDV);
@@ -99,7 +106,7 @@ namespace BLL
                 string nombreUsuario = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.NombreUsuario ?? "Sistema";
 
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Compras",
-                    $"Factura {factura.NroFactura} pagada ({medioPago}), Total ${factura.Total}. Stock actualizado para {detalleRecepcion.Count} producto(s).",
+                    $"Factura {factura.NroFactura} pagada ({medioPago}), Total ${factura.Total.ToString("N2", System.Globalization.CultureInfo.GetCultureInfo("es-AR"))}. Stock actualizado para {detalleRecepcion.Count} producto(s).",
                     Criticidad486LP.Alta, dni, nombreUsuario));
 
                 string mensajeDV;

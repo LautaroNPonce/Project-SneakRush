@@ -26,8 +26,20 @@ namespace Mappers
             return tabla.Rows.Count > 0 ? ManejadorMapeo486LP.MapearEntidad<ImportacionProducto486LP>(tabla.Rows[0]) : null;
         }
 
-        // Registra el remito la primera vez que llega. Devuelve el Id generado
-        public int Crear(int idProveedor, string nroRemito, string usuario, string nombreArchivo)
+        // Busca una importacion anterior de ese proveedor con el mismo contenido (misma huella). Devuelve null si no hay
+        public ImportacionProducto486LP ObtenerPorHuella(int idProveedor, string huella)
+        {
+            SqlCommand cmd = new SqlCommand("ImportacionProducto_ObtenerPorHuella");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdProveedor", idProveedor));
+            cmd.Parameters.Add(new SqlParameter("@HashContenido", huella));
+
+            DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
+            return tabla.Rows.Count > 0 ? ManejadorMapeo486LP.MapearEntidad<ImportacionProducto486LP>(tabla.Rows[0]) : null;
+        }
+
+        // Registra el remito la primera vez que llega (con la huella de su contenido). Devuelve el Id generado
+        public int Crear(int idProveedor, string nroRemito, string usuario, string nombreArchivo, string huella)
         {
             SqlCommand cmd = new SqlCommand("ImportacionProducto_Crear");
             cmd.CommandType = CommandType.StoredProcedure;
@@ -35,6 +47,7 @@ namespace Mappers
             cmd.Parameters.Add(new SqlParameter("@NroRemito", nroRemito));
             cmd.Parameters.Add(new SqlParameter("@Usuario", usuario));
             cmd.Parameters.Add(new SqlParameter("@NombreArchivo", nombreArchivo));
+            cmd.Parameters.Add(new SqlParameter("@HashContenido", huella));
 
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
         }

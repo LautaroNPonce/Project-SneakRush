@@ -30,9 +30,35 @@ namespace Sistema_SneakRush
         public FrmGestionUsuarios486LP()
         {
             InitializeComponent();
+            // Cada par de radios va en su propio panel: si estan todos juntos en el form, WinForms los toma como un solo grupo
+            AislarRadios(rbtnActivos, rbtnTodos);
+            AislarRadios(rbtnActivoSi, rbtnActivoNo);
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionUsuarios486LP_FormClosing;
 
+        }
+
+        private void AislarRadios(RadioButton a, RadioButton b)
+        {
+            Control padre = a.Parent;
+            int x = Math.Min(a.Left, b.Left);
+            int y = Math.Min(a.Top, b.Top);
+            int ancho = Math.Max(a.Right, b.Right) - x;
+            int alto = Math.Max(a.Bottom, b.Bottom) - y;
+
+            Panel panel = new Panel();
+            panel.BackColor = Color.Transparent;
+            panel.Bounds = new Rectangle(x, y, ancho, alto);
+            panel.TabStop = false;
+
+            int indice = padre.Controls.GetChildIndex(a);
+            padre.Controls.Add(panel);
+            padre.Controls.SetChildIndex(panel, indice);
+
+            a.Location = new Point(a.Left - x, a.Top - y);
+            b.Location = new Point(b.Left - x, b.Top - y);
+            panel.Controls.Add(a);
+            panel.Controls.Add(b);
         }
 
         private void FrmGestionUsuarios486LP_Load(object sender, EventArgs e)

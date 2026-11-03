@@ -19,6 +19,7 @@ namespace Sistema_SneakRush
         private List<Permiso486LP> _todasLasPatentes = new List<Permiso486LP>();
         private List<int> _idsFamiliasAsignadas = new List<int>();
         private List<int> _idsPermisosAsignados = new List<int>();
+        private List<int> _idsPermisosPorFamilia = new List<int>(); // permisos que el perfil ya recibe a traves de sus familias
         private readonly string[] _codigosModulo =
         {
             "Todos", "Usuarios", "Familias", "Perfiles", "Bitácora", "Respaldos",
@@ -141,6 +142,10 @@ namespace Sistema_SneakRush
                 if (_idsPermisosAsignados.Contains(p.Id))
                     continue;
 
+                // Tampoco se ofrecen los que el perfil ya recibe por alguna de sus familias
+                if (_idsPermisosPorFamilia.Contains(p.Id))
+                    continue;
+
                 if (filtro == "Todos" || ObtenerModulo(p.Nombre) == filtro)
                 {
                     dgvPatentes.Rows.Add(p.Id, p.Nombre);
@@ -175,13 +180,23 @@ namespace Sistema_SneakRush
             dgvFamiliasAsignadas.Rows.Clear();
             dgvPermisosDeFamilia.Rows.Clear();
             _idsFamiliasAsignadas.Clear();
+            _idsPermisosPorFamilia.Clear();
 
             List<Familia486LP> asignadas = _bll.ObtenerFamiliasDePerfil(idPerfil);
             foreach (Familia486LP f in asignadas)
             {
                 dgvFamiliasAsignadas.Rows.Add(f.Id, f.Nombre);
                 _idsFamiliasAsignadas.Add(f.Id);
+
+                foreach (Permiso486LP pf in _bllFamilia.ObtenerPermisosDeFamilia(f.Id))
+                {
+                    if (!_idsPermisosPorFamilia.Contains(pf.Id))
+                    {
+                        _idsPermisosPorFamilia.Add(pf.Id);
+                    }
+                }
             }
+            MostrarPatentes();
 
             // Refrescar "familias disponibles" para que no muestre las ya asignadas
             CargarFamilias();
@@ -633,6 +648,7 @@ namespace Sistema_SneakRush
             dgvPermisosDeFamilia.Rows.Clear();
             _idsFamiliasAsignadas.Clear();   // sin perfil seleccionado todo vuelve a disponibles
             _idsPermisosAsignados.Clear();
+            _idsPermisosPorFamilia.Clear();
             ActualizarLabelPerfil();
             CargarPerfiles();
             CargarFamilias();

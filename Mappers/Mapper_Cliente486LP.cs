@@ -13,57 +13,36 @@ namespace Mappers
 
     public class Mapper_Cliente486LP : MapperBase486LP
     {
-        // Lista todos los clientes.
+        // Lista todos los clientes. Si falla la base de datos la excepcion se propaga, la BLL la registra en la bitacora
         public List<Cliente486LP> Listar()
         {
-            try
-            {
-                SqlCommand cmd = new SqlCommand("Cliente_Listar");
-                cmd.CommandType = CommandType.StoredProcedure;
+            SqlCommand cmd = new SqlCommand("Cliente_Listar");
+            cmd.CommandType = CommandType.StoredProcedure;
 
-                DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
-                return ManejadorMapeo486LP.MapearLista<Cliente486LP>(tabla);
-            }
-            catch
-            {
-                return new List<Cliente486LP>();
-            }
+            DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
+            return ManejadorMapeo486LP.MapearLista<Cliente486LP>(tabla);
         }
 
-        // Obtiene un cliente por su dni (devuelve null si no existe)
+        // Obtiene un cliente por su dni (devuelve null si no existe). Si falla la base de datos la excepcion se propaga a la BLL
         public Cliente486LP Obtener(string dni)
         {
-            try
-            {
-                SqlCommand cmd = new SqlCommand("Cliente_Obtener");
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@DNI", dni));
+            SqlCommand cmd = new SqlCommand("Cliente_Obtener");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@DNI", dni));
 
-                DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
-                return tabla.Rows.Count > 0 ? ManejadorMapeo486LP.MapearEntidad<Cliente486LP>(tabla.Rows[0]) : null;
-            }
-            catch
-            {
-                return null;
-            }
+            DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
+            return tabla.Rows.Count > 0 ? ManejadorMapeo486LP.MapearEntidad<Cliente486LP>(tabla.Rows[0]) : null;
         }
 
-        // Indica si ya existe un cliente con ese dni
+        // Indica si ya existe un cliente con ese dni. Si falla la base de datos la excepcion se propaga a la BLL (no se puede asumir que no existe)
         public bool Existe(string dni)
         {
-            try
-            {
-                SqlCommand cmd = new SqlCommand("Cliente_Existe");
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add(new SqlParameter("@DNI", dni));
+            SqlCommand cmd = new SqlCommand("Cliente_Existe");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@DNI", dni));
 
-                int cantidad = Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
-                return cantidad > 0;
-            }
-            catch
-            {
-                return false;
-            }
+            int cantidad = Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
+            return cantidad > 0;
         }
 
         public int Agregar(Cliente486LP cliente)

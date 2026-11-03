@@ -39,7 +39,9 @@
     <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -77,11 +79,11 @@
     <Compile Include="FrmCobrarVenta486LP.Designer.cs">
       <DependentUpon>FrmCobrarVenta486LP.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmConsultarAnaliticas486LP.cs">
+    <Compile Include="FrmReporteInteligente486LP.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmConsultarAnaliticas486LP.Designer.cs">
-      <DependentUpon>FrmConsultarAnaliticas486LP.cs</DependentUpon>
+    <Compile Include="FrmReporteInteligente486LP.Designer.cs">
+      <DependentUpon>FrmReporteInteligente486LP.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmConsultarProducto486LP.cs">
       <SubType>Form</SubType>
@@ -230,8 +232,8 @@
     <EmbeddedResource Include="FrmCobrarVenta486LP.resx">
       <DependentUpon>FrmCobrarVenta486LP.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FrmConsultarAnaliticas486LP.resx">
-      <DependentUpon>FrmConsultarAnaliticas486LP.cs</DependentUpon>
+    <EmbeddedResource Include="FrmReporteInteligente486LP.resx">
+      <DependentUpon>FrmReporteInteligente486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultarProducto486LP.resx">
       <DependentUpon>FrmConsultarProducto486LP.cs</DependentUpon>
