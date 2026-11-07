@@ -24,6 +24,14 @@ namespace BLL
         public const int VENTANA_PROMEDIO = 3;
         public const int CANTIDAD_TOP = 5;
 
+        // Reporte de rotacion
+        public const int MESES_CUBRIR_DEFECTO = 3;
+        public const int MIN_MESES_CUBRIR = 1;
+        public const int MAX_MESES_CUBRIR = 12;
+        public const int FACTOR_SOBRESTOCK = 2;    // si el stock alcanza para mas de (meses a cubrir x 2) no hace falta comprar
+        public const int CANTIDAD_RANKING = 8;     // cuantos modelos muestran los graficos de mas y menos vendidos
+        private const decimal DIAS_POR_MES = 30.4375m;
+
         public bool ValidarRangoFechas(DateTime desde, DateTime hasta)
         {
             return desde.Date <= hasta.Date;
@@ -42,6 +50,11 @@ namespace BLL
         public bool ValidarPeriodosAProyectar(int periodos)
         {
             return periodos >= 1 && periodos <= MAX_PERIODOS_PROYECTAR;
+        }
+
+        public bool ValidarMesesACubrir(int meses)
+        {
+            return meses >= MIN_MESES_CUBRIR && meses <= MAX_MESES_CUBRIR;
         }
 
         // Primer dia del periodo que contiene la fecha: dia 1 del mes, o el lunes de esa semana
@@ -220,6 +233,109 @@ namespace BLL
             return r;
         }
 
+        // Esto devuelve el reporte de rotacion armado, uno vacio si los filtros no son validos, o null si hubo un error (queda en la bitacora).
+        public ReporteRotacion486LP GenerarRotacion(DateTime desde, DateTime hasta, int mesesACubrir)
+        {
+            try
+            {
+                if (!ValidarRangoFechas(desde, hasta) || !ValidarMesesACubrir(mesesACubrir))
+                    return new ReporteRotacion486LP();
+
+                DateTime hoy = DateTime.Today;
+                DateTime hastaEf = hasta.Date > hoy ? hoy : hasta.Date;
+                if (desde.Date > hastaEf) return new ReporteRotacion486LP();
+
+                List<ReporteRotacionProducto486LP> filas = ObjetoMapper.Rotacion(desde.Date, hastaEf);
+                return CalcularRotacion(desde.Date, hastaEf, mesesACubrir, filas);
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO, $"Error en BLL_ReporteInteligente.GenerarRotacion(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return null;
+            }
+        }
+
+        // Armo el reporte de rotacion a partir de lo que devolvio la base (no toca la base, asi se puede probar solo).
+        // Regla de compra, por modelo:
+        //   ventas por mes = unidades vendidas / meses del periodo
+        //   necesito = ventas por mes x meses a cubrir
+        //   - sin ventas en el periodo                       -> NO COMPRAR
+        //   - stock menor a lo que necesito                  -> COMPRAR (cantidad = necesito - stock, redondeado hacia arriba)
+        //   - stock mayor a (necesito x FACTOR_SOBRESTOCK)   -> NO COMPRAR (ya tiene de sobra)
+        //   - el resto                                       -> MANTENER
+        public ReporteRotacion486LP CalcularRotacion(DateTime desde, DateTime hasta, int mesesACubrir, List<ReporteRotacionProducto486LP> filas)
+        {
+            ReporteRotacion486LP r = new ReporteRotacion486LP();
+            r.Desde = desde.Date;
+            r.Hasta = hasta.Date;
+            r.MesesACubrir = mesesACubrir;
+            decimal dias = (hasta.Date - desde.Date).Days + 1;
+            r.MesesPeriodo = Math.Round(dias / DIAS_POR_MES, 2);
+            if (r.MesesPeriodo <= 0m) r.MesesPeriodo = 0.01m;
+
+            List<ReporteRotacionProducto486LP> lista = filas ?? new List<ReporteRotacionProducto486LP>();
+
+            foreach (ReporteRotacionProducto486LP p in lista)
+            {
+                p.UnidadesPorMes = Math.Round(p.Unidades / (dias / DIAS_POR_MES), 2);
+                p.MesesDeStock = null;
+                p.CantidadSugerida = 0;
+
+                if (p.Unidades <= 0)
+                {
+                    p.Recomendacion = ReporteRotacionProducto486LP.NO_COMPRAR;
+                    continue;
+                }
+
+                decimal porMes = p.Unidades / (dias / DIAS_POR_MES);
+                decimal necesito = porMes * mesesACubrir;
+                p.MesesDeStock = Math.Round(p.Stock / porMes, 1);
+
+                if (p.Stock < necesito)
+                {
+                    p.Recomendacion = ReporteRotacionProducto486LP.COMPRAR;
+                    p.CantidadSugerida = (int)Math.Ceiling(necesito - p.Stock);
+                }
+                else if (p.Stock > necesito * FACTOR_SOBRESTOCK)
+                {
+                    p.Recomendacion = ReporteRotacionProducto486LP.NO_COMPRAR;
+                }
+                else
+                {
+                    p.Recomendacion = ReporteRotacionProducto486LP.MANTENER;
+                }
+            }
+
+            r.ModelosAnalizados = lista.Count;
+            r.ModelosConVentas = lista.Count(x => x.Unidades > 0);
+            r.ModelosSinVentas = lista.Count(x => x.Unidades <= 0);
+            r.TotalUnidades = lista.Sum(x => x.Unidades);
+            r.TotalMonto = lista.Sum(x => x.Monto);
+            r.ModelosAComprar = lista.Count(x => x.Recomendacion == ReporteRotacionProducto486LP.COMPRAR);
+            r.UnidadesAComprar = lista.Sum(x => x.CantidadSugerida);
+            r.ModelosNoComprar = lista.Count(x => x.Recomendacion == ReporteRotacionProducto486LP.NO_COMPRAR);
+
+            // Ranking de mas vendidos (de mayor a menor) y de menos vendidos (de menor a mayor; si empatan, primero el que mas stock parado tiene)
+            List<ReporteRotacionProducto486LP> masVendidos = lista
+                .OrderByDescending(x => x.Unidades).ThenByDescending(x => x.Monto).ThenBy(x => x.Marca).ThenBy(x => x.Modelo).ToList();
+            List<ReporteRotacionProducto486LP> menosVendidos = lista
+                .OrderBy(x => x.Unidades).ThenByDescending(x => x.Stock).ThenBy(x => x.Marca).ThenBy(x => x.Modelo).ToList();
+
+            r.MasVendidos = masVendidos.Take(CANTIDAD_RANKING).ToList();
+            r.MenosVendidos = menosVendidos.Take(CANTIDAD_RANKING).ToList();
+            r.MasVendido = masVendidos.FirstOrDefault(x => x.Unidades > 0);
+            r.MenosVendido = menosVendidos.FirstOrDefault(x => x.Unidades > 0);
+
+            // Para la tabla: primero lo que hay que comprar (lo que mas falta primero), despues mantener, despues no comprar
+            r.Productos = lista
+                .OrderBy(x => x.Recomendacion)
+                .ThenByDescending(x => x.CantidadSugerida)
+                .ThenByDescending(x => x.Unidades)
+                .ThenBy(x => x.Marca).ThenBy(x => x.Modelo).ToList();
+
+            return r;
+        }
+
         // Proyecta los "pasos" periodos siguientes a partir del historico (un monto por periodo completo, en orden).
         public static List<decimal> Proyectar(List<decimal> historico, int pasos, int metodo)
         {
@@ -267,13 +383,13 @@ namespace BLL
             return resultado;
         }
 
-        public void RegistrarExportacion(int periodos)
+        public void RegistrarExportacion(int periodos, int modelos)
         {
             try
             {
                 var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO,
-                    $"Reporte inteligente exportado a PDF ({periodos} periodos).",
+                    $"Reporte inteligente exportado a PDF ({periodos} periodos y {modelos} modelos).",
                     Criticidad486LP.Baja,
                     usuario?.DNI ?? "Sistema",
                     usuario?.NombreUsuario ?? "Sistema"));

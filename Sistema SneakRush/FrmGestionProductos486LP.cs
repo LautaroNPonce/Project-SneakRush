@@ -27,6 +27,7 @@ namespace Sistema_SneakRush
         private bool _puedeCerrar;
         private bool _puedeImportar;
         private int _idSeleccionado;
+        private List<Producto486LP> _todosLosProductos = new List<Producto486LP>();
 
         public FrmGestionProductos486LP()
         {
@@ -66,12 +67,10 @@ namespace Sistema_SneakRush
             txtColor.MaxLength = 30;
             txtTalle.MaxLength = 4;
             txtPrecio.MaxLength = 12;
-            txtStock.MaxLength = 9;
 
             // Teclas permitidas: talle y precio admiten numeros y separador decimal; stock solo numeros
             txtTalle.KeyPress += SoloNumeroConDecimal_KeyPress;
             txtPrecio.KeyPress += SoloNumeroConDecimal_KeyPress;
-            txtStock.KeyPress += SoloNumero_KeyPress;
 
             CargarCombos();
             ConfigurarColumnas();
@@ -80,6 +79,14 @@ namespace Sistema_SneakRush
             AplicarPermisosBotones();
             LimpiarCampos();
             ActualizarIdioma();
+
+            // Filtro en vivo: la grilla se va achicando a medida que se escribe o se elige la marca
+            cmbMarca.SelectedIndexChanged += FiltroCambiado;
+            cmbCategoria.SelectedIndexChanged += FiltroCambiado;
+            txtModelo.TextChanged += FiltroCambiado;
+            txtColor.TextChanged += FiltroCambiado;
+            txtTalle.TextChanged += FiltroCambiado;
+            txtPrecio.TextChanged += FiltroCambiado;
         }
 
         private bool TienePatenteAcceso()
@@ -170,9 +177,65 @@ namespace Sistema_SneakRush
 
         private void RefrescarGrilla()
         {
+            _todosLosProductos = _bllProducto.Listar();
+            AplicarFiltro();
+        }
+
+        private void FiltroCambiado(object sender, EventArgs e)
+        {
+            AplicarFiltro();
+        }
+
+        // Muestra en la grilla solo los productos que coinciden con lo que hay en marca, modelo, color y talle.
+        // Con un producto elegido en la grilla no se filtra, porque los campos tienen sus datos para modificarlos
+        // (al apretar Limpiar se vuelve a mostrar la lista completa).
+        private void AplicarFiltro()
+        {
+            if (_idSeleccionado != 0) return;
+
+            IEnumerable<Producto486LP> resultado = _todosLosProductos;
+
+            if (cmbMarca.SelectedIndex >= 0)
+            {
+                string marca = cmbMarca.Text;
+                resultado = resultado.Where(p => string.Equals(p.Marca, marca, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (cmbCategoria.SelectedIndex >= 0)
+            {
+                string categoria = cmbCategoria.Text;
+                resultado = resultado.Where(p => string.Equals(p.Categoria, categoria, StringComparison.OrdinalIgnoreCase));
+            }
+
+            string modelo = txtModelo.Text.Trim();
+            if (modelo.Length > 0)
+                resultado = resultado.Where(p => Contiene(p.Modelo, modelo));
+
+            string color = txtColor.Text.Trim();
+            if (color.Length > 0)
+                resultado = resultado.Where(p => Contiene(p.Color, color));
+
+            // El talle filtra por el comienzo: 42 muestra el 42 y el 42.5
+            string talle = txtTalle.Text.Trim().Replace(',', '.');
+            if (talle.Length > 0)
+                resultado = resultado.Where(p => p.Talle != null && p.Talle.StartsWith(talle, StringComparison.OrdinalIgnoreCase));
+
+            // El precio tambien filtra por el comienzo: 1200 muestra 1200, 12000 o 1200.5 (coma o punto, da igual)
+            string precio = txtPrecio.Text.Trim().Replace(',', '.');
+            if (precio.Length > 0)
+                resultado = resultado.Where(p => p.Precio.ToString("0.##", CultureInfo.InvariantCulture).StartsWith(precio, StringComparison.Ordinal));
+
             dgvProductos.DataSource = null;
-            dgvProductos.DataSource = _bllProducto.Listar();
+            dgvProductos.DataSource = resultado.ToList();
             dgvProductos.ClearSelection();
+        }
+
+        // Compara sin importar mayusculas ni tildes
+        private bool Contiene(string texto, string buscado)
+        {
+            if (texto == null) return false;
+            return CultureInfo.CurrentCulture.CompareInfo.IndexOf(texto, buscado,
+                CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace) >= 0;
         }
 
         private void dgvProductos_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -189,8 +252,7 @@ namespace Sistema_SneakRush
             txtColor.Text = p.Color;
             txtTalle.Text = p.Talle;
             txtPrecio.Text = p.Precio.ToString("0.00");
-            txtStock.Text = p.Stock.ToString();
-            txtStock.ReadOnly = true;
+            nudStock.Value = Math.Min(p.Stock, (int)nudStock.Maximum);
             ActualizarEtiquetaStock();
         }
 
@@ -325,12 +387,8 @@ namespace Sistema_SneakRush
                 return false;
             }
 
-            int stock = 0;
-            if (esAlta && !string.IsNullOrWhiteSpace(txtStock.Text) && !int.TryParse(txtStock.Text.Trim(), out stock))
-            {
-                MostrarAviso(Mensajes486LP.Obtener("Producto.StockInvalido"));
-                return false;
-            }
+            // El control numerico siempre tiene un valor entre 0 y su maximo, no hace falta validar texto
+            int stock = (int)nudStock.Value;
 
             producto = new Producto486LP
             {
@@ -354,8 +412,8 @@ namespace Sistema_SneakRush
             txtColor.Clear();
             txtTalle.Clear();
             txtPrecio.Clear();
-            txtStock.ReadOnly = false;
-            txtStock.Text = "0";
+            nudStock.Value = 0;
+            AplicarFiltro();
             dgvProductos.ClearSelection();
             ActualizarEtiquetaStock();
             cmbMarca.Focus();

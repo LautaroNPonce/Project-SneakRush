@@ -56,7 +56,7 @@
             this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.lblTitulo.Location = new System.Drawing.Point(24, 14);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(330, 30);
+            this.lblTitulo.Size = new System.Drawing.Size(380, 37);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Estado de stock y reposición";
             // 
@@ -85,7 +85,7 @@
             this.lblMarca.ForeColor = System.Drawing.Color.Black;
             this.lblMarca.Location = new System.Drawing.Point(18, 34);
             this.lblMarca.Name = "lblMarca";
-            this.lblMarca.Size = new System.Drawing.Size(44, 17);
+            this.lblMarca.Size = new System.Drawing.Size(57, 23);
             this.lblMarca.TabIndex = 0;
             this.lblMarca.Text = "Marca";
             // 
@@ -96,7 +96,7 @@
             this.cmbMarca.FormattingEnabled = true;
             this.cmbMarca.Location = new System.Drawing.Point(70, 30);
             this.cmbMarca.Name = "cmbMarca";
-            this.cmbMarca.Size = new System.Drawing.Size(140, 25);
+            this.cmbMarca.Size = new System.Drawing.Size(140, 29);
             this.cmbMarca.TabIndex = 1;
             // 
             // lblTalle
@@ -106,7 +106,7 @@
             this.lblTalle.ForeColor = System.Drawing.Color.Black;
             this.lblTalle.Location = new System.Drawing.Point(230, 34);
             this.lblTalle.Name = "lblTalle";
-            this.lblTalle.Size = new System.Drawing.Size(37, 17);
+            this.lblTalle.Size = new System.Drawing.Size(43, 23);
             this.lblTalle.TabIndex = 2;
             this.lblTalle.Text = "Talle";
             // 
@@ -117,7 +117,7 @@
             this.cmbTalle.FormattingEnabled = true;
             this.cmbTalle.Location = new System.Drawing.Point(275, 30);
             this.cmbTalle.Name = "cmbTalle";
-            this.cmbTalle.Size = new System.Drawing.Size(90, 25);
+            this.cmbTalle.Size = new System.Drawing.Size(90, 29);
             this.cmbTalle.TabIndex = 3;
             // 
             // lblEstado
@@ -127,7 +127,7 @@
             this.lblEstado.ForeColor = System.Drawing.Color.Black;
             this.lblEstado.Location = new System.Drawing.Point(385, 34);
             this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Size = new System.Drawing.Size(48, 17);
+            this.lblEstado.Size = new System.Drawing.Size(61, 23);
             this.lblEstado.TabIndex = 4;
             this.lblEstado.Text = "Estado";
             // 
@@ -138,7 +138,7 @@
             this.cmbEstado.FormattingEnabled = true;
             this.cmbEstado.Location = new System.Drawing.Point(440, 30);
             this.cmbEstado.Name = "cmbEstado";
-            this.cmbEstado.Size = new System.Drawing.Size(130, 25);
+            this.cmbEstado.Size = new System.Drawing.Size(130, 29);
             this.cmbEstado.TabIndex = 5;
             // 
             // chkSoloReponer
@@ -148,7 +148,7 @@
             this.chkSoloReponer.ForeColor = System.Drawing.Color.Black;
             this.chkSoloReponer.Location = new System.Drawing.Point(595, 32);
             this.chkSoloReponer.Name = "chkSoloReponer";
-            this.chkSoloReponer.Size = new System.Drawing.Size(200, 21);
+            this.chkSoloReponer.Size = new System.Drawing.Size(226, 27);
             this.chkSoloReponer.TabIndex = 6;
             this.chkSoloReponer.Text = "Solo productos a reponer";
             this.chkSoloReponer.UseVisualStyleBackColor = true;
@@ -206,7 +206,7 @@
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCerrar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnCerrar.ForeColor = System.Drawing.Color.White;
-            this.btnCerrar.Location = new System.Drawing.Point(863, 150);
+            this.btnCerrar.Location = new System.Drawing.Point(991, 150);
             this.btnCerrar.Name = "btnCerrar";
             this.btnCerrar.Size = new System.Drawing.Size(110, 34);
             this.btnCerrar.TabIndex = 5;
@@ -216,19 +216,23 @@
             // 
             // dgvProductos
             // 
-            this.dgvProductos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvProductos.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.dgvProductos.ColumnHeadersHeight = 29;
             this.dgvProductos.Location = new System.Drawing.Point(27, 200);
             this.dgvProductos.Name = "dgvProductos";
-            this.dgvProductos.Size = new System.Drawing.Size(640, 330);
+            this.dgvProductos.RowHeadersWidth = 51;
+            this.dgvProductos.Size = new System.Drawing.Size(711, 330);
             this.dgvProductos.TabIndex = 6;
             // 
             // chartEstado
             // 
-            this.chartEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.chartEstado.BackColor = System.Drawing.Color.White;
-            this.chartEstado.Location = new System.Drawing.Point(680, 200);
+            this.chartEstado.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartEstado.Location = new System.Drawing.Point(744, 200);
             this.chartEstado.Name = "chartEstado";
-            this.chartEstado.Size = new System.Drawing.Size(293, 330);
+            this.chartEstado.Size = new System.Drawing.Size(357, 330);
             this.chartEstado.TabIndex = 7;
             this.chartEstado.Text = "chartEstado";
             // 
@@ -240,16 +244,16 @@
             this.lblResumen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.lblResumen.Location = new System.Drawing.Point(27, 542);
             this.lblResumen.Name = "lblResumen";
-            this.lblResumen.Size = new System.Drawing.Size(200, 17);
+            this.lblResumen.Size = new System.Drawing.Size(238, 23);
             this.lblResumen.TabIndex = 8;
             this.lblResumen.Text = "Aún no se generó el reporte.";
             // 
             // FrmReporteCompras486LP
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
-            this.ClientSize = new System.Drawing.Size(1000, 580);
+            this.ClientSize = new System.Drawing.Size(1128, 580);
             this.ControlBox = false;
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.grpFiltros);

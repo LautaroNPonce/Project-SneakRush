@@ -20,18 +20,23 @@ namespace Sistema_SneakRush
     {
         private BLL_ReporteInteligente486LP _bll = new BLL_ReporteInteligente486LP();
         private readonly string f = "FrmReporteInteligente486LP";
-        private bool _puedeGenerar;
-        private bool _puedeLimpiar;
-        private bool _puedeExportar;
-        private bool _puedeCerrar;
         private bool _cargado = false;
         private bool _generado = false;
         private ReporteInteligente486LP _reporte = new ReporteInteligente486LP();
         private List<FilaPeriodo486LP> _filas = new List<FilaPeriodo486LP>();
 
+        private const int VISTA_ROTACION = 0;
+        private const int VISTA_VENTAS = 1;
+        private int _vista = VISTA_ROTACION;
+        private bool _ajustando = false;   // true mientras el codigo cambia fechas / combo de periodo rapido (para no disparar los eventos)
+        private ReporteRotacion486LP _rotacion = new ReporteRotacion486LP();
+        private List<FilaRotacion486LP> _filasRot = new List<FilaRotacion486LP>();
+        private static readonly int[] MesesRango = { 0, 6, 12, 24, 36, 48 };   // 0 = personalizado
+
         private static readonly Color Azul = Color.FromArgb(12, 68, 124);
         private static readonly Color Naranja = Color.FromArgb(240, 90, 40);
         private static readonly Color AzulClaro = Color.FromArgb(130, 165, 210);
+        private static readonly Color Verde = Color.FromArgb(46, 139, 87);
 
         public FrmReporteInteligente486LP()
         {
@@ -59,11 +64,13 @@ namespace Sistema_SneakRush
             }
 
             ConfigurarGrilla();
+            ConfigurarGrillaRotacion();
             ConfigurarGraficos();
             RellenarCombos();
             ValoresIniciales();
-            AjustarBotonesSegunPerfil();
-            AplicarPermisosBotones();
+            AplicarVista();
+            dtpDesde.ValueChanged += Fecha_ValueChanged;
+            dtpHasta.ValueChanged += Fecha_ValueChanged;
             _cargado = true;
             ActualizarIdioma();
         }
@@ -77,34 +84,18 @@ namespace Sistema_SneakRush
             return permisos.Contains("REPORTE_INTELIGENTE");
         }
 
-        private void AjustarBotonesSegunPerfil()
-        {
-            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-            if (usuario == null) return;
-
-            List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
-
-            _puedeGenerar = permisos.Contains("REPORTE_INTELIGENTE_GENERAR");
-            _puedeLimpiar = permisos.Contains("REPORTE_INTELIGENTE_LIMPIAR");
-            _puedeExportar = permisos.Contains("REPORTE_INTELIGENTE_EXPORTAR");
-            _puedeCerrar = permisos.Contains("REPORTE_INTELIGENTE_CERRAR");
-        }
-
-        private void AplicarPermisosBotones()
-        {
-            btnGenerar.Enabled = _puedeGenerar;
-            btnLimpiar.Enabled = _puedeLimpiar;
-            btnExportarPDF.Enabled = _puedeExportar;
-            btnCerrar.Enabled = _puedeCerrar;
-        }
-
         private void ValoresIniciales()
         {
+            _ajustando = true;
             dtpHasta.Value = DateTime.Today;
-            dtpDesde.Value = DateTime.Today.AddMonths(-12);
+            dtpDesde.Value = DateTime.Today.AddMonths(-24);
+            cmbRango.SelectedIndex = 3;  // ultimos 2 anios
+            _ajustando = false;
+
             cmbAgrupar.SelectedIndex = 0;// por mes
             nudProyectar.Value = 3;
             cmbMetodo.SelectedIndex = 0; // tendencia lineal
+            nudCubrir.Value = BLL_ReporteInteligente486LP.MESES_CUBRIR_DEFECTO;
         }
 
         // Los combos guardan la opcion por posicion (0 = mes / tendencia lineal, 1 = semana / promedio movil) solo cambia el texto segun el idioma
@@ -123,6 +114,84 @@ namespace Sistema_SneakRush
             cmbMetodo.Items.Add(lm.ObtenerTexto(f, "metodo.Tendencia", "Tendencia lineal"));
             cmbMetodo.Items.Add(lm.ObtenerTexto(f, "metodo.Promedio", "Promedio móvil (3 períodos)"));
             cmbMetodo.SelectedIndex = metodo;
+
+            // El periodo rapido guarda la opcion por posicion (ver MesesRango); mientras se rellena no se tocan las fechas
+            _ajustando = true;
+            int rango = cmbRango.SelectedIndex < 0 ? 3 : cmbRango.SelectedIndex;
+            cmbRango.Items.Clear();
+            cmbRango.Items.Add(lm.ObtenerTexto(f, "rango.Personalizado", "Personalizado"));
+            cmbRango.Items.Add(lm.ObtenerTexto(f, "rango.6m", "Últimos 6 meses"));
+            cmbRango.Items.Add(lm.ObtenerTexto(f, "rango.1a", "Último año"));
+            cmbRango.Items.Add(lm.ObtenerTexto(f, "rango.2a", "Últimos 2 años"));
+            cmbRango.Items.Add(lm.ObtenerTexto(f, "rango.3a", "Últimos 3 años"));
+            cmbRango.Items.Add(lm.ObtenerTexto(f, "rango.4a", "Últimos 4 años"));
+            cmbRango.SelectedIndex = rango;
+            _ajustando = false;
+        }
+
+        private void cmbRango_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!_cargado || _ajustando) return;
+
+            int indice = cmbRango.SelectedIndex;
+            if (indice <= 0 || indice >= MesesRango.Length) return;   // "personalizado" no toca las fechas
+
+            _ajustando = true;
+            dtpHasta.Value = DateTime.Today;
+            dtpDesde.Value = DateTime.Today.AddMonths(-MesesRango[indice]);
+            _ajustando = false;
+        }
+
+        // Si la persona cambia una fecha a mano, el periodo rapido pasa a "personalizado"
+        private void Fecha_ValueChanged(object sender, EventArgs e)
+        {
+            if (!_cargado || _ajustando) return;
+
+            _ajustando = true;
+            cmbRango.SelectedIndex = 0;
+            _ajustando = false;
+        }
+
+        private void btnVistaRotacion_Click(object sender, EventArgs e)
+        {
+            _vista = VISTA_ROTACION;
+            AplicarVista();
+        }
+
+        private void btnVistaVentas_Click(object sender, EventArgs e)
+        {
+            _vista = VISTA_VENTAS;
+            AplicarVista();
+        }
+
+        // Muestra solo lo de la vista elegida: rotacion y compras (por defecto) o ventas y proyeccion
+        private void AplicarVista()
+        {
+            bool rotacion = _vista == VISTA_ROTACION;
+
+            chartMas.Visible = rotacion;
+            chartMenos.Visible = rotacion;
+            dgvRotacion.Visible = rotacion;
+            lblCubrir.Visible = rotacion;
+            nudCubrir.Visible = rotacion;
+
+            chartVentas.Visible = !rotacion;
+            dgvPeriodos.Visible = !rotacion;
+            lblAgrupar.Visible = !rotacion;
+            cmbAgrupar.Visible = !rotacion;
+            lblProyectar.Visible = !rotacion;
+            nudProyectar.Visible = !rotacion;
+            lblMetodo.Visible = !rotacion;
+            cmbMetodo.Visible = !rotacion;
+
+            btnVistaRotacion.BackColor = rotacion ? Naranja : Azul;
+            btnVistaVentas.BackColor = rotacion ? Azul : Naranja;
+
+            if (_cargado)
+            {
+                DistribuirFiltros();
+                MostrarDatos();
+            }
         }
 
         private int AgrupacionElegida()
@@ -138,14 +207,27 @@ namespace Sistema_SneakRush
         // Acomoda los filtros de izquierda a derecha segun el ancho del texto (cambia con el idioma)
         private void DistribuirFiltros()
         {
+            // Fila 1: fechas y periodo rapido (para las dos vistas)
             int x = 18;
             Ubicar(ref x, lblDesde, dtpDesde);
             Ubicar(ref x, lblHasta, dtpHasta);
-            Ubicar(ref x, lblAgrupar, cmbAgrupar);
+            Ubicar(ref x, lblRango, cmbRango);
+
+            // Fila 2: depende de la vista
+            lblAgrupar.Top = lblProyectar.Top;
+            cmbAgrupar.Top = cmbMetodo.Top;
 
             x = 18;
-            Ubicar(ref x, lblProyectar, nudProyectar);
-            Ubicar(ref x, lblMetodo, cmbMetodo);
+            if (_vista == VISTA_ROTACION)
+            {
+                Ubicar(ref x, lblCubrir, nudCubrir);
+            }
+            else
+            {
+                Ubicar(ref x, lblAgrupar, cmbAgrupar);
+                Ubicar(ref x, lblProyectar, nudProyectar);
+                Ubicar(ref x, lblMetodo, cmbMetodo);
+            }
         }
 
         private void Ubicar(ref int x, Label etiqueta, Control control)
@@ -155,19 +237,19 @@ namespace Sistema_SneakRush
             x = control.Right + 26;
         }
 
-        private void ConfigurarGrilla()
+        private void EstilizarGrilla(DataGridView g)
         {
-            dgvPeriodos.AutoGenerateColumns = false;
-            dgvPeriodos.AllowUserToAddRows = false;
-            dgvPeriodos.AllowUserToDeleteRows = false;
-            dgvPeriodos.ReadOnly = true;
-            dgvPeriodos.MultiSelect = false;
-            dgvPeriodos.RowHeadersVisible = false;
-            dgvPeriodos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvPeriodos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvPeriodos.BackgroundColor = Color.White;
-            dgvPeriodos.EnableHeadersVisualStyles = false;
-            dgvPeriodos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            g.AutoGenerateColumns = false;
+            g.AllowUserToAddRows = false;
+            g.AllowUserToDeleteRows = false;
+            g.ReadOnly = true;
+            g.MultiSelect = false;
+            g.RowHeadersVisible = false;
+            g.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            g.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            g.BackgroundColor = Color.White;
+            g.EnableHeadersVisualStyles = false;
+            g.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
             DataGridViewCellStyle estiloHeader = new DataGridViewCellStyle();
             estiloHeader.BackColor = Azul;
@@ -176,13 +258,18 @@ namespace Sistema_SneakRush
             estiloHeader.SelectionBackColor = Azul;
             estiloHeader.SelectionForeColor = Color.White;
             estiloHeader.WrapMode = DataGridViewTriState.True;
-            dgvPeriodos.ColumnHeadersDefaultCellStyle = estiloHeader;
+            g.ColumnHeadersDefaultCellStyle = estiloHeader;
 
             DataGridViewCellStyle estiloFilas = new DataGridViewCellStyle();
             estiloFilas.BackColor = Color.White;
             estiloFilas.SelectionBackColor = Naranja;
             estiloFilas.SelectionForeColor = Color.White;
-            dgvPeriodos.RowsDefaultCellStyle = estiloFilas;
+            g.RowsDefaultCellStyle = estiloFilas;
+        }
+
+        private void ConfigurarGrilla()
+        {
+            EstilizarGrilla(dgvPeriodos);
 
             dgvPeriodos.Columns.Clear();
             dgvPeriodos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colPeriodo", DataPropertyName = "Periodo", FillWeight = 22 });
@@ -205,6 +292,32 @@ namespace Sistema_SneakRush
             {
                 Name = "colEstado", DataPropertyName = "Estado", FillWeight = 20,
                 DefaultCellStyle = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter }
+            });
+
+            TraducirColumnas();
+        }
+
+        private void ConfigurarGrillaRotacion()
+        {
+            EstilizarGrilla(dgvRotacion);
+
+            DataGridViewCellStyle centro = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.MiddleCenter };
+
+            dgvRotacion.Columns.Clear();
+            dgvRotacion.Columns.Add(new DataGridViewTextBoxColumn { Name = "colRotModelo", DataPropertyName = "Modelo", FillWeight = 30 });
+            dgvRotacion.Columns.Add(new DataGridViewTextBoxColumn { Name = "colRotUnidades", DataPropertyName = "Unidades", FillWeight = 11, DefaultCellStyle = centro });
+            dgvRotacion.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colRotPorMes", DataPropertyName = "PorMes", FillWeight = 11,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N1", Alignment = DataGridViewContentAlignment.MiddleCenter }
+            });
+            dgvRotacion.Columns.Add(new DataGridViewTextBoxColumn { Name = "colRotStock", DataPropertyName = "Stock", FillWeight = 11, DefaultCellStyle = centro });
+            dgvRotacion.Columns.Add(new DataGridViewTextBoxColumn { Name = "colRotCobertura", DataPropertyName = "Cobertura", FillWeight = 14, DefaultCellStyle = centro });
+            dgvRotacion.Columns.Add(new DataGridViewTextBoxColumn { Name = "colRotRecomendacion", DataPropertyName = "Recomendacion", FillWeight = 13, DefaultCellStyle = centro });
+            dgvRotacion.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colRotCantidad", DataPropertyName = "CantidadSugerida", FillWeight = 12,
+                DefaultCellStyle = new DataGridViewCellStyle { NullValue = "-", Alignment = DataGridViewContentAlignment.MiddleCenter }
             });
 
             TraducirColumnas();
@@ -253,57 +366,83 @@ namespace Sistema_SneakRush
             chartVentas.Series.Add(serieProy);
 
             chartVentas.Titles.Add(new Charting.Title("", Charting.Docking.Top, new System.Drawing.Font("Segoe UI", 10F, FontStyle.Bold), Azul));
-            chartTop.Series.Clear();
-            chartTop.ChartAreas.Clear();
-            chartTop.Legends.Clear();
-            chartTop.Titles.Clear();
 
-            Charting.ChartArea areaT = new Charting.ChartArea("areaTop");
-            areaT.BackColor = Color.White;
-            areaT.AxisX.MajorGrid.Enabled = false;
-            areaT.AxisX.IsReversed = true;  // el mas vendido queda arriba
-            areaT.AxisX.LabelStyle.Interval = 1;
-            areaT.AxisX.LabelStyle.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            areaT.AxisY.LabelStyle.Format = "N0";
-            areaT.AxisY.LabelStyle.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            areaT.AxisY.MajorGrid.LineColor = Color.Gainsboro;
-            chartTop.ChartAreas.Add(areaT);
+            ConfigurarGraficoRanking(chartMas, "areaMas", "serieMas", Azul);
+            ConfigurarGraficoRanking(chartMenos, "areaMenos", "serieMenos", Naranja);
+        }
 
-            Charting.Series serieTop = new Charting.Series("serieTop");
-            serieTop.ChartType = Charting.SeriesChartType.Bar;
-            serieTop.ChartArea = "areaTop";
-            serieTop.Color = Azul;
-            serieTop.IsValueShownAsLabel = true;
-            serieTop.LabelFormat = "N0";
-            serieTop.Font = new System.Drawing.Font("Segoe UI", 8.25F, FontStyle.Bold);
-            chartTop.Series.Add(serieTop);
+        private void ConfigurarGraficoRanking(Charting.Chart grafico, string nombreArea, string nombreSerie, Color color)
+        {
+            grafico.Series.Clear();
+            grafico.ChartAreas.Clear();
+            grafico.Legends.Clear();
+            grafico.Titles.Clear();
 
-            chartTop.Titles.Add(new Charting.Title("", Charting.Docking.Top, new System.Drawing.Font("Segoe UI", 10F, FontStyle.Bold), Azul));
-            chartMedios.Series.Clear();
-            chartMedios.ChartAreas.Clear();
-            chartMedios.Legends.Clear();
-            chartMedios.Titles.Clear();
+            Charting.ChartArea area = new Charting.ChartArea(nombreArea);
+            area.BackColor = Color.White;
+            area.AxisX.MajorGrid.Enabled = false;
+            area.AxisX.IsReversed = true;  // el primero de la lista queda arriba
+            area.AxisX.LabelStyle.Interval = 1;
+            area.AxisX.LabelStyle.Font = new System.Drawing.Font("Segoe UI", 8F);
+            area.AxisY.LabelStyle.Format = "N0";
+            area.AxisY.LabelStyle.Font = new System.Drawing.Font("Segoe UI", 8F);
+            area.AxisY.MajorGrid.LineColor = Color.Gainsboro;
+            grafico.ChartAreas.Add(area);
 
-            Charting.ChartArea areaM = new Charting.ChartArea("areaMedios");
-            areaM.BackColor = Color.White;
-            chartMedios.ChartAreas.Add(areaM);
+            Charting.Series serie = new Charting.Series(nombreSerie);
+            serie.ChartType = Charting.SeriesChartType.Bar;
+            serie.ChartArea = nombreArea;
+            serie.Color = color;
+            serie.IsValueShownAsLabel = true;
+            serie.LabelFormat = "N0";
+            serie.Font = new System.Drawing.Font("Segoe UI", 8F, FontStyle.Bold);
+            grafico.Series.Add(serie);
 
-            Charting.Legend leyendaM = new Charting.Legend("leyendaMedios");
-            leyendaM.Docking = Charting.Docking.Right;
-            leyendaM.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            chartMedios.Legends.Add(leyendaM);
+            grafico.Titles.Add(new Charting.Title("", Charting.Docking.Top, new System.Drawing.Font("Segoe UI", 10F, FontStyle.Bold), Azul));
+        }
 
-            Charting.Series serieMedios = new Charting.Series("serieMedios");
-            serieMedios.ChartType = Charting.SeriesChartType.Pie;
-            serieMedios.ChartArea = "areaMedios";
-            serieMedios.Legend = "leyendaMedios";
-            serieMedios.IsValueShownAsLabel = true;
-            serieMedios.Label = "#PERCENT{P0}";
-            serieMedios.Font = new System.Drawing.Font("Segoe UI", 8.25F, FontStyle.Bold);
-            serieMedios["PieLabelStyle"] = "Inside";
-            chartMedios.Series.Add(serieMedios);
+        // Grafico de torta de ventas por medio de pago. Se arma al momento (para la ventana y para el PDF).
+        private Charting.Chart CrearGraficoMedios(int ancho, int alto)
+        {
+            var lm = Program.LanguageManager;
 
-            chartMedios.Titles.Add(new Charting.Title("", Charting.Docking.Top, new System.Drawing.Font("Segoe UI", 10F, FontStyle.Bold), Azul));
+            Charting.Chart grafico = new Charting.Chart();
+            grafico.Size = new Size(ancho, alto);
+            grafico.BackColor = Color.White;
+
+            Charting.ChartArea area = new Charting.ChartArea("areaMedios");
+            area.BackColor = Color.White;
+            grafico.ChartAreas.Add(area);
+
+            Charting.Legend leyenda = new Charting.Legend("leyendaMedios");
+            leyenda.Docking = Charting.Docking.Right;
+            leyenda.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            grafico.Legends.Add(leyenda);
+
+            Charting.Series serie = new Charting.Series("serieMedios");
+            serie.ChartType = Charting.SeriesChartType.Pie;
+            serie.ChartArea = "areaMedios";
+            serie.Legend = "leyendaMedios";
+            serie.IsValueShownAsLabel = true;
+            serie.Label = "#PERCENT{P0}";
+            serie.Font = new System.Drawing.Font("Segoe UI", 8.25F, FontStyle.Bold);
+            serie["PieLabelStyle"] = "Inside";
+            grafico.Series.Add(serie);
+
+            grafico.Titles.Add(new Charting.Title(lm.ObtenerTexto(f, "chart.Medios.Titulo", "Ventas por medio de pago"),
+                Charting.Docking.Top, new System.Drawing.Font("Segoe UI", 10F, FontStyle.Bold), Azul));
+
+            Color[] paleta = { Azul, Naranja, Verde, Color.FromArgb(150, 110, 190), Color.FromArgb(120, 120, 120) };
+            int i = 0;
+            foreach (ReporteMedioPago486LP m in _reporte.MediosPago)
+            {
+                int idx = serie.Points.AddXY(m.MedioPago, (double)m.MontoTotal);
+                serie.Points[idx].Color = paleta[i % paleta.Length];
+                serie.Points[idx].LegendText = string.Format("{0} ({1})", m.MedioPago, m.MontoTotal.ToString("C0"));
+                serie.Points[idx].AxisLabel = m.MedioPago;
+                i++;
+            }
+            return grafico;
         }
 
         private string EtiquetaPeriodo(DateTime periodo, int agrupacion)
@@ -329,6 +468,54 @@ namespace Sistema_SneakRush
             if (tipo == ReportePuntoSerie486LP.EN_CURSO) return lm.ObtenerTexto(f, "estado.EnCurso", "En curso");
             if (tipo == ReportePuntoSerie486LP.PROYECTADO) return lm.ObtenerTexto(f, "estado.Proyectado", "Proyectado");
             return lm.ObtenerTexto(f, "estado.Completo", "Completo");
+        }
+
+        private string NombreRecomendacion(int tipo)
+        {
+            var lm = Program.LanguageManager;
+            if (tipo == ReporteRotacionProducto486LP.COMPRAR) return lm.ObtenerTexto(f, "rec.Comprar", "Comprar");
+            if (tipo == ReporteRotacionProducto486LP.NO_COMPRAR) return lm.ObtenerTexto(f, "rec.NoComprar", "No comprar");
+            return lm.ObtenerTexto(f, "rec.Mantener", "Mantener");
+        }
+
+        private List<FilaRotacion486LP> ArmarFilasRotacion()
+        {
+            var lm = Program.LanguageManager;
+            List<FilaRotacion486LP> filas = new List<FilaRotacion486LP>();
+            if (!_generado) return filas;
+
+            foreach (ReporteRotacionProducto486LP p in _rotacion.Productos)
+            {
+                FilaRotacion486LP fila = new FilaRotacion486LP();
+                fila.Modelo = p.NombreCompleto;
+                fila.Unidades = p.Unidades;
+                fila.PorMes = p.UnidadesPorMes;
+                fila.Stock = p.Stock;
+                fila.Cobertura = p.MesesDeStock.HasValue
+                    ? string.Format(lm.ObtenerTexto(f, "rot.Cobertura", "{0} meses"), p.MesesDeStock.Value.ToString("0.0", CultureInfo.CurrentCulture))
+                    : lm.ObtenerTexto(f, "rot.SinVentas", "Sin ventas");
+                fila.Tipo = p.Recomendacion;
+                fila.Recomendacion = NombreRecomendacion(p.Recomendacion);
+                fila.CantidadSugerida = p.Recomendacion == ReporteRotacionProducto486LP.COMPRAR ? (int?)p.CantidadSugerida : null;
+                filas.Add(fila);
+            }
+            return filas;
+        }
+
+        private void ActualizarGrillaRotacion()
+        {
+            _filasRot = ArmarFilasRotacion();
+            dgvRotacion.DataSource = null;
+            dgvRotacion.DataSource = _filasRot;
+
+            for (int i = 0; i < dgvRotacion.Rows.Count && i < _filasRot.Count; i++)
+            {
+                if (_filasRot[i].Tipo == ReporteRotacionProducto486LP.COMPRAR)
+                    dgvRotacion.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(226, 244, 230);
+                else if (_filasRot[i].Tipo == ReporteRotacionProducto486LP.NO_COMPRAR)
+                    dgvRotacion.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(250, 228, 228);
+            }
+            dgvRotacion.ClearSelection();
         }
 
         private List<FilaPeriodo486LP> ArmarFilas()
@@ -413,48 +600,29 @@ namespace Sistema_SneakRush
             }
         }
 
-        private void ActualizarGraficoTop()
+        private void ActualizarGraficosRanking()
         {
             var lm = Program.LanguageManager;
-            if (chartTop.Series.Count == 0) return;
+            if (chartMas.Series.Count == 0 || chartMenos.Series.Count == 0) return;
 
-            if (chartTop.Titles.Count > 0)
-                chartTop.Titles[0].Text = string.Format(lm.ObtenerTexto(f, "chart.Top.Titulo", "Top {0} modelos más vendidos (unidades)"), BLL_ReporteInteligente486LP.CANTIDAD_TOP);
+            int n = BLL_ReporteInteligente486LP.CANTIDAD_RANKING;
+            if (chartMas.Titles.Count > 0)
+                chartMas.Titles[0].Text = string.Format(lm.ObtenerTexto(f, "chart.Mas.Titulo", "Los {0} modelos más vendidos (unidades)"), n);
+            if (chartMenos.Titles.Count > 0)
+                chartMenos.Titles[0].Text = string.Format(lm.ObtenerTexto(f, "chart.Menos.Titulo", "Los {0} modelos menos vendidos (unidades)"), n);
 
-            Charting.Series serie = chartTop.Series["serieTop"];
-            serie.Points.Clear();
+            Charting.Series serieMas = chartMas.Series["serieMas"];
+            Charting.Series serieMenos = chartMenos.Series["serieMenos"];
+            serieMas.Points.Clear();
+            serieMenos.Points.Clear();
             if (!_generado) return;
 
-            foreach (ReporteTopProducto486LP t in _reporte.TopProductos)
-            {
-                serie.Points.AddXY(t.NombreCompleto, t.Unidades);
-            }
+            foreach (ReporteRotacionProducto486LP p in _rotacion.MasVendidos)
+                serieMas.Points.AddXY(p.NombreCompleto, p.Unidades);
+
+            foreach (ReporteRotacionProducto486LP p in _rotacion.MenosVendidos)
+                serieMenos.Points.AddXY(p.NombreCompleto, p.Unidades);
         }
-
-        private void ActualizarGraficoMedios()
-        {
-            var lm = Program.LanguageManager;
-            if (chartMedios.Series.Count == 0) return;
-
-            if (chartMedios.Titles.Count > 0)
-                chartMedios.Titles[0].Text = lm.ObtenerTexto(f, "chart.Medios.Titulo", "Ventas por medio de pago");
-
-            Charting.Series serie = chartMedios.Series["serieMedios"];
-            serie.Points.Clear();
-            if (!_generado) return;
-
-            Color[] paleta = { Azul, Naranja, Color.FromArgb(46, 139, 87), Color.FromArgb(150, 110, 190), Color.FromArgb(120, 120, 120) };
-            int i = 0;
-            foreach (ReporteMedioPago486LP m in _reporte.MediosPago)
-            {
-                int idx = serie.Points.AddXY(m.MedioPago, (double)m.MontoTotal);
-                serie.Points[idx].Color = paleta[i % paleta.Length];
-                serie.Points[idx].LegendText = m.MedioPago;
-                serie.Points[idx].AxisLabel = m.MedioPago;
-                i++;
-            }
-        }
-
 
         private string Variacion(decimal variacion)
         {
@@ -462,23 +630,24 @@ namespace Sistema_SneakRush
             return flecha + " " + Math.Abs(variacion).ToString("0.0", CultureInfo.CurrentCulture) + "%";
         }
 
-        private void ActualizarTarjetas()
+        private void TarjetasVentas(string[] t, string[] v, string[] d)
         {
             var lm = Program.LanguageManager;
 
-            lblCardTitulo1.Text = lm.ObtenerTexto(f, "card.Total", "Total vendido");
-            lblCardTitulo2.Text = lm.ObtenerTexto(f, "card.Ticket", "Ticket promedio");
-            lblCardTitulo3.Text = lm.ObtenerTexto(f, "card.UltimoCompleto", "Último período completo");
-            lblCardTitulo4.Text = lm.ObtenerTexto(f, "card.EnCurso", "Período en curso");
-            lblCardTitulo5.Text = lm.ObtenerTexto(f, "card.Cierre", "Proyección de cierre");
-            lblCardTitulo6.Text = lm.ObtenerTexto(f, "card.Proximo", "Próximo período proyectado");
+            t[0] = lm.ObtenerTexto(f, "card.Total", "Total vendido");
+            t[1] = lm.ObtenerTexto(f, "card.Ticket", "Ticket promedio");
+            t[2] = lm.ObtenerTexto(f, "card.UltimoCompleto", "Último período completo");
+            t[3] = lm.ObtenerTexto(f, "card.EnCurso", "Período en curso");
+            t[4] = lm.ObtenerTexto(f, "card.Cierre", "Proyección de cierre");
+            t[5] = lm.ObtenerTexto(f, "card.Proximo", "Próximo período proyectado");
 
             if (!_generado)
             {
-                Label[] valores = { lblCardValor1, lblCardValor2, lblCardValor3, lblCardValor4, lblCardValor5, lblCardValor6 };
-                Label[] detalles = { lblCardDetalle1, lblCardDetalle2, lblCardDetalle3, lblCardDetalle4, lblCardDetalle5, lblCardDetalle6 };
-                foreach (Label l in valores) l.Text = "-";
-                foreach (Label l in detalles) l.Text = "";
+                for (int i = 0; i < 6; i++)
+                {
+                    v[i] = "-";
+                    d[i] = "";
+                }
                 return;
             }
 
@@ -487,71 +656,150 @@ namespace Sistema_SneakRush
                 BLL_ReporteInteligente486LP.MIN_PERIODOS, r.PeriodosCompletos);
 
             // 1) Total vendido en el rango
-            lblCardValor1.Text = r.Resumen.MontoTotal.ToString("C0");
-            lblCardDetalle1.Text = string.Format(lm.ObtenerTexto(f, "card.Total.Detalle", "{0} ventas | {1} unidades"), r.Resumen.CantidadVentas, r.Resumen.Unidades);
+            v[0] = r.Resumen.MontoTotal.ToString("C0");
+            d[0] = string.Format(lm.ObtenerTexto(f, "card.Total.Detalle", "{0} ventas | {1} unidades"), r.Resumen.CantidadVentas, r.Resumen.Unidades);
 
             // 2) Ticket promedio
-            lblCardValor2.Text = r.Resumen.TicketPromedio.ToString("C0");
-            lblCardDetalle2.Text = string.Format(lm.ObtenerTexto(f, "card.Ticket.Detalle", "Del {0} al {1}"),
+            v[1] = r.Resumen.TicketPromedio.ToString("C0");
+            d[1] = string.Format(lm.ObtenerTexto(f, "card.Ticket.Detalle", "Del {0} al {1}"),
                 r.DesdeEfectivo.ToString("dd/MM/yyyy"), r.HastaEfectivo.ToString("dd/MM/yyyy"));
 
             // 3) Ultimo periodo completo, comparado con el anterior
             if (r.PeriodoUltimoCompleto.HasValue)
             {
                 string etiqueta = EtiquetaPeriodo(r.PeriodoUltimoCompleto.Value, r.Agrupacion);
-                lblCardValor3.Text = r.MontoUltimoCompleto.ToString("C0");
-                lblCardDetalle3.Text = r.VariacionUltimoVsAnterior.HasValue
+                v[2] = r.MontoUltimoCompleto.ToString("C0");
+                d[2] = r.VariacionUltimoVsAnterior.HasValue
                     ? string.Format(lm.ObtenerTexto(f, "card.UltimoCompleto.Detalle", "{0} | {1} vs el anterior"), etiqueta, Variacion(r.VariacionUltimoVsAnterior.Value))
                     : string.Format(lm.ObtenerTexto(f, "card.UltimoCompleto.SinComparar", "{0} | sin período anterior para comparar"), etiqueta);
             }
             else
             {
-                lblCardValor3.Text = "-";
-                lblCardDetalle3.Text = lm.ObtenerTexto(f, "card.SinCompletos", "Todavía no terminó ningún período del rango.");
+                v[2] = "-";
+                d[2] = lm.ObtenerTexto(f, "card.SinCompletos", "Todavía no terminó ningún período del rango.");
             }
 
             // 4) Periodo en curso: lo que va y como cerraria al ritmo de hoy
             if (r.HayEnCurso)
             {
-                lblCardValor4.Text = r.MontoEnCurso.ToString("C0");
-                lblCardDetalle4.Text = string.Format(lm.ObtenerTexto(f, "card.EnCurso.Detalle", "{0} | día {1} de {2}. Al ritmo actual: {3}"),
+                v[3] = r.MontoEnCurso.ToString("C0");
+                d[3] = string.Format(lm.ObtenerTexto(f, "card.EnCurso.Detalle", "{0} | día {1} de {2}. Al ritmo actual: {3}"),
                     EtiquetaPeriodo(r.PeriodoEnCurso.Value, r.Agrupacion), r.DiasTranscurridos, r.DiasDelPeriodo, r.CierreAlRitmoActual.ToString("C0"));
             }
             else
             {
-                lblCardValor4.Text = "-";
-                lblCardDetalle4.Text = lm.ObtenerTexto(f, "card.SinEnCurso", "El rango no incluye el período actual.");
+                v[3] = "-";
+                d[3] = lm.ObtenerTexto(f, "card.SinEnCurso", "El rango no incluye el período actual.");
             }
 
             // 5) Proyeccion de cierre del periodo en curso
             if (r.HayEnCurso && r.ProyeccionCierre.HasValue)
             {
-                lblCardValor5.Text = r.ProyeccionCierre.Value.ToString("C0");
-                lblCardDetalle5.Text = string.Format("{0} | {1}", EtiquetaPeriodo(r.PeriodoEnCurso.Value, r.Agrupacion), NombreMetodo(r.Metodo));
+                v[4] = r.ProyeccionCierre.Value.ToString("C0");
+                d[4] = string.Format("{0} | {1}", EtiquetaPeriodo(r.PeriodoEnCurso.Value, r.Agrupacion), NombreMetodo(r.Metodo));
             }
             else
             {
-                lblCardValor5.Text = "-";
-                lblCardDetalle5.Text = r.HayEnCurso ? faltan : lm.ObtenerTexto(f, "card.SinEnCurso", "El rango no incluye el período actual.");
+                v[4] = "-";
+                d[4] = r.HayEnCurso ? faltan : lm.ObtenerTexto(f, "card.SinEnCurso", "El rango no incluye el período actual.");
             }
 
             // 6) Proximo periodo proyectado
             if (r.ProyeccionProximo.HasValue)
             {
-                lblCardValor6.Text = r.ProyeccionProximo.Value.ToString("C0");
+                v[5] = r.ProyeccionProximo.Value.ToString("C0");
                 string etiqueta = EtiquetaPeriodo(r.PeriodoProximo.Value, r.Agrupacion);
-                lblCardDetalle6.Text = r.VariacionProximoVsUltimo.HasValue
+                d[5] = r.VariacionProximoVsUltimo.HasValue
                     ? string.Format(lm.ObtenerTexto(f, "card.Proximo.Detalle", "{0} | {1} vs el último completo"), etiqueta, Variacion(r.VariacionProximoVsUltimo.Value))
                     : etiqueta;
             }
             else
             {
-                lblCardValor6.Text = "-";
-                lblCardDetalle6.Text = faltan;
+                v[5] = "-";
+                d[5] = faltan;
             }
         }
 
-        private string TextoResumen()
+        private void TarjetasRotacion(string[] t, string[] v, string[] d)
+        {
+            var lm = Program.LanguageManager;
+
+            t[0] = lm.ObtenerTexto(f, "rcard.Unidades", "Unidades vendidas");
+            t[1] = lm.ObtenerTexto(f, "rcard.Modelos", "Modelos analizados");
+            t[2] = lm.ObtenerTexto(f, "rcard.Comprar", "Modelos a comprar");
+            t[3] = lm.ObtenerTexto(f, "rcard.NoComprar", "No hace falta comprar");
+            t[4] = lm.ObtenerTexto(f, "rcard.MasVendido", "Modelo más vendido");
+            t[5] = lm.ObtenerTexto(f, "rcard.MenosVendido", "Modelo menos vendido");
+
+            if (!_generado)
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    v[i] = "-";
+                    d[i] = "";
+                }
+                return;
+            }
+
+            ReporteRotacion486LP r = _rotacion;
+            string unidad = lm.ObtenerTexto(f, "rcard.Un", "un.");
+
+            v[0] = r.TotalUnidades.ToString("N0");
+            d[0] = string.Format(lm.ObtenerTexto(f, "rcard.Unidades.Detalle", "Facturación: {0}"), r.TotalMonto.ToString("C0"));
+
+            v[1] = r.ModelosAnalizados.ToString("N0");
+            d[1] = string.Format(lm.ObtenerTexto(f, "rcard.Modelos.Detalle", "{0} con ventas | {1} sin ventas"), r.ModelosConVentas, r.ModelosSinVentas);
+
+            v[2] = r.ModelosAComprar.ToString("N0");
+            d[2] = string.Format(lm.ObtenerTexto(f, "rcard.Comprar.Detalle", "{0} unidades sugeridas para {1} meses"), r.UnidadesAComprar.ToString("N0"), r.MesesACubrir);
+
+            v[3] = r.ModelosNoComprar.ToString("N0");
+            d[3] = string.Format(lm.ObtenerTexto(f, "rcard.NoComprar.Detalle", "Sin ventas o con stock para más de {0} meses"), r.MesesACubrir * BLL_ReporteInteligente486LP.FACTOR_SOBRESTOCK);
+
+            if (r.MasVendido != null)
+            {
+                v[4] = r.MasVendido.Unidades.ToString("N0") + " " + unidad;
+                d[4] = r.MasVendido.NombreCompleto;
+            }
+            else
+            {
+                v[4] = "-";
+                d[4] = lm.ObtenerTexto(f, "rcard.SinVentas", "No hubo ventas en el período.");
+            }
+
+            if (r.MenosVendido != null)
+            {
+                v[5] = r.MenosVendido.Unidades.ToString("N0") + " " + unidad;
+                d[5] = r.MenosVendido.NombreCompleto;
+            }
+            else
+            {
+                v[5] = "-";
+                d[5] = lm.ObtenerTexto(f, "rcard.SinVentas", "No hubo ventas en el período.");
+            }
+        }
+
+        private void ActualizarTarjetas()
+        {
+            string[] t = new string[6];
+            string[] v = new string[6];
+            string[] d = new string[6];
+
+            if (_vista == VISTA_ROTACION) TarjetasRotacion(t, v, d);
+            else TarjetasVentas(t, v, d);
+
+            Label[] titulos = { lblCardTitulo1, lblCardTitulo2, lblCardTitulo3, lblCardTitulo4, lblCardTitulo5, lblCardTitulo6 };
+            Label[] valores = { lblCardValor1, lblCardValor2, lblCardValor3, lblCardValor4, lblCardValor5, lblCardValor6 };
+            Label[] detalles = { lblCardDetalle1, lblCardDetalle2, lblCardDetalle3, lblCardDetalle4, lblCardDetalle5, lblCardDetalle6 };
+            for (int i = 0; i < 6; i++)
+            {
+                titulos[i].Text = t[i];
+                valores[i].Text = v[i];
+                detalles[i].Text = d[i];
+            }
+        }
+
+        private string TextoResumenVentas()
         {
             var lm = Program.LanguageManager;
             if (!_generado) return lm.ObtenerTexto(f, "lbl.SinGenerar", "Aún no se generó el reporte.");
@@ -568,12 +816,29 @@ namespace Sistema_SneakRush
             return texto;
         }
 
+        private string TextoResumenRotacion()
+        {
+            var lm = Program.LanguageManager;
+            if (!_generado) return lm.ObtenerTexto(f, "lbl.SinGenerar", "Aún no se generó el reporte.");
+
+            return string.Format(lm.ObtenerTexto(f, "lbl.RangoRotacion",
+                "Período analizado: {0} al {1} ({2} meses). Se sugiere comprar cuando el stock actual no alcanza para {3} meses de ventas al ritmo del período; no comprar si no hubo ventas o si el stock alcanza para más de {4} meses."),
+                _rotacion.Desde.ToString("dd/MM/yyyy"), _rotacion.Hasta.ToString("dd/MM/yyyy"),
+                _rotacion.MesesPeriodo.ToString("0.#", CultureInfo.CurrentCulture),
+                _rotacion.MesesACubrir, _rotacion.MesesACubrir * BLL_ReporteInteligente486LP.FACTOR_SOBRESTOCK);
+        }
+
+        private string TextoResumen()
+        {
+            return _vista == VISTA_ROTACION ? TextoResumenRotacion() : TextoResumenVentas();
+        }
+
         private void MostrarDatos()
         {
             ActualizarGrilla();
+            ActualizarGrillaRotacion();
             ActualizarGraficoVentas();
-            ActualizarGraficoTop();
-            ActualizarGraficoMedios();
+            ActualizarGraficosRanking();
             ActualizarTarjetas();
             lblResumen.Text = TextoResumen();
         }
@@ -587,6 +852,7 @@ namespace Sistema_SneakRush
             int agrupacion = AgrupacionElegida();
             int metodo = MetodoElegido();
             int periodos = (int)nudProyectar.Value;
+            int mesesACubrir = (int)nudCubrir.Value;
 
             if (!_bll.ValidarRangoFechas(desde, hasta))
             {
@@ -602,9 +868,17 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            ReporteInteligente486LP resultado = _bll.Generar(desde, hasta, agrupacion, metodo, periodos);
+            if (!_bll.ValidarMesesACubrir(mesesACubrir))
+            {
+                MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.MesesInvalido", "Los meses de ventas a cubrir deben estar entre {0} y {1}."), BLL_ReporteInteligente486LP.MIN_MESES_CUBRIR, BLL_ReporteInteligente486LP.MAX_MESES_CUBRIR),
+                    lm.ObtenerTexto(f, "Msg.RangoInvalido.Title", "Filtros inválidos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            if (resultado == null)
+            ReporteInteligente486LP resultado = _bll.Generar(desde, hasta, agrupacion, metodo, periodos);
+            ReporteRotacion486LP rotacion = _bll.GenerarRotacion(desde, hasta, mesesACubrir);
+
+            if (resultado == null || rotacion == null)
             {
                 MessageBox.Show(lm.ObtenerTexto(f, "Msg.ErrorGenerar", "No se pudo generar el reporte. El error quedó registrado en la bitácora."),
                     lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -612,10 +886,19 @@ namespace Sistema_SneakRush
             }
 
             _reporte = resultado;
+            _rotacion = rotacion;
             _generado = true;
             MostrarDatos();
 
-            if (_reporte.Resumen.CantidadVentas == 0)
+            if (_vista == VISTA_ROTACION)
+            {
+                if (_rotacion.ModelosConVentas == 0)
+                {
+                    MessageBox.Show(lm.ObtenerTexto(f, "Msg.SinResultados", "No hay ventas en el rango elegido."),
+                        lm.ObtenerTexto(f, "Msg.SinResultados.Title", "Sin resultados"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else if (_reporte.Resumen.CantidadVentas == 0)
             {
                 MessageBox.Show(lm.ObtenerTexto(f, "Msg.SinResultados", "No hay ventas en el rango elegido."),
                     lm.ObtenerTexto(f, "Msg.SinResultados.Title", "Sin resultados"), MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -625,6 +908,49 @@ namespace Sistema_SneakRush
                 MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.DatosInsuficientes", "Datos insuficientes para proyectar: hacen falta al menos {0} períodos completos y el rango tiene {1}. Probá ampliar el rango de fechas o agrupar por semana."),
                     BLL_ReporteInteligente486LP.MIN_PERIODOS, _reporte.PeriodosCompletos),
                     lm.ObtenerTexto(f, "Msg.DatosInsuficientes.Title", "Datos insuficientes"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btnMedios_Click(object sender, EventArgs e)
+        {
+            var lm = Program.LanguageManager;
+
+            if (!_generado || _reporte.MediosPago.Count == 0)
+            {
+                MessageBox.Show(lm.ObtenerTexto(f, "Msg.SinMedios", "Primero generá el reporte con al menos una venta para ver los medios de pago."),
+                    lm.ObtenerTexto(f, "chart.Medios.Titulo", "Ventas por medio de pago"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (Form dialogo = new Form())
+            using (Charting.Chart grafico = CrearGraficoMedios(640, 400))
+            using (Button cerrar = new Button())
+            {
+                dialogo.Text = lm.ObtenerTexto(f, "chart.Medios.Titulo", "Ventas por medio de pago");
+                dialogo.StartPosition = FormStartPosition.CenterParent;
+                dialogo.FormBorderStyle = FormBorderStyle.FixedDialog;
+                dialogo.MaximizeBox = false;
+                dialogo.MinimizeBox = false;
+                dialogo.ShowInTaskbar = false;
+                dialogo.BackColor = Color.White;
+                dialogo.ClientSize = new Size(640, 440);
+
+                grafico.Dock = DockStyle.Fill;
+
+                cerrar.Text = lm.ObtenerTexto(f, "btnCerrar", "Cerrar");
+                cerrar.Dock = DockStyle.Bottom;
+                cerrar.Height = 40;
+                cerrar.FlatStyle = FlatStyle.Flat;
+                cerrar.FlatAppearance.BorderSize = 0;
+                cerrar.BackColor = Azul;
+                cerrar.ForeColor = Color.White;
+                cerrar.Font = new System.Drawing.Font("Segoe UI", 9.75F, FontStyle.Bold);
+                cerrar.DialogResult = DialogResult.OK;
+
+                dialogo.Controls.Add(grafico);
+                dialogo.Controls.Add(cerrar);
+                dialogo.AcceptButton = cerrar;
+                dialogo.ShowDialog(this);
             }
         }
 
@@ -642,6 +968,7 @@ namespace Sistema_SneakRush
         {
             ValoresIniciales();
             _reporte = new ReporteInteligente486LP();
+            _rotacion = new ReporteRotacion486LP();
             _generado = false;
             MostrarDatos();
         }
@@ -654,13 +981,23 @@ namespace Sistema_SneakRush
         // Todo esto es lo de PDF
         private iTextSharp.text.Image ImagenDe(Charting.Chart grafico, float ancho, float alto)
         {
-            using (MemoryStream ms = new MemoryStream())
+            // Un grafico de la vista que no se esta mostrando esta oculto: se muestra un instante (sin repintar) para que se dibuje completo
+            bool estabaVisible = grafico.Visible;
+            if (!estabaVisible) grafico.Visible = true;
+            try
             {
-                grafico.SaveImage(ms, Charting.ChartImageFormat.Png);
-                iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(ms.ToArray());
-                img.ScaleToFit(ancho, alto);
-                img.Alignment = Element.ALIGN_CENTER;
-                return img;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    grafico.SaveImage(ms, Charting.ChartImageFormat.Png);
+                    iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(ms.ToArray());
+                    img.ScaleToFit(ancho, alto);
+                    img.Alignment = Element.ALIGN_CENTER;
+                    return img;
+                }
+            }
+            finally
+            {
+                if (!estabaVisible) grafico.Visible = false;
             }
         }
 
@@ -668,7 +1005,7 @@ namespace Sistema_SneakRush
         {
             var lm = Program.LanguageManager;
 
-            if (!_generado || _reporte.Resumen.CantidadVentas == 0)
+            if (!_generado || (_reporte.Resumen.CantidadVentas == 0 && _rotacion.TotalUnidades == 0))
             {
                 MessageBox.Show(lm.ObtenerTexto(f, "Msg.SinDatosPDF", "Primero generá el reporte con al menos una venta para poder exportarlo."),
                     lm.ObtenerTexto(f, "Msg.PDF.Title", "Exportar PDF"), MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -690,6 +1027,7 @@ namespace Sistema_SneakRush
                     doc.Open();
 
                     PdfFont fuenteTitulo = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.WHITE);
+                    PdfFont fuenteSeccion = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10f, BaseColor.WHITE);
                     PdfFont fuenteSubtitulo = FontFactory.GetFont(FontFactory.HELVETICA, 9f, new BaseColor(80, 80, 80));
                     PdfFont fuenteHeader = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 8f, BaseColor.WHITE);
                     PdfFont fuenteDato = FontFactory.GetFont(FontFactory.HELVETICA, 8f, BaseColor.BLACK);
@@ -697,8 +1035,11 @@ namespace Sistema_SneakRush
                     PdfFont fuenteCardValor = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 11f, new BaseColor(12, 68, 124));
                     PdfFont fuenteCardDetalle = FontFactory.GetFont(FontFactory.HELVETICA, 6.5f, new BaseColor(90, 90, 90));
                     PdfFont fuenteNota = FontFactory.GetFont(FontFactory.HELVETICA_OBLIQUE, 7.5f, new BaseColor(80, 80, 80));
+                    BaseColor bgClaro = new BaseColor(245, 248, 255);
+
+                    // Encabezado
                     PdfPTable encabezado = new PdfPTable(1) { WidthPercentage = 100 };
-                    encabezado.AddCell(new PdfPCell(new Phrase("SneakRush — " + lm.ObtenerTexto(f, "pdf.Titulo", "Reporte inteligente: ventas y proyección"), fuenteTitulo))
+                    encabezado.AddCell(new PdfPCell(new Phrase("SneakRush — " + lm.ObtenerTexto(f, "pdf.Titulo", "Reporte inteligente: rotación de productos y ventas"), fuenteTitulo))
                     {
                         BackgroundColor = new BaseColor(33, 90, 160),
                         HorizontalAlignment = Element.ALIGN_CENTER,
@@ -706,15 +1047,10 @@ namespace Sistema_SneakRush
                     });
 
                     string usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual().NombreUsuario;
-                    string agrupacionTexto = _reporte.Agrupacion == BLL_ReporteInteligente486LP.AGRUPAR_SEMANA
-                        ? lm.ObtenerTexto(f, "agrupar.Semana", "Semana") : lm.ObtenerTexto(f, "agrupar.Mes", "Mes");
-                    string periodo = string.Format(lm.ObtenerTexto(f, "pdf.Periodo", "Período: {0} al {1} | Agrupado por: {2} | Método: {3} | Períodos a proyectar: {4}"),
-                        _reporte.DesdeEfectivo.ToString("dd/MM/yyyy"), _reporte.HastaEfectivo.ToString("dd/MM/yyyy"),
-                        agrupacionTexto, NombreMetodo(_reporte.Metodo), _reporte.PeriodosAProyectar);
                     string subtexto = string.Format(lm.ObtenerTexto(f, "pdf.Generado", "Generado: {0} | Usuario: {1}"),
                         DateTime.Now.ToString("dd/MM/yyyy HH:mm"), usuario);
 
-                    encabezado.AddCell(new PdfPCell(new Phrase(periodo + "\n" + subtexto, fuenteSubtitulo))
+                    encabezado.AddCell(new PdfPCell(new Phrase(subtexto, fuenteSubtitulo))
                     {
                         BackgroundColor = new BaseColor(220, 230, 245),
                         HorizontalAlignment = Element.ALIGN_CENTER,
@@ -722,37 +1058,97 @@ namespace Sistema_SneakRush
                     });
                     doc.Add(encabezado);
                     doc.Add(new Paragraph(" ", fuenteNota));
-                    string[] titulos = { lblCardTitulo1.Text, lblCardTitulo2.Text, lblCardTitulo3.Text, lblCardTitulo4.Text, lblCardTitulo5.Text, lblCardTitulo6.Text };
-                    string[] valores = { lblCardValor1.Text, lblCardValor2.Text, lblCardValor3.Text, lblCardValor4.Text, lblCardValor5.Text, lblCardValor6.Text };
-                    string[] detalles = { lblCardDetalle1.Text, lblCardDetalle2.Text, lblCardDetalle3.Text, lblCardDetalle4.Text, lblCardDetalle5.Text, lblCardDetalle6.Text };
-                    for (int k = 0; k < detalles.Length; k++)
-                        detalles[k] = detalles[k].Replace("▲ ", "+").Replace("▼ ", "-");
 
-                    PdfPTable tarjetas = new PdfPTable(6) { WidthPercentage = 100 };
-                    for (int i = 0; i < 6; i++)
-                    {
-                        PdfPCell celda = new PdfPCell
-                        {
-                            BackgroundColor = i >= 4 ? new BaseColor(253, 240, 232) : new BaseColor(245, 248, 255),
-                            BorderColor = new BaseColor(200, 210, 230),
-                            Padding = 5f
-                        };
-                        celda.AddElement(new Paragraph(titulos[i], fuenteCardTitulo));
-                        celda.AddElement(new Paragraph(valores[i], fuenteCardValor));
-                        celda.AddElement(new Paragraph(detalles[i], fuenteCardDetalle));
-                        tarjetas.AddCell(celda);
-                    }
-                    doc.Add(tarjetas);
+                    // ------------------------------------------------ 1) Rotacion y compras
+                    string periodoRot = string.Format(lm.ObtenerTexto(f, "pdf.PeriodoRotacion", "Período analizado: {0} al {1} | Meses de ventas a cubrir con la compra: {2}"),
+                        _rotacion.Desde.ToString("dd/MM/yyyy"), _rotacion.Hasta.ToString("dd/MM/yyyy"), _rotacion.MesesACubrir);
+                    AgregarSeccionPDF(doc, lm.ObtenerTexto(f, "pdf.SeccionRotacion", "1. Rotación de productos y compra sugerida"), periodoRot, fuenteSeccion, fuenteSubtitulo);
+
+                    string[] t = new string[6];
+                    string[] v = new string[6];
+                    string[] d = new string[6];
+                    TarjetasRotacion(t, v, d);
+                    AgregarTarjetasPDF(doc, t, v, d, fuenteCardTitulo, fuenteCardValor, fuenteCardDetalle, 2);
                     doc.Add(new Paragraph(" ", fuenteNota));
 
-                    doc.Add(ImagenDe(chartVentas, 600f, 190f));
+                    PdfPTable graficosRot = new PdfPTable(2) { WidthPercentage = 100, SpacingBefore = 4f };
+                    graficosRot.AddCell(new PdfPCell(ImagenDe(chartMas, 390f, 160f), true) { Border = PdfRectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER });
+                    graficosRot.AddCell(new PdfPCell(ImagenDe(chartMenos, 390f, 160f), true) { Border = PdfRectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER });
+                    doc.Add(graficosRot);
 
-                    PdfPTable graficos = new PdfPTable(2) { WidthPercentage = 100, SpacingBefore = 4f };
-                    graficos.AddCell(new PdfPCell(ImagenDe(chartTop, 390f, 150f), true) { Border = PdfRectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER });
-                    graficos.AddCell(new PdfPCell(ImagenDe(chartMedios, 390f, 150f), true) { Border = PdfRectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER });
-                    doc.Add(graficos);
+                    Paragraph notaRot = new Paragraph(TextoResumenRotacion(), fuenteNota);
+                    notaRot.Alignment = Element.ALIGN_CENTER;
+                    notaRot.SpacingBefore = 4f;
+                    doc.Add(notaRot);
+                    doc.Add(new Paragraph(" ", fuenteNota));
 
-                    Paragraph nota = new Paragraph(lblResumen.Text, fuenteNota);
+                    float[] anchosRot = { 30f, 11f, 11f, 11f, 14f, 13f, 12f };
+                    PdfPTable tablaRot = new PdfPTable(anchosRot.Length) { WidthPercentage = 100, SpacingBefore = 4f };
+                    tablaRot.SetWidths(anchosRot);
+                    tablaRot.HeaderRows = 1;
+
+                    string[] headersRot =
+                    {
+                        lm.ObtenerTexto(f, "rcol.Modelo", "Modelo"),
+                        lm.ObtenerTexto(f, "rcol.Unidades", "Unidades vendidas"),
+                        lm.ObtenerTexto(f, "rcol.PorMes", "Ventas por mes"),
+                        lm.ObtenerTexto(f, "rcol.Stock", "Stock actual"),
+                        lm.ObtenerTexto(f, "rcol.Cobertura", "Stock alcanza para"),
+                        lm.ObtenerTexto(f, "rcol.Recomendacion", "Recomendación"),
+                        lm.ObtenerTexto(f, "rcol.Cantidad", "Cantidad sugerida")
+                    };
+                    foreach (string h in headersRot)
+                    {
+                        tablaRot.AddCell(new PdfPCell(new Phrase(h, fuenteHeader))
+                        {
+                            BackgroundColor = new BaseColor(33, 90, 160),
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            VerticalAlignment = Element.ALIGN_MIDDLE,
+                            Padding = 5f
+                        });
+                    }
+
+                    foreach (FilaRotacion486LP fila in _filasRot)
+                    {
+                        BaseColor bgFila = BaseColor.WHITE;
+                        if (fila.Tipo == ReporteRotacionProducto486LP.COMPRAR) bgFila = new BaseColor(226, 244, 230);
+                        else if (fila.Tipo == ReporteRotacionProducto486LP.NO_COMPRAR) bgFila = new BaseColor(250, 228, 228);
+
+                        AgregarCelda(tablaRot, fila.Modelo, fuenteDato, bgFila, Element.ALIGN_LEFT);
+                        AgregarCelda(tablaRot, fila.Unidades.ToString("N0"), fuenteDato, bgFila, Element.ALIGN_CENTER);
+                        AgregarCelda(tablaRot, fila.PorMes.ToString("N1"), fuenteDato, bgFila, Element.ALIGN_CENTER);
+                        AgregarCelda(tablaRot, fila.Stock.ToString("N0"), fuenteDato, bgFila, Element.ALIGN_CENTER);
+                        AgregarCelda(tablaRot, fila.Cobertura, fuenteDato, bgFila, Element.ALIGN_CENTER);
+                        AgregarCelda(tablaRot, fila.Recomendacion, fuenteDato, bgFila, Element.ALIGN_CENTER);
+                        AgregarCelda(tablaRot, fila.CantidadSugerida.HasValue ? fila.CantidadSugerida.Value.ToString("N0") : "-", fuenteDato, bgFila, Element.ALIGN_CENTER);
+                    }
+                    doc.Add(tablaRot);
+
+                    // ------------------------------------------------ 2) Ventas y proyeccion
+                    doc.NewPage();
+
+                    string agrupacionTexto = _reporte.Agrupacion == BLL_ReporteInteligente486LP.AGRUPAR_SEMANA
+                        ? lm.ObtenerTexto(f, "agrupar.Semana", "Semana") : lm.ObtenerTexto(f, "agrupar.Mes", "Mes");
+                    string periodoVentas = string.Format(lm.ObtenerTexto(f, "pdf.Periodo", "Período: {0} al {1} | Agrupado por: {2} | Método: {3} | Períodos a proyectar: {4}"),
+                        _reporte.DesdeEfectivo.ToString("dd/MM/yyyy"), _reporte.HastaEfectivo.ToString("dd/MM/yyyy"),
+                        agrupacionTexto, NombreMetodo(_reporte.Metodo), _reporte.PeriodosAProyectar);
+                    AgregarSeccionPDF(doc, lm.ObtenerTexto(f, "pdf.SeccionVentas", "2. Ventas por período y proyección"), periodoVentas, fuenteSeccion, fuenteSubtitulo);
+
+                    TarjetasVentas(t, v, d);
+                    AgregarTarjetasPDF(doc, t, v, d, fuenteCardTitulo, fuenteCardValor, fuenteCardDetalle, 4);
+                    doc.Add(new Paragraph(" ", fuenteNota));
+
+                    doc.Add(ImagenDe(chartVentas, 780f, 165f));
+
+                    if (_reporte.MediosPago.Count > 0)
+                    {
+                        using (Charting.Chart medios = CrearGraficoMedios(640, 260))
+                        {
+                            doc.Add(ImagenDe(medios, 400f, 130f));
+                        }
+                    }
+
+                    Paragraph nota = new Paragraph(TextoResumenVentas(), fuenteNota);
                     nota.Alignment = Element.ALIGN_CENTER;
                     nota.SpacingBefore = 4f;
                     doc.Add(nota);
@@ -761,8 +1157,7 @@ namespace Sistema_SneakRush
                     float[] anchos = { 22f, 14f, 22f, 22f, 20f };
                     PdfPTable tabla = new PdfPTable(anchos.Length) { WidthPercentage = 100, SpacingBefore = 4f };
                     tabla.SetWidths(anchos);
-
-                    BaseColor bgClaro = new BaseColor(245, 248, 255);
+                    tabla.HeaderRows = 1;
 
                     string[] headers =
                     {
@@ -806,7 +1201,7 @@ namespace Sistema_SneakRush
                     doc.Add(pie);
                     doc.Close();
 
-                    _bll.RegistrarExportacion(_filas.Count);
+                    _bll.RegistrarExportacion(_filas.Count, _filasRot.Count);
 
                     MessageBox.Show(string.Format(lm.ObtenerTexto(f, "Msg.PDFExportado", "PDF exportado correctamente:\n{0}"), sfd.FileName),
                         lm.ObtenerTexto(f, "Msg.PDF.Title", "Exportar PDF"), MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -818,6 +1213,48 @@ namespace Sistema_SneakRush
                         lm.ObtenerTexto(f, "Msg.Error.Title", "Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        // Barra de titulo de una seccion del PDF (con el periodo que cubre)
+        private void AgregarSeccionPDF(Document doc, string titulo, string detalle, PdfFont fuenteSeccion, PdfFont fuenteDetalle)
+        {
+            PdfPTable seccion = new PdfPTable(1) { WidthPercentage = 100 };
+            seccion.AddCell(new PdfPCell(new Phrase(titulo, fuenteSeccion))
+            {
+                BackgroundColor = new BaseColor(240, 90, 40),
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Padding = 5f, Border = PdfRectangle.NO_BORDER
+            });
+            seccion.AddCell(new PdfPCell(new Phrase(detalle, fuenteDetalle))
+            {
+                BackgroundColor = new BaseColor(253, 240, 232),
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Padding = 4f, Border = PdfRectangle.NO_BORDER
+            });
+            doc.Add(seccion);
+            doc.Add(new Paragraph(" ", fuenteDetalle));
+        }
+
+        // Fila de 6 tarjetas; desdeResaltada es la primera que va con fondo naranja claro
+        private void AgregarTarjetasPDF(Document doc, string[] titulos, string[] valores, string[] detalles,
+            PdfFont fuenteTitulo, PdfFont fuenteValor, PdfFont fuenteDetalle, int desdeResaltada)
+        {
+            PdfPTable tarjetas = new PdfPTable(6) { WidthPercentage = 100 };
+            for (int i = 0; i < 6; i++)
+            {
+                string detalle = (detalles[i] ?? "").Replace("▲ ", "+").Replace("▼ ", "-");
+                PdfPCell celda = new PdfPCell
+                {
+                    BackgroundColor = i >= desdeResaltada ? new BaseColor(253, 240, 232) : new BaseColor(245, 248, 255),
+                    BorderColor = new BaseColor(200, 210, 230),
+                    Padding = 5f
+                };
+                celda.AddElement(new Paragraph(titulos[i], fuenteTitulo));
+                celda.AddElement(new Paragraph(valores[i], fuenteValor));
+                celda.AddElement(new Paragraph(detalle, fuenteDetalle));
+                tarjetas.AddCell(celda);
+            }
+            doc.Add(tarjetas);
         }
 
         private void AgregarCelda(PdfPTable tabla, string texto, PdfFont fuente, BaseColor fondo, int alineacion)
@@ -846,6 +1283,11 @@ namespace Sistema_SneakRush
             lblAgrupar.Text = lm.ObtenerTexto(f, "lblAgrupar", "Agrupar por");
             lblProyectar.Text = lm.ObtenerTexto(f, "lblProyectar", "Períodos a proyectar");
             lblMetodo.Text = lm.ObtenerTexto(f, "lblMetodo", "Método de proyección");
+            lblRango.Text = lm.ObtenerTexto(f, "lblRango", "Período rápido");
+            lblCubrir.Text = lm.ObtenerTexto(f, "lblCubrir", "Meses de ventas a cubrir");
+            btnVistaRotacion.Text = lm.ObtenerTexto(f, "btnVistaRotacion", "Rotación y compras");
+            btnVistaVentas.Text = lm.ObtenerTexto(f, "btnVistaVentas", "Ventas y proyección");
+            btnMedios.Text = lm.ObtenerTexto(f, "btnMedios", "Medios de pago");
 
             btnGenerar.Text = lm.ObtenerTexto(f, "btnGenerar", "Generar");
             btnLimpiar.Text = lm.ObtenerTexto(f, "btnLimpiar", "Limpiar");
@@ -874,12 +1316,39 @@ namespace Sistema_SneakRush
                 dgvPeriodos.Columns["colMontoProyectado"].HeaderText = lm.ObtenerTexto(f, "col.MontoProyectado", "Monto proyectado");
             if (dgvPeriodos.Columns.Contains("colEstado"))
                 dgvPeriodos.Columns["colEstado"].HeaderText = lm.ObtenerTexto(f, "col.Estado", "Estado");
+
+            if (dgvRotacion.Columns.Contains("colRotModelo"))
+                dgvRotacion.Columns["colRotModelo"].HeaderText = lm.ObtenerTexto(f, "rcol.Modelo", "Modelo");
+            if (dgvRotacion.Columns.Contains("colRotUnidades"))
+                dgvRotacion.Columns["colRotUnidades"].HeaderText = lm.ObtenerTexto(f, "rcol.Unidades", "Unidades vendidas");
+            if (dgvRotacion.Columns.Contains("colRotPorMes"))
+                dgvRotacion.Columns["colRotPorMes"].HeaderText = lm.ObtenerTexto(f, "rcol.PorMes", "Ventas por mes");
+            if (dgvRotacion.Columns.Contains("colRotStock"))
+                dgvRotacion.Columns["colRotStock"].HeaderText = lm.ObtenerTexto(f, "rcol.Stock", "Stock actual");
+            if (dgvRotacion.Columns.Contains("colRotCobertura"))
+                dgvRotacion.Columns["colRotCobertura"].HeaderText = lm.ObtenerTexto(f, "rcol.Cobertura", "Stock alcanza para");
+            if (dgvRotacion.Columns.Contains("colRotRecomendacion"))
+                dgvRotacion.Columns["colRotRecomendacion"].HeaderText = lm.ObtenerTexto(f, "rcol.Recomendacion", "Recomendación");
+            if (dgvRotacion.Columns.Contains("colRotCantidad"))
+                dgvRotacion.Columns["colRotCantidad"].HeaderText = lm.ObtenerTexto(f, "rcol.Cantidad", "Cantidad sugerida");
         }
 
         private void FrmReporteInteligente486LP_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.LanguageManager.Quitar(this);
         }
+    }
+
+    public class FilaRotacion486LP
+    {
+        public string Modelo { get; set; }
+        public int Unidades { get; set; }
+        public decimal PorMes { get; set; }
+        public int Stock { get; set; }
+        public string Cobertura { get; set; }
+        public string Recomendacion { get; set; }
+        public int? CantidadSugerida { get; set; }
+        public int Tipo { get; set; }
     }
 
     public class FilaPeriodo486LP

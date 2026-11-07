@@ -19,10 +19,6 @@ namespace Sistema_SneakRush
     {
         private BLL_Reporte486LP _bll = new BLL_Reporte486LP();
         private readonly string f = "FrmReporteCompras486LP";
-        private bool _puedeGenerar;
-        private bool _puedeLimpiar;
-        private bool _puedeExportar;
-        private bool _puedeCerrar;
         private List<string> _marcas = new List<string>();
         private List<string> _talles = new List<string>();
         private List<ReporteStockProducto486LP> _datos = new List<ReporteStockProducto486LP>();
@@ -65,8 +61,6 @@ namespace Sistema_SneakRush
             ConfigurarGrilla();
             ConfigurarGrafico();
             CargarOpcionesFiltros();
-            AjustarBotonesSegunPerfil();
-            AplicarPermisosBotones();
             ActualizarIdioma();
         }
 
@@ -77,27 +71,6 @@ namespace Sistema_SneakRush
 
             List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
             return permisos.Contains("REPORTE_COMPRAS");
-        }
-
-        private void AjustarBotonesSegunPerfil()
-        {
-            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-            if (usuario == null) return;
-
-            List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
-
-            _puedeGenerar = permisos.Contains("REPORTE_COMPRAS_GENERAR");
-            _puedeLimpiar = permisos.Contains("REPORTE_COMPRAS_LIMPIAR");
-            _puedeExportar = permisos.Contains("REPORTE_COMPRAS_EXPORTAR");
-            _puedeCerrar = permisos.Contains("REPORTE_COMPRAS_CERRAR");
-        }
-
-        private void AplicarPermisosBotones()
-        {
-            btnGenerar.Enabled = _puedeGenerar;
-            btnLimpiar.Enabled = _puedeLimpiar;
-            btnExportarPDF.Enabled = _puedeExportar;
-            btnCerrar.Enabled = _puedeCerrar;
         }
 
         private void CargarOpcionesFiltros()
@@ -354,6 +327,13 @@ namespace Sistema_SneakRush
         public void Refrescar()
         {
             Resetear();
+        }
+
+        // Lo usa el aviso del menu principal: deja el reporte listo con solo los productos a reponer
+        public void MostrarSoloAReponer()
+        {
+            chkSoloReponer.Checked = true;
+            btnGenerar_Click(this, EventArgs.Empty);
         }
 
         private void Resetear()

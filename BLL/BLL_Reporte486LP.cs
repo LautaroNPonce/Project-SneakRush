@@ -97,6 +97,14 @@ namespace BLL
             }
         }
 
+        // Cantidad de productos a reponer: [0] sin stock y [1] con stock bajo.
+        // Se usa para el aviso al iniciar sesion y para el icono de advertencia del menu Reporte
+        public int[] ContarProductosAReponer()
+        {
+            List<ReporteStockProducto486LP> aReponer = EstadoStock(null, null, null, true);
+            return ContarPorEstado(aReponer);
+        }
+
         public List<string> MarcasDe(List<ReporteStockProducto486LP> productos)
         {
             if (productos == null) return new List<string>();

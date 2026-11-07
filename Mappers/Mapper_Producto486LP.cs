@@ -147,6 +147,7 @@ namespace Mappers
             cmd.Parameters.Add(new SqlParameter("@Color", producto.Color));
             cmd.Parameters.Add(new SqlParameter("@Talle", producto.Talle));
             cmd.Parameters.Add(new SqlParameter("@Precio", producto.Precio));
+            cmd.Parameters.Add(new SqlParameter("@Stock", producto.Stock));
 
             return Conexion486LP.EjecutarNoConsulta(cmd);
         }

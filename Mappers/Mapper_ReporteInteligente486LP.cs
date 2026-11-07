@@ -58,5 +58,16 @@ namespace Mappers
             DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
             return ManejadorMapeo486LP.MapearLista<ReporteMedioPago486LP>(tabla);
         }
+
+        public List<ReporteRotacionProducto486LP> Rotacion(DateTime desde, DateTime hasta)
+        {
+            SqlCommand cmd = new SqlCommand("Reporte_RotacionProductos");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@Desde", desde.Date));
+            cmd.Parameters.Add(new SqlParameter("@Hasta", hasta.Date));
+
+            DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
+            return ManejadorMapeo486LP.MapearLista<ReporteRotacionProducto486LP>(tabla);
+        }
     }
 }

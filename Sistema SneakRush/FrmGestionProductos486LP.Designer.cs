@@ -40,7 +40,7 @@
             this.lblPrecio = new System.Windows.Forms.Label();
             this.txtPrecio = new System.Windows.Forms.TextBox();
             this.lblStock = new System.Windows.Forms.Label();
-            this.txtStock = new System.Windows.Forms.TextBox();
+            this.nudStock = new System.Windows.Forms.NumericUpDown();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.btnModificar = new System.Windows.Forms.Button();
             this.btnEliminar = new System.Windows.Forms.Button();
@@ -51,6 +51,7 @@
             this.btnCerrar = new System.Windows.Forms.Button();
             this.grpDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStock)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitulo
@@ -79,7 +80,7 @@
             this.grpDatos.Controls.Add(this.lblPrecio);
             this.grpDatos.Controls.Add(this.txtPrecio);
             this.grpDatos.Controls.Add(this.lblStock);
-            this.grpDatos.Controls.Add(this.txtStock);
+            this.grpDatos.Controls.Add(this.nudStock);
             this.grpDatos.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.grpDatos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.grpDatos.Location = new System.Drawing.Point(27, 62);
@@ -218,13 +219,18 @@
             this.lblStock.TabIndex = 12;
             this.lblStock.Text = "Stock inicial:";
             // 
-            // txtStock
+            // nudStock
             // 
-            this.txtStock.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.txtStock.Location = new System.Drawing.Point(120, 277);
-            this.txtStock.Name = "txtStock";
-            this.txtStock.Size = new System.Drawing.Size(220, 25);
-            this.txtStock.TabIndex = 13;
+            this.nudStock.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.nudStock.Location = new System.Drawing.Point(120, 277);
+            this.nudStock.Maximum = new decimal(new int[] {
+            999999999,
+            0,
+            0,
+            0});
+            this.nudStock.Name = "nudStock";
+            this.nudStock.Size = new System.Drawing.Size(220, 25);
+            this.nudStock.TabIndex = 13;
             // 
             // btnAgregar
             // 
@@ -381,6 +387,7 @@
             this.grpDatos.ResumeLayout(false);
             this.grpDatos.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProductos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStock)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
@@ -402,7 +409,7 @@
         private System.Windows.Forms.Label lblPrecio;
         private System.Windows.Forms.TextBox txtPrecio;
         private System.Windows.Forms.Label lblStock;
-        private System.Windows.Forms.TextBox txtStock;
+        private System.Windows.Forms.NumericUpDown nudStock;
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Button btnModificar;
         private System.Windows.Forms.Button btnEliminar;

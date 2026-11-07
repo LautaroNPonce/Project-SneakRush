@@ -237,7 +237,7 @@ namespace BLL
             if (!ValidarColor(producto.Color)) return Mensajes486LP.Obtener("Producto.ColorInvalido"); // Muestra: El color solo admite letras, y puede combinarse con espacio, guion o barra (máximo 30 caracteres)
             if (!ValidarTalle(producto.Talle)) return Mensajes486LP.Obtener("Producto.TalleInvalido"); // Muestra: El talle debe ser un número entre 30 y 50, con medio talle opcional (por ejemplo 42 o 42.5)
             if (!ValidarPrecio(producto.Precio)) return Mensajes486LP.Obtener("Producto.PrecioInvalido"); // Muestra: El precio debe ser mayor a cero, con hasta 2 decimales, y no puede superar 99.999.999,99
-            if (esAlta && producto.Stock < 0) return Mensajes486LP.Obtener("Producto.StockInvalido"); // Muestra: El stock inicial debe ser un número entero mayor o igual a cero
+            if (producto.Stock < 0) return Mensajes486LP.Obtener("Producto.StockInvalido"); // Muestra: El stock debe ser un número entero mayor o igual a cero
 
             return null;
         }
@@ -267,7 +267,7 @@ namespace BLL
 
                 if (ObjetoMapper.ExisteCombinacion(producto.IdMarca, producto.Modelo, producto.Color, producto.Talle, 0))
                 {
-                    mensaje = Mensajes486LP.Obtener("Producto.Duplicado"); // Muestra: Ya existe un producto con esa marca, modelo, color y talle
+                    mensaje = Mensajes486LP.Obtener("Producto.DuplicadoAlta"); // Muestra: Ya existe un producto con esa marca, modelo, color y talle. Para cambiar su stock, elíjalo en la grilla y use Modificar
                     return false;
                 }
 
@@ -309,6 +309,14 @@ namespace BLL
                     return false;
                 }
 
+                // Se toma el producto antes de modificar para dejar en la bitacora el cambio de stock (de X a Y)
+                Producto486LP anterior = ObjetoMapper.ObtenerPorId(producto.IdProducto);
+                if (anterior == null)
+                {
+                    mensaje = Mensajes486LP.Obtener("Producto.NoExiste"); // Muestra: El producto ya no existe. Actualice la lista y vuelva a intentar
+                    return false;
+                }
+
                 if (ObjetoMapper.Modificar(producto) == 0)
                 {
                     mensaje = Mensajes486LP.Obtener("Producto.NoExiste"); // Muestra: El producto ya no existe. Actualice la lista y vuelva a intentar
@@ -316,8 +324,10 @@ namespace BLL
                 }
 
                 RecalcularDVProducto();
+
+                string detalleStock = anterior.Stock != producto.Stock ? $", stock de {anterior.Stock} a {producto.Stock}" : "";
                 ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO_MAESTROS,
-                    $"Modificacion de producto Id {producto.IdProducto}: {producto.Modelo} {producto.Color} talle {producto.Talle}", Criticidad486LP.Media, UsuarioDNI(), UsuarioNombre()));
+                    $"Modificacion de producto Id {producto.IdProducto}: {producto.Modelo} {producto.Color} talle {producto.Talle}{detalleStock}", Criticidad486LP.Media, UsuarioDNI(), UsuarioNombre()));
 
                 mensaje = Mensajes486LP.Obtener("Producto.Modificado"); // Muestra: Producto modificado correctamente
                 return true;

@@ -14,6 +14,7 @@ namespace Sistema_SneakRush
             InitializeComponent();
             this.IsMdiContainer = true;
             this.MdiChildActivate += FrmMenuPrincipal486LP_MdiChildActivate;
+            this.Shown += FrmMenuPrincipal486LP_Shown;
             _hayInconsistencia = hayInconsistencia;
             Program.LanguageManager.Agregar(this);
         }
@@ -152,6 +153,127 @@ namespace Sistema_SneakRush
                 reporteDeVentasToolStripMenuItem.Visible = permisos.Contains("REPORTE_VENTAS");
                 reporteDeComprasToolStripMenuItem.Visible = permisos.Contains("REPORTE_COMPRAS");
                 reporteInteligenteToolStripMenuItem.Visible = permisos.Contains("REPORTE_INTELIGENTE");
+            }
+
+            ActualizarAvisoStock();
+        }
+
+        private System.Drawing.Bitmap _iconoAdvertencia;
+
+        // Icono rojo de advertencia dibujado en codigo (triangulo con un signo de exclamacion)
+        private System.Drawing.Bitmap ObtenerIconoAdvertencia()
+        {
+            if (_iconoAdvertencia != null) return _iconoAdvertencia;
+
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(16, 16);
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bmp))
+            {
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                g.Clear(System.Drawing.Color.Transparent);
+
+                System.Drawing.Point[] triangulo =
+                {
+                    new System.Drawing.Point(8, 1),
+                    new System.Drawing.Point(15, 14),
+                    new System.Drawing.Point(1, 14)
+                };
+                using (System.Drawing.SolidBrush relleno = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(200, 30, 30)))
+                    g.FillPolygon(relleno, triangulo);
+                using (System.Drawing.Pen borde = new System.Drawing.Pen(System.Drawing.Color.FromArgb(140, 0, 0), 1f))
+                    g.DrawPolygon(borde, triangulo);
+
+                using (System.Drawing.Font fuente = new System.Drawing.Font("Segoe UI", 9f, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel))
+                using (System.Drawing.StringFormat centro = new System.Drawing.StringFormat())
+                {
+                    centro.Alignment = System.Drawing.StringAlignment.Center;
+                    centro.LineAlignment = System.Drawing.StringAlignment.Center;
+                    g.DrawString("!", fuente, System.Drawing.Brushes.White, new System.Drawing.RectangleF(0, 4, 16, 11), centro);
+                }
+            }
+
+            _iconoAdvertencia = bmp;
+            return _iconoAdvertencia;
+        }
+
+        // Muestra (o saca) el icono rojo en Reporte y Estado de stock segun haya productos para reponer.
+        // Solo aplica a quien puede ver el reporte de estado de stock.
+        private void ActualizarAvisoStock()
+        {
+            try
+            {
+                bool puedeVer = !_hayInconsistencia
+                    && SessionManager486LP.ObtenerInstancia().UsuarioActual() != null
+                    && reporteToolStripMenuItem.Available
+                    && reporteDeComprasToolStripMenuItem.Available;
+
+                int sinStock = 0, stockBajo = 0;
+                if (puedeVer)
+                {
+                    int[] cantidades = new BLL_Reporte486LP().ContarProductosAReponer();
+                    sinStock = cantidades[0];
+                    stockBajo = cantidades[1];
+                }
+
+                int total = sinStock + stockBajo;
+                if (total > 0)
+                {
+                    var lm = Program.LanguageManager;
+                    string tooltip = string.Format(
+                        lm.ObtenerTexto("FrmMenuPrincipal486LP", "Aviso.Stock.Tooltip", "Hay {0} producto(s) para reponer: revise el reporte de estado de stock."),
+                        total);
+
+                    reporteToolStripMenuItem.Image = ObtenerIconoAdvertencia();
+                    reporteToolStripMenuItem.ToolTipText = tooltip;
+                    reporteDeComprasToolStripMenuItem.Image = ObtenerIconoAdvertencia();
+                    reporteDeComprasToolStripMenuItem.ToolTipText = tooltip;
+                }
+                else
+                {
+                    reporteToolStripMenuItem.Image = null;
+                    reporteToolStripMenuItem.ToolTipText = null;
+                    reporteDeComprasToolStripMenuItem.Image = null;
+                    reporteDeComprasToolStripMenuItem.ToolTipText = null;
+                }
+            }
+            catch
+            {
+                // El icono es solo un aviso: si algo falla no tiene que impedir el uso del menu
+            }
+        }
+
+        // Al iniciar sesion avisa si hay productos sin stock o con stock bajo y ofrece abrir el reporte
+        private void FrmMenuPrincipal486LP_Shown(object sender, System.EventArgs e)
+        {
+            if (_hayInconsistencia || !reporteDeComprasToolStripMenuItem.Available || !reporteToolStripMenuItem.Available)
+                return;
+
+            int[] cantidades = new BLL_Reporte486LP().ContarProductosAReponer();
+            if (cantidades[0] + cantidades[1] == 0)
+                return;
+
+            var lm = Program.LanguageManager;
+            string f = "FrmMenuPrincipal486LP";
+            string mensaje = string.Format(
+                lm.ObtenerTexto(f, "Aviso.Stock.Mensaje", "Productos sin stock: {0}\nProductos con stock bajo ({2} unidades o menos): {1}\n\n¿Desea abrir el reporte de estado de stock para ver qué reponer?"),
+                cantidades[0], cantidades[1], BLL_Reporte486LP.UMBRAL_STOCK_BAJO);
+
+            DialogResult respuesta = MessageBox.Show(
+                mensaje,
+                lm.ObtenerTexto(f, "Aviso.Stock.Titulo", "Aviso de stock"),
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (respuesta != DialogResult.Yes)
+                return;
+
+            AbrirFormulario(new FrmReporteCompras486LP());
+            foreach (Form hijo in this.MdiChildren)
+            {
+                FrmReporteCompras486LP reporte = hijo as FrmReporteCompras486LP;
+                if (reporte != null)
+                {
+                    reporte.MostrarSoloAReponer();
+                    break;
+                }
             }
         }
 
@@ -338,6 +460,9 @@ namespace Sistema_SneakRush
 
         private void FrmMenuPrincipal486LP_MdiChildActivate(object sender, System.EventArgs e)
         {
+            // Al cambiar de ventana se recalcula el icono: si se cargo stock, desaparece solo
+            ActualizarAvisoStock();
+
             if (_ajustandoMdi)
             {
                 return;
@@ -462,6 +587,7 @@ namespace Sistema_SneakRush
             guíaDeUsuarioToolStripMenuItem.Text = lm.ObtenerTexto(f, "guíaDeUsuarioToolStripMenuItem");
 
             ActualizarEstado();
+            ActualizarAvisoStock();
         }
 
         private void AgregarAccentNaranja()

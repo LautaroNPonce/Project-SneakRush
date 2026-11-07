@@ -19,10 +19,6 @@ namespace Sistema_SneakRush
     {
         private BLL_Reporte486LP _bll = new BLL_Reporte486LP();
         private readonly string f = "FrmReporteVenta486LP";
-        private bool _puedeGenerar;
-        private bool _puedeLimpiar;
-        private bool _puedeExportar;
-        private bool _puedeCerrar;
         private List<ReporteClienteFrecuente486LP> _datos = new List<ReporteClienteFrecuente486LP>();
         private bool _generado = false;
         private DateTime _desdeUsado;
@@ -57,8 +53,6 @@ namespace Sistema_SneakRush
             ConfigurarGrilla();
             ConfigurarGrafico();
             ValoresIniciales();
-            AjustarBotonesSegunPerfil();
-            AplicarPermisosBotones();
             ActualizarIdioma();
         }
 
@@ -69,27 +63,6 @@ namespace Sistema_SneakRush
 
             List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
             return permisos.Contains("REPORTE_VENTAS");
-        }
-
-        private void AjustarBotonesSegunPerfil()
-        {
-            var usuario = SessionManager486LP.ObtenerInstancia().UsuarioActual();
-            if (usuario == null) return;
-
-            List<string> permisos = new BLL_Perfil486LP().ObtenerPermisosPorRol(usuario.Rol);
-
-            _puedeGenerar = permisos.Contains("REPORTE_VENTAS_GENERAR");
-            _puedeLimpiar = permisos.Contains("REPORTE_VENTAS_LIMPIAR");
-            _puedeExportar = permisos.Contains("REPORTE_VENTAS_EXPORTAR");
-            _puedeCerrar = permisos.Contains("REPORTE_VENTAS_CERRAR");
-        }
-
-        private void AplicarPermisosBotones()
-        {
-            btnGenerar.Enabled = _puedeGenerar;
-            btnLimpiar.Enabled = _puedeLimpiar;
-            btnExportarPDF.Enabled = _puedeExportar;
-            btnCerrar.Enabled = _puedeCerrar;
         }
 
         private void ValoresIniciales()

@@ -69,9 +69,17 @@
             this.lblCardValor6 = new System.Windows.Forms.Label();
             this.lblCardDetalle6 = new System.Windows.Forms.Label();
             this.chartVentas = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.chartTop = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.chartMedios = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dgvPeriodos = new System.Windows.Forms.DataGridView();
+            this.chartMas = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartMenos = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.dgvRotacion = new System.Windows.Forms.DataGridView();
+            this.btnVistaRotacion = new System.Windows.Forms.Button();
+            this.btnVistaVentas = new System.Windows.Forms.Button();
+            this.btnMedios = new System.Windows.Forms.Button();
+            this.lblRango = new System.Windows.Forms.Label();
+            this.cmbRango = new System.Windows.Forms.ComboBox();
+            this.lblCubrir = new System.Windows.Forms.Label();
+            this.nudCubrir = new System.Windows.Forms.NumericUpDown();
             this.lblResumen = new System.Windows.Forms.Label();
             this.grpFiltros.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudProyectar)).BeginInit();
@@ -82,9 +90,11 @@
             this.pnlCard5.SuspendLayout();
             this.pnlCard6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartVentas)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartTop)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartMedios)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPeriodos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartMas)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartMenos)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRotacion)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCubrir)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitulo
@@ -110,6 +120,10 @@
             this.grpFiltros.Controls.Add(this.nudProyectar);
             this.grpFiltros.Controls.Add(this.lblMetodo);
             this.grpFiltros.Controls.Add(this.cmbMetodo);
+            this.grpFiltros.Controls.Add(this.lblRango);
+            this.grpFiltros.Controls.Add(this.cmbRango);
+            this.grpFiltros.Controls.Add(this.lblCubrir);
+            this.grpFiltros.Controls.Add(this.nudCubrir);
             this.grpFiltros.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.grpFiltros.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.grpFiltros.Location = new System.Drawing.Point(27, 60);
@@ -546,25 +560,9 @@
             // 
             this.chartVentas.Location = new System.Drawing.Point(27, 324);
             this.chartVentas.Name = "chartVentas";
-            this.chartVentas.Size = new System.Drawing.Size(640, 200);
+            this.chartVentas.Size = new System.Drawing.Size(1046, 200);
             this.chartVentas.TabIndex = 14;
             this.chartVentas.Text = "chartVentas";
-            // 
-            // chartTop
-            // 
-            this.chartTop.Location = new System.Drawing.Point(675, 324);
-            this.chartTop.Name = "chartTop";
-            this.chartTop.Size = new System.Drawing.Size(398, 200);
-            this.chartTop.TabIndex = 15;
-            this.chartTop.Text = "chartTop";
-            // 
-            // chartMedios
-            // 
-            this.chartMedios.Location = new System.Drawing.Point(675, 532);
-            this.chartMedios.Name = "chartMedios";
-            this.chartMedios.Size = new System.Drawing.Size(398, 190);
-            this.chartMedios.TabIndex = 17;
-            this.chartMedios.Text = "chartMedios";
             // 
             // dgvPeriodos
             // 
@@ -572,8 +570,134 @@
             this.dgvPeriodos.Location = new System.Drawing.Point(27, 532);
             this.dgvPeriodos.Name = "dgvPeriodos";
             this.dgvPeriodos.RowHeadersWidth = 51;
-            this.dgvPeriodos.Size = new System.Drawing.Size(640, 190);
+            this.dgvPeriodos.Size = new System.Drawing.Size(1046, 190);
             this.dgvPeriodos.TabIndex = 16;
+            // 
+            // chartMas
+            // 
+            this.chartMas.Location = new System.Drawing.Point(27, 324);
+            this.chartMas.Name = "chartMas";
+            this.chartMas.Size = new System.Drawing.Size(518, 200);
+            this.chartMas.TabIndex = 19;
+            this.chartMas.Text = "chartMas";
+            // 
+            // chartMenos
+            // 
+            this.chartMenos.Location = new System.Drawing.Point(555, 324);
+            this.chartMenos.Name = "chartMenos";
+            this.chartMenos.Size = new System.Drawing.Size(518, 200);
+            this.chartMenos.TabIndex = 20;
+            this.chartMenos.Text = "chartMenos";
+            // 
+            // dgvRotacion
+            // 
+            this.dgvRotacion.ColumnHeadersHeight = 29;
+            this.dgvRotacion.Location = new System.Drawing.Point(27, 532);
+            this.dgvRotacion.Name = "dgvRotacion";
+            this.dgvRotacion.RowHeadersWidth = 51;
+            this.dgvRotacion.Size = new System.Drawing.Size(1046, 190);
+            this.dgvRotacion.TabIndex = 21;
+            // 
+            // btnVistaRotacion
+            // 
+            this.btnVistaRotacion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(90)))), ((int)(((byte)(40)))));
+            this.btnVistaRotacion.FlatAppearance.BorderSize = 0;
+            this.btnVistaRotacion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVistaRotacion.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnVistaRotacion.ForeColor = System.Drawing.Color.White;
+            this.btnVistaRotacion.Location = new System.Drawing.Point(560, 14);
+            this.btnVistaRotacion.Name = "btnVistaRotacion";
+            this.btnVistaRotacion.Size = new System.Drawing.Size(240, 36);
+            this.btnVistaRotacion.TabIndex = 22;
+            this.btnVistaRotacion.Text = "Rotación y compras";
+            this.btnVistaRotacion.UseVisualStyleBackColor = false;
+            this.btnVistaRotacion.Click += new System.EventHandler(this.btnVistaRotacion_Click);
+            // 
+            // btnVistaVentas
+            // 
+            this.btnVistaVentas.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            this.btnVistaVentas.FlatAppearance.BorderSize = 0;
+            this.btnVistaVentas.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnVistaVentas.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnVistaVentas.ForeColor = System.Drawing.Color.White;
+            this.btnVistaVentas.Location = new System.Drawing.Point(810, 14);
+            this.btnVistaVentas.Name = "btnVistaVentas";
+            this.btnVistaVentas.Size = new System.Drawing.Size(240, 36);
+            this.btnVistaVentas.TabIndex = 23;
+            this.btnVistaVentas.Text = "Ventas y proyección";
+            this.btnVistaVentas.UseVisualStyleBackColor = false;
+            this.btnVistaVentas.Click += new System.EventHandler(this.btnVistaVentas_Click);
+            // 
+            // btnMedios
+            // 
+            this.btnMedios.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.btnMedios.FlatAppearance.BorderSize = 0;
+            this.btnMedios.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMedios.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnMedios.ForeColor = System.Drawing.Color.White;
+            this.btnMedios.Location = new System.Drawing.Point(557, 172);
+            this.btnMedios.Name = "btnMedios";
+            this.btnMedios.Size = new System.Drawing.Size(200, 34);
+            this.btnMedios.TabIndex = 24;
+            this.btnMedios.Text = "Medios de pago";
+            this.btnMedios.UseVisualStyleBackColor = false;
+            this.btnMedios.Click += new System.EventHandler(this.btnMedios_Click);
+            // 
+            // lblRango
+            // 
+            this.lblRango.AutoSize = true;
+            this.lblRango.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lblRango.ForeColor = System.Drawing.Color.Black;
+            this.lblRango.Location = new System.Drawing.Point(400, 34);
+            this.lblRango.Name = "lblRango";
+            this.lblRango.Size = new System.Drawing.Size(116, 23);
+            this.lblRango.TabIndex = 10;
+            this.lblRango.Text = "Período rápido";
+            // 
+            // cmbRango
+            // 
+            this.cmbRango.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbRango.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.cmbRango.FormattingEnabled = true;
+            this.cmbRango.Location = new System.Drawing.Point(520, 31);
+            this.cmbRango.Name = "cmbRango";
+            this.cmbRango.Size = new System.Drawing.Size(170, 29);
+            this.cmbRango.TabIndex = 11;
+            this.cmbRango.SelectedIndexChanged += new System.EventHandler(this.cmbRango_SelectedIndexChanged);
+            // 
+            // lblCubrir
+            // 
+            this.lblCubrir.AutoSize = true;
+            this.lblCubrir.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lblCubrir.ForeColor = System.Drawing.Color.Black;
+            this.lblCubrir.Location = new System.Drawing.Point(18, 68);
+            this.lblCubrir.Name = "lblCubrir";
+            this.lblCubrir.Size = new System.Drawing.Size(220, 23);
+            this.lblCubrir.TabIndex = 12;
+            this.lblCubrir.Text = "Meses de ventas a cubrir con la compra";
+            // 
+            // nudCubrir
+            // 
+            this.nudCubrir.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.nudCubrir.Location = new System.Drawing.Point(300, 66);
+            this.nudCubrir.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.nudCubrir.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudCubrir.Name = "nudCubrir";
+            this.nudCubrir.Size = new System.Drawing.Size(55, 29);
+            this.nudCubrir.TabIndex = 13;
+            this.nudCubrir.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             // 
             // lblResumen
             // 
@@ -606,9 +730,13 @@
             this.Controls.Add(this.pnlCard5);
             this.Controls.Add(this.pnlCard6);
             this.Controls.Add(this.chartVentas);
-            this.Controls.Add(this.chartTop);
             this.Controls.Add(this.dgvPeriodos);
-            this.Controls.Add(this.chartMedios);
+            this.Controls.Add(this.chartMas);
+            this.Controls.Add(this.chartMenos);
+            this.Controls.Add(this.dgvRotacion);
+            this.Controls.Add(this.btnVistaRotacion);
+            this.Controls.Add(this.btnVistaVentas);
+            this.Controls.Add(this.btnMedios);
             this.Controls.Add(this.lblResumen);
             this.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             this.Name = "FrmReporteInteligente486LP";
@@ -625,9 +753,11 @@
             this.pnlCard5.ResumeLayout(false);
             this.pnlCard6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chartVentas)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartTop)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartMedios)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPeriodos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartMas)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartMenos)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvRotacion)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCubrir)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -676,9 +806,17 @@
         private System.Windows.Forms.Label lblCardValor6;
         private System.Windows.Forms.Label lblCardDetalle6;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartVentas;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartTop;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chartMedios;
         private System.Windows.Forms.DataGridView dgvPeriodos;
         private System.Windows.Forms.Label lblResumen;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartMas;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartMenos;
+        private System.Windows.Forms.DataGridView dgvRotacion;
+        private System.Windows.Forms.Button btnVistaRotacion;
+        private System.Windows.Forms.Button btnVistaVentas;
+        private System.Windows.Forms.Button btnMedios;
+        private System.Windows.Forms.Label lblRango;
+        private System.Windows.Forms.ComboBox cmbRango;
+        private System.Windows.Forms.Label lblCubrir;
+        private System.Windows.Forms.NumericUpDown nudCubrir;
     }
 }
