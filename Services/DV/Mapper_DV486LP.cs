@@ -10,19 +10,8 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-
-    /// DV opera sobre 27 tablas distintas (15 de Ventas/Seguridad + 8 agregadas en RFN2 Compras + 2 del Bloque 3: Categoria y Marca + 2 de la importacion de productos desde XML: ImportacionProducto y DetalleImportacion. Las de Compras:
-    /// Proveedor, SolicitudCompra, DetalleSolicitudCompra, OrdenCompra, DetalleOrdenCompra,
-    /// Recepcion, DetalleRecepcion, Factura), pero NUNCA arma el nombre de tabla como texto SQL
-    /// dinamico: cada tabla tiene su propio SP fijo (DV_Leer_X, DV_ActualizarFila_X), y este
-    /// Mapper solo ELIGE cual SP llamar segun el nombre de tabla que le llega - la eleccion es en
-    /// C#, el SQL de cada SP es fijo y conocido de antemano.
-    /// UBICACION DEFINITIVA en Services (no en Mappers) - fue la ULTIMA entidad migrada; con esta se completo el refactor y se movieron los 7 Mappers
-    /// de seguridad/auditoria a Services (ver CHANGELOG_Refactor_Arquitectura.md).
-
     public class Mapper_DV486LP : MapperBase486LP
     {
-        // Nombre del SP de lectura completa, por tabla protegida (27 tablas).
         private static readonly Dictionary<string, string> _spLeerPorTabla = new Dictionary<string, string>
         {
             { "BitacoraEvento",   "DV_Leer_BitacoraEvento" },
@@ -33,14 +22,13 @@ namespace Services
             { "Idioma",           "DV_Leer_Idioma" },
             { "Familia_Permiso",  "DV_Leer_Familia_Permiso" },
             { "Perfil_Familia",   "DV_Leer_Perfil_Familia" },
-            { "Perfil_Permiso",  "DV_Leer_Perfil_Permiso" },
+            { "Perfil_Permiso",   "DV_Leer_Perfil_Permiso" },
             { "Producto",         "DV_Leer_Producto" },
             { "Carrito",          "DV_Leer_Carrito" },
             { "DetalleCarrito",   "DV_Leer_DetalleCarrito" },
             { "Cliente",          "DV_Leer_Cliente" },
             { "Venta",            "DV_Leer_Venta" },
             { "DetalleVenta",     "DV_Leer_DetalleVenta" },
-            // Agregadas en RFN2 Compras (CUN04-07).
             { "Proveedor",              "DV_Leer_Proveedor" },
             { "SolicitudCompra",        "DV_Leer_SolicitudCompra" },
             { "DetalleSolicitudCompra", "DV_Leer_DetalleSolicitudCompra" },
@@ -49,48 +37,41 @@ namespace Services
             { "Recepcion",              "DV_Leer_Recepcion" },
             { "DetalleRecepcion",       "DV_Leer_DetalleRecepcion" },
             { "Factura",                "DV_Leer_Factura" },
-            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
             { "Categoria",              "DV_Leer_Categoria" },
             { "Marca",                  "DV_Leer_Marca" },
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09).
             { "ImportacionProducto",    "DV_Leer_ImportacionProducto" },
-            { "DetalleImportacion",     "DV_Leer_DetalleImportacion" }
+            { "DetalleImportacion",     "DV_Leer_DetalleImportacion" },
+            { "ProductoCambio",         "DV_Leer_ProductoCambio" }
         };
 
-        // Nombre del SP que actualiza el DV de UNA fila, por tabla (solo las que llevan DVH por fila - las 3 puente quedan afuera).
         private static readonly Dictionary<string, string> _spActualizarFilaPorTabla = new Dictionary<string, string>
         {
-            { "BitacoraEvento",  "DV_ActualizarFila_BitacoraEvento" },
-            { "Usuarios",        "DV_ActualizarFila_Usuarios" },
-            { "Perfil",          "DV_ActualizarFila_Perfil" },
-            { "Familia",         "DV_ActualizarFila_Familia" },
-            { "Permiso",         "DV_ActualizarFila_Permiso" },
-            { "Idioma",          "DV_ActualizarFila_Idioma" },
-            { "Producto",        "DV_ActualizarFila_Producto" },
-            { "Carrito",         "DV_ActualizarFila_Carrito" },
-            { "DetalleCarrito",  "DV_ActualizarFila_DetalleCarrito" },
-            { "Cliente",         "DV_ActualizarFila_Cliente" },
-            { "Venta",           "DV_ActualizarFila_Venta" },
-            { "DetalleVenta",    "DV_ActualizarFila_DetalleVenta" },
-            // Agregadas en RFN2 Compras (CUN04-07).
-            { "Proveedor",              "DV_ActualizarFila_Proveedor" },
-            { "SolicitudCompra",        "DV_ActualizarFila_SolicitudCompra" },
+            { "BitacoraEvento", "DV_ActualizarFila_BitacoraEvento" },
+            { "Usuarios", "DV_ActualizarFila_Usuarios" },
+            { "Perfil", "DV_ActualizarFila_Perfil" },
+            { "Familia", "DV_ActualizarFila_Familia" },
+            { "Permiso", "DV_ActualizarFila_Permiso" },
+            { "Idioma", "DV_ActualizarFila_Idioma" },
+            { "Producto", "DV_ActualizarFila_Producto" },
+            { "Carrito", "DV_ActualizarFila_Carrito" },
+            { "DetalleCarrito", "DV_ActualizarFila_DetalleCarrito" },
+            { "Cliente", "DV_ActualizarFila_Cliente" },
+            { "Venta", "DV_ActualizarFila_Venta" },
+            { "DetalleVenta", "DV_ActualizarFila_DetalleVenta" },
+            { "Proveedor", "DV_ActualizarFila_Proveedor" },
+            { "SolicitudCompra", "DV_ActualizarFila_SolicitudCompra" },
             { "DetalleSolicitudCompra", "DV_ActualizarFila_DetalleSolicitudCompra" },
-            { "OrdenCompra",            "DV_ActualizarFila_OrdenCompra" },
-            { "DetalleOrdenCompra",     "DV_ActualizarFila_DetalleOrdenCompra" },
-            { "Recepcion",              "DV_ActualizarFila_Recepcion" },
-            { "DetalleRecepcion",       "DV_ActualizarFila_DetalleRecepcion" },
-            { "Factura",                "DV_ActualizarFila_Factura" },
-            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
-            { "Categoria",              "DV_ActualizarFila_Categoria" },
-            { "Marca",                  "DV_ActualizarFila_Marca" },
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09).
-            { "ImportacionProducto",    "DV_ActualizarFila_ImportacionProducto" },
-            { "DetalleImportacion",     "DV_ActualizarFila_DetalleImportacion" }
+            { "OrdenCompra", "DV_ActualizarFila_OrdenCompra" },
+            { "DetalleOrdenCompra", "DV_ActualizarFila_DetalleOrdenCompra" },
+            { "Recepcion", "DV_ActualizarFila_Recepcion" },
+            { "DetalleRecepcion", "DV_ActualizarFila_DetalleRecepcion" },
+            { "Factura", "DV_ActualizarFila_Factura" },
+            { "Categoria", "DV_ActualizarFila_Categoria" },
+            { "Marca", "DV_ActualizarFila_Marca" },
+            { "ImportacionProducto", "DV_ActualizarFila_ImportacionProducto" },
+            { "DetalleImportacion", "DV_ActualizarFila_DetalleImportacion" },
+            { "ProductoCambio", "DV_ActualizarFila_ProductoCambio" }
         };
-
-        // Lee TODAS las columnas y filas de una tabla protegida (para calcular DVH/DVV). Elige el SP fijo correspondiente - nunca arma SQL con el
-        // nombre de tabla como texto.
         public DataTable LeerTabla(string nombreTabla)
         {
             if (!_spLeerPorTabla.ContainsKey(nombreTabla))
@@ -166,8 +147,6 @@ namespace Services
             }
         }
 
-        // Actualiza el DV de UNA SOLA fila puntual (sin recorrer el resto de la tabla). Se usa cuando se acaba de insertar/modificar un unico registro mucho mas rapido que
-        // RecalcularDVHPorFila para tablas grandes (ej. BitacoraEvento, que crece indefinidamente).
         public void ActualizarDVDeUnaFila(string tabla, object id, string dv)
         {
             if (!_spActualizarFilaPorTabla.ContainsKey(tabla))
@@ -190,8 +169,6 @@ namespace Services
             }
         }
 
-        // Recalcula el DVH (hash por fila) de cada registro de la tabla y lo
-        // guarda, fila por fila, usando el SP de actualizacion fijo de esa tabla.
         public void RecalcularDVHPorFila(string tabla, string columnaId)
         {
             if (!_spActualizarFilaPorTabla.ContainsKey(tabla))

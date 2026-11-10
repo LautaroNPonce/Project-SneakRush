@@ -48,6 +48,7 @@
             this.gestionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.productosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.historialProductosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.categoríasMarcasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.proveedoresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -214,6 +215,7 @@
             this.gestionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clientesToolStripMenuItem,
             this.productosToolStripMenuItem,
+            this.historialProductosToolStripMenuItem,
             this.categoríasMarcasToolStripMenuItem,
             this.proveedoresToolStripMenuItem});
             this.gestionToolStripMenuItem.ForeColor = System.Drawing.Color.White;
@@ -234,6 +236,13 @@
             this.productosToolStripMenuItem.Size = new System.Drawing.Size(297, 26);
             this.productosToolStripMenuItem.Text = "Gestión de productos";
             this.productosToolStripMenuItem.Click += new System.EventHandler(this.productosToolStripMenuItem_Click);
+            // 
+            // historialProductosToolStripMenuItem
+            // 
+            this.historialProductosToolStripMenuItem.Name = "historialProductosToolStripMenuItem";
+            this.historialProductosToolStripMenuItem.Size = new System.Drawing.Size(297, 26);
+            this.historialProductosToolStripMenuItem.Text = "Historial de cambios de productos";
+            this.historialProductosToolStripMenuItem.Click += new System.EventHandler(this.historialProductosToolStripMenuItem_Click);
             // 
             // categoríasMarcasToolStripMenuItem
             // 
@@ -427,6 +436,7 @@
         private System.Windows.Forms.ToolStripMenuItem gestiónDeRespaldosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clientesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem productosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem historialProductosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem categoríasMarcasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem proveedoresToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generarSolicitudDeCompraToolStripMenuItem;

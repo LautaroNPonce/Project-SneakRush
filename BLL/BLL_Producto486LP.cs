@@ -377,6 +377,112 @@ namespace BLL
             }
         }
 
+
+        private const int RESTAURAR_OK = 0;
+        private const int RESTAURAR_NO_EXISTE = 1;
+        private const int RESTAURAR_YA_VIGENTE = 2;
+        private const int RESTAURAR_MARCA_INEXISTENTE = 3;
+        private const int RESTAURAR_CATEGORIA_INEXISTENTE = 4;
+        private const int RESTAURAR_COMBINACION_REPETIDA = 5;
+
+        public bool ValidarFechasHistorial(DateTime desde, DateTime hasta, out string mensaje)
+        {
+            mensaje = "";
+            if (desde.Date > hasta.Date)
+            {
+                mensaje = Mensajes486LP.Obtener("ProductoCambio.FechasInvalidas"); // Muestra: La fecha desde no puede ser posterior a la fecha hasta.
+                return false;
+            }
+            return true;
+        }
+
+        public List<ProductoCambio486LP> ListarCambios(string marca, string modelo, string color, string talle, DateTime? desde, DateTime? hasta)
+        {
+            try
+            {
+                return ObjetoMapper.ListarCambios(marca, modelo, color, talle, desde, hasta);
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO_MAESTROS, $"Error en BLL_Producto.ListarCambios(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                return new List<ProductoCambio486LP>();
+            }
+        }
+
+        // La pantalla lo llama antes de pedir la confirmacion, asi no se le advierte al usuario de algo que despues no se puede hacer
+        public bool ValidarRestauracion(ProductoCambio486LP cambio, out string mensaje)
+        {
+            mensaje = "";
+
+            if (cambio == null || cambio.IdCambio <= 0)
+            {
+                mensaje = Mensajes486LP.Obtener("ProductoCambio.Seleccionar"); // Muestra: Seleccione una version de la grilla para restaurar.
+                return false;
+            }
+
+            // La baja no cuenta como version vigente: restaurarla vuelve a crear el producto eliminado
+            if (cambio.Vigente && cambio.Operacion != ProductoCambio486LP.OPERACION_BAJA)
+            {
+                mensaje = Mensajes486LP.Obtener("ProductoCambio.YaVigente"); // Muestra: La version seleccionada ya es la vigente de este producto.
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool RestaurarCambio(ProductoCambio486LP cambio, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                if (!ValidarRestauracion(cambio, out mensaje)) return false;
+
+                Producto486LP antes = ObjetoMapper.ObtenerPorId(cambio.IdProducto);
+
+                int codigo = ObjetoMapper.RestaurarCambio(cambio.IdCambio);
+                if (codigo != RESTAURAR_OK)
+                {
+                    mensaje = MensajeDeRestauracion(codigo);
+                    return false;
+                }
+
+                string mensajeDV;
+                ObjDV.RegistrarDVDeFilaNueva("Producto", cambio.IdProducto, out mensajeDV);
+
+                Producto486LP despues = ObjetoMapper.ObtenerPorId(cambio.IdProducto);
+                string detalle = antes == null || despues == null
+                    ? "el producto estaba eliminado y se volvio a crear"
+                    : $"stock {antes.Stock} a {despues.Stock}, precio {antes.Precio:0.00} a {despues.Precio:0.00}";
+
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO_MAESTROS,
+                    $"Restauracion de producto Id {cambio.IdProducto}: {cambio} a la version del {cambio.FechaHora:dd/MM/yyyy HH:mm:ss} ({detalle})",
+                    Criticidad486LP.Alta, UsuarioDNI(), UsuarioNombre()));
+
+                mensaje = Mensajes486LP.Obtener("ProductoCambio.Restaurado"); // Muestra: El producto fue restaurado a la version seleccionada.
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ObjBitacora.Registrar(new BitacoraEvento486LP(MODULO_MAESTROS, $"Error en BLL_Producto.RestaurarCambio(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
+                mensaje = Mensajes486LP.Obtener("General.ErrorInesperado"); // Muestra: Ocurrio un error inesperado. El detalle quedo registrado en la bitacora
+                return false;
+            }
+        }
+
+        private string MensajeDeRestauracion(int codigo)
+        {
+            switch (codigo)
+            {
+                case RESTAURAR_NO_EXISTE: return Mensajes486LP.Obtener("ProductoCambio.NoExiste"); // Muestra: La version seleccionada ya no existe. Actualice la lista y vuelva a intentar.
+                case RESTAURAR_YA_VIGENTE: return Mensajes486LP.Obtener("ProductoCambio.YaVigente"); // Muestra: La version seleccionada ya es la vigente de este producto.
+                case RESTAURAR_MARCA_INEXISTENTE: return Mensajes486LP.Obtener("ProductoCambio.MarcaInexistente"); // Muestra: No se puede restaurar: la marca de esa version ya no existe.
+                case RESTAURAR_CATEGORIA_INEXISTENTE: return Mensajes486LP.Obtener("ProductoCambio.CategoriaInexistente"); // Muestra: No se puede restaurar: la categoria de esa version ya no existe.
+                case RESTAURAR_COMBINACION_REPETIDA: return Mensajes486LP.Obtener("ProductoCambio.CombinacionRepetida"); // Muestra: No se puede restaurar: ya existe otro producto con la misma marca, modelo, color y talle.
+                default: return Mensajes486LP.Obtener("General.ErrorInesperado");
+            }
+        }
+
         private void RecalcularDVProducto()
         {
             string mensajeDV;

@@ -46,6 +46,7 @@
             this.btnEliminar = new System.Windows.Forms.Button();
             this.btnLimpiar = new System.Windows.Forms.Button();
             this.btnImportar = new System.Windows.Forms.Button();
+            this.btnHistorial = new System.Windows.Forms.Button();
             this.lblProductos = new System.Windows.Forms.Label();
             this.dgvProductos = new System.Windows.Forms.DataGridView();
             this.btnCerrar = new System.Windows.Forms.Button();
@@ -307,6 +308,21 @@
             this.btnImportar.UseVisualStyleBackColor = false;
             this.btnImportar.Click += new System.EventHandler(this.btnImportar_Click);
             // 
+            // btnHistorial
+            // 
+            this.btnHistorial.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.btnHistorial.FlatAppearance.BorderSize = 0;
+            this.btnHistorial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHistorial.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnHistorial.ForeColor = System.Drawing.Color.White;
+            this.btnHistorial.Location = new System.Drawing.Point(574, 446);
+            this.btnHistorial.Name = "btnHistorial";
+            this.btnHistorial.Size = new System.Drawing.Size(170, 34);
+            this.btnHistorial.TabIndex = 10;
+            this.btnHistorial.Text = "Historial de cambios";
+            this.btnHistorial.UseVisualStyleBackColor = false;
+            this.btnHistorial.Click += new System.EventHandler(this.btnHistorial_Click);
+            // 
             // lblProductos
             // 
             this.lblProductos.AutoSize = true;
@@ -375,6 +391,7 @@
             this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.btnImportar);
+            this.Controls.Add(this.btnHistorial);
             this.Controls.Add(this.lblProductos);
             this.Controls.Add(this.dgvProductos);
             this.Controls.Add(this.btnCerrar);
@@ -415,6 +432,7 @@
         private System.Windows.Forms.Button btnEliminar;
         private System.Windows.Forms.Button btnLimpiar;
         private System.Windows.Forms.Button btnImportar;
+        private System.Windows.Forms.Button btnHistorial;
         private System.Windows.Forms.Label lblProductos;
         private System.Windows.Forms.DataGridView dgvProductos;
         private System.Windows.Forms.Button btnCerrar;

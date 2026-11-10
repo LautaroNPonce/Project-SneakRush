@@ -50,4 +50,46 @@ namespace BE
             return $"{Marca} {Modelo} - {Color} - Talle {Talle} (${Precio})";
         }
     }
+
+    public class ProductoCambio486LP
+    {
+        public const string OPERACION_INICIAL = "I";
+        public const string OPERACION_ALTA = "A";
+        public const string OPERACION_MODIFICACION = "M";
+        public const string OPERACION_BAJA = "B";
+
+        [ColumnaTabla486LP]
+        public int IdCambio { get; set; }
+        [ColumnaTabla486LP]
+        public int IdProducto { get; set; }
+        [ColumnaTabla486LP]
+        public DateTime FechaHora { get; set; }
+        [ColumnaTabla486LP]
+        public string Operacion { get; set; }
+        [ColumnaTabla486LP]
+        public int IdMarca { get; set; }
+        [ColumnaTabla486LP]
+        public string Marca { get; set; }
+        [ColumnaTabla486LP]
+        public int IdCategoria { get; set; }
+        [ColumnaTabla486LP]
+        public string Categoria { get; set; }
+        [ColumnaTabla486LP]
+        public string Modelo { get; set; }
+        [ColumnaTabla486LP]
+        public string Color { get; set; }
+        [ColumnaTabla486LP]
+        public string Talle { get; set; }
+        [ColumnaTabla486LP]
+        public decimal Precio { get; set; }
+        [ColumnaTabla486LP]
+        public int Stock { get; set; }
+        [ColumnaTabla486LP]
+        public bool Vigente { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Marca} {Modelo} - {Color} - Talle {Talle}";
+        }
+    }
 }

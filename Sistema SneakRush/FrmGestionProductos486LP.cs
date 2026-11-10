@@ -26,6 +26,7 @@ namespace Sistema_SneakRush
         private bool _puedeLimpiar;
         private bool _puedeCerrar;
         private bool _puedeImportar;
+        private bool _puedeHistorial;
         private int _idSeleccionado;
         private List<Producto486LP> _todosLosProductos = new List<Producto486LP>();
 
@@ -62,16 +63,12 @@ namespace Sistema_SneakRush
                 return;
             }
 
-            // Largos maximos acordes a las reglas de validacion de la BLL (modelo 50, color 30, talle 4, precio y stock numericos)
             txtModelo.MaxLength = 50;
             txtColor.MaxLength = 30;
             txtTalle.MaxLength = 4;
             txtPrecio.MaxLength = 12;
-
-            // Teclas permitidas: talle y precio admiten numeros y separador decimal; stock solo numeros
             txtTalle.KeyPress += SoloNumeroConDecimal_KeyPress;
             txtPrecio.KeyPress += SoloNumeroConDecimal_KeyPress;
-
             CargarCombos();
             ConfigurarColumnas();
             RefrescarGrilla();
@@ -79,8 +76,6 @@ namespace Sistema_SneakRush
             AplicarPermisosBotones();
             LimpiarCampos();
             ActualizarIdioma();
-
-            // Filtro en vivo: la grilla se va achicando a medida que se escribe o se elige la marca
             cmbMarca.SelectedIndexChanged += FiltroCambiado;
             cmbCategoria.SelectedIndexChanged += FiltroCambiado;
             txtModelo.TextChanged += FiltroCambiado;
@@ -112,6 +107,7 @@ namespace Sistema_SneakRush
             _puedeLimpiar = permisos.Contains("MAESTRO_PRODUCTOS_LIMPIAR");
             _puedeCerrar = permisos.Contains("MAESTRO_PRODUCTOS_CERRAR");
             _puedeImportar = permisos.Contains("MAESTRO_PRODUCTOS_IMPORTAR");
+            _puedeHistorial = permisos.Contains("MAESTRO_PRODUCTOS_HISTORIAL");
         }
 
         private void AplicarPermisosBotones()
@@ -122,6 +118,7 @@ namespace Sistema_SneakRush
             btnLimpiar.Enabled = _puedeLimpiar;
             btnCerrar.Enabled = _puedeCerrar;
             btnImportar.Enabled = _puedeImportar;
+            btnHistorial.Enabled = _puedeHistorial;
         }
         private void CargarCombos()
         {
@@ -186,9 +183,6 @@ namespace Sistema_SneakRush
             AplicarFiltro();
         }
 
-        // Muestra en la grilla solo los productos que coinciden con lo que hay en marca, modelo, color y talle.
-        // Con un producto elegido en la grilla no se filtra, porque los campos tienen sus datos para modificarlos
-        // (al apretar Limpiar se vuelve a mostrar la lista completa).
         private void AplicarFiltro()
         {
             if (_idSeleccionado != 0) return;
@@ -357,13 +351,23 @@ namespace Sistema_SneakRush
             LimpiarCampos();
         }
 
+        // Abro el historial de cambios de productos. Al volver, la grilla se refresca porque pudo haberse restaurado una version anterior (con otro stock, otro precio o un producto eliminado)
+        private void btnHistorial_Click(object sender, EventArgs e)
+        {
+            using (FrmHistorialProductos486LP dialogo = new FrmHistorialProductos486LP())
+            {
+                dialogo.ShowDialog(this);
+            }
+
+            RefrescarGrilla();
+            LimpiarCampos();
+        }
+
         private void btnCerrar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        // Valida solo lo que corresponde a la GUI (campos obligatorios no vacios y numeros bien escritos).
-        // Las reglas de negocio (formato de modelo, color y talle, rangos, producto repetido, etc.) las hace la BLL y devuelve el mensaje ya traducido.
         private bool TomarDatosDelFormulario(bool esAlta, out Producto486LP producto)
         {
             var lm = Program.LanguageManager;
@@ -438,14 +442,12 @@ namespace Sistema_SneakRush
             MessageBox.Show(texto, lm.ObtenerTexto(f, "Frm.GestionProductos.Msg.Title", "Procesar productos"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        // Solo digitos
         private void SoloNumero_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
                 e.Handled = true;
         }
 
-        // Digitos y un separador decimal (coma o punto)
         private void SoloNumeroConDecimal_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != ',' && e.KeyChar != '.')
@@ -471,6 +473,7 @@ namespace Sistema_SneakRush
             btnEliminar.Text = lm.ObtenerTexto(f, "Frm.GestionProductos.Eliminar", "Eliminar");
             btnLimpiar.Text = lm.ObtenerTexto(f, "Frm.GestionProductos.Limpiar", "Limpiar");
             btnImportar.Text = lm.ObtenerTexto(f, "Frm.GestionProductos.Importar", "Importar XML");
+            btnHistorial.Text = lm.ObtenerTexto(f, "Frm.GestionProductos.Historial", "Historial de cambios");
             btnCerrar.Text = lm.ObtenerTexto(f, "Frm.GestionProductos.Cerrar", "Cerrar");
 
             ActualizarEtiquetaStock();

@@ -101,6 +101,7 @@ namespace Sistema_SneakRush
 
             bool verMaestro = permisos.Contains("MAESTRO_CLIENTES")
                            || permisos.Contains("MAESTRO_PRODUCTOS")
+                           || permisos.Contains("MAESTRO_PRODUCTOS_HISTORIAL")
                            || permisos.Contains("MAESTRO_PROVEEDORES")
                            || permisos.Contains("MAESTRO_CATEGORIAS");
 
@@ -110,6 +111,7 @@ namespace Sistema_SneakRush
             {
                 clientesToolStripMenuItem.Visible = permisos.Contains("MAESTRO_CLIENTES");
                 productosToolStripMenuItem.Visible = permisos.Contains("MAESTRO_PRODUCTOS");
+                historialProductosToolStripMenuItem.Visible = permisos.Contains("MAESTRO_PRODUCTOS_HISTORIAL");
                 proveedoresToolStripMenuItem.Visible = permisos.Contains("MAESTRO_PROVEEDORES");
                 categoríasMarcasToolStripMenuItem.Visible = permisos.Contains("MAESTRO_CATEGORIAS");
             }
@@ -322,6 +324,10 @@ namespace Sistema_SneakRush
         private void productosToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             AbrirFormulario(new FrmGestionProductos486LP());
+        }
+        private void historialProductosToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            AbrirFormulario(new FrmHistorialProductos486LP());
         }
         private void categoríasMarcasToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -559,6 +565,7 @@ namespace Sistema_SneakRush
             gestionToolStripMenuItem.Text = lm.ObtenerTexto(f, "gestionToolStripMenuItem");
             clientesToolStripMenuItem.Text = lm.ObtenerTexto(f, "clientesToolStripMenuItem");
             productosToolStripMenuItem.Text = lm.ObtenerTexto(f, "productosToolStripMenuItem");
+            historialProductosToolStripMenuItem.Text = lm.ObtenerTexto(f, "historialProductosToolStripMenuItem");
             categoríasMarcasToolStripMenuItem.Text = lm.ObtenerTexto(f, "categoríasMarcasToolStripMenuItem");
             proveedoresToolStripMenuItem.Text = lm.ObtenerTexto(f, "proveedoresToolStripMenuItem");
 

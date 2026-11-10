@@ -145,6 +145,12 @@
     <Compile Include="FrmGestionProveedores486LP.Designer.cs">
       <DependentUpon>FrmGestionProveedores486LP.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmHistorialProductos486LP.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHistorialProductos486LP.Designer.cs">
+      <DependentUpon>FrmHistorialProductos486LP.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmImportarProductos486LP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -231,6 +237,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCobrarVenta486LP.resx">
       <DependentUpon>FrmCobrarVenta486LP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHistorialProductos486LP.resx">
+      <DependentUpon>FrmHistorialProductos486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmReporteInteligente486LP.resx">
       <DependentUpon>FrmReporteInteligente486LP.cs</DependentUpon>

@@ -182,5 +182,30 @@ namespace Mappers
 
             return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd)) > 0;
         }
+
+        public List<ProductoCambio486LP> ListarCambios(string marca, string modelo, string color, string talle, DateTime? desde, DateTime? hasta)
+        {
+            SqlCommand cmd = new SqlCommand("ProductoCambio_Listar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@Marca", string.IsNullOrWhiteSpace(marca) ? (object)DBNull.Value : marca.Trim()));
+            cmd.Parameters.Add(new SqlParameter("@Modelo", string.IsNullOrWhiteSpace(modelo) ? (object)DBNull.Value : modelo.Trim()));
+            cmd.Parameters.Add(new SqlParameter("@Color", string.IsNullOrWhiteSpace(color) ? (object)DBNull.Value : color.Trim()));
+            cmd.Parameters.Add(new SqlParameter("@Talle", string.IsNullOrWhiteSpace(talle) ? (object)DBNull.Value : talle.Trim()));
+            cmd.Parameters.Add(new SqlParameter("@Desde", SqlDbType.DateTime) { Value = desde.HasValue ? (object)desde.Value.Date : DBNull.Value });
+            cmd.Parameters.Add(new SqlParameter("@Hasta", SqlDbType.DateTime) { Value = hasta.HasValue ? (object)hasta.Value.Date : DBNull.Value });
+
+            DataTable tabla = Conexion486LP.EjecutarConsulta(cmd);
+            return ManejadorMapeo486LP.MapearLista<ProductoCambio486LP>(tabla);
+        }
+
+        // Deja el producto como estaba en la version elegida (si estaba eliminado lo vuelve a crear)
+        public int RestaurarCambio(int idCambio)
+        {
+            SqlCommand cmd = new SqlCommand("ProductoCambio_Restaurar");
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(new SqlParameter("@IdCambio", idCambio));
+
+            return Convert.ToInt32(Conexion486LP.EjecutarEscalar(cmd));
+        }
     }
 }

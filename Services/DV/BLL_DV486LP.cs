@@ -15,6 +15,7 @@ namespace Services
         private Mapper_DV486LP _mapper = new Mapper_DV486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
         private static readonly List<string> _columnasIgnorar = new List<string> { "DV" };
+
         // Nombre de la columna PK de cada tabla, para el recálculo del DV por fila.
         private static readonly Dictionary<string, string> _columnaIdPorTabla = new Dictionary<string, string>
         {
@@ -30,8 +31,6 @@ namespace Services
             { "Cliente",        "DNI"          },
             { "Venta",          "IdVenta"      },
             { "DetalleVenta",   "IdDetalleVenta" },
-            // Agregadas en RFN2 Compras (CUN04-07) - antes de esto nunca se registraron aca,
-            // por eso RecalcularDV/RegistrarDVDeFilaNueva nunca actualizaban nada para ellas.
             { "Proveedor",              "IdProveedor" },
             { "SolicitudCompra",        "IdSolicitud" },
             { "DetalleSolicitudCompra", "IdDetalleSolicitud" },
@@ -40,34 +39,28 @@ namespace Services
             { "Recepcion",              "IdRecepcion" },
             { "DetalleRecepcion",       "IdDetalleRecepcion" },
             { "Factura",                "IdFactura" },
-            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas)
             { "Categoria",              "IdCategoria" },
             { "Marca",                  "IdMarca" },
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09)
             { "ImportacionProducto",    "IdImportacion" },
-            { "DetalleImportacion",     "IdDetalleImportacion" }
+            { "DetalleImportacion",     "IdDetalleImportacion" },
+            { "ProductoCambio",         "IdCambio" }
         };
 
         private static readonly string[] _tablasProtegidas = {
             "BitacoraEvento", "Usuarios", "Perfil", "Familia", "Permiso", "Idioma",
             "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso",
             "Producto", "Carrito", "DetalleCarrito", "Cliente", "Venta", "DetalleVenta",
-            // Agregadas en RFN2 Compras (CUN04-07).
             "Proveedor", "SolicitudCompra", "DetalleSolicitudCompra",
             "OrdenCompra", "DetalleOrdenCompra", "Recepcion", "DetalleRecepcion", "Factura",
-            // Agregadas en el Bloque 3 (Maestros: Categorias y Marcas).
-            "Categoria", "Marca",
-            // Agregadas con la importacion de productos desde XML (ampliacion de CUN09).
-            "ImportacionProducto", "DetalleImportacion"
+            "Categoria", "Marca","ImportacionProducto", "DetalleImportacion","ProductoCambio"
         };
+        private const string TABLA_PRODUCTO = "Producto";
+        private const string TABLA_HISTORIAL_PRODUCTO = "ProductoCambio";
         private static readonly List<string> _tablasSoloNivelTabla = new List<string> { "Familia_Permiso", "Perfil_Familia", "Perfil_Permiso" };
         private string ObtenerColumnaId(string tabla)
         {
             return _columnaIdPorTabla.ContainsKey(tabla) ? _columnaIdPorTabla[tabla] : "Id";
         }
-
-        // Calculo de hashes: se separo en dos partes (leer + calcular) para poder REUTILIZAR un DataTable ya leido, en vez de releer la tabla
-        // completa cada vez (ver RegistrarDVDeFilaNueva mas abajo).
 
         private string CalcularDVH(string tabla)
         {
@@ -117,28 +110,63 @@ namespace Services
             return Encriptacion486LP.GenerarHash(sb.ToString());
         }
 
-        // Hash de UNA fila individual (misma formula que usa Mapper_DV486LP.RecalcularDVHPorFila).
         private string CalcularHashDeFila(DataRow fila, DataColumnCollection columnas)
+        {
+            return CalcularHashDeFila(fila, columnas, false);
+        }
+
+        private string CalcularHashDeFila(DataRow fila, DataColumnCollection columnas, bool invertirVigente)
         {
             StringBuilder sb = new StringBuilder();
             foreach (DataColumn col in columnas)
             {
-                if (col.ColumnName != "DV")
+                if (col.ColumnName == "DV") continue;
+
+                if (invertirVigente && col.ColumnName == "Vigente" && fila[col] != DBNull.Value)
+                    sb.Append((!Convert.ToBoolean(fila[col])).ToString());
+                else
                     sb.Append(fila[col].ToString());
             }
             return Encriptacion486LP.GenerarHash(sb.ToString());
         }
 
-        // NUEVO: recalculo LIVIANO para cuando se acaba de insertar/modificar UNA fila puntual (ej. un evento nuevo en Bitacora). En vez de recorrer TODA la tabla fila por fila
-        // (RecalcularDVHPorFila, que con miles de filas se vuelve lentisimo y puede fallar a mitad de camino), lee la tabla UNA sola vez, actualiza solo esa fila, y
-        // reusa esos mismos datos para el DVH/DVV de nivel tabla.
+        private void SincronizarDVProductoCambio()
+        {
+            try
+            {
+                DataTable dt = _mapper.LeerTabla(TABLA_HISTORIAL_PRODUCTO);
+                string columnaId = ObtenerColumnaId(TABLA_HISTORIAL_PRODUCTO);
+
+                foreach (DataRow fila in dt.Rows)
+                {
+                    string guardado = fila["DV"] == DBNull.Value ? "" : fila["DV"].ToString();
+                    string actual = CalcularHashDeFila(fila, dt.Columns, false);
+
+                    if (guardado == actual) continue;
+
+                    bool sinDV = guardado.Length == 0;
+                    bool soloCambioVigente = !sinDV && guardado == CalcularHashDeFila(fila, dt.Columns, true);
+
+                    if (sinDV || soloCambioVigente)
+                    {
+                        _mapper.ActualizarDVDeUnaFila(TABLA_HISTORIAL_PRODUCTO, fila[columnaId], actual);
+                    }
+                }
+
+                _mapper.GuardarDV(TABLA_HISTORIAL_PRODUCTO, CalcularDVHDesdeTabla(dt), CalcularDVVDesdeTabla(dt));
+            }
+            catch
+            {
+                // Sin historial en la BD no hay nada para sincronizar. Si falla por otro motivo, la inconsistencia aparece en la verificacion de DV.
+            }
+        }
 
         public bool RegistrarDVDeFilaNueva(string tabla, object id, out string mensaje)
         {
             mensaje = "";
             try
             {
-                DataTable dt = _mapper.LeerTabla(tabla); // UNA sola lectura completa
+                DataTable dt = _mapper.LeerTabla(tabla); 
 
                 if (!_tablasSoloNivelTabla.Contains(tabla))
                 {
@@ -163,11 +191,11 @@ namespace Services
                     _mapper.ActualizarDVDeUnaFila(tabla, id, hashFila);
                 }
 
-                // DVH/DVV de nivel tabla, reusando el MISMO DataTable ya leido
-                // (no se vuelve a consultar la base).
                 string dvh = CalcularDVHDesdeTabla(dt);
                 string dvv = CalcularDVVDesdeTabla(dt);
                 _mapper.GuardarDV(tabla, dvh, dvv);
+
+                if (tabla == TABLA_PRODUCTO) SincronizarDVProductoCambio();
 
                 return true;
             }
@@ -196,8 +224,8 @@ namespace Services
                     _mapper.RecalcularDVHPorFila(tabla, ObtenerColumnaId(tabla));
                 }
 
-                // No registro en bitácora cuando recalculamos la propia tabla Bitacora:
-                // evita un bucle infinito (el evento de recálculo dejaría el hash viejo otra vez).
+                if (tabla == TABLA_PRODUCTO) SincronizarDVProductoCambio();
+
                 if (registrarBitacora)
                 {
                     string dni = SessionManager486LP.ObtenerInstancia().UsuarioActual()?.DNI ?? "Sistema";
