@@ -27,6 +27,7 @@ namespace Sistema_SneakRush
         public FrmGestionClientes486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-clientes");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionClientes486LP_FormClosing;
         }

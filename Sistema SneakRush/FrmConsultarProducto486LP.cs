@@ -27,6 +27,7 @@ namespace Sistema_SneakRush
         public FrmConsultarProducto486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "consultar-producto");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmConsultarProducto486LP_FormClosing;
         }

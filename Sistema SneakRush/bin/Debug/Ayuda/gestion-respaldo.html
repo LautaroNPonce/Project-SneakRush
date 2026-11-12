@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestión de respaldos - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-respaldo">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Administrador › Gestión de respaldos</div>
+<h1>Gestión de respaldos</h1>
+<p class="bajada">Un respaldo es una copia completa de la información del sistema (usuarios, productos, ventas, compras, bitácora...) en un archivo .bak. Si algo se rompe o se pierden datos, se restaura ese archivo y el sistema vuelve al estado en que estaba cuando se hizo la copia.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Administrador › Gestión de respaldos</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-respaldo.png" alt="Pantalla Gestión de respaldos de SneakRush con las secciones Respaldo (Backup) y Restauración (Restore)" width="640" height="404">
+<button type="button" class="hs" data-n="1" aria-label="Carpeta de destino" style="left:5.781%;top:30.446%;width:59.688%;height:5.941%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Seleccionar carpeta" style="left:67.031%;top:30.198%;width:23.594%;height:7.426%"><span class="pin der">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Respaldar" style="left:5.625%;top:39.109%;width:32.500%;height:7.921%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Archivo de backup" style="left:5.781%;top:63.366%;width:59.688%;height:5.941%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Seleccionar archivo" style="left:67.031%;top:63.366%;width:23.594%;height:7.426%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Restaurar" style="left:5.625%;top:72.525%;width:32.500%;height:7.921%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Salir" style="left:73.594%;top:85.396%;width:19.062%;height:8.416%"><span class="pin aba">7</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Carpeta de destino</b><span>Muestra la carpeta donde se va a guardar el respaldo. Se completa sola al elegir la carpeta con el botón de al lado.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Seleccionar carpeta</b><span>Abre el explorador de Windows para que elijas dónde guardar el respaldo. Conviene una carpeta fuera de la computadora del sistema, por ejemplo un pendrive o la nube.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Respaldar</b><span>Genera el archivo de respaldo en la carpeta elegida. Se llama SneakRushDB_fecha_hora.bak, así nunca pisa uno anterior.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Archivo de backup</b><span>Muestra el archivo .bak que vas a restaurar. Se completa al elegirlo con el botón de al lado.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Seleccionar archivo</b><span>Abre el explorador para elegir el archivo .bak a restaurar. Solo muestra archivos de ese tipo.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Restaurar</b><span>Reemplaza TODA la base actual por el contenido del archivo elegido. Pide confirmación, cierra la sesión y reinicia el programa.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Salir</b><span>Cierra esta pantalla y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Hacer un respaldo</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Restaurar un respaldo</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Conviene hacerlo todos los días de trabajo o antes de cualquier cambio importante.</p>
+<ol class="pasos"><li>Tocá <span class="btn">Seleccionar carpeta...</span> y elegí dónde guardar la copia.</li><li>Tocá <span class="btn naranja">Respaldar</span>.</li><li>Espera el aviso &quot;Backup generado correctamente en:&quot; con la ruta completa del archivo.</li><li>Guardá ese archivo en un lugar seguro, preferentemente en otro dispositivo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El respaldo es completo: incluye todas las tablas. Queda registrado en la Bitácora con criticidad Alta.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<p class="intro">Usalo solo cuando de verdad necesites volver atrás.</p>
+<ol class="pasos"><li>Tocá <span class="btn">Seleccionar archivo...</span> y elegí el archivo .bak.</li><li>Tocá <span class="btn">Restaurar</span>.</li><li>Leé el aviso de confirmación. Si estás seguro, tocá Sí.</li><li>Cuando termina, el sistema avisa y se reinicia solo para cargar los datos restaurados. Volvé a iniciar sesión.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Se pierde todo lo que se cargó DESPUÉS de la fecha del respaldo: ventas, compras, usuarios, cambios. No se puede deshacer. Antes de restaurar, hacé un respaldo del estado actual por si hace falta volver.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">7</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar una carpeta de destino.</td><td>Tocaste Respaldar sin elegir carpeta. Usá Seleccionar carpeta primero.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Backup generado correctamente en: (ruta)</td><td>El archivo ya existe en esa carpeta. Copialo a un lugar seguro.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado al generar el backup. / Error: (motivo)</td><td>No se pudo crear el archivo. Suele ser una carpeta sin permiso de escritura o sin espacio libre. Probá con otra carpeta.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar un archivo .bak válido.</td><td>No elegiste archivo, el archivo ya no existe o no es un .bak.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>La restauración reemplazará TODA la base de datos actual y cerrará la sesión. ¿Desea continuar?</td><td>Sí restaura, No cancela y no cambia nada.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Base de datos restaurada correctamente. La aplicación se reiniciará para recargar los datos.</td><td>Aceptá el aviso: el programa se reinicia y vas a ver el inicio de sesión.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado al restaurar el backup.</td><td>La restauración falló. El sistema intenta dejar la base disponible de nuevo. Revisá que el archivo no esté dañado o abierto en otro programa.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede respaldar y restaurar.</li><li>El nombre del archivo lleva fecha y hora, por ejemplo SneakRushDB_20261111_160000.bak.</li><li>Mientras se restaura, el sistema cierra cualquier otra conexión a la base para que nadie escriba datos a la mitad.</li><li>Esta misma pantalla de restauración se abre desde Reparación de la base de datos, cuando el sistema detecta una inconsistencia: ahí aparece solo la parte de restaurar.</li><li>Tanto el respaldo como la restauración quedan registrados en la Bitácora de eventos.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="reparacion-bd.html">Reparar la base de datos</a><a href="bitacora-eventos.html">Bitácora de eventos</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Gestión de respaldos. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

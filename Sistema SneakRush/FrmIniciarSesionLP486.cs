@@ -18,6 +18,7 @@ namespace Sistema_SneakRush
         public FrmIniciarSesionLP486()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "inicio-sesion");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmIniciarSesionLP486_FormClosing;
         }

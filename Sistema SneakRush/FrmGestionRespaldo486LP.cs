@@ -26,6 +26,7 @@ namespace Sistema_SneakRush
         public FrmGestionRespaldo486LP(bool soloRestore = false)
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-respaldo");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionRespaldo486LP_FormClosing;
             _soloRestore = soloRestore;

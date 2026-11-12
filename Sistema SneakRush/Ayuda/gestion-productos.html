@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procesar productos - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-productos">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Maestro › Procesar productos</div>
+<h1>Procesar productos</h1>
+<p class="bajada">Es el catálogo del negocio: cada fila es una zapatilla distinta (marca, modelo, color y talle) con su precio y su stock. Los campos de la izquierda sirven para dos cosas: cargar un producto nuevo y buscar mientras escribís.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Maestro › Procesar productos</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-productos.png" alt="Pantalla Procesar productos de SneakRush con el formulario de datos del producto y la lista de productos registrados" width="1150" height="460">
+<button type="button" class="hs" data-n="1" aria-label="Marca" style="left:12.348%;top:18.261%;width:18.000%;height:4.783%"><span class="pin">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Categoría" style="left:12.348%;top:26.522%;width:18.000%;height:4.783%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Modelo" style="left:12.348%;top:34.783%;width:18.000%;height:4.783%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Color" style="left:12.348%;top:43.043%;width:18.000%;height:4.783%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Talle" style="left:12.348%;top:51.304%;width:18.000%;height:4.783%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Precio" style="left:12.348%;top:59.565%;width:18.000%;height:4.783%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Stock inicial / Stock actual" style="left:12.348%;top:67.826%;width:18.000%;height:4.783%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Productos registrados" style="left:34.348%;top:15.870%;width:63.478%;height:71.304%"><span class="pin der">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Agregar" style="left:2.348%;top:80.652%;width:9.043%;height:8.043%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Modificar" style="left:11.913%;top:80.652%;width:9.043%;height:8.043%"><span class="pin">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Eliminar" style="left:21.478%;top:80.652%;width:9.043%;height:8.043%"><span class="pin">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Limpiar" style="left:2.348%;top:89.565%;width:28.174%;height:6.957%"><span class="pin aba">12</span></button>
+<button type="button" class="hs" data-n="13" aria-label="Importar / exportar" style="left:34.261%;top:89.565%;width:12.435%;height:6.957%"><span class="pin aba">13</span></button>
+<button type="button" class="hs" data-n="14" aria-label="Historial de cambios" style="left:47.478%;top:89.565%;width:14.000%;height:6.957%"><span class="pin aba">14</span></button>
+<button type="button" class="hs" data-n="15" aria-label="Cerrar" style="left:88.696%;top:89.565%;width:9.130%;height:6.957%"><span class="pin aba">15</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Marca</b><span>Elegí la marca de la lista. Las marcas se cargan en Procesar categorías y marcas.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Categoría</b><span>Elegí el tipo de calzado (Running, Urbanas, Skate...). También se carga en Procesar categorías y marcas.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Modelo</b><span>Nombre del modelo, por ejemplo Air Force 1. Admite letras, números, espacios y los signos . &amp; &#x27; - / + ( ). Hasta 50 caracteres.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Color</b><span>Solo letras. Para combinados usá espacio, guion o barra (Blanco/Negro). Hasta 30 caracteres.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Talle</b><span>Número entre 30 y 50. Admite medio talle con punto o coma (42.5).</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Precio</b><span>Precio de venta por par, mayor a cero y con hasta 2 decimales. Máximo 99.999.999,99.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Stock inicial / Stock actual</b><span>Al cargar un producto nuevo, la etiqueta dice Stock inicial: es con cuántos pares empieza. Cuando elegís un producto de la lista pasa a decir Stock actual y se puede corregir.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Productos registrados</b><span>Todo el catálogo con marca, categoría, modelo, color, talle, precio y stock. Tocá una fila para cargarla en el formulario y poder modificarla o eliminarla.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Agregar</b><span>Registra un producto nuevo con los datos del formulario.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Modificar</b><span>Guarda los cambios del producto que elegiste en la lista (datos, precio o stock).</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Eliminar</b><span>Da de baja el producto elegido, con confirmación. No se puede si ya tuvo movimientos.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Limpiar</b><span>Vacía el formulario y deja de seleccionar el producto, para volver a cargar o buscar.</span></div></li>
+<li data-n="13"><span class="n">13</span><div><b>Importar / exportar</b><span>Abre la pantalla para cargar productos desde un archivo XML o para guardar el catálogo en un XML.</span></div></li>
+<li data-n="14"><span class="n">14</span><div><b>Historial de cambios</b><span>Abre el historial de cada modificación hecha a los productos, con la posibilidad de volver a una versión anterior.</span></div></li>
+<li data-n="15"><span class="n">15</span><div><b>Cerrar</b><span>Cierra esta pantalla y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Agregar un producto nuevo</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Buscar un producto</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Cambiar precio, stock u otros datos</button>
+<button role="tab" id="tab-3" aria-controls="pn-3" aria-selected="false" tabindex="-1">Eliminar un producto</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Con el formulario vacío (tocá <span class="btn">Limpiar</span> si hay un producto elegido), completá Marca, Categoría, Modelo, Color, Talle y Precio.</li><li>Indicá el Stock inicial: con cuántos pares empieza.</li><li>Tocá <span class="btn naranja">Agregar</span>. Aparece &quot;Producto registrado correctamente&quot;.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> No puede haber dos productos con la misma marca, modelo, color y talle. Si ya existe, elegilo en la lista y corregí su stock con Modificar.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<p class="intro">No hay botón de buscar: la lista se filtra sola a medida que completás los campos.</p>
+<ol class="pasos"><li>Con el formulario vacío, elegí una marca o categoría, o escribí parte del modelo, color, talle o precio.</li><li>La lista muestra solo lo que coincide. El modelo y el color no distinguen mayúsculas ni tildes; el talle y el precio buscan por el comienzo (42 muestra 42 y 42.5).</li><li>Tocá <span class="btn">Limpiar</span> para ver todo de nuevo.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Tocá el producto en la lista.</li><li>Modificá lo que necesites. La etiqueta ahora dice Stock actual.</li><li>Tocá <span class="btn">Modificar</span>.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Cada modificación queda guardada en el Historial de cambios, así podés ver qué se cambió y volver atrás si hizo falta.</div>
+</div>
+<div role="tabpanel" id="pn-3" aria-labelledby="tab-3" hidden>
+<ol class="pasos"><li>Tocá el producto en la lista.</li><li>Tocá <span class="btn rojo">Eliminar</span> y confirmá.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Solo se pueden eliminar productos sin movimientos. Si ya estuvo en un carrito, una venta o una compra, no se puede borrar.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">14</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Complete los campos obligatorios (marca, categoría, modelo, color, talle y precio).</td><td>Falta alguno de esos datos.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Hay un producto elegido en la grilla. Presione Limpiar antes de agregar uno nuevo.</td><td>Para cargar otro producto primero tocá Limpiar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un producto de la grilla para modificar / eliminar.</td><td>Elegí la fila del producto antes.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El modelo solo admite letras, números, espacios y los signos . &amp; &#x27; - / + ( ) (máximo 50 caracteres)</td><td>Corregí el modelo.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El color solo admite letras, y puede combinarse con espacio, guion o barra (máximo 30 caracteres)</td><td>Sin números en el color.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El talle debe ser un número entre 30 y 50, con medio talle opcional (por ejemplo 42 o 42.5)</td><td>Revisá el talle.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El precio debe ser mayor a cero, con hasta 2 decimales, y no puede superar 99.999.999,99</td><td>Corregí el precio.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El stock debe ser un número entero mayor o igual a cero</td><td>No se admiten stocks negativos.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Ya existe un producto con esa marca, modelo, color y talle. Para cambiar su stock, elíjalo en la grilla y use Modificar</td><td>No se duplican productos: modificá el que ya está.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El producto ya no existe. Actualice la lista y vuelva a intentar</td><td>Alguien lo eliminó. Tocá Limpiar o volvé a abrir la pantalla.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Confirma la eliminación del producto ...?</td><td>Sí lo da de baja, No cancela.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No se puede eliminar el producto: tiene movimientos asociados (carritos, ventas o compras)</td><td>Se conserva para no romper el historial.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Producto registrado / modificado / eliminado correctamente</td><td>La operación se guardó.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado. El detalle quedó registrado en la bitácora</td><td>Avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede usar esta pantalla.</li><li>Un producto se identifica por marca + modelo + color + talle: no puede repetirse esa combinación.</li><li>El stock también cambia solo con las compras recibidas (suma) y las ventas cobradas (resta), no solo desde acá.</li><li>Cuando el stock de un producto baja a 5 unidades o menos, aparece en el aviso de reposición del reporte Estado de stock.</li><li>Cada alta, modificación y baja queda en la Bitácora y en el Historial de cambios de productos.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="importar-productos.html">Importar y exportar productos (XML)</a><a href="historial-productos.html">Historial de cambios de productos</a><a href="gestion-categorias-marcas.html">Procesar categorías y marcas</a><a href="reporte-stock.html">Estado de stock</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Procesar productos. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registrar factura y pago de compra - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="registrar-factura">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Compra › Registrar factura y pago de compra</div>
+<h1>Registrar factura y pago de compra</h1>
+<p class="bajada">Es el último paso de una compra. Elegís una orden ya recibida, el sistema arma la factura con lo que llegó, registrás el pago y las unidades se suman al stock. Al terminar se genera el comprobante en PDF.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Compra › Registrar factura y pago de compra</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/registrar-factura.png" alt="Pantalla Registrar factura y pago de compra de SneakRush con las órdenes pendientes de facturación, el detalle a facturar, el medio de pago y el total" width="740" height="570">
+<button type="button" class="hs" data-n="1" aria-label="Órdenes pendientes de facturación" style="left:4.459%;top:10.351%;width:90.541%;height:12.456%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Detalle a facturar" style="left:2.568%;top:30.175%;width:94.324%;height:25.263%"><span class="pin der">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Medio de pago" style="left:2.568%;top:58.421%;width:27.027%;height:17.544%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Datos de la tarjeta" style="left:32.162%;top:58.421%;width:64.865%;height:17.544%"><span class="pin der">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Total" style="left:3.108%;top:84.737%;width:23.649%;height:4.211%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Registrar factura y cobrar" style="left:2.432%;top:91.228%;width:22.027%;height:5.614%"><span class="pin aba">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Ver comprobante" style="left:26.622%;top:91.228%;width:22.027%;height:5.614%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Cancelar" style="left:75.000%;top:91.228%;width:22.027%;height:5.614%"><span class="pin aba">8</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Órdenes pendientes de facturación</b><span>Las órdenes ya recibidas que todavía no se facturaron ni se pagaron.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Detalle a facturar</b><span>Marca, modelo, color, talle, cantidad recibida, costo y subtotal. Se factura lo que realmente llegó, no lo que se pidió. Es de solo lectura.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Medio de pago</b><span>Cómo se le paga al proveedor: Efectivo, Tarjeta o Transferencia.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Datos de la tarjeta</b><span>Solo se usan si pagás con tarjeta: número de 16 dígitos, vencimiento MM/AA y CVV de 3 dígitos.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Total</b><span>Lo que se factura: cantidad recibida por costo de cada producto.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Registrar factura y cobrar</b><span>Genera la factura y confirma el pago. Con tarjeta o transferencia espera unos segundos la confirmación del banco.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Ver comprobante</b><span>Abre el PDF de la factura. Solo se habilita después de pagar.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Cancelar</b><span>Cierra la pantalla.</span></div></li>
+</ul>
+<h2>Otras vistas de esta pantalla</h2>
+<figure class="extra"><img src="img/registrar-factura-extra1.png" alt="Registrar factura y pago de compra después de pagar, con los controles bloqueados y el botón Ver comprobante habilitado" width="740" height="570" loading="lazy"><figcaption><b>Después de pagar.</b> El pago queda confirmado: la lista y el medio de pago se bloquean, Registrar factura y cobrar se apaga y se habilita Ver comprobante.</figcaption></figure>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Facturar y pagar una compra</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Elegí la orden en <span class="btn">Órdenes pendientes de facturación</span>.</li><li>Revisá el detalle y el Total.</li><li>Elegí el <span class="btn">Medio de pago</span>. Si es Tarjeta, completá número, vencimiento y CVV.</li><li>Tocá <span class="btn naranja">Registrar factura y cobrar</span>.</li><li>Aparece &quot;Pago confirmado correctamente&quot; y se genera el comprobante. Tocá <span class="btn">Ver comprobante</span> para abrirlo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Las unidades recibidas se suman al stock en este paso, cuando el pago queda confirmado.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">8</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>No hay órdenes pendientes de facturación.</td><td>Primero hay que registrar la recepción de una orden. La pantalla se cierra sola.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione una orden de compra.</td><td>Tocá una fila de la lista de arriba.</td></tr>
+<tr><td><span class="tipo error">Error</span>El número de tarjeta debe tener 16 dígitos.</td><td>Revisá el número.</td></tr>
+<tr><td><span class="tipo error">Error</span>El vencimiento debe tener el formato MM/AA.</td><td>Por ejemplo 08/29.</td></tr>
+<tr><td><span class="tipo error">Error</span>La tarjeta está vencida.</td><td>Usá otra tarjeta u otro medio de pago.</td></tr>
+<tr><td><span class="tipo error">Error</span>El CVV debe tener 3 dígitos.</td><td>Revisá el código.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Pago confirmado correctamente.</td><td>La factura quedó pagada, el stock actualizado y la orden pasó a Facturada.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La transacción se registró, pero no se pudo generar el comprobante. Puede intentarlo de nuevo con &quot;Ver comprobante&quot;.</td><td>El pago está hecho; solo falta el PDF.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">6</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador registra facturas de compra.</li><li>Se factura la cantidad recibida en la recepción, no la pedida.</li><li>Con efectivo el pago se confirma al instante. Con tarjeta o transferencia el sistema espera la confirmación del banco unos segundos.</li><li>Al confirmar el pago: la factura queda Pagada, la orden pasa a Facturada y se suma el stock de lo recibido.</li><li>El comprobante es un PDF que se guarda en la carpeta Comprobantes, junto al programa.</li><li>Después de pagar, la pantalla queda bloqueada con esa factura: para facturar otra orden, cerrala y volvela a abrir.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="registrar-recepcion.html">Registrar recepción de mercadería</a><a href="registrar-orden.html">Registrar orden de compra</a><a href="reporte-stock.html">Estado de stock</a><a href="gestion-productos.html">Procesar productos</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Registrar factura y pago de compra. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

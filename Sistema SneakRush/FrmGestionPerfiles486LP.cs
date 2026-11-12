@@ -52,6 +52,7 @@ namespace Sistema_SneakRush
         public FrmGestionPerfiles486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-perfiles");
             this.WindowState = FormWindowState.Maximized;
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionPerfiles486LP_FormClosing;

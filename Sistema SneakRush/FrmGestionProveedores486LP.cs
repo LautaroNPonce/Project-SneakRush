@@ -27,6 +27,7 @@ namespace Sistema_SneakRush
         public FrmGestionProveedores486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-proveedores");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionProveedores486LP_FormClosing;
         }

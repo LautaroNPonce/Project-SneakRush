@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menú principal - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="menu-principal">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Primeros pasos › Menú principal</div>
+<h1>Menú principal</h1>
+<p class="bajada">Después de iniciar sesión llegás acá. Arriba está la barra de menú con las secciones del sistema y abajo ves quién está conectado. Solo aparecen las opciones que tu perfil puede usar.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Se abre al iniciar sesión</b></span><span class="chip">Lo usa: <b>Todos los usuarios</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/menu-principal.png" alt="Menú principal de SneakRush con la barra de menú y la barra de estado con el usuario y el rol" width="760" height="772">
+<button type="button" class="hs" data-n="1" aria-label="Usuario" style="left:0.658%;top:3.368%;width:7.105%;height:2.332%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Administrador" style="left:8.158%;top:3.368%;width:11.053%;height:2.332%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Maestro" style="left:20.000%;top:3.368%;width:7.105%;height:2.332%"><span class="pin aba">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Compra" style="left:27.763%;top:3.368%;width:6.842%;height:2.332%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Venta" style="left:35.526%;top:3.368%;width:5.000%;height:2.332%"><span class="pin aba">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Reporte" style="left:41.316%;top:3.368%;width:9.211%;height:2.332%"><span class="pin aba">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Ayuda" style="left:51.579%;top:3.368%;width:5.526%;height:2.332%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Área de trabajo" style="left:5.263%;top:9.067%;width:89.474%;height:86.788%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Barra de estado" style="left:0.658%;top:97.927%;width:34.211%;height:2.073%"><span class="pin der">9</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Usuario</b><span>Cambiar idioma, cambiar tu contraseña, iniciar sesión y cerrar sesión.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Administrador</b><span>Usuarios, perfiles, bitácora de eventos y respaldos de la base de datos.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Maestro</b><span>Los datos base: clientes, productos, categorías y marcas, y proveedores.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Compra</b><span>Todo el circuito de compra: solicitud, orden, recepción de mercadería y factura.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Venta</b><span>Cargar el carrito, cobrar la venta y consultar productos.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Reporte</b><span>Clientes frecuentes, estado de stock y reporte inteligente. El triángulo rojo avisa que hay productos para reponer.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Ayuda</b><span>Abre esta ayuda en el navegador. En cualquier pantalla también podés usar F1.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Área de trabajo</b><span>Cada pantalla que abrís aparece acá, ocupando todo el espacio. Podés tener varias abiertas y cerrarlas con su propio botón.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Barra de estado</b><span>Te muestra con qué usuario y con qué rol estás trabajando.</span></div></li>
+</ul>
+<h2>Otras vistas de esta pantalla</h2>
+<figure class="extra"><img src="img/menu-principal-extra1.png" alt="Menú Administrador abierto con el submenú Gestión de perfiles" width="700" height="190" loading="lazy"><figcaption><b>Administrador.</b> Gestión de usuarios, Gestión de perfiles (con Gestión de Familias y Gestión de Perfiles), Bitácora de eventos y Gestión de respaldos.</figcaption></figure>
+<figure class="extra"><img src="img/menu-principal-extra2.png" alt="Menú Maestro abierto" width="700" height="190" loading="lazy"><figcaption><b>Maestro.</b> Procesar clientes, Procesar productos, Historial de cambios de productos, Procesar categorías y marcas y Procesar proveedores.</figcaption></figure>
+<figure class="extra"><img src="img/menu-principal-extra3.png" alt="Menú Compra abierto" width="700" height="190" loading="lazy"><figcaption><b>Compra.</b> Generar solicitud de compra, Registrar orden de compra, Registrar recepción de mercadería y Registrar factura y pago de compra.</figcaption></figure>
+<figure class="extra"><img src="img/menu-principal-extra4.png" alt="Menú Venta abierto" width="700" height="190" loading="lazy"><figcaption><b>Venta.</b> Cargar carrito, Cobrar venta y Consultar productos.</figcaption></figure>
+<figure class="extra"><img src="img/menu-principal-extra5.png" alt="Menú Reporte abierto con el triángulo rojo junto a Estado de stock" width="700" height="190" loading="lazy"><figcaption><b>Reporte.</b> Clientes frecuentes, Estado de stock y Reporte inteligente. El triángulo rojo aparece mientras haya productos sin stock o con stock bajo.</figcaption></figure>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Abrir una pantalla</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Atender el aviso de stock</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Tocá la sección en la barra de menú, por ejemplo <span class="btn">Maestro</span>.</li><li>Elegí la opción de la lista.</li><li>La pantalla se abre en el área de trabajo. Para volver al menú, usá su botón <span class="btn">Cerrar</span> o <span class="btn">Salir</span>.</li></ol>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Al iniciar sesión, si hay productos sin stock o con stock bajo, aparece el aviso con las cantidades.</li><li>Tocá <span class="btn">Sí</span> para abrir Estado de stock ya filtrado con lo que hay que reponer, o <span class="btn">No</span> para seguir.</li><li>Mientras haya algo para reponer, el triángulo rojo queda junto a Reporte y a Estado de stock. Si pasás el mouse, te dice cuántos productos son.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El aviso y el triángulo solo los ven quienes pueden abrir el reporte de Estado de stock.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">1</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo pregunta">Confirmación</span>Productos sin stock: (n) / Productos con stock bajo (5 unidades o menos): (n). ¿Desea abrir el reporte de estado de stock para ver qué reponer?</td><td>Sí abre Estado de stock mostrando solo lo que hay que reponer. No te deja en el menú.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>El menú depende de tu perfil: las opciones para las que no tenés permiso no se muestran. Si no ves algo que necesitás, pedile al administrador que revise tu perfil.</li><li>Si el sistema detecta que los datos fueron alterados, el menú se reduce a la sección Usuario hasta que el administrador lo resuelva.</li><li>Podés tener varias pantallas abiertas a la vez. Cada una se abre ocupando todo el espacio.</li><li>Podés pedir ayuda con la tecla F1 desde cualquier pantalla: se abre el tema de esa pantalla.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="inicio-sesion.html">Iniciar sesión</a><a href="cambiar-idioma.html">Cambiar idioma</a><a href="reporte-stock.html">Estado de stock</a><a href="como-usar.html">Cómo usar esta ayuda</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Menú principal. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

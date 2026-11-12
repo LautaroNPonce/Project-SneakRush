@@ -38,6 +38,7 @@ namespace Sistema_SneakRush
         public FrmRegistrarFactura486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "registrar-factura");
             EstiloBotonHabilitacion(btnCobrar);
             EstiloBotonHabilitacion(btnVerComprobante);
             Program.LanguageManager.Agregar(this);

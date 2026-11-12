@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generar solicitud de compra - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="generar-solicitud">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Compra › Generar solicitud de compra</div>
+<h1>Generar solicitud de compra</h1>
+<p class="bajada">Una solicitud es la lista de lo que falta comprar. El catálogo aparece ordenado de menor a mayor stock, así lo urgente queda arriba. Elegís productos, indicás cuántos querés y confirmás: la solicitud queda pendiente hasta que se arme la orden de compra.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Compra › Generar solicitud de compra</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/generar-solicitud.png" alt="Pantalla Generar solicitud de compra de SneakRush con filtros, catálogo ordenado por stock y productos en la solicitud" width="740" height="520">
+<button type="button" class="hs" data-n="1" aria-label="Filtro de marca" style="left:11.486%;top:11.538%;width:21.622%;height:4.038%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Filtro de talle" style="left:42.162%;top:11.538%;width:12.973%;height:4.038%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Limpiar filtros" style="left:79.324%;top:10.385%;width:15.405%;height:4.615%"><span class="pin der">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Catálogo ordenado por stock" style="left:2.568%;top:22.308%;width:94.324%;height:27.500%"><span class="pin der">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Cantidad solicitada" style="left:21.351%;top:55.577%;width:6.757%;height:4.231%"><span class="pin aba">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Agregar a solicitud" style="left:33.243%;top:54.808%;width:19.595%;height:4.231%"><span class="pin der">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Productos en la solicitud" style="left:2.568%;top:65.962%;width:76.757%;height:20.577%"><span class="pin der">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Quitar" style="left:80.541%;top:65.769%;width:16.486%;height:5.769%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Confirmar solicitud" style="left:2.432%;top:89.423%;width:24.324%;height:6.154%"><span class="pin der">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Cancelar" style="left:72.838%;top:89.423%;width:24.189%;height:6.154%"><span class="pin">10</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Filtro de marca</b><span>Mostrá solo los productos de una marca. &quot;(Todas)&quot; los muestra a todos.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Filtro de talle</b><span>Mostrá solo un talle. &quot;(Todos)&quot; los muestra a todos.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Limpiar filtros</b><span>Quita los filtros de marca y talle y vuelve a mostrar todo el catálogo.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Catálogo ordenado por stock</b><span>Los productos con menos stock van primero. Rojo: sin stock (0). Naranja: stock bajo (3 o menos). Tocá una fila para elegirla.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Cantidad solicitada</b><span>Cuántos pares querés pedir del producto elegido. Entre 1 y 9999.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Agregar a solicitud</b><span>Suma el producto elegido, con esa cantidad, a la lista de abajo. Si ya estaba, le suma la cantidad.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Productos en la solicitud</b><span>Lo que llevás armado: marca, modelo, color, talle y cantidad. Todavía no se guardó nada.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Quitar</b><span>Saca de la solicitud el producto que elegiste en la lista de abajo.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Confirmar solicitud</b><span>Guarda la solicitud con todo lo que cargaste. Queda en estado Pendiente.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Cancelar</b><span>Descarta lo que armaste y cierra la pantalla.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Armar y confirmar una solicitud</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Si buscás algo puntual, usá los filtros de Marca y Talle.</li><li>Tocá un producto del catálogo.</li><li>Indicá la Cantidad solicitada y tocá <span class="btn naranja">Agregar a solicitud</span>.</li><li>Repetí con los demás productos.</li><li>Revisá la lista de abajo. Si algo sobra, elegilo y tocá <span class="btn rojo">Quitar</span>.</li><li>Tocá <span class="btn naranja">Confirmar solicitud</span>. Aparece &quot;Solicitud de compra generada correctamente&quot;.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> La solicitud no lleva proveedor ni precios: eso se define después en Registrar orden de compra.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">6</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un producto del catálogo.</td><td>Tocá una fila del catálogo antes de agregar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Cantidad inválida.</td><td>La cantidad debe ser un número entero mayor a cero.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La solicitud no tiene productos.</td><td>Agregá al menos un producto antes de confirmar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La cantidad debe estar entre 1 y 9999</td><td>Corregí la cantidad.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Solicitud de compra generada correctamente</td><td>La solicitud quedó pendiente, lista para convertirse en orden de compra.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado. El detalle quedó registrado en la bitácora</td><td>No se guardó la solicitud. Avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede generar solicitudes.</li><li>El catálogo se ordena por stock ascendente para que lo más urgente aparezca primero.</li><li>Si agregás dos veces el mismo producto, las cantidades se suman en una sola línea.</li><li>Estado de la solicitud: nace Pendiente y pasa a otro estado cuando se usa en una orden de compra.</li><li>La generación queda registrada en la Bitácora (módulo Compras).</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="registrar-orden.html">Registrar orden de compra</a><a href="reporte-stock.html">Estado de stock</a><a href="gestion-proveedores.html">Procesar proveedores</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Generar solicitud de compra. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

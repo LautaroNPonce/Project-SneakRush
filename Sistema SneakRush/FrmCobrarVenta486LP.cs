@@ -37,6 +37,7 @@ namespace Sistema_SneakRush
         public FrmCobrarVenta486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "cobrar-venta");
             EstiloBotonHabilitacion(btnSeleccionar);
             EstiloBotonHabilitacion(btnCobrar);
             EstiloBotonHabilitacion(btnVerComprobante);

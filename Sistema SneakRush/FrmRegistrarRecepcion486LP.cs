@@ -29,6 +29,7 @@ namespace Sistema_SneakRush
         public FrmRegistrarRecepcion486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "registrar-recepcion");
             this.Load += FrmRegistrarRecepcion486LP_Load;
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmRegistrarRecepcion486LP_FormClosing;

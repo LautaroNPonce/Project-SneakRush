@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consultar productos - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="consultar-producto">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Venta › Consultar productos</div>
+<h1>Consultar productos</h1>
+<p class="bajada">Sirve para averiguar rápido si hay una zapatilla, cuánto cuesta y cuántos pares quedan. Si elegís una, la manda directo al carrito. La misma ventana se abre cuando tocás Agregar dentro de Cargar carrito.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Venta › Consultar productos</b></span><span class="chip">Lo usa: <b>Administrador, Encargado de depósito, Vendedor</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/consultar-producto.png" alt="Pantalla Consultar productos de SneakRush con los filtros de búsqueda y la lista de productos con precio y stock" width="710" height="430">
+<button type="button" class="hs" data-n="1" aria-label="Marca" style="left:9.296%;top:11.163%;width:15.211%;height:5.116%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Modelo" style="left:32.394%;top:11.163%;width:15.211%;height:5.116%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Color" style="left:53.944%;top:11.163%;width:13.803%;height:5.116%"><span class="pin aba">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Talle" style="left:74.366%;top:11.163%;width:9.014%;height:5.116%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Solo con stock" style="left:3.239%;top:19.070%;width:14.085%;height:3.721%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Buscar" style="left:70.423%;top:18.605%;width:11.972%;height:5.581%"><span class="pin aba">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Limpiar" style="left:84.930%;top:18.605%;width:12.113%;height:5.581%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Lista de productos" style="left:2.958%;top:30.000%;width:93.944%;height:56.279%"><span class="pin der">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Seleccionar" style="left:33.239%;top:89.767%;width:13.099%;height:6.744%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Cancelar" style="left:47.324%;top:89.767%;width:13.099%;height:6.744%"><span class="pin der">10</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Marca</b><span>Escribí la marca o parte de ella (por ejemplo Nike).</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Modelo</b><span>Escribí el modelo o parte del nombre (por ejemplo Pegasus).</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Color</b><span>Escribí el color.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Talle</b><span>Escribí el talle (por ejemplo 42).</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Solo con stock</b><span>Si la tildás, oculta los productos que tienen 0 unidades.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Buscar</b><span>Muestra solo los productos que cumplen todo lo que escribiste. Podés completar uno o varios campos.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Limpiar</b><span>Borra los filtros y vuelve a mostrar todo el catálogo.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Lista de productos</b><span>Marca, categoría, modelo, color, talle, precio y stock disponible de cada zapatilla. Tocá una fila para elegirla.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Seleccionar</b><span>Elige el producto marcado. Abierta desde el menú, la pasa al carrito (abre Cargar carrito o suma al que ya esté abierto). Abierta desde el carrito, vuelve con el producto elegido.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Cancelar</b><span>Cierra la pantalla sin elegir nada.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Ver si hay stock de un modelo</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Llevar un producto al carrito</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Escribí marca, modelo, color y/o talle (con uno solo alcanza).</li><li>Tocá <span class="btn naranja">Buscar</span>.</li><li>Mirá la columna Stock: es cuántos pares hay hoy.</li><li>Tildá Solo con stock si querés ocultar lo agotado.</li></ol>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Buscá la zapatilla y tocá su fila.</li><li>Tocá <span class="btn naranja">Seleccionar</span>.</li><li>Se abre Cargar carrito con ese producto agregado (cantidad 1). Seguí desde ahí.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Para pasar al carrito hace falta el permiso de gestionar carrito (Administrador y Vendedor). El Encargado de depósito puede consultar pero no armar carritos.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">3</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>No se encontraron productos con esos criterios.</td><td>Ninguna zapatilla coincide. Probá con menos filtros o revisá cómo escribiste.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un producto de la grilla.</td><td>Tocá primero una fila de la lista.</td></tr>
+<tr><td><span class="tipo error">Error</span>No tiene permiso para gestionar el carrito.</td><td>Tu perfil puede consultar pero no armar ventas.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Alcanza con escribir parte del nombre; podés completar solo los campos que te sirvan.</li><li>El stock que se ve es el real al momento de buscar.</li><li>El Administrador, el Encargado de depósito y el Vendedor pueden consultar productos.</li><li>Desde esta pantalla no se modifica ningún producto: para eso está Procesar productos.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-carrito.html">Cargar carrito</a><a href="gestion-productos.html">Procesar productos</a><a href="reporte-stock.html">Estado de stock</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Consultar productos. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

@@ -31,6 +31,7 @@ namespace Sistema_SneakRush
         public FrmGestionCarrito486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-carrito");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionCarrito486LP_FormClosing;
         }

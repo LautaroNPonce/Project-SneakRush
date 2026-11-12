@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestión de Perfiles - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-perfiles">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Administrador › Gestión de Perfiles</div>
+<h1>Gestión de Perfiles</h1>
+<p class="bajada">El perfil es el rol que se le da a cada usuario (Vendedor, Cajero, Administrador...). Un perfil se arma sumándole familias de permisos y, si hace falta, algún permiso suelto. Lo que tenga el perfil es lo que el usuario ve en el menú.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Administrador › Gestión de perfiles › Gestión de Perfiles</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-perfiles.png" alt="Pantalla Gestión de Perfiles de SneakRush con perfiles, familias disponibles, permisos directos y la composición del perfil" width="1356" height="574">
+<button type="button" class="hs" data-n="1" aria-label="Nombre del perfil" style="left:1.696%;top:13.066%;width:18.805%;height:4.181%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Lista de perfiles" style="left:1.696%;top:18.990%;width:18.879%;height:64.111%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Crear" style="left:1.696%;top:83.972%;width:8.702%;height:5.401%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Modificar" style="left:11.799%;top:83.972%;width:8.702%;height:5.401%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Eliminar" style="left:1.696%;top:90.244%;width:8.702%;height:5.401%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Cancelar" style="left:11.799%;top:90.244%;width:8.702%;height:5.401%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Familias disponibles" style="left:23.230%;top:13.066%;width:17.847%;height:70.035%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Asignar familia al perfil" style="left:23.230%;top:83.972%;width:17.847%;height:5.401%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Filtro por módulo" style="left:43.732%;top:13.066%;width:17.847%;height:4.181%"><span class="pin aba">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Permisos directos disponibles" style="left:43.732%;top:18.990%;width:17.847%;height:64.111%"><span class="pin">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Asignar permiso al perfil" style="left:43.732%;top:83.972%;width:17.847%;height:5.401%"><span class="pin">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Familias asignadas" style="left:64.381%;top:21.429%;width:16.372%;height:27.352%"><span class="pin der">12</span></button>
+<button type="button" class="hs" data-n="13" aria-label="Permisos de la familia" style="left:81.637%;top:21.429%;width:16.224%;height:27.352%"><span class="pin der">13</span></button>
+<button type="button" class="hs" data-n="14" aria-label="Quitar familia seleccionada" style="left:64.307%;top:49.826%;width:23.083%;height:5.401%"><span class="pin">14</span></button>
+<button type="button" class="hs" data-n="15" aria-label="Permisos directos asignados" style="left:64.381%;top:61.847%;width:23.083%;height:29.617%"><span class="pin der">15</span></button>
+<button type="button" class="hs" data-n="16" aria-label="Quitar permiso seleccionado" style="left:64.307%;top:92.509%;width:23.083%;height:5.401%"><span class="pin">16</span></button>
+<button type="button" class="hs" data-n="17" aria-label="Salir" style="left:92.920%;top:2.091%;width:6.195%;height:5.226%"><span class="pin aba">17</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Nombre del perfil</b><span>Escribí el nombre de un perfil nuevo o cambiá el del perfil seleccionado. Hasta 50 caracteres.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Lista de perfiles</b><span>Todos los perfiles que existen. Al elegir uno, a la derecha se ve de qué está compuesto.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Crear</b><span>Crea un perfil nuevo con el nombre escrito. Empieza vacío: después le sumás familias o permisos.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Modificar</b><span>Cambia el nombre del perfil seleccionado.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Eliminar</b><span>Borra el perfil seleccionado. No se puede si tenés usuarios asignados o si es el perfil que estás usando.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Cancelar</b><span>Limpia la pantalla y vuelve a cargar las listas.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Familias disponibles</b><span>Las familias que se le pueden sumar al perfil seleccionado. Elegí una y tocá el botón de abajo.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Asignar familia al perfil</b><span>Le suma al perfil la familia elegida: el perfil recibe de golpe todos los permisos de esa familia.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Filtro por módulo</b><span>Acota la lista de permisos sueltos por módulo. &quot;Todos&quot; muestra todos.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Permisos directos disponibles</b><span>Permisos sueltos que se pueden dar al perfil sin pasar por una familia. Sirven para casos puntuales.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Asignar permiso al perfil</b><span>Le da al perfil el permiso suelto que elegiste.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Familias asignadas</b><span>Las familias que ya tiene el perfil. Arriba dice de qué perfil se trata (&quot;Perfil: ...&quot;).</span></div></li>
+<li data-n="13"><span class="n">13</span><div><b>Permisos de la familia</b><span>Lo que incluye la familia elegida en la lista de al lado. Es solo para mirar.</span></div></li>
+<li data-n="14"><span class="n">14</span><div><b>Quitar familia seleccionada</b><span>Saca del perfil la familia elegida en Familias asignadas.</span></div></li>
+<li data-n="15"><span class="n">15</span><div><b>Permisos directos asignados</b><span>Los permisos sueltos que tiene el perfil además de los que traen sus familias.</span></div></li>
+<li data-n="16"><span class="n">16</span><div><b>Quitar permiso seleccionado</b><span>Saca del perfil el permiso suelto elegido en la lista.</span></div></li>
+<li data-n="17"><span class="n">17</span><div><b>Salir</b><span>Cierra esta pantalla y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Crear un perfil</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Cambiar lo que puede hacer un perfil</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Eliminar un perfil</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Por ejemplo, un perfil &quot;Supervisor&quot;.</p>
+<ol class="pasos"><li>Escribí el nombre en el campo de arriba a la izquierda y tocá <span class="btn naranja">Crear</span>.</li><li>Elegí el perfil nuevo en la lista.</li><li>En Familias disponibles elegí una familia y tocá <span class="btn naranja">Asignar familia al perfil</span>. Repetí con las que necesite.</li><li>Si falta algo muy puntual, buscalo en Permisos directos disponibles y tocá <span class="btn naranja">Asignar permiso al perfil</span>.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Para que alguien use el perfil, después hay que asignárselo en Gestión de usuarios.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Elegí el perfil en la lista.</li><li>Para sumar acceso, asigná una familia o un permiso suelto.</li><li>Para sacar acceso, elegí la familia o el permiso en el panel de la derecha y tocá el botón Quitar correspondiente.</li><li>Los usuarios con ese perfil ven el cambio la próxima vez que inicien sesión.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Los permisos &quot;Cambiar contraseña&quot; y &quot;Cerrar sesión&quot; son obligatorios en todos los perfiles y no se pueden quitar.</div>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Elegí el perfil en la lista.</li><li>Tocá <span class="btn rojo">Eliminar</span>.</li><li>Si tiene familias o permisos, el sistema te avisa que se van a quitar. Confirmá con Sí.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> No se puede eliminar un perfil que tenga usuarios asignados: primero hay que reasignarlos o eliminarlos. Tampoco el perfil que estás usando vos.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">18</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar un Perfil.</td><td>Elegí un perfil en la lista antes de usar Modificar, Eliminar o cualquiera de los botones de asignar o quitar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe ingresar un nombre. / Debe ingresar un nombre válido.</td><td>El campo del nombre está vacío.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El nombre no puede superar los 50 caracteres.</td><td>Acortá el nombre.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ya existe un Perfil con ese nombre.</td><td>No se pueden repetir nombres de perfil.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar una Familia. / Debe seleccionar un Permiso.</td><td>Falta elegir en la lista el elemento a asignar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar una Familia para quitar. / Debe seleccionar un Permiso para quitar.</td><td>Falta elegir en el panel de la derecha lo que querés sacar.</td></tr>
+<tr><td><span class="tipo error">Error</span>El componente ya pertenece a este elemento.</td><td>El perfil ya tiene esa familia o ese permiso.</td></tr>
+<tr><td><span class="tipo error">Error</span>Este permiso ya está incluido en la familia &#x27;...&#x27;, asignada a este perfil.</td><td>No hace falta darlo suelto: el perfil ya lo recibe por esa familia.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>Esta familia comparte permisos con otra ya asignada a este perfil. ¿Desea asignársela igual?</td><td>Podés seguir sin problema: si un permiso está en las dos familias, el perfil lo tiene una sola vez.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Esta familia ya incluye permisos que tenías asignados sueltos. Se quitaron de los permisos directos...</td><td>Pasa solo: lo que ya trae la familia no se deja duplicado como permiso suelto. El mensaje lista cuáles se quitaron.</td></tr>
+<tr><td><span class="tipo error">Error</span>Esta patente es obligatoria en todos los perfiles (cambiar contraseña y cerrar sesión) y no se puede quitar.</td><td>Esos permisos siempre tienen que estar.</td></tr>
+<tr><td><span class="tipo error">Error</span>No puede quitar este permiso del perfil Administrador: dejaría al sistema sin forma de administrar permisos.</td><td>El sistema protege al Administrador para que siempre alguien pueda gestionar accesos.</td></tr>
+<tr><td><span class="tipo error">Error</span>No puede eliminar el perfil que está usando actualmente.</td><td>Entrá con otro usuario si querés borrar ese perfil.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se puede eliminar el perfil: hay usuarios asignados a él. Reasigne o elimine esos usuarios primero.</td><td>Andá a Gestión de usuarios, cambiales el perfil y volvé a intentar.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>El perfil tiene familias o permisos asignados. Si lo elimina, se quitarán todas las asociaciones.</td><td>Se borra el perfil junto con sus asignaciones.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>Está quitando una familia / un permiso de su propio perfil. Perderá acceso la próxima vez que inicie sesión.</td><td>Si confirmás, vos mismo vas a perder esa función al volver a entrar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Modificó el nombre de su propio perfil. Debe cerrar sesión e iniciar nuevamente para que el cambio tome efecto.</td><td>Cerrá sesión y entrá de nuevo.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Perfil creado / modificado / eliminado correctamente. Familia o permiso asignado / quitado correctamente.</td><td>La operación se guardó.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede entrar a esta pantalla.</li><li>Un perfil recibe permisos por dos vías: las familias que tiene y los permisos sueltos. Es más prolijo trabajar con familias y usar permisos sueltos solo en casos puntuales.</li><li>Si un permiso llega por una familia, el sistema no deja darlo también suelto.</li><li>Cada botón depende de los permisos de tu perfil: si aparece gris, tu perfil no lo tiene.</li><li>Los cambios de un perfil se ven en el menú de sus usuarios la próxima vez que inicien sesión.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-familias.html">Gestión de familias</a><a href="gestion-usuarios.html">Gestión de usuarios</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Gestión de Perfiles. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

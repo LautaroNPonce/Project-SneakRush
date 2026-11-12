@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reparación de base de datos - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="reparacion-bd">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Administrador › Reparación de base de datos</div>
+<h1>Reparación de base de datos</h1>
+<p class="bajada">Cada vez que alguien inicia sesión, el sistema comprueba que los datos no hayan sido tocados fuera del programa. Si encuentra una diferencia, el Administrador ve esta pantalla con las tablas afectadas y puede recalcular o restaurar un respaldo.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Aparece sola al iniciar sesión como Administrador</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<div class="sin-captura"><b>Esta pantalla no tiene captura.</b> Solo aparece cuando hay una inconsistencia real en la base de datos, y no se puede provocar sin dañar los datos. Por eso acá se explica con texto.</div>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Encabezado</b><span>Dice &quot;INCONSISTENCIA PRESENTE EN LA BASE DE DATOS&quot;: el sistema detectó una diferencia entre los datos y su control de integridad.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Lista de inconsistencias</b><span>Una fila por cada problema: el ID del registro, la tabla afectada y qué pasó. Puede decir que el registro se insertó, se modificó o se eliminó directamente en la base de datos.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Recalcular</b><span>Vuelve a calcular los dígitos verificadores de las tablas afectadas, tomando los datos tal como están hoy. Pide confirmación. Si sale bien, avisa &quot;Dígitos verificadores recalculados correctamente&quot; y entrás al menú.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Restaurar</b><span>Pide confirmación y abre Gestión de respaldos para reemplazar toda la información actual por la de un respaldo (.bak).</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Salir</b><span>Pide confirmación y sale sin reparar. Volvés a la pantalla de ingreso.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Cuando los cambios fueron legítimos</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Cuando los datos no son confiables</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Por ejemplo, si vos mismo modificaste datos directamente en la base y sabés que están bien.</p>
+<ol class="pasos"><li>Revisá en la lista qué tablas y qué registros figuran.</li><li>Tocá <span class="btn naranja">Recalcular</span> y confirmá.</li><li>Cuando aparezca el aviso de éxito, el sistema te lleva al menú principal.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Recalcular da por buenos los datos actuales. Hacelo solo si estás seguro de que nadie los alteró sin permiso.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Tocá <span class="btn">Restaurar</span> y confirmá.</li><li>En Gestión de respaldos elegí el archivo de backup (.bak) y tocá Restaurar.</li><li>Se reemplaza toda la información actual por la del respaldo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Se pierde todo lo registrado después de la fecha del respaldo.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">5</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Está seguro de que desea recalcular los dígitos verificadores?</td><td>Sí recalcula; No te deja en la pantalla.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Dígitos verificadores recalculados correctamente.</td><td>Listo: entrás al menú principal.</td></tr>
+<tr><td><span class="tipo error">Error</span>Error al recalcular: (motivo)</td><td>No se pudo recalcular. Probá restaurando un respaldo.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Está seguro de que desea restaurar la base de datos? Se reemplazará toda la información actual por la del respaldo.</td><td>Sí abre Gestión de respaldos para elegir el archivo.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Está seguro de que desea salir sin reparar la inconsistencia?</td><td>Sí vuelve a la pantalla de ingreso.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">3</span></summary><div class="cuerpo"><ul class="reglas"><li>La revisión se hace en cada inicio de sesión, y se registra en la bitácora de eventos.</li><li>Si quien inicia sesión no es Administrador, el sistema avisa &quot;Se detectó un Error en el Sistema. Contacte al Administrador&quot; y le deja solo el menú Usuario.</li><li>Esta pantalla solo muestra el problema: no cambia nada hasta que elegís Recalcular o Restaurar.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-respaldo.html">Gestión de respaldos</a><a href="bitacora-eventos.html">Bitácora de eventos</a><a href="inicio-sesion.html">Iniciar sesión</a><a href="menu-principal.html">Menú principal</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Reparación de base de datos. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

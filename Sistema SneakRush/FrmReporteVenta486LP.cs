@@ -28,6 +28,7 @@ namespace Sistema_SneakRush
         public FrmReporteVenta486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "reporte-ventas");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmReporteVenta486LP_FormClosing;
         }

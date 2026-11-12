@@ -34,6 +34,7 @@ namespace Sistema_SneakRush
         public FrmImportarProductos486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "importar-productos");
             EstiloBotonHabilitacion(btnExportarVenta);
             EstiloBotonHabilitacion(btnExportar);
             Program.LanguageManager.Agregar(this);

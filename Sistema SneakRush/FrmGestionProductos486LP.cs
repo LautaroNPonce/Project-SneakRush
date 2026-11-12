@@ -33,6 +33,7 @@ namespace Sistema_SneakRush
         public FrmGestionProductos486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-productos");
 
             int anchoNecesario = 770;
             if (dgvProductos.Width < anchoNecesario)

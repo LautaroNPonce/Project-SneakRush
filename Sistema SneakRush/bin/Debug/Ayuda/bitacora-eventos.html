@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitácora de eventos - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="bitacora-eventos">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Administrador › Bitácora de eventos</div>
+<h1>Bitácora de eventos</h1>
+<p class="bajada">El sistema anota solo cada acción importante (ingresos, cambios de datos, bajas, respaldos...) con quién la hizo y cuándo. Acá las revisás, las filtrás por DNI, módulo, criticidad o fechas, y podés sacar un PDF.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Administrador › Bitácora de eventos</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/bitacora-eventos.png" alt="Pantalla Bitácora de eventos de SneakRush con la grilla de registros, los filtros y el detalle del registro" width="1330" height="544">
+<button type="button" class="hs" data-n="1" aria-label="Registros de la bitácora" style="left:1.805%;top:11.029%;width:69.248%;height:57.721%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Total de registros" style="left:62.030%;top:69.853%;width:9.023%;height:3.309%"><span class="pin der">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="DNI" style="left:1.880%;top:77.941%;width:9.474%;height:4.412%"><span class="pin aba">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Fecha desde" style="left:16.466%;top:77.941%;width:14.737%;height:4.412%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Fecha hasta" style="left:33.609%;top:77.941%;width:14.737%;height:4.412%"><span class="pin aba">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Módulo" style="left:1.880%;top:90.257%;width:9.474%;height:4.412%"><span class="pin aba">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Criticidad" style="left:16.466%;top:90.257%;width:8.496%;height:4.412%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Aplicar" style="left:50.376%;top:78.125%;width:9.098%;height:6.985%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Limpiar" style="left:62.030%;top:78.125%;width:9.098%;height:6.985%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Cancelar / Salir" style="left:50.376%;top:88.603%;width:9.098%;height:6.985%"><span class="pin">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Exportar PDF" style="left:62.030%;top:88.603%;width:9.098%;height:6.985%"><span class="pin">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Detalle del registro" style="left:73.083%;top:10.846%;width:25.263%;height:71.691%"><span class="pin">12</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Registros de la bitácora</b><span>Cada fila es un evento: número, fecha y hora, usuario, DNI, módulo donde ocurrió, descripción y criticidad. Los más nuevos aparecen primero. Tocá una fila para ver todo su detalle a la derecha.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Total de registros</b><span>Cuántos registros se están mostrando con los filtros actuales.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>DNI</b><span>Para ver solo lo que hizo una persona, escribí su DNI.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Fecha desde</b><span>Primer día del período que querés ver. Se incluye completo.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Fecha hasta</b><span>Último día del período. Se incluye hasta las 23:59 de ese día.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Módulo</b><span>Filtra por la parte del sistema donde pasó el evento: Login, Logout, Cambiar contraseña, Gestión de usuarios, perfiles, familias o respaldos, Ventas, Compras, Maestros, Dígito verificador o Cambiar idioma.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Criticidad</b><span>Filtra por qué tan importante es el evento, de 1 (Muy alta) a 5 (Muy baja).</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Aplicar</b><span>Busca los registros que cumplen todos los filtros que completaste.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Limpiar</b><span>Borra todos los filtros y vuelve a mostrar la bitácora completa.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Cancelar / Salir</b><span>Mientras hay filtros aplicados se llama Cancelar y los deshace. Cuando no hay filtros pasa a llamarse Salir y cierra la pantalla.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Exportar PDF</b><span>Guarda en un archivo PDF los registros que estás viendo, listo para imprimir o archivar.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Detalle del registro</b><span>Muestra completo el registro elegido en la grilla: número, fecha y hora, nombre y apellido, DNI, módulo, criticidad y la descripción entera, que en la grilla puede verse cortada.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Buscar lo que hizo un usuario</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Ver solo los eventos más graves</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Sacar un PDF</button>
+<button role="tab" id="tab-3" aria-controls="pn-3" aria-selected="false" tabindex="-1">Volver a ver todo</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Escribí el DNI de la persona.</li><li>Si querés acotar el período, elegí Fecha desde y Fecha hasta.</li><li>Tocá <span class="btn naranja">Aplicar</span>.</li><li>Tocá una fila para leer la descripción completa en el panel de la derecha.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Las fechas por defecto son las de hoy: si querés ver días anteriores, cambialas antes de tocar Aplicar.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Abrí Criticidad y elegí 1 - Muy Alta (o el nivel que busques).</li><li>Si querés, sumá un módulo.</li><li>Tocá <span class="btn naranja">Aplicar</span>.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Filtrá lo que necesites (o dejá todo sin filtrar).</li><li>Tocá <span class="btn">Exportar PDF</span>.</li><li>Elegí la carpeta y el nombre del archivo. Por defecto propone Bitacora_fecha_hora.pdf.</li><li>Tocá Guardar. El sistema avisa con la ubicación del archivo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El PDF incluye exactamente los registros que ves en pantalla, con la fecha de generación y el usuario que lo exportó.</div>
+</div>
+<div role="tabpanel" id="pn-3" aria-labelledby="tab-3" hidden>
+<ol class="pasos"><li>Tocá <span class="btn">Limpiar</span> o <span class="btn">Cancelar</span>. Los filtros se borran y vuelve la lista completa.</li></ol>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">5</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>La fecha desde no puede ser mayor a la fecha hasta.</td><td>Invertiste el rango. Poné primero la fecha más antigua.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No se encontraron registros con los filtros aplicados.</td><td>Ningún evento cumple esos filtros. Probá ampliar las fechas o sacar algún filtro.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No hay registros para exportar.</td><td>La grilla está vacía, no hay nada para llevar al PDF.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>PDF exportado correctamente: (ruta del archivo)</td><td>El archivo ya está guardado en la carpeta que elegiste.</td></tr>
+<tr><td><span class="tipo error">Error</span>Error al exportar PDF: (motivo)</td><td>No se pudo escribir el archivo. Suele pasar si el PDF está abierto en otro programa o la carpeta no permite guardar. Cerralo o elegí otra carpeta.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>La bitácora es solo de consulta: no se pueden editar ni borrar registros desde acá.</li><li>Los filtros se combinan: se muestran los registros que cumplen todos a la vez.</li><li>Criticidad: 1 Muy alta, 2 Alta, 3 Media, 4 Baja, 5 Muy baja. Las más altas son las que más importan (por ejemplo inicios de sesión, bloqueos o errores de integridad).</li><li>El sistema registra automáticamente: ingresos y salidas, cambios de contraseña e idioma, altas, bajas y modificaciones de usuarios, perfiles, familias y productos, compras, ventas, respaldos y recálculos del dígito verificador.</li><li>Cada registro lleva un dígito verificador: si alguien altera la base de datos por fuera del sistema, el control de integridad lo detecta (ver Reparación de la base de datos).</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-usuarios.html">Gestión de usuarios</a><a href="gestion-respaldo.html">Gestión de respaldos</a><a href="reparacion-bd.html">Reparar la base de datos</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Bitácora de eventos. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

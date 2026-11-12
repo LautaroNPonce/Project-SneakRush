@@ -41,6 +41,7 @@ namespace Sistema_SneakRush
         public FrmReporteInteligente486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "reporte-inteligente");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmReporteInteligente486LP_FormClosing;
         }

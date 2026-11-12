@@ -23,6 +23,7 @@ namespace Sistema_SneakRush
         public FrmReparacionBD486LP(List<string> tablas)
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "reparacion-bd");
             _tablas = tablas ?? new List<string>();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmReparacionBD486LP_FormClosing;

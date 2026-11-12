@@ -30,6 +30,7 @@ namespace Sistema_SneakRush
         public FrmRegistrarOrden486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "registrar-orden");
             this.Load += FrmRegistrarOrden486LP_Load;
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmRegistrarOrden486LP_FormClosing;

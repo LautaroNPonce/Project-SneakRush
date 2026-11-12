@@ -36,6 +36,7 @@ namespace Sistema_SneakRush
         public FrmGestionFamilias486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-familias");
             this.WindowState = FormWindowState.Maximized;
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionFamilias486LP_FormClosing;

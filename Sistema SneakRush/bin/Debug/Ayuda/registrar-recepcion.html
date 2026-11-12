@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registrar recepción de mercadería - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="registrar-recepcion">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Compra › Registrar recepción de mercadería</div>
+<h1>Registrar recepción de mercadería</h1>
+<p class="bajada">Cuando llega la mercadería elegís la orden y confirmás cuántos pares llegaron de cada producto. Si falta alguno, el sistema calcula el faltante y lo deja anotado.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Compra › Registrar recepción de mercadería</b></span><span class="chip">Lo usa: <b>Administrador, Encargado de depósito</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/registrar-recepcion.png" alt="Pantalla Registrar recepción de mercadería de SneakRush con las órdenes pendientes de recepción y el detalle con cantidades pedidas, recibidas y faltantes" width="740" height="420">
+<button type="button" class="hs" data-n="1" aria-label="Órdenes pendientes de recepción" style="left:2.568%;top:13.333%;width:94.324%;height:25.476%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Detalle de la recepción" style="left:2.568%;top:45.952%;width:94.324%;height:37.381%"><span class="pin der">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Cantidad recibida" style="left:66.757%;top:46.429%;width:12.838%;height:36.905%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Confirmar recepción" style="left:2.432%;top:87.381%;width:24.189%;height:7.619%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Cancelar" style="left:72.838%;top:87.381%;width:24.189%;height:7.619%"><span class="pin aba">5</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Órdenes pendientes de recepción</b><span>Las órdenes de compra que todavía no se recibieron. Al abrir la pantalla queda elegida la primera.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Detalle de la recepción</b><span>Los productos de la orden con la cantidad pedida, la recibida y el faltante.</span></div></li>
+<li data-n="3" data-nota="Va de 0 a la cantidad pedida, y al menos un producto tiene que tener una unidad."><span class="n">3</span><div><b>Cantidad recibida</b><span>Empieza igual a lo pedido. Si llegó menos, hacé doble clic en la celda y escribí lo que llegó realmente. El faltante se calcula solo.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Confirmar recepción</b><span>Registra lo recibido. La pantalla se cierra y la orden pasa a estado Recibida.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Cancelar</b><span>Cierra la pantalla sin registrar nada.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Registrar una recepción completa</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Registrar una recepción con faltantes</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Elegí la orden en <span class="btn">Órdenes pendientes de recepción</span>.</li><li>Controlá que las cantidades coincidan con lo que llegó.</li><li>Tocá <span class="btn naranja">Confirmar recepción</span>. Aparece &quot;Recepción registrada correctamente&quot;.</li></ol>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Elegí la orden.</li><li>Hacé doble clic en la <span class="btn">Cantidad recibida</span> del producto que llegó incompleto y escribí lo que llegó.</li><li>Comprobá que el faltante se actualizó y tocá <span class="btn naranja">Confirmar recepción</span>.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Al confirmar, la orden pasa a Recibida aunque falten unidades. Lo faltante queda registrado en la bitácora de eventos.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">6</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>No hay órdenes pendientes de recepción.</td><td>Primero hay que registrar una orden de compra. La pantalla se cierra sola.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione una orden de compra.</td><td>Tocá una fila de la lista de arriba.</td></tr>
+<tr><td><span class="tipo error">Error</span>La cantidad recibida debe estar entre 0 y la cantidad pedida.</td><td>Corregí la cantidad; vuelve a quedar la pedida.</td></tr>
+<tr><td><span class="tipo error">Error</span>Debe recibir al menos una unidad para registrar la recepción.</td><td>Todos los productos tienen cantidad cero.</td></tr>
+<tr><td><span class="tipo error">Error</span>El valor ingresado no es un número válido.</td><td>En la cantidad solo van números.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Recepción registrada correctamente.</td><td>Quedó anotado lo que llegó y la orden pasó a Recibida.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Pueden registrarla el Administrador y el Encargado de depósito.</li><li>Registrar la recepción no suma stock: las unidades entran al stock cuando se confirma el pago de la factura, según lo que se recibió.</li><li>Una orden se recibe una sola vez.</li><li>Cada botón depende de los permisos del perfil.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="registrar-orden.html">Registrar orden de compra</a><a href="registrar-factura.html">Registrar factura y pago de compra</a><a href="reporte-stock.html">Estado de stock</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Registrar recepción de mercadería. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

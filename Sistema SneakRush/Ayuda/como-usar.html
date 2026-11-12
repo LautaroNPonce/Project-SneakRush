@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cómo usar esta ayuda - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="como-usar">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Ayuda › Cómo usar esta ayuda</div>
+<h1>Cómo usar esta ayuda</h1>
+<p class="bajada">La ayuda se abre en tu navegador, sin conexión a internet. Hay un tema por cada pantalla del sistema y se ordenan igual que el menú.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Ayuda (en la barra de menú)</b></span><span class="chip">Lo usa: <b>Todos los usuarios</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<div class="sin-captura"><b>Esta pantalla no tiene captura.</b> Esta página explica la propia ayuda, así que no hace falta una captura del sistema.</div>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Tecla F1</b><span>Estando en cualquier pantalla del sistema, presioná F1 y se abre la ayuda directo en el tema de esa pantalla.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Menú Ayuda</b><span>En la barra de menú del sistema, Ayuda abre el inicio de esta ayuda.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Menú lateral</b><span>Lista todos los temas con el mismo orden y los mismos nombres que el menú del sistema: Usuario, Administrador, Maestro, Compra, Venta, Reporte y Ayuda. Tocá una sección para ver lo que tiene adentro.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Buscador</b><span>Escribí lo que querés hacer, por ejemplo &quot;cobrar&quot; o &quot;stock&quot;. Aparecen los temas relacionados. Con la tecla / vas directo al buscador y con las flechas y Enter elegís un resultado.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Captura interactiva</b><span>En cada tema pasá el mouse por un botón o campo de la captura y aparece un globo con lo que hace. Si hacés clic, el globo queda fijo; Escape lo cierra.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Mostrar números</b><span>Muestra u oculta los números de la captura. Cada número coincide con la lista &quot;Qué hace cada elemento&quot;.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Cómo hacerlo</b><span>Pestañas con los pasos de las tareas más comunes de esa pantalla.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Para saber más</b><span>Secciones que se abren y se cierran: los mensajes que puede mostrar el sistema, las reglas a tener en cuenta y los temas relacionados.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Pedir ayuda de la pantalla donde estoy</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Buscar un tema</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Usarla desde el celular o una ventana angosta</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Con la pantalla abierta, presioná <kbd>F1</kbd>.</li><li>Se abre el navegador en el tema de esa pantalla.</li></ol>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Presioná <kbd>/</kbd> o tocá el buscador.</li><li>Escribí una o dos palabras, por ejemplo &quot;cobrar tarjeta&quot;.</li><li>Elegí un resultado con el mouse o con las flechas y <kbd>Enter</kbd>.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Tocá el botón <span class="btn">Temas</span> arriba a la izquierda para abrir o cerrar el menú.</li><li>Elegí el tema.</li></ol>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>La ayuda está solo en español y se abre en el navegador que tengas como predeterminado.</li><li>No necesita internet: todo el contenido viene con el sistema, en la carpeta Ayuda.</li><li>Si F1 o el menú Ayuda no abren nada, la carpeta Ayuda no está junto al programa. Avisale al administrador.</li><li>Las capturas pueden mostrar datos de ejemplo.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="menu-principal.html">Menú principal</a><a href="inicio-sesion.html">Iniciar sesión</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Cómo usar esta ayuda. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

@@ -31,6 +31,7 @@ namespace Sistema_SneakRush
         public FrmGestionCategoriasMarcas486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-categorias-marcas");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGestionCategoriasMarcas486LP_FormClosing;
         }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambiar idioma - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="cambiar-idioma">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Usuario › Cambiar idioma</div>
+<h1>Cambiar idioma</h1>
+<p class="bajada">Cambia al instante el idioma de los menús y de todas las pantallas. El sistema se acuerda de tu elección y la vuelve a usar cada vez que iniciás sesión.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Usuario › Cambiar Idioma</b></span><span class="chip">Lo usa: <b>Todos los usuarios</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/cambiar-idioma.png" alt="Menú Usuario de SneakRush con el submenú Cambiar Idioma abierto, que muestra Español, English y Português" width="640" height="190">
+<button type="button" class="hs" data-n="1" aria-label="Menú Usuario" style="left:0.781%;top:13.684%;width:8.438%;height:9.474%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Cambiar Idioma" style="left:0.781%;top:25.263%;width:26.406%;height:10.526%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Español" style="left:27.500%;top:26.316%;width:18.750%;height:10.526%"><span class="pin der">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="English" style="left:27.500%;top:37.368%;width:18.750%;height:10.526%"><span class="pin der">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Português" style="left:27.500%;top:48.421%;width:18.750%;height:10.526%"><span class="pin der">5</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Menú Usuario</b><span>Acá están las opciones de tu cuenta: idioma, contraseña y sesión.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Cambiar Idioma</b><span>Abre la lista de idiomas disponibles.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Español</b><span>Pone todo el sistema en español.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>English</b><span>Pone todo el sistema en inglés.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Português</b><span>Pone todo el sistema en portugués.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Cambiar el idioma</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Abrí el menú <span class="btn">Usuario</span>.</li><li>Pasá por <span class="btn">Cambiar Idioma</span>.</li><li>Elegí <span class="btn">Español</span>, <span class="btn">English</span> o <span class="btn">Português</span>.</li><li>Los menús y las pantallas abiertas cambian en el momento.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Cada idioma se ve siempre con su propio nombre, así lo encontrás aunque el sistema esté en un idioma que no entendés.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Tu idioma queda guardado en tu usuario: la próxima vez que inicies sesión el sistema lo usa solo.</li><li>Cada cambio de idioma queda registrado en la bitácora de eventos.</li><li>Antes de iniciar sesión, la pantalla de ingreso usa el último idioma con el que se trabajó en esa computadora.</li><li>Esta ayuda está solo en español.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="menu-principal.html">Menú principal</a><a href="cambiar-contrasena.html">Cambiar contraseña</a><a href="bitacora-eventos.html">Bitácora de eventos</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Cambiar idioma. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

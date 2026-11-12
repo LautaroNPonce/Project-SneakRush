@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Importar y exportar productos (XML) - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="importar-productos">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Maestro › Importar y exportar productos (XML)</div>
+<h1>Importar y exportar productos (XML)</h1>
+<p class="bajada">En vez de cargar producto por producto, podés importar el remito XML que manda el proveedor: suma stock a lo que ya existe y da de alta lo nuevo. También exporta el catálogo de productos a la venta y las líneas rechazadas para corregirlas.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Maestro › Procesar productos › Importar / exportar</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/importar-productos.png" alt="Ventana Importar y exportar productos de SneakRush con el proveedor, el archivo XML, los botones de vista previa e importar, la exportación y el detalle de la importación" width="948" height="609">
+<button type="button" class="hs" data-n="1" aria-label="Proveedor" style="left:13.713%;top:19.540%;width:27.848%;height:3.612%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Archivo XML" style="left:53.165%;top:19.212%;width:29.958%;height:3.941%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Examinar" style="left:84.177%;top:19.048%;width:10.970%;height:4.433%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Vista previa" style="left:4.641%;top:31.034%;width:12.869%;height:6.076%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Importar" style="left:18.671%;top:31.034%;width:14.979%;height:6.076%"><span class="pin aba">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Exportar productos a la venta" style="left:4.641%;top:45.156%;width:25.105%;height:5.419%"><span class="pin aba">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Exportar para corregir" style="left:30.802%;top:45.156%;width:20.148%;height:5.419%"><span class="pin der">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Detalle de la importación" style="left:2.743%;top:59.278%;width:94.515%;height:30.870%"><span class="pin aba">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Mostrar solo rechazadas" style="left:80.802%;top:55.337%;width:16.878%;height:2.956%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Cerrar" style="left:86.287%;top:92.282%;width:10.970%;height:5.090%"><span class="pin aba">10</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Proveedor</b><span>Elegí quién envía el remito. El CUIT que figura dentro del archivo tiene que coincidir con el del proveedor elegido.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Archivo XML</b><span>Muestra el archivo elegido. No se escribe a mano: se completa con Examinar.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Examinar</b><span>Abre el explorador para elegir el XML del remito. Solo muestra archivos .xml, de hasta 5 MB.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Vista previa</b><span>Revisa el archivo y te dice qué se importaría y qué no, sin cambiar nada. Conviene hacerlo siempre antes de importar.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Importar</b><span>Importa de verdad: suma stock a los productos que existen, da de alta los nuevos y rechaza las líneas con errores.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Exportar productos a la venta</b><span>Guarda un XML con el catálogo de todos los productos que tienen stock: marca, categoría, modelo, color, talle, precio y stock.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Exportar para corregir</b><span>Se activa solo después de una importación con líneas rechazadas. Guarda un XML con esas líneas para que las corrijas y vuelvas a importar.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Detalle de la importación</b><span>Una fila por línea del remito: número de línea, marca, modelo, color, talle, cantidad, resultado y detalle. Resultados posibles: Por importar (vista previa), Producto nuevo, Stock sumado, Ya importada y Rechazada.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Mostrar solo rechazadas</b><span>Filtra la lista para ver únicamente las líneas con error. Se habilita solo si hay rechazadas.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Cerrar</b><span>Cierra esta ventana y vuelve a Procesar productos.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Importar un remito</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Corregir líneas rechazadas</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Exportar los productos a la venta</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Elegí el Proveedor.</li><li>Tocá <span class="btn">Examinar...</span> y elegí el archivo XML del remito.</li><li>Tocá <span class="btn">Vista previa</span>: te muestra cuántas líneas se importarían y cuáles tienen errores. Todavía no cambia nada.</li><li>Si está bien, tocá <span class="btn naranja">Importar</span>.</li><li>Mirá el resumen: productos nuevos, stock sumado, líneas rechazadas y ya importadas antes.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Si el producto ya existe, la importación suma el stock pero NO cambia su precio ni su categoría.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<p class="intro">Una línea se rechaza si tiene un dato inválido (talle, cantidad, marca inexistente...). Las demás se importan igual.</p>
+<ol class="pasos"><li>Activá Mostrar solo rechazadas para ver qué falló y por qué.</li><li>Tocá <span class="btn">Exportar para corregir</span> y guardá el archivo (propone remito_número_para_corregir.xml).</li><li>Abrí ese XML con el Bloc de notas, corregí los valores y guardalo.</li><li>Volvé a elegir ese archivo con Examinar e importalo. Las líneas ya importadas no se repiten.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Cuando todas las líneas quedan importadas, el remito figura como completo y ya no se puede volver a importar.</div>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Tocá <span class="btn">Exportar productos a la venta</span>.</li><li>Elegí dónde guardar el archivo. Propone productos_a_la_venta con la fecha.</li><li>El XML incluye solo productos con stock, y registra fecha, usuario y cantidad.</li></ol>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">17</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione el proveedor del remito.</td><td>Falta elegir el proveedor.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione el archivo XML del remito con el botón Examinar.</td><td>Falta elegir el archivo.</td></tr>
+<tr><td><span class="tipo error">Error</span>El archivo debe ser un .xml con contenido y no superar los 5 MB</td><td>Elegiste otro tipo de archivo, uno vacío o muy pesado.</td></tr>
+<tr><td><span class="tipo error">Error</span>El archivo no es un XML válido (error en la línea N, posición M)</td><td>Está mal escrito (por ejemplo falta cerrar una etiqueta). Corregí en esa línea.</td></tr>
+<tr><td><span class="tipo error">Error</span>El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item</td><td>El XML tiene que empezar con &lt;remito&gt; y traer al menos un &lt;item&gt;.</td></tr>
+<tr><td><span class="tipo error">Error</span>El archivo contiene una declaración DTD o entidades, que no están permitidas por seguridad</td><td>Quitá esa parte del XML. Se bloquea por seguridad.</td></tr>
+<tr><td><span class="tipo error">Error</span>El número de remito es obligatorio, admite letras, números y los signos - _ / . y hasta 30 caracteres</td><td>Corregí el atributo numero del remito.</td></tr>
+<tr><td><span class="tipo error">Error</span>El CUIT del archivo (...) no coincide con el del proveedor elegido (...)</td><td>Elegiste el proveedor equivocado o el archivo es de otro proveedor.</td></tr>
+<tr><td><span class="tipo error">Error</span>La numeración de las líneas (atributo linea) está incompleta, repetida o no es válida</td><td>Cada item tiene que traer un número de línea distinto.</td></tr>
+<tr><td><span class="tipo error">Error</span>El archivo supera el máximo de 2000 líneas por remito</td><td>Dividí el remito en varios archivos.</td></tr>
+<tr><td><span class="tipo error">Error</span>El remito ... ya fue importado completo el ... No se importó nada</td><td>Ese número de remito de ese proveedor ya se cargó. Se evita así duplicar stock.</td></tr>
+<tr><td><span class="tipo error">Error</span>Este contenido ya fue importado como remito ... No se importó nada</td><td>Es el mismo contenido que otro remito ya cargado, aunque cambie el número. También evita duplicar stock.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Línea rechazada: cantidad / talle / marca / precio inválidos (con el motivo exacto)</td><td>Mirá el Detalle de esa línea en la grilla. La cantidad debe ser un entero entre 1 y 10.000.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Importación terminada. Productos nuevos: N. Stock sumado: N. Líneas rechazadas: N. Ya importadas antes: N</td><td>Resumen del resultado.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No hay líneas rechazadas para exportar</td><td>No hace falta corregir nada.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se pudo guardar el archivo. Verifique la ubicación y vuelva a intentar</td><td>Elegí otra carpeta o cerrá el archivo si lo tenías abierto.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se pudo leer el archivo. Verifique que no esté abierto en otro programa</td><td>Cerralo en el otro programa y reintentá.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede importar y exportar.</li><li>El remito tiene un número, el CUIT del proveedor y una lista de items. Cada item trae línea, marca, categoría, modelo, color, talle, cantidad y precio.</li><li>Importar nunca duplica stock: el mismo remito, o el mismo contenido con otro número, se rechaza. Las líneas ya importadas se reconocen y se saltean.</li><li>Una línea con error no frena a las demás: se informa y las buenas se importan.</li><li>La importación, la exportación para corregir y la exportación a la venta quedan registradas en la Bitácora.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-productos.html">Procesar productos</a><a href="gestion-proveedores.html">Procesar proveedores</a><a href="registrar-recepcion.html">Registrar recepción de mercadería</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Importar y exportar productos (XML). Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

@@ -31,6 +31,7 @@ namespace Sistema_SneakRush
         public FrmBitacoraEvento486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "bitacora-eventos");
             AjustarBotonesSegunPerfil();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmBitacoraEvento486LP_FormClosing;

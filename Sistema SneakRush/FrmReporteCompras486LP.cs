@@ -35,6 +35,7 @@ namespace Sistema_SneakRush
         public FrmReporteCompras486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "reporte-stock");
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmReporteCompras486LP_FormClosing;
             chkSoloReponer.CheckedChanged += chkSoloReponer_CheckedChanged;

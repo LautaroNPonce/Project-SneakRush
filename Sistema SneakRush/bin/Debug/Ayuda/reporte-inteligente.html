@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reporte inteligente - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="reporte-inteligente">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Reporte › Reporte inteligente</div>
+<h1>Reporte inteligente</h1>
+<p class="bajada">Tiene dos vistas. Rotación y compras te dice qué modelos se venden más y menos y cuáles conviene comprar. Ventas y proyección muestra cuánto se vendió por período y estima los próximos. Las dos se pueden exportar a un solo PDF.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Reporte › Reporte inteligente</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/reporte-inteligente.png" alt="Pantalla Reporte inteligente de SneakRush en la vista Rotación y compras, con filtros, seis tarjetas de resumen, dos gráficos de barras y la tabla de recomendaciones" width="1030" height="675">
+<button type="button" class="hs" data-n="1" aria-label="Rotación y compras" style="left:51.748%;top:0.444%;width:22.039%;height:5.037%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Ventas y proyección" style="left:74.757%;top:0.444%;width:22.039%;height:5.037%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Desde" style="left:9.223%;top:11.111%;width:10.097%;height:3.259%"><span class="pin aba">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Hasta" style="left:26.311%;top:11.111%;width:10.097%;height:3.259%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Período rápido" style="left:48.447%;top:11.407%;width:15.534%;height:3.259%"><span class="pin aba">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Meses de ventas a cubrir" style="left:19.320%;top:16.148%;width:5.049%;height:3.259%"><span class="pin der">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Generar" style="left:2.621%;top:22.519%;width:16.602%;height:4.889%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Limpiar" style="left:20.194%;top:22.519%;width:13.786%;height:4.889%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Exportar PDF" style="left:34.854%;top:22.519%;width:15.728%;height:4.889%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Medios de pago" style="left:51.456%;top:22.519%;width:18.447%;height:4.889%"><span class="pin der">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Tarjetas de resumen" style="left:2.718%;top:29.185%;width:95.922%;height:13.333%"><span class="pin aba">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Los más vendidos" style="left:2.718%;top:44.000%;width:47.670%;height:28.000%"><span class="pin der">12</span></button>
+<button type="button" class="hs" data-n="13" aria-label="Los menos vendidos" style="left:51.262%;top:44.000%;width:47.670%;height:28.000%"><span class="pin">13</span></button>
+<button type="button" class="hs" data-n="14" aria-label="Tabla de recomendaciones" style="left:2.718%;top:73.481%;width:96.311%;height:25.926%"><span class="pin">14</span></button>
+<button type="button" class="hs" data-n="15" aria-label="Cerrar" style="left:127.087%;top:22.519%;width:10.097%;height:4.889%"><span class="pin aba">15</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Rotación y compras</b><span>Vista para decidir compras: ranking de modelos y recomendación de cuánto reponer.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Ventas y proyección</b><span>Vista para ver cómo evolucionan las ventas y una estimación de los próximos períodos.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Desde</b><span>Primer día del período a analizar.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Hasta</b><span>Último día del período a analizar.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Período rápido</b><span>Atajo para completar las fechas: últimos 6 meses, 1, 2, 3 o 4 años. &quot;Personalizado&quot; te deja elegir las fechas a mano.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Meses de ventas a cubrir</b><span>Cuántos meses de ventas querés tener en stock después de comprar. Va de 1 a 12. Con eso el sistema calcula la recomendación.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Generar</b><span>Arma el reporte con los filtros elegidos.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Limpiar</b><span>Deja los filtros como al principio y vacía el reporte.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Exportar PDF</b><span>Guarda en un PDF las dos vistas juntas: la de rotación y la de ventas. Primero hay que generar el reporte.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Medios de pago</b><span>Abre un gráfico con cuánto se vendió en efectivo, tarjeta y transferencia.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Tarjetas de resumen</b><span>Seis datos clave: unidades vendidas y facturación, modelos analizados, modelos a comprar, modelos que no hace falta comprar, el más vendido y el menos vendido.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Los más vendidos</b><span>Los 8 modelos que más unidades vendieron en el período.</span></div></li>
+<li data-n="13"><span class="n">13</span><div><b>Los menos vendidos</b><span>Los 8 modelos que menos unidades vendieron. Son los candidatos a no reponer.</span></div></li>
+<li data-n="14"><span class="n">14</span><div><b>Tabla de recomendaciones</b><span>Una fila por modelo: unidades vendidas, ventas por mes, stock actual, para cuántos meses alcanza el stock, la recomendación y la cantidad sugerida a comprar.</span></div></li>
+<li data-n="15"><span class="n">15</span><div><b>Cerrar</b><span>Cierra el reporte y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Otras vistas de esta pantalla</h2>
+<figure class="extra"><img src="img/reporte-inteligente-extra1.png" alt="Vista Ventas y proyección del Reporte inteligente, con filtros de agrupación y método, tarjetas, gráfico de barras con línea de proyección y tabla por período" width="1030" height="675" loading="lazy"><figcaption><b>Ventas y proyección.</b> Además de las fechas, acá elegís cómo agrupar (por mes o por semana), cuántos períodos proyectar (de 1 a 6) y el método: tendencia lineal o promedio móvil de 3 períodos. Las barras son las ventas reales y la línea naranja es la proyección. Las tarjetas muestran total vendido, ticket promedio, último período completo, período en curso y los dos próximos.</figcaption></figure>
+<figure class="extra"><img src="img/reporte-inteligente-extra2.png" alt="Ventana Ventas por medio de pago con un gráfico circular de transferencia, tarjeta y efectivo" width="615" height="455" loading="lazy"><figcaption><b>Medios de pago.</b> El gráfico circular muestra qué parte de lo vendido se cobró con cada medio. A la derecha ves el monto de cada uno. Se cierra con el botón Cerrar de abajo.</figcaption></figure>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Saber qué comprar</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Ver cómo vienen las ventas</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Ver los medios de pago</button>
+<button role="tab" id="tab-3" aria-controls="pn-3" aria-selected="false" tabindex="-1">Exportar a PDF</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Entrá en la vista <span class="btn">Rotación y compras</span>.</li><li>Elegí un <span class="btn">Período rápido</span> o las fechas <span class="btn">Desde</span> y <span class="btn">Hasta</span>.</li><li>En <span class="btn">Meses de ventas a cubrir</span> poné cuántos meses de stock querés tener (por defecto, 3).</li><li>Tocá <span class="btn naranja">Generar</span>.</li><li>Mirá la tabla: los modelos con recomendación Comprar traen la cantidad sugerida.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> La recomendación se basa en lo que se vendió en el período elegido. Cuanto más largo sea, más confiable es.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Entrá en la vista <span class="btn">Ventas y proyección</span>.</li><li>Elegí las fechas, cómo <span class="btn">Agrupar por</span> (mes o semana) y cuántos períodos proyectar.</li><li>Elegí el método de proyección.</li><li>Tocá <span class="btn naranja">Generar</span> y mirá el gráfico y la tabla.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> La proyección usa solo períodos completos. El período en curso no entra en el cálculo y necesita al menos 3 períodos completos.</div>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Generá el reporte.</li><li>Tocá <span class="btn">Medios de pago</span>.</li><li>Cerrá la ventana con <span class="btn">Cerrar</span> cuando termines.</li></ol>
+</div>
+<div role="tabpanel" id="pn-3" aria-labelledby="tab-3" hidden>
+<ol class="pasos"><li>Generá el reporte.</li><li>Tocá <span class="btn">Exportar PDF</span> y elegí dónde guardarlo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El PDF incluye las dos vistas: 1. Rotación de productos y compra sugerida, y 2. Ventas por período y proyección.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">10</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo error">Error</span>La fecha &#x27;Desde&#x27; no puede ser posterior a la fecha &#x27;Hasta&#x27;.</td><td>Corregí las fechas para que el período tenga sentido.</td></tr>
+<tr><td><span class="tipo error">Error</span>Los meses de ventas a cubrir deben estar entre 1 y 12.</td><td>Poné un número dentro de ese rango.</td></tr>
+<tr><td><span class="tipo error">Error</span>La cantidad de períodos a proyectar debe estar entre 1 y 6.</td><td>Poné un número dentro de ese rango.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No hay ventas en el rango elegido.</td><td>Ampliá el período.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Datos insuficientes para proyectar: hacen falta al menos 3 períodos completos.</td><td>Ampliá el rango de fechas o agrupá por semana.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Primero generá el reporte con al menos una venta para poder exportarlo.</td><td>Tocá Generar antes de exportar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Primero generá el reporte con al menos una venta para ver los medios de pago.</td><td>Tocá Generar antes de abrir Medios de pago.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>PDF exportado correctamente: (ruta)</td><td>El archivo quedó guardado.</td></tr>
+<tr><td><span class="tipo error">Error</span>Error al exportar PDF: (motivo)</td><td>Cerrá el archivo si estaba abierto o elegí otra carpeta.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se pudo generar el reporte. El error quedó registrado en la bitácora.</td><td>Avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">7</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede ver este reporte.</li><li>Comprar: el stock actual no alcanza para los meses de ventas que pediste cubrir, al ritmo del período. La cantidad sugerida es lo que falta para llegar.</li><li>No comprar: no hubo ventas en el período, o el stock ya alcanza para más del doble de los meses a cubrir.</li><li>Mantener: ni una cosa ni la otra. Por ahora no hace falta comprar.</li><li>En la proyección, la tendencia lineal sigue la dirección de los períodos completos. El promedio móvil usa el promedio de los últimos 3.</li><li>Si el rango no termina en un período entero, el sistema lo ajusta a períodos enteros y te muestra el rango real debajo de los filtros.</li><li>El reporte es de consulta: no modifica ningún dato.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="reporte-stock.html">Estado de stock</a><a href="reporte-ventas.html">Clientes frecuentes</a><a href="generar-solicitud.html">Generar solicitud de compra</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Reporte inteligente. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

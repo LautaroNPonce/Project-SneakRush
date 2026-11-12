@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cambiar contraseña - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="cambiar-contrasena">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Usuario › Cambiar contraseña</div>
+<h1>Cambiar contraseña</h1>
+<p class="bajada">Sirve para cambiar tu contraseña por una nueva. También aparece solo la primera vez que entrás, cuando tenés una contraseña temporal.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Usuario › Cambiar contraseña</b></span><span class="chip">Lo usa: <b>Todos los usuarios</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/cambiar-contrasena.png" alt="Pantalla Cambiar contraseña de SneakRush" width="340" height="350">
+<button type="button" class="hs" data-n="1" aria-label="Usuario" style="left:11.765%;top:32.000%;width:75.588%;height:7.143%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Contraseña actual" style="left:11.765%;top:44.857%;width:69.706%;height:7.143%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Nueva contraseña" style="left:11.765%;top:58.000%;width:69.706%;height:7.143%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Confirmar contraseña" style="left:11.765%;top:70.286%;width:69.706%;height:7.143%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Ver contraseña" style="left:81.471%;top:45.143%;width:7.059%;height:32.571%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Aceptar" style="left:11.765%;top:81.714%;width:35.588%;height:8.857%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Salir" style="left:51.765%;top:81.714%;width:35.588%;height:8.857%"><span class="pin">7</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Usuario</b><span>Muestra tu nombre de usuario. Está bloqueado: no se puede escribir acá.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Contraseña actual</b><span>Escribí la contraseña con la que entraste al sistema. Si es tu primer ingreso, es la temporal que te dieron.</span></div></li>
+<li data-n="3" data-nota="No puede ser igual a la actual."><span class="n">3</span><div><b>Nueva contraseña</b><span>Escribí la contraseña nueva. Tiene que tener al menos 8 caracteres, una mayúscula y una minúscula.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Confirmar contraseña</b><span>Volvé a escribir la contraseña nueva, igual que arriba, para evitar errores de tipeo.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Ver contraseña</b><span>El ojo de cada campo muestra u oculta lo que escribiste, para que puedas revisarlo.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Aceptar</b><span>Guarda la contraseña nueva y cierra la pantalla. También se activa con Enter desde el último campo.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Salir</b><span>Cierra la pantalla sin cambiar nada.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Cambiar mi contraseña</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Primer ingreso</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Lleva menos de un minuto.</p>
+<ol class="pasos"><li>Abrí el menú <span class="btn">Usuario</span> y elegí Cambiar contraseña.</li><li>Escribí tu contraseña actual.</li><li>Escribí la nueva contraseña y repetila en Confirmar contraseña. Con <kbd>Enter</kbd> pasás de un campo al siguiente.</li><li>Tocá <span class="btn naranja">Aceptar</span>. Cuando aparece el mensaje de éxito, la pantalla se cierra sola.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> La próxima vez que entres al sistema, usá la contraseña nueva.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<p class="intro">Si el administrador te creó el usuario, entrás con una contraseña temporal y el sistema te pide cambiarla.</p>
+<ol class="pasos"><li>Ingresá con tu usuario y la contraseña temporal (tu apellido seguido del DNI).</li><li>Aparece el aviso de cambio requerido: aceptalo.</li><li>Completá esta pantalla con la temporal como contraseña actual y elegí una nueva.</li><li>Tocá <span class="btn naranja">Aceptar</span>.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Hasta que no la cambies, el sistema no te deja avanzar.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">8</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>La contraseña debe tener al menos 8 caracteres.</td><td>Agregá más caracteres.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La contraseña debe contener al menos una letra mayúscula / minúscula.</td><td>Agregá una letra mayúscula y una minúscula.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La nueva contraseña y la confirmación no coinciden.</td><td>Escribí las dos iguales. Usá el ojo para revisar lo que tipeaste.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La nueva contraseña no puede ser igual a la actual.</td><td>Elegí una distinta.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La contraseña actual es incorrecta.</td><td>Revisá la contraseña actual. Si no la recordás, pedile ayuda a un administrador.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Contraseña cambiada exitosamente.</td><td>Listo: usá la nueva la próxima vez que ingreses.</td></tr>
+<tr><td><span class="tipo error">Error</span>No hay sesión activa. / No se pudo obtener el usuario de la sesión.</td><td>Cerrá el sistema y volvé a entrar.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado al cambiar la contraseña.</td><td>No se cambió nada. Probá de nuevo; si se repite, avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>La contraseña nueva necesita 8 caracteres como mínimo, con al menos una mayúscula y una minúscula.</li><li>La contraseña nueva no puede ser la misma que la actual.</li><li>Las contraseñas se guardan cifradas: nadie, ni el administrador, puede verlas.</li><li>El cambio queda registrado en la Bitácora de eventos.</li></ul></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Cambiar contraseña. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

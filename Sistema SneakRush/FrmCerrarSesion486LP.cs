@@ -19,6 +19,7 @@ namespace Sistema_SneakRush
         public FrmCerrarSesion486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "cerrar-sesion");
             AjustarBotonesSegunPerfil();
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmCerrarSesion486LP_FormClosing;

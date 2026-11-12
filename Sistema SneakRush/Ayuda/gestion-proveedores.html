@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procesar proveedores - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-proveedores">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Maestro › Procesar proveedores</div>
+<h1>Procesar proveedores</h1>
+<p class="bajada">Los proveedores son las empresas a las que SneakRush le compra. Tienen que estar cargados acá para poder pedirles mercadería en una solicitud u orden de compra o importar su remito.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Maestro › Procesar proveedores</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-proveedores.png" alt="Pantalla Procesar proveedores de SneakRush con el formulario de datos del proveedor y la lista de proveedores registrados" width="950" height="390">
+<button type="button" class="hs" data-n="1" aria-label="Nombre" style="left:14.947%;top:21.538%;width:21.789%;height:5.641%"><span class="pin">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="CUIT" style="left:14.947%;top:31.282%;width:21.789%;height:5.641%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Teléfono (opcional)" style="left:14.947%;top:41.026%;width:21.789%;height:5.641%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Correo" style="left:14.947%;top:50.769%;width:21.789%;height:5.641%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Proveedores registrados" style="left:41.579%;top:18.718%;width:55.789%;height:64.103%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Agregar" style="left:2.842%;top:75.641%;width:10.947%;height:9.231%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Modificar" style="left:14.421%;top:75.641%;width:10.947%;height:9.231%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Eliminar" style="left:26.000%;top:75.641%;width:10.947%;height:9.231%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Limpiar" style="left:2.842%;top:86.410%;width:34.105%;height:8.205%"><span class="pin aba">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Cerrar" style="left:86.421%;top:86.410%;width:10.947%;height:8.205%"><span class="pin aba">10</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Nombre</b><span>Razón social o nombre comercial. Admite letras, números, espacios y los signos . , &amp; &#x27; - hasta 100 caracteres. No puede repetirse.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>CUIT</b><span>11 dígitos con dígito verificador correcto (por ejemplo 30-12345678-9). El sistema lo controla y no admite dos proveedores con el mismo CUIT.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Teléfono (opcional)</b><span>Se puede dejar vacío. Si se completa: números, espacios, +, - y paréntesis, con entre 8 y 15 dígitos.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Correo</b><span>Email de contacto con formato usuario@dominio.com. Hasta 100 caracteres.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Proveedores registrados</b><span>Lista con nombre, CUIT, teléfono y correo. Tocá un proveedor para cargarlo en el formulario y modificarlo o eliminarlo.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Agregar</b><span>Registra un proveedor nuevo con los datos del formulario.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Modificar</b><span>Guarda los cambios del proveedor elegido.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Eliminar</b><span>Da de baja al proveedor elegido, con confirmación. No se puede si tiene órdenes de compra o importaciones.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Limpiar</b><span>Vacía el formulario y deja de seleccionar el proveedor.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Cerrar</b><span>Cierra esta pantalla y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Registrar un proveedor</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Corregir datos de un proveedor</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Dar de baja un proveedor</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Completá Nombre, CUIT y Correo (el teléfono es opcional).</li><li>Tocá <span class="btn naranja">Agregar</span>.</li><li>El proveedor aparece en la lista y ya se puede elegir en las compras.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Si hay un proveedor elegido en la lista, tocá Limpiar antes de agregar uno nuevo.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Tocá al proveedor en la lista.</li><li>Cambiá lo necesario.</li><li>Tocá <span class="btn">Modificar</span>.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Tocá al proveedor en la lista.</li><li>Tocá <span class="btn rojo">Eliminar</span> y confirmá.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Un proveedor con órdenes de compra o importaciones de remitos no se puede eliminar: el historial de compras lo necesita.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">12</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Complete los campos obligatorios (Nombre, CUIT y Correo).</td><td>Falta alguno de esos datos.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El nombre del proveedor solo admite letras, números, espacios y los signos . , &amp; &#x27; - (máximo 100 caracteres)</td><td>Corregí el nombre.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El CUIT no es válido. Debe tener 11 dígitos y un dígito verificador correcto</td><td>Revisá los números: hay un error de tipeo.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El correo no tiene un formato válido. Debe ser del tipo usuario@dominio.com</td><td>Revisá el email.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El teléfono solo admite números, espacios, +, - y paréntesis, y debe tener entre 8 y 15 dígitos</td><td>Corregí el teléfono o dejalo vacío.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Ya existe un proveedor con ese nombre / con ese CUIT</td><td>No se repiten ni el nombre ni el CUIT.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Hay un proveedor elegido en la grilla. Presione Limpiar antes de agregar uno nuevo.</td><td>Tocá Limpiar y volvé a intentar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un proveedor de la grilla para modificar / eliminar.</td><td>Elegí primero una fila.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Confirma la eliminación del proveedor ...?</td><td>Sí lo elimina, No cancela.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No se puede eliminar el proveedor: tiene órdenes de compra o importaciones asociadas</td><td>Se conserva por el historial.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Proveedor registrado / modificado / eliminado correctamente</td><td>La operación se guardó.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado. El detalle quedó registrado en la bitácora</td><td>Avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede usar esta pantalla.</li><li>El nombre y el CUIT de cada proveedor son únicos.</li><li>El CUIT del proveedor se usa también para validar el remito XML al importar productos: tiene que coincidir.</li><li>Altas, modificaciones y bajas quedan registradas en la Bitácora.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="generar-solicitud.html">Generar solicitud de compra</a><a href="registrar-orden.html">Registrar orden de compra</a><a href="importar-productos.html">Importar y exportar productos (XML)</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Procesar proveedores. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

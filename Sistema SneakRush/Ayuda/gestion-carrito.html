@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cargar carrito - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-carrito">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Venta › Cargar carrito</div>
+<h1>Cargar carrito</h1>
+<p class="bajada">Es el primer paso de una venta: se eligen los productos que lleva el cliente, se indican las cantidades y se asigna su DNI. Al finalizar, el carrito queda guardado y listo para que lo cobre la caja en Cobrar venta.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Venta › Cargar carrito</b></span><span class="chip">Lo usa: <b>Administrador, Vendedor</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-carrito.png" alt="Pantalla Cargar carrito de SneakRush con un carrito de ejemplo de dos productos, el DNI del cliente y el total" width="920" height="470">
+<button type="button" class="hs" data-n="1" aria-label="Carrito" style="left:2.283%;top:11.489%;width:74.783%;height:64.681%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Agregar" style="left:80.217%;top:16.170%;width:13.804%;height:5.532%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Eliminar" style="left:80.217%;top:22.979%;width:13.804%;height:5.532%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Modificar" style="left:80.217%;top:30.000%;width:13.804%;height:5.532%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Cantidad" style="left:80.217%;top:42.340%;width:13.804%;height:4.681%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Finalizar carga" style="left:80.217%;top:62.766%;width:16.957%;height:5.957%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Cancelar" style="left:80.217%;top:70.000%;width:16.957%;height:5.957%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="DNI del cliente" style="left:7.283%;top:84.894%;width:10.109%;height:4.894%"><span class="pin der">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Asignar" style="left:18.587%;top:84.468%;width:8.370%;height:5.319%"><span class="pin der">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Total" style="left:2.500%;top:93.617%;width:16.304%;height:4.681%"><span class="pin der">10</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Carrito</b><span>Lo que lleva el cliente: marca, modelo, color, talle, cantidad, precio y subtotal (precio por cantidad). Tocá una fila para eliminarla o cambiarle la cantidad.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Agregar</b><span>Abre Consultar productos para buscar y elegir una zapatilla. Se agrega al carrito con la cantidad que dice el campo de abajo.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Eliminar</b><span>Quita del carrito la fila elegida, después de preguntarte si estás seguro.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Modificar</b><span>Cambia la cantidad de la fila elegida por la que dice el campo Cantidad.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Cantidad</b><span>Cuántos pares: para el próximo producto que agregues, o la nueva cantidad si usás Modificar.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Finalizar carga</b><span>Guarda el carrito con su cliente y lo deja listo para cobrar. Hace falta haber asignado el DNI y tener al menos un producto.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Cancelar</b><span>Descarta el carrito y cierra la pantalla. Si ya cargaste algo, antes pregunta si estás seguro.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>DNI del cliente</b><span>Documento de quien va a comprar: 7 u 8 números, sin puntos ni espacios.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Asignar</b><span>Confirma el DNI escrito para este carrito. Aparece &quot;DNI asignado al carrito&quot;.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Total</b><span>Suma de todos los subtotales. Se actualiza solo cada vez que agregás, quitás o cambiás algo.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Armar un carrito</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Cambiar la cantidad o sacar un producto</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Abandonar el carrito</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Poné la Cantidad que lleva el cliente del primer producto.</li><li>Tocá <span class="btn naranja">Agregar</span>. Se abre Consultar productos: buscá la zapatilla, elegila y tocá Seleccionar.</li><li>Repetí con los demás productos. Si agregás el mismo dos veces, el sistema controla que no pase del stock.</li><li>Escribí el DNI del cliente y tocá <span class="btn">Asignar</span>.</li><li>Revisá el Total y tocá <span class="btn">Finalizar carga</span>. Aparece &quot;Carrito guardado con éxito&quot;.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Hasta que no tocás Finalizar carga no se guarda nada: si cerrás o cancelás, se pierde lo cargado.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Tocá la fila en el carrito.</li><li>Para cambiar la cantidad: escribila en el campo y tocá <span class="btn">Modificar</span>.</li><li>Para sacarlo: tocá <span class="btn rojo">Eliminar</span> y confirmá.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Tocá <span class="btn rojo">Cancelar</span>.</li><li>Si había datos cargados, confirmá con Sí. Se pierden y la pantalla se cierra.</li></ol>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">10</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>DNI incorrecto. Debe tener 7 u 8 dígitos numéricos (sin puntos ni espacios).</td><td>Corregí el DNI y tocá Asignar de nuevo.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>DNI asignado al carrito.</td><td>El cliente quedó asociado. Ya podés finalizar la carga.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe asignar el DNI del cliente antes de finalizar.</td><td>Escribí el DNI y tocá Asignar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El carrito no tiene productos.</td><td>Agregá al menos un producto.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Stock insuficiente. Unidades disponibles: N.</td><td>Pediste más pares de los que hay (sumando lo que ya tenés en el carrito). Bajá la cantidad.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La cantidad debe ser mayor a cero.</td><td>Poné 1 o más.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un producto del carrito para eliminar / modificar.</td><td>Tocá primero una fila.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Desea quitar (producto) del carrito?</td><td>Sí lo quita, No lo deja.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>Hay datos cargados en el carrito que todavía no se guardaron. Si cancela, se pierden. ¿Desea cancelar la carga?</td><td>Sí descarta todo, No te deja seguir cargando.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Carrito guardado con éxito.</td><td>El carrito quedó guardado (estado Activo) y espera ser cobrado en Cobrar venta.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>Pueden usar esta pantalla el Administrador y el Vendedor.</li><li>Cargar un carrito no descuenta stock: el stock baja recién cuando la venta se cobra.</li><li>Un carrito guardado queda en estado Activo y lo retoma la caja con el DNI del cliente.</li><li>El cliente no necesita estar registrado para armar el carrito. Si no lo está, se le pide registrarse en el momento de cobrar.</li><li>El alta del carrito queda registrada en la Bitácora (módulo Ventas).</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="consultar-producto.html">Consultar productos</a><a href="cobrar-venta.html">Cobrar venta</a><a href="gestion-clientes.html">Procesar clientes</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Cargar carrito. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

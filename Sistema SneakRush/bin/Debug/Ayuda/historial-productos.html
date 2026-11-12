@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Historial de cambios de productos - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="historial-productos">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Maestro › Historial de cambios de productos</div>
+<h1>Historial de cambios de productos</h1>
+<p class="bajada">Cada vez que un producto se crea, se modifica o se elimina, el sistema guarda una foto de cómo quedó. Acá ves esas versiones, las filtrás y, si te equivocaste, restaurás el producto a cómo estaba en una fecha anterior.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Maestro › Historial de cambios de productos</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/historial-productos.png" alt="Ventana Historial de cambios de productos de SneakRush con los filtros, la lista de versiones y los botones Restaurar y Cerrar" width="950" height="586">
+<button type="button" class="hs" data-n="1" aria-label="Marca" style="left:10.632%;top:20.307%;width:14.737%;height:3.754%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Modelo" style="left:34.947%;top:20.137%;width:14.947%;height:4.096%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Color" style="left:58.421%;top:20.137%;width:11.895%;height:4.096%"><span class="pin aba">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Talle" style="left:77.263%;top:20.137%;width:7.895%;height:4.096%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Desde" style="left:10.526%;top:26.621%;width:14.947%;height:4.096%"><span class="pin aba">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Hasta" style="left:34.947%;top:26.621%;width:14.947%;height:4.096%"><span class="pin aba">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Aplicar" style="left:58.421%;top:25.597%;width:12.000%;height:5.631%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Limpiar" style="left:71.474%;top:25.597%;width:11.895%;height:5.631%"><span class="pin aba">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Versiones encontradas" style="left:2.947%;top:36.007%;width:19.474%;height:3.072%"><span class="pin der">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Lista de versiones" style="left:2.632%;top:40.102%;width:94.737%;height:48.464%"><span class="pin aba">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Restaurar" style="left:2.526%;top:91.297%;width:14.947%;height:5.461%"><span class="pin der">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Cerrar" style="left:86.421%;top:91.297%;width:10.947%;height:5.461%"><span class="pin aba">12</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Marca</b><span>Mostrá solo las versiones de una marca.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Modelo</b><span>Escribí parte del nombre del modelo para acotar la búsqueda.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Color</b><span>Filtra por color.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Talle</b><span>Filtra por talle.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Desde</b><span>Primer día del período a consultar. Por defecto propone el último mes.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Hasta</b><span>Último día del período. Por defecto es hoy.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Aplicar</b><span>Busca las versiones que cumplen los filtros.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Limpiar</b><span>Borra los filtros y vuelve a los valores iniciales (último mes).</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Versiones encontradas</b><span>Cuántas versiones muestra la lista con los filtros actuales.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Lista de versiones</b><span>Cada fila es una versión: fecha, hora, operación (Inicial, Alta, Modificación o Baja), los datos del producto en ese momento, y si esa versión es la Vigente. Verde: versión vigente. Rojo: baja. Sin color: versión anterior reemplazada.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Restaurar</b><span>Deja el producto tal como estaba en la versión elegida, incluido el stock. Pide confirmación y es una acción seria: leé el aviso.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Cerrar</b><span>Cierra esta ventana y vuelve a Procesar productos.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Ver qué le pasó a un producto</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Volver a una versión anterior</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Elegí marca y/o escribí modelo, color o talle.</li><li>Ajustá Desde y Hasta si el cambio fue hace más de un mes.</li><li>Tocá <span class="btn">Aplicar</span>.</li><li>Leé la lista de arriba hacia abajo: lo más nuevo aparece primero.</li></ol>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<p class="intro">Sirve, por ejemplo, para recuperar un producto eliminado por error o un precio mal cargado.</p>
+<ol class="pasos"><li>Buscá el producto y tocá la fila de la versión a la que querés volver.</li><li>Tocá <span class="btn naranja">Restaurar</span>.</li><li>Leé el aviso completo y confirmá solo si estás seguro.</li><li>El producto queda como estaba en esa versión. Si estaba eliminado, se vuelve a crear.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Restaurar reemplaza TODO el estado actual, también el stock, aunque después haya habido ventas o compras. Puede afectar esas operaciones, y queda bajo tu responsabilidad.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">8</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>La fecha desde no puede ser posterior a la fecha hasta.</td><td>Corregí el rango de fechas.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione una versión de la grilla para restaurar.</td><td>Tocá primero una fila de la lista.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La versión seleccionada ya es la vigente de este producto.</td><td>No hay nada para restaurar: el producto ya está así.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>Va a restaurar el producto ... a la versión del ... Se reemplaza todo el estado actual del producto (incluido el stock)...</td><td>Sí restaura, No cancela. Si el producto fue eliminado se vuelve a crear.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se puede restaurar: la marca / la categoría de esa versión ya no existe.</td><td>Primero volvé a crear esa marca o categoría en Procesar categorías y marcas.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se puede restaurar: ya existe otro producto con la misma marca, modelo, color y talle.</td><td>No pueden convivir dos productos iguales. Resolvé el que ya existe.</td></tr>
+<tr><td><span class="tipo error">Error</span>La versión seleccionada ya no existe. Actualice la lista y vuelva a intentar.</td><td>Tocá Aplicar para refrescar la lista.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>El producto fue restaurado a la versión seleccionada.</td><td>El producto quedó con esos datos y se registró una versión nueva.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede ver el historial y restaurar versiones.</li><li>Se guarda una versión cada vez que un producto se da de alta, se modifica o se elimina.</li><li>Los productos que ya existían antes de activar el historial figuran con la operación Inicial.</li><li>El historial no se puede editar ni borrar desde el sistema.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-productos.html">Procesar productos</a><a href="importar-productos.html">Importar y exportar productos (XML)</a><a href="bitacora-eventos.html">Bitácora de eventos</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Historial de cambios de productos. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

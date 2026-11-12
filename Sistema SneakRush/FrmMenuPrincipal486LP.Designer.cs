@@ -65,8 +65,6 @@
             this.reporteDeComprasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reporteInteligenteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.verDocumentaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.guíaDeUsuarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblEstado = new System.Windows.Forms.Label();
             this.Menu.SuspendLayout();
             this.SuspendLayout();
@@ -364,27 +362,11 @@
             // 
             // ayudaToolStripMenuItem
             // 
-            this.ayudaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.verDocumentaciónToolStripMenuItem,
-            this.guíaDeUsuarioToolStripMenuItem});
             this.ayudaToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
             this.ayudaToolStripMenuItem.Size = new System.Drawing.Size(65, 24);
             this.ayudaToolStripMenuItem.Text = "Ayuda";
-            // 
-            // verDocumentaciónToolStripMenuItem
-            // 
-            this.verDocumentaciónToolStripMenuItem.Name = "verDocumentaciónToolStripMenuItem";
-            this.verDocumentaciónToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
-            this.verDocumentaciónToolStripMenuItem.Text = "Ver documentación";
-            this.verDocumentaciónToolStripMenuItem.Click += new System.EventHandler(this.verDocumentaciónToolStripMenuItem_Click);
-            // 
-            // guíaDeUsuarioToolStripMenuItem
-            // 
-            this.guíaDeUsuarioToolStripMenuItem.Name = "guíaDeUsuarioToolStripMenuItem";
-            this.guíaDeUsuarioToolStripMenuItem.Size = new System.Drawing.Size(220, 26);
-            this.guíaDeUsuarioToolStripMenuItem.Text = "Guía de usuario";
-            this.guíaDeUsuarioToolStripMenuItem.Click += new System.EventHandler(this.guíaDeUsuarioToolStripMenuItem_Click);
+            this.ayudaToolStripMenuItem.Click += new System.EventHandler(this.ayudaToolStripMenuItem_Click);
             // 
             // lblEstado
             // 
@@ -448,8 +430,6 @@
         private System.Windows.Forms.ToolStripMenuItem reporteDeVentasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reporteDeComprasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reporteInteligenteToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem verDocumentaciónToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem guíaDeUsuarioToolStripMenuItem;
         private System.Windows.Forms.Label lblEstado;
         private System.Windows.Forms.ToolStripMenuItem iniciarSesionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gestionDeFamiliasToolStripMenuItem;

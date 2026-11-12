@@ -30,6 +30,7 @@ namespace Sistema_SneakRush
         public FrmGestionUsuarios486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "gestion-usuarios");
             // Cada par de radios va en su propio panel: si estan todos juntos en el form, WinForms los toma como un solo grupo
             AislarRadios(rbtnActivos, rbtnTodos);
             AislarRadios(rbtnActivoSi, rbtnActivoNo);

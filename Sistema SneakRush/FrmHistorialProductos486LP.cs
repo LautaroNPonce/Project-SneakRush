@@ -30,6 +30,7 @@ namespace Sistema_SneakRush
         public FrmHistorialProductos486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "historial-productos");
             EstiloBotonHabilitacion(btnAplicar);
             EstiloBotonHabilitacion(btnLimpiar);
             EstiloBotonHabilitacion(btnRestaurar);

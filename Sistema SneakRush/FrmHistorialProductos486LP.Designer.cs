@@ -56,7 +56,7 @@
             this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.lblTitulo.Location = new System.Drawing.Point(22, 18);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(378, 30);
+            this.lblTitulo.Size = new System.Drawing.Size(458, 37);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Historial de cambios de productos";
             // 
@@ -92,7 +92,7 @@
             this.lblMarca.ForeColor = System.Drawing.Color.Black;
             this.lblMarca.Location = new System.Drawing.Point(20, 36);
             this.lblMarca.Name = "lblMarca";
-            this.lblMarca.Size = new System.Drawing.Size(60, 17);
+            this.lblMarca.Size = new System.Drawing.Size(61, 23);
             this.lblMarca.TabIndex = 0;
             this.lblMarca.Text = "Marca:";
             // 
@@ -103,7 +103,7 @@
             this.cmbMarca.FormattingEnabled = true;
             this.cmbMarca.Location = new System.Drawing.Point(80, 33);
             this.cmbMarca.Name = "cmbMarca";
-            this.cmbMarca.Size = new System.Drawing.Size(150, 25);
+            this.cmbMarca.Size = new System.Drawing.Size(150, 29);
             this.cmbMarca.TabIndex = 1;
             // 
             // lblModelo
@@ -113,7 +113,7 @@
             this.lblModelo.ForeColor = System.Drawing.Color.Black;
             this.lblModelo.Location = new System.Drawing.Point(255, 36);
             this.lblModelo.Name = "lblModelo";
-            this.lblModelo.Size = new System.Drawing.Size(60, 17);
+            this.lblModelo.Size = new System.Drawing.Size(72, 23);
             this.lblModelo.TabIndex = 0;
             this.lblModelo.Text = "Modelo:";
             // 
@@ -123,7 +123,7 @@
             this.txtModelo.Location = new System.Drawing.Point(325, 33);
             this.txtModelo.MaxLength = 50;
             this.txtModelo.Name = "txtModelo";
-            this.txtModelo.Size = new System.Drawing.Size(150, 25);
+            this.txtModelo.Size = new System.Drawing.Size(150, 29);
             this.txtModelo.TabIndex = 3;
             // 
             // lblColor
@@ -133,17 +133,17 @@
             this.lblColor.ForeColor = System.Drawing.Color.Black;
             this.lblColor.Location = new System.Drawing.Point(500, 36);
             this.lblColor.Name = "lblColor";
-            this.lblColor.Size = new System.Drawing.Size(60, 17);
+            this.lblColor.Size = new System.Drawing.Size(55, 23);
             this.lblColor.TabIndex = 0;
             this.lblColor.Text = "Color:";
             // 
             // txtColor
             // 
             this.txtColor.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.txtColor.Location = new System.Drawing.Point(550, 33);
+            this.txtColor.Location = new System.Drawing.Point(560, 33);
             this.txtColor.MaxLength = 30;
             this.txtColor.Name = "txtColor";
-            this.txtColor.Size = new System.Drawing.Size(120, 25);
+            this.txtColor.Size = new System.Drawing.Size(120, 29);
             this.txtColor.TabIndex = 5;
             // 
             // lblTalle
@@ -153,17 +153,17 @@
             this.lblTalle.ForeColor = System.Drawing.Color.Black;
             this.lblTalle.Location = new System.Drawing.Point(695, 36);
             this.lblTalle.Name = "lblTalle";
-            this.lblTalle.Size = new System.Drawing.Size(60, 17);
+            this.lblTalle.Size = new System.Drawing.Size(47, 23);
             this.lblTalle.TabIndex = 0;
             this.lblTalle.Text = "Talle:";
             // 
             // txtTalle
             // 
             this.txtTalle.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.txtTalle.Location = new System.Drawing.Point(775, 33);
+            this.txtTalle.Location = new System.Drawing.Point(759, 33);
             this.txtTalle.MaxLength = 10;
             this.txtTalle.Name = "txtTalle";
-            this.txtTalle.Size = new System.Drawing.Size(80, 25);
+            this.txtTalle.Size = new System.Drawing.Size(80, 29);
             this.txtTalle.TabIndex = 7;
             // 
             // lblDesde
@@ -173,7 +173,7 @@
             this.lblDesde.ForeColor = System.Drawing.Color.Black;
             this.lblDesde.Location = new System.Drawing.Point(20, 76);
             this.lblDesde.Name = "lblDesde";
-            this.lblDesde.Size = new System.Drawing.Size(60, 17);
+            this.lblDesde.Size = new System.Drawing.Size(61, 23);
             this.lblDesde.TabIndex = 0;
             this.lblDesde.Text = "Desde:";
             // 
@@ -183,7 +183,7 @@
             this.dtpDesde.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpDesde.Location = new System.Drawing.Point(80, 73);
             this.dtpDesde.Name = "dtpDesde";
-            this.dtpDesde.Size = new System.Drawing.Size(150, 25);
+            this.dtpDesde.Size = new System.Drawing.Size(150, 29);
             this.dtpDesde.TabIndex = 9;
             // 
             // lblHasta
@@ -193,7 +193,7 @@
             this.lblHasta.ForeColor = System.Drawing.Color.Black;
             this.lblHasta.Location = new System.Drawing.Point(255, 76);
             this.lblHasta.Name = "lblHasta";
-            this.lblHasta.Size = new System.Drawing.Size(60, 17);
+            this.lblHasta.Size = new System.Drawing.Size(57, 23);
             this.lblHasta.TabIndex = 0;
             this.lblHasta.Text = "Hasta:";
             // 
@@ -203,7 +203,7 @@
             this.dtpHasta.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpHasta.Location = new System.Drawing.Point(325, 73);
             this.dtpHasta.Name = "dtpHasta";
-            this.dtpHasta.Size = new System.Drawing.Size(150, 25);
+            this.dtpHasta.Size = new System.Drawing.Size(150, 29);
             this.dtpHasta.TabIndex = 11;
             // 
             // btnAplicar
@@ -243,7 +243,7 @@
             this.lblCantidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.lblCantidad.Location = new System.Drawing.Point(27, 192);
             this.lblCantidad.Name = "lblCantidad";
-            this.lblCantidad.Size = new System.Drawing.Size(150, 20);
+            this.lblCantidad.Size = new System.Drawing.Size(233, 25);
             this.lblCantidad.TabIndex = 2;
             this.lblCantidad.Text = "Versiones encontradas: 0";
             // 
@@ -254,7 +254,7 @@
             this.dgvCambios.BackgroundColor = System.Drawing.Color.White;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
@@ -307,7 +307,7 @@
             // 
             // FrmHistorialProductos486LP
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
             this.ClientSize = new System.Drawing.Size(1004, 590);
@@ -328,6 +328,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvCambios)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

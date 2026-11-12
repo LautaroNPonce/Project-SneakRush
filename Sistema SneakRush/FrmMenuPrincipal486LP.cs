@@ -12,6 +12,7 @@ namespace Sistema_SneakRush
         public FrmMenuPrincipal486LP(bool hayInconsistencia = false)
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "menu-principal");
             this.IsMdiContainer = true;
             this.MdiChildActivate += FrmMenuPrincipal486LP_MdiChildActivate;
             this.Shown += FrmMenuPrincipal486LP_Shown;
@@ -422,14 +423,10 @@ namespace Sistema_SneakRush
             AbrirFormulario(new FrmReporteInteligente486LP());
         }
 
-        // Menu Ayuda
-        private void verDocumentaciónToolStripMenuItem_Click(object sender, System.EventArgs e)
+        // Menu Ayuda: abre la ayuda del sistema (HTML) en el navegador
+        private void ayudaToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            MensajeEnDesarrollo("Ver Documentación");
-        }
-        private void guíaDeUsuarioToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            MensajeEnDesarrollo("Guía de Usuario");
+            Ayuda486LP.Mostrar();
         }
 
         private void AbrirFormulario(Form formulario)
@@ -590,8 +587,6 @@ namespace Sistema_SneakRush
 
             // Menú Ayuda
             ayudaToolStripMenuItem.Text = lm.ObtenerTexto(f, "ayudaToolStripMenuItem");
-            verDocumentaciónToolStripMenuItem.Text = lm.ObtenerTexto(f, "verDocumentaciónToolStripMenuItem");
-            guíaDeUsuarioToolStripMenuItem.Text = lm.ObtenerTexto(f, "guíaDeUsuarioToolStripMenuItem");
 
             ActualizarEstado();
             ActualizarAvisoStock();

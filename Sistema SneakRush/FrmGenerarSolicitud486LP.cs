@@ -33,6 +33,7 @@ namespace Sistema_SneakRush
         public FrmGenerarSolicitud486LP()
         {
             InitializeComponent();
+            Ayuda486LP.Vincular(this, "generar-solicitud");
             this.Load += FrmGenerarSolicitud486LP_Load;
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmGenerarSolicitud486LP_FormClosing;

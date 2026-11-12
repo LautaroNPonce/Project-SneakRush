@@ -91,12 +91,6 @@
     <Compile Include="FrmConsultarProducto486LP.Designer.cs">
       <DependentUpon>FrmConsultarProducto486LP.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmDocumentacion486LP.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmDocumentacion486LP.Designer.cs">
-      <DependentUpon>FrmDocumentacion486LP.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmGenerarSolicitud486LP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -169,12 +163,6 @@
     <Compile Include="FrmGestionUsuarios486LP.Designer.cs">
       <DependentUpon>FrmGestionUsuarios486LP.cs</DependentUpon>
     </Compile>
-    <Compile Include="FrmGuiaUsuarios486LP.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FrmGuiaUsuarios486LP.Designer.cs">
-      <DependentUpon>FrmGuiaUsuarios486LP.cs</DependentUpon>
-    </Compile>
     <Compile Include="FrmIniciarSesionLP486.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,8 +211,12 @@
     <Compile Include="FrmReporteVenta486LP.Designer.cs">
       <DependentUpon>FrmReporteVenta486LP.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ayuda486LP.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Ayuda\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Portada.ico" />
     <EmbeddedResource Include="FrmBitacoraEvento486LP.resx">
       <DependentUpon>FrmBitacoraEvento486LP.cs</DependentUpon>
@@ -246,9 +238,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmConsultarProducto486LP.resx">
       <DependentUpon>FrmConsultarProducto486LP.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmDocumentacion486LP.resx">
-      <DependentUpon>FrmDocumentacion486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmGenerarSolicitud486LP.resx">
       <DependentUpon>FrmGenerarSolicitud486LP.cs</DependentUpon>
@@ -276,9 +265,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmGestionUsuarios486LP.resx">
       <DependentUpon>FrmGestionUsuarios486LP.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FrmGuiaUsuarios486LP.resx">
-      <DependentUpon>FrmGuiaUsuarios486LP.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmImportarProductos486LP.resx">
       <DependentUpon>FrmImportarProductos486LP.cs</DependentUpon>

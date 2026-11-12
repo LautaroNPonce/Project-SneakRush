@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clientes frecuentes - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="reporte-ventas">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Reporte › Clientes frecuentes</div>
+<h1>Clientes frecuentes</h1>
+<p class="bajada">Un ranking de tus mejores clientes en el período que elijas: cuántas compras hicieron, cuánto gastaron y cuándo compraron por última vez. Incluye un gráfico con los cinco que más gastaron y se puede pasar a PDF.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Reporte › Clientes frecuentes</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/reporte-ventas.png" alt="Pantalla Clientes frecuentes de SneakRush con los filtros, la tabla de clientes y el gráfico de los cinco que más gastaron" width="1440" height="665">
+<button type="button" class="hs" data-n="1" aria-label="Desde" style="left:6.528%;top:11.579%;width:8.472%;height:3.308%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Hasta" style="left:20.208%;top:11.579%;width:8.472%;height:3.308%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Mínimo de compras" style="left:39.722%;top:11.278%;width:4.583%;height:3.609%"><span class="pin aba">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Generar" style="left:1.875%;top:19.850%;width:11.875%;height:4.812%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Limpiar" style="left:14.444%;top:19.850%;width:9.861%;height:4.812%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Exportar PDF" style="left:24.931%;top:19.850%;width:11.250%;height:4.812%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Cerrar" style="left:92.014%;top:19.850%;width:7.222%;height:4.812%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Tabla de clientes" style="left:1.944%;top:27.368%;width:36.806%;height:66.466%"><span class="pin der">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Gráfico: top 5 por monto gastado" style="left:39.653%;top:27.068%;width:59.583%;height:66.917%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Resumen" style="left:2.083%;top:95.639%;width:18.056%;height:2.707%"><span class="pin der">10</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Desde</b><span>Primer día del período. Por defecto propone hace 12 meses.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Hasta</b><span>Último día del período. Por defecto es hoy.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Mínimo de compras</b><span>Solo muestra clientes con al menos esta cantidad de compras en el período. Poné un número mayor para ver a los más fieles.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Generar</b><span>Arma el reporte con los filtros elegidos: llena la tabla y el gráfico.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Limpiar</b><span>Vuelve los filtros a sus valores iniciales y vacía el reporte.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Exportar PDF</b><span>Guarda el reporte en un PDF con el período, los datos de la tabla y el gráfico. Primero hay que generarlo.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Cerrar</b><span>Cierra el reporte y vuelve al menú principal.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Tabla de clientes</b><span>Una fila por cliente: DNI, nombre, apellido, cantidad de compras, total gastado y fecha de la última compra. Ordenada de mayor a menor gasto.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Gráfico: top 5 por monto gastado</b><span>Barras con los cinco clientes que más gastaron, con el monto al final de cada barra.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Resumen</b><span>Cuántos clientes entran en el reporte y cuánto suman en total. Antes de generar dice &quot;Aún no se generó el reporte&quot;.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Ver los mejores clientes del año</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Sacar el reporte en PDF</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Dejá Desde y Hasta como están (último año) o cambialos.</li><li>Poné el Mínimo de compras que quieras exigir (1 muestra a todos los que compraron).</li><li>Tocá <span class="btn naranja">Generar</span>.</li><li>Leé la tabla de arriba hacia abajo y mirá el gráfico de los cinco primeros.</li></ol>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Generá el reporte primero.</li><li>Tocá <span class="btn">Exportar PDF</span>.</li><li>Elegí la carpeta y el nombre. Propone ClientesFrecuentes_fecha_hora.pdf.</li><li>Tocá Guardar: el sistema avisa con la ubicación del archivo.</li></ol>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">7</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>La fecha &#x27;Desde&#x27; no puede ser posterior a la fecha &#x27;Hasta&#x27;.</td><td>Invertiste el período.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El mínimo de compras debe ser 1 o más.</td><td>Poné 1 o un número mayor.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No hay clientes que cumplan con los filtros elegidos.</td><td>Ampliá el período o bajá el mínimo de compras.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Primero generá el reporte con al menos un cliente para poder exportarlo.</td><td>Tocá Generar antes de Exportar PDF.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>PDF exportado correctamente: (ruta)</td><td>El archivo quedó guardado.</td></tr>
+<tr><td><span class="tipo error">Error</span>Error al exportar PDF: (motivo)</td><td>Cerrá el archivo si lo tenías abierto o elegí otra carpeta.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se pudo generar el reporte. El error quedó registrado en la bitácora.</td><td>Avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede ver este reporte.</li><li>El reporte es de consulta: no modifica ningún dato.</li><li>El gráfico siempre muestra los cinco clientes con mayor monto gastado, aunque la tabla tenga más.</li><li>Cada vez que se cambia un filtro hay que volver a tocar Generar.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-clientes.html">Procesar clientes</a><a href="cobrar-venta.html">Cobrar venta</a><a href="reporte-inteligente.html">Reporte inteligente</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Clientes frecuentes. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>
