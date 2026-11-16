@@ -33,8 +33,8 @@
             this.txtArchivo = new System.Windows.Forms.TextBox();
             this.btnExaminar = new System.Windows.Forms.Button();
             this.lblNota = new System.Windows.Forms.Label();
-            this.btnImportar = new System.Windows.Forms.Button();
             this.btnVer = new System.Windows.Forms.Button();
+            this.btnImportar = new System.Windows.Forms.Button();
             this.lblResumen = new System.Windows.Forms.Label();
             this.grpExportar = new System.Windows.Forms.GroupBox();
             this.btnExportarVenta = new System.Windows.Forms.Button();
@@ -55,7 +55,7 @@
             this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
             this.lblTitulo.Location = new System.Drawing.Point(22, 18);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(340, 30);
+            this.lblTitulo.Size = new System.Drawing.Size(414, 37);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Importar y exportar productos";
             // 
@@ -86,7 +86,7 @@
             this.lblProveedor.ForeColor = System.Drawing.Color.Black;
             this.lblProveedor.Location = new System.Drawing.Point(20, 35);
             this.lblProveedor.Name = "lblProveedor";
-            this.lblProveedor.Size = new System.Drawing.Size(74, 17);
+            this.lblProveedor.Size = new System.Drawing.Size(92, 23);
             this.lblProveedor.TabIndex = 0;
             this.lblProveedor.Text = "Proveedor:";
             // 
@@ -97,7 +97,7 @@
             this.cmbProveedor.FormattingEnabled = true;
             this.cmbProveedor.Location = new System.Drawing.Point(110, 32);
             this.cmbProveedor.Name = "cmbProveedor";
-            this.cmbProveedor.Size = new System.Drawing.Size(280, 25);
+            this.cmbProveedor.Size = new System.Drawing.Size(280, 29);
             this.cmbProveedor.TabIndex = 1;
             // 
             // lblArchivo
@@ -107,17 +107,17 @@
             this.lblArchivo.ForeColor = System.Drawing.Color.Black;
             this.lblArchivo.Location = new System.Drawing.Point(415, 35);
             this.lblArchivo.Name = "lblArchivo";
-            this.lblArchivo.Size = new System.Drawing.Size(81, 17);
+            this.lblArchivo.Size = new System.Drawing.Size(109, 23);
             this.lblArchivo.TabIndex = 2;
             this.lblArchivo.Text = "Archivo XML:";
             // 
             // txtArchivo
             // 
             this.txtArchivo.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.txtArchivo.Location = new System.Drawing.Point(505, 32);
+            this.txtArchivo.Location = new System.Drawing.Point(524, 32);
             this.txtArchivo.Name = "txtArchivo";
             this.txtArchivo.ReadOnly = true;
-            this.txtArchivo.Size = new System.Drawing.Size(300, 25);
+            this.txtArchivo.Size = new System.Drawing.Size(300, 29);
             this.txtArchivo.TabIndex = 3;
             // 
             // btnExaminar
@@ -127,7 +127,7 @@
             this.btnExaminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExaminar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnExaminar.ForeColor = System.Drawing.Color.White;
-            this.btnExaminar.Location = new System.Drawing.Point(815, 30);
+            this.btnExaminar.Location = new System.Drawing.Point(830, 31);
             this.btnExaminar.Name = "btnExaminar";
             this.btnExaminar.Size = new System.Drawing.Size(110, 29);
             this.btnExaminar.TabIndex = 4;
@@ -143,22 +143,8 @@
             this.lblNota.Name = "lblNota";
             this.lblNota.Size = new System.Drawing.Size(905, 30);
             this.lblNota.TabIndex = 5;
-            this.lblNota.Text = "Cada línea suma stock si el producto ya existe (no cambia el precio) o lo da de alta si es nuevo. Las líneas con errores se informan y no se importan.";
-            // 
-            // btnImportar
-            // 
-            this.btnImportar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(90)))), ((int)(((byte)(40)))));
-            this.btnImportar.FlatAppearance.BorderSize = 0;
-            this.btnImportar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnImportar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            this.btnImportar.ForeColor = System.Drawing.Color.White;
-            this.btnImportar.Location = new System.Drawing.Point(160, 108);
-            this.btnImportar.Name = "btnImportar";
-            this.btnImportar.Size = new System.Drawing.Size(150, 38);
-            this.btnImportar.TabIndex = 2;
-            this.btnImportar.Text = "Importar";
-            this.btnImportar.UseVisualStyleBackColor = false;
-            this.btnImportar.Click += new System.EventHandler(this.btnImportar_Click);
+            this.lblNota.Text = "Cada línea suma stock si el producto ya existe (no cambia el precio) o lo da de a" +
+    "lta si es nuevo. Las líneas con errores se informan y no se importan.";
             // 
             // btnVer
             // 
@@ -175,6 +161,21 @@
             this.btnVer.UseVisualStyleBackColor = false;
             this.btnVer.Click += new System.EventHandler(this.btnVer_Click);
             // 
+            // btnImportar
+            // 
+            this.btnImportar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(90)))), ((int)(((byte)(40)))));
+            this.btnImportar.FlatAppearance.BorderSize = 0;
+            this.btnImportar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnImportar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
+            this.btnImportar.ForeColor = System.Drawing.Color.White;
+            this.btnImportar.Location = new System.Drawing.Point(160, 108);
+            this.btnImportar.Name = "btnImportar";
+            this.btnImportar.Size = new System.Drawing.Size(150, 38);
+            this.btnImportar.TabIndex = 2;
+            this.btnImportar.Text = "Importar";
+            this.btnImportar.UseVisualStyleBackColor = false;
+            this.btnImportar.Click += new System.EventHandler(this.btnImportar_Click);
+            // 
             // lblResumen
             // 
             this.lblResumen.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
@@ -183,57 +184,6 @@
             this.lblResumen.Name = "lblResumen";
             this.lblResumen.Size = new System.Drawing.Size(605, 46);
             this.lblResumen.TabIndex = 3;
-            // 
-            // lblDetalle
-            // 
-            this.lblDetalle.AutoSize = true;
-            this.lblDetalle.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
-            this.lblDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            this.lblDetalle.Location = new System.Drawing.Point(27, 322);
-            this.lblDetalle.Name = "lblDetalle";
-            this.lblDetalle.Size = new System.Drawing.Size(197, 20);
-            this.lblDetalle.TabIndex = 3;
-            this.lblDetalle.Text = "Detalle de la importación:";
-            // 
-            // chkSoloRechazadas
-            // 
-            this.chkSoloRechazadas.AutoSize = true;
-            this.chkSoloRechazadas.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.chkSoloRechazadas.ForeColor = System.Drawing.Color.Black;
-            this.chkSoloRechazadas.Location = new System.Drawing.Point(810, 324);
-            this.chkSoloRechazadas.Name = "chkSoloRechazadas";
-            this.chkSoloRechazadas.Size = new System.Drawing.Size(163, 21);
-            this.chkSoloRechazadas.TabIndex = 4;
-            this.chkSoloRechazadas.Text = "Mostrar solo rechazadas";
-            this.chkSoloRechazadas.UseVisualStyleBackColor = true;
-            this.chkSoloRechazadas.CheckedChanged += new System.EventHandler(this.chkSoloRechazadas_CheckedChanged);
-            // 
-            // dgvLineas
-            // 
-            this.dgvLineas.AllowUserToAddRows = false;
-            this.dgvLineas.AllowUserToDeleteRows = false;
-            this.dgvLineas.BackgroundColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
-            this.dgvLineas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvLineas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLineas.EnableHeadersVisualStyles = false;
-            this.dgvLineas.Location = new System.Drawing.Point(27, 350);
-            this.dgvLineas.MultiSelect = false;
-            this.dgvLineas.Name = "dgvLineas";
-            this.dgvLineas.ReadOnly = true;
-            this.dgvLineas.RowHeadersVisible = false;
-            this.dgvLineas.RowHeadersWidth = 51;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
-            this.dgvLineas.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvLineas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLineas.Size = new System.Drawing.Size(946, 200);
-            this.dgvLineas.TabIndex = 5;
             // 
             // grpExportar
             // 
@@ -257,7 +207,7 @@
             this.btnExportarVenta.ForeColor = System.Drawing.Color.White;
             this.btnExportarVenta.Location = new System.Drawing.Point(20, 28);
             this.btnExportarVenta.Name = "btnExportarVenta";
-            this.btnExportarVenta.Size = new System.Drawing.Size(250, 34);
+            this.btnExportarVenta.Size = new System.Drawing.Size(267, 34);
             this.btnExportarVenta.TabIndex = 0;
             this.btnExportarVenta.Text = "Exportar productos a la venta";
             this.btnExportarVenta.UseVisualStyleBackColor = false;
@@ -270,13 +220,64 @@
             this.btnExportar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExportar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold);
             this.btnExportar.ForeColor = System.Drawing.Color.White;
-            this.btnExportar.Location = new System.Drawing.Point(282, 28);
+            this.btnExportar.Location = new System.Drawing.Point(293, 28);
             this.btnExportar.Name = "btnExportar";
             this.btnExportar.Size = new System.Drawing.Size(200, 34);
             this.btnExportar.TabIndex = 1;
             this.btnExportar.Text = "Exportar para corregir";
             this.btnExportar.UseVisualStyleBackColor = false;
             this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
+            // 
+            // lblDetalle
+            // 
+            this.lblDetalle.AutoSize = true;
+            this.lblDetalle.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold);
+            this.lblDetalle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            this.lblDetalle.Location = new System.Drawing.Point(27, 322);
+            this.lblDetalle.Name = "lblDetalle";
+            this.lblDetalle.Size = new System.Drawing.Size(240, 25);
+            this.lblDetalle.TabIndex = 3;
+            this.lblDetalle.Text = "Detalle de la importación:";
+            // 
+            // chkSoloRechazadas
+            // 
+            this.chkSoloRechazadas.AutoSize = true;
+            this.chkSoloRechazadas.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.chkSoloRechazadas.ForeColor = System.Drawing.Color.Black;
+            this.chkSoloRechazadas.Location = new System.Drawing.Point(817, 320);
+            this.chkSoloRechazadas.Name = "chkSoloRechazadas";
+            this.chkSoloRechazadas.Size = new System.Drawing.Size(217, 27);
+            this.chkSoloRechazadas.TabIndex = 4;
+            this.chkSoloRechazadas.Text = "Mostrar solo rechazadas";
+            this.chkSoloRechazadas.UseVisualStyleBackColor = true;
+            this.chkSoloRechazadas.CheckedChanged += new System.EventHandler(this.chkSoloRechazadas_CheckedChanged);
+            // 
+            // dgvLineas
+            // 
+            this.dgvLineas.AllowUserToAddRows = false;
+            this.dgvLineas.AllowUserToDeleteRows = false;
+            this.dgvLineas.BackgroundColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(68)))), ((int)(((byte)(124)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            this.dgvLineas.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvLineas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLineas.EnableHeadersVisualStyles = false;
+            this.dgvLineas.Location = new System.Drawing.Point(27, 350);
+            this.dgvLineas.MultiSelect = false;
+            this.dgvLineas.Name = "dgvLineas";
+            this.dgvLineas.ReadOnly = true;
+            this.dgvLineas.RowHeadersVisible = false;
+            this.dgvLineas.RowHeadersWidth = 51;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(214)))), ((int)(((byte)(230)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(56)))), ((int)(((byte)(110)))));
+            this.dgvLineas.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvLineas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvLineas.Size = new System.Drawing.Size(946, 200);
+            this.dgvLineas.TabIndex = 5;
             // 
             // btnCerrar
             // 
@@ -295,10 +296,10 @@
             // 
             // FrmImportarProductos486LP
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(201)))), ((int)(((byte)(220)))), ((int)(((byte)(240)))));
-            this.ClientSize = new System.Drawing.Size(1000, 612);
+            this.ClientSize = new System.Drawing.Size(1046, 612);
             this.Controls.Add(this.lblTitulo);
             this.Controls.Add(this.grpOrigen);
             this.Controls.Add(this.grpExportar);
@@ -320,6 +321,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvLineas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion
