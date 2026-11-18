@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestión de usuarios - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-usuarios">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Administrador › Gestión de usuarios</div>
+<h1>Gestión de usuarios</h1>
+<p class="bajada">Acá se dan de alta, modifican, bloquean y eliminan los usuarios que pueden entrar al sistema.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Administrador › Gestión de usuarios</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-usuarios.png" alt="Pantalla Gestión de usuarios de SneakRush" width="960" height="756">
+<button type="button" class="hs" data-n="1" aria-label="Lista de usuarios" style="left:2.188%;top:16.402%;width:72.500%;height:36.772%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Activos / Todos" style="left:68.958%;top:55.026%;width:6.875%;height:5.556%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Modo actual" style="left:2.083%;top:56.085%;width:12.083%;height:3.307%"><span class="pin der">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Datos del usuario" style="left:2.083%;top:60.847%;width:31.042%;height:19.974%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Activo (Sí / No)" style="left:35.833%;top:61.111%;width:5.000%;height:8.466%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Agregar" style="left:82.188%;top:16.270%;width:12.708%;height:5.159%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Eliminar" style="left:82.188%;top:23.280%;width:12.708%;height:5.159%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Modificar" style="left:82.188%;top:30.820%;width:12.708%;height:5.159%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Bloquear / Desbloquear" style="left:82.188%;top:38.228%;width:12.708%;height:5.159%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Aplicar" style="left:82.188%;top:45.767%;width:12.708%;height:5.159%"><span class="pin">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Cancelar" style="left:82.188%;top:53.042%;width:12.708%;height:5.159%"><span class="pin">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Salir" style="left:82.188%;top:59.788%;width:12.708%;height:5.159%"><span class="pin">12</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1" data-nota="Las filas en rojo son usuarios inactivos."><span class="n">1</span><div><b>Lista de usuarios</b><span>Muestra a todos los usuarios con su DNI, nombre, apellido, correo, usuario, si están bloqueados y su rol. Hacé clic en una fila para elegir a quién querés modificar, eliminar o bloquear.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Activos / Todos</b><span>Elegís qué ver en la lista: solo los usuarios activos o todos, incluidos los que están dados de baja.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Modo actual</b><span>Te avisa qué estás haciendo: Consulta, Añadir, Modificar, Eliminar, Bloquear o Desbloquear.</span></div></li>
+<li data-n="4" data-nota="El usuario se arma solo con Nombre.Apellido al agregar."><span class="n">4</span><div><b>Datos del usuario</b><span>DNI, nombre, apellido, usuario, correo y rol. Están bloqueados mientras solo estás mirando; se habilitan al tocar Agregar o Modificar.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Activo (Sí / No)</b><span>Indica si el usuario puede usar el sistema. Se completa con Sí al agregar y se cambia desde Modificar.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Agregar</b><span>Limpia los datos y los habilita para cargar un usuario nuevo. No se guarda hasta que toques Aplicar.</span></div></li>
+<li data-n="7" data-nota="No podés eliminar tu propia cuenta."><span class="n">7</span><div><b>Eliminar</b><span>Prepara el borrado del usuario elegido en la lista. Te pide confirmar al tocar Aplicar.</span></div></li>
+<li data-n="8" data-nota="El DNI y el usuario no se pueden cambiar."><span class="n">8</span><div><b>Modificar</b><span>Habilita los datos del usuario elegido para cambiarlos (nombre, apellido, correo, rol y si está activo).</span></div></li>
+<li data-n="9" data-nota="No podés bloquear tu propia cuenta."><span class="n">9</span><div><b>Bloquear / Desbloquear</b><span>Cambia de nombre según el usuario elegido: si está bloqueado dice Desbloquear, si no, Bloquear. Te pide confirmar al tocar Aplicar.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Aplicar</b><span>Confirma lo que estás haciendo (agregar, modificar, eliminar, bloquear o desbloquear). Sin este paso no se guarda nada.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Cancelar</b><span>Descarta lo que estabas haciendo y vuelve al modo Consulta sin guardar cambios.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Salir</b><span>Cierra la pantalla.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Agregar un usuario</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Modificar</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Bloquear o desbloquear</button>
+<button role="tab" id="tab-3" aria-controls="pn-3" aria-selected="false" tabindex="-1">Eliminar</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Para dar de alta a una persona nueva.</p>
+<ol class="pasos"><li>Tocá <span class="btn">Agregar</span>.</li><li>Completá DNI, nombre, apellido, correo y elegí el rol. El usuario se escribe solo.</li><li>Tocá <span class="btn naranja">Aplicar</span>.</li><li>Aparece un mensaje de confirmación: la contraseña temporal es el apellido seguido del DNI.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El DNI debe tener 7 u 8 números. Ni el DNI, ni el usuario, ni el correo pueden estar repetidos.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<p class="intro">Para corregir los datos de alguien o cambiar su rol.</p>
+<ol class="pasos"><li>Hacé clic en la fila del usuario.</li><li>Tocá <span class="btn">Modificar</span>: se cargan sus datos y se habilitan.</li><li>Cambiá lo que necesites. Si querés que deje de usar el sistema sin borrarlo, marcá Activo: No.</li><li>Tocá <span class="btn naranja">Aplicar</span>.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El DNI y el usuario quedan bloqueados. Tampoco podés desactivar tu propia cuenta.</div>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<p class="intro">Cuando alguien se bloqueó por errar la contraseña tres veces, o para impedir temporalmente su ingreso.</p>
+<ol class="pasos"><li>Hacé clic en la fila del usuario.</li><li>Tocá el botón de bloqueo: dice <span class="btn">Desbloquear</span> si está bloqueado o <span class="btn">Bloquear</span> si no.</li><li>Confirmá la pregunta con Sí tras tocar <span class="btn naranja">Aplicar</span>.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> La columna Bloqueado de la lista se actualiza sola.</div>
+</div>
+<div role="tabpanel" id="pn-3" aria-labelledby="tab-3" hidden>
+<p class="intro">Para borrar un usuario que ya no hace falta.</p>
+<ol class="pasos"><li>Hacé clic en la fila del usuario.</li><li>Tocá <span class="btn rojo">Eliminar</span> y después <span class="btn naranja">Aplicar</span>.</li><li>Respondé Sí a la pregunta de confirmación.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El usuario se elimina definitivamente. Si solo querés que no entre más, es mejor desactivarlo desde Modificar.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">11</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un usuario para modificar. / para eliminar. / Seleccione un usuario de la grilla.</td><td>Primero hacé clic en una fila de la lista y después tocá el botón.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El DNI es obligatorio. / El DNI debe tener 7 u 8 dígitos numéricos.</td><td>Escribí el DNI solo con números, sin puntos.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El Nombre / Apellido / Login es obligatorio.</td><td>Completá el campo que falta.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El Email no tiene un formato válido.</td><td>Revisá que tenga la forma nombre@dominio.com.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar un Rol.</td><td>Elegí un rol en la lista desplegable.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El DNI / nombre de usuario / correo ya se encuentra registrado.</td><td>Esos datos no se pueden repetir. Revisá si la persona ya existe en la lista (podés estar en Activos: probá con Todos).</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Usuario creado correctamente. La contraseña temporal es: Apellido + DNI</td><td>Pasale esa contraseña a la persona: el sistema le va a pedir que la cambie al ingresar por primera vez.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Usuario modificado / eliminado / bloqueado / desbloqueado correctamente.</td><td>La operación terminó bien y la lista se actualizó.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Está seguro que desea eliminar al usuario &#x27;…&#x27;? / ¿Desea bloquear (o desbloquear) al usuario &#x27;…&#x27;?</td><td>Sí continúa; No lo deja como estaba.</td></tr>
+<tr><td><span class="tipo error">Error</span>No puede eliminar / bloquear / desactivar su propia cuenta mientras está en uso.</td><td>Pedile a otro administrador que lo haga.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado al agregar / modificar el usuario. / Ocurrió un error al eliminar, bloquear o desbloquear el usuario.</td><td>No se guardó nada. Probá otra vez y, si se repite, avisale a soporte. El detalle queda en la Bitácora de eventos.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">6</span></summary><div class="cuerpo"><ul class="reglas"><li>Todos los botones se habilitan según los permisos de tu rol: si falta alguno, es porque tu rol no lo tiene.</li><li>El usuario (login) se arma solo con Nombre.Apellido y no se puede cambiar después.</li><li>La contraseña temporal es Apellido + DNI; la persona debe cambiarla al ingresar.</li><li>Un usuario se bloquea solo al errar la contraseña 3 veces. Acá lo podés desbloquear.</li><li>Cada alta, modificación, eliminación, bloqueo y desbloqueo queda registrado en la Bitácora de eventos.</li><li>Mientras Activos esté marcado, los usuarios dados de baja no aparecen: elegí Todos para verlos en rojo.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="bitacora-eventos.html">Bitácora de eventos</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Gestión de usuarios. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

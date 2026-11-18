@@ -46,6 +46,7 @@
     <Compile Include="Categoria486LP.cs" />
     <Compile Include="Cliente486LP.cs" />
     <Compile Include="ColumnaTabla486LP.cs" />
+    <Compile Include="DatosAdminInstalacion486LP.cs" />
     <Compile Include="DetalleCarrito486LP.cs" />
     <Compile Include="DetalleImportacion486LP.cs" />
     <Compile Include="DetalleOrdenCompra486LP.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="ReporteVentaPeriodo486LP.cs" />
     <Compile Include="RemitoXml486LP.cs" />
     <Compile Include="ResultadoImportacion486LP.cs" />
+    <Compile Include="ResultadoInstalacion486LP.cs" />
     <Compile Include="SolicitudCompra486LP.cs" />
     <Compile Include="Venta486LP.cs" />
   </ItemGroup>

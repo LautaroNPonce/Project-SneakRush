@@ -63,7 +63,6 @@ namespace Services
             }
         }
 
-        // Obtener texto traducido
         public string ObtenerTexto(string form, string clave)
         {
             try

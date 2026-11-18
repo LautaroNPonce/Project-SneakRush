@@ -1188,6 +1188,7 @@
     "Importacion.XmlMalFormado": "El archivo no es un XML válido (error en la línea {0}, posición {1}).",
     "Importacion.XmlNoPermitido": "El archivo contiene una declaración DTD o entidades, que no están permitidas por seguridad.",
     "Importacion.EstructuraInvalida": "El archivo no tiene la estructura esperada: debe ser un remito con al menos una línea item.",
+    "Importacion.EsCatalogo": "El archivo es un catálogo de productos a la venta exportado desde el sistema, no un remito. Solo se pueden importar remitos de proveedores.",
     "Importacion.RemitoInvalido": "El número de remito es obligatorio, admite letras, números y los signos - _ / . y hasta 30 caracteres.",
     "Importacion.ProveedorNoCoincide": "El CUIT del archivo ({0}) no coincide con el del proveedor elegido ({1}).",
     "Importacion.DemasiadasLineas": "El archivo supera el máximo de {0} líneas por remito.",

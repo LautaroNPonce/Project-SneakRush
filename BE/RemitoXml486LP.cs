@@ -7,7 +7,6 @@ using System.Xml.Serialization;
 
 namespace BE
 {
-    // XmlSerializer lo usa para leer el archivo que se importa (deserializacion) y para armar el archivo de lineas rechazadas que se exporta para corregir (serializacion).
     [XmlRoot("remito")]
     public class RemitoXml486LP
     {
@@ -25,7 +24,7 @@ namespace BE
 
     public class ItemRemitoXml486LP
     {
-        // Numero de linea. Si el archivo no lo trae queda en null y se numera por posicion
+        // Si el archivo no lo trae queda en null y se numera por posicion
         [XmlAttribute("linea")]
         public string Linea { get; set; }
 

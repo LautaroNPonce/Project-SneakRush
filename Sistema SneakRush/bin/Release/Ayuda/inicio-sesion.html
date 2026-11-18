@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iniciar sesión - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="inicio-sesion">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Primeros pasos › Iniciar sesión</div>
+<h1>Iniciar sesión</h1>
+<p class="bajada">Es la puerta de entrada: ingresás tu usuario y tu contraseña y el sistema te muestra solo las opciones que tu rol puede usar.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Pantalla inicial del sistema</b></span><span class="chip">Lo usa: <b>Todos los usuarios</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/inicio-sesion.png" alt="Pantalla de inicio de sesión de SneakRush" width="327" height="466">
+<button type="button" class="hs" data-n="1" aria-label="Usuario" style="left:19.878%;top:59.871%;width:60.856%;height:5.365%"><span class="pin">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Contraseña" style="left:19.878%;top:69.957%;width:53.823%;height:5.150%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Ver contraseña" style="left:74.312%;top:70.386%;width:6.728%;height:4.721%"><span class="pin der">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Ingresar" style="left:19.878%;top:78.326%;width:60.856%;height:6.867%"><span class="pin">4</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Usuario</b><span>Escribí tu nombre de usuario. Es el que te dio el administrador, con la forma Nombre.Apellido.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Contraseña</b><span>Escribí tu contraseña. Mientras escribís se ve oculta con puntos.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Ver contraseña</b><span>El ojo muestra u oculta lo que escribiste, para que puedas revisar que no haya errores.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Ingresar</b><span>Verifica tus datos y abre el sistema. También funciona con la tecla Enter desde el campo Contraseña.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Ingresar al sistema</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Mi usuario está bloqueado</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Lo primero que hacés al abrir SneakRush.</p>
+<ol class="pasos"><li>Escribí tu usuario y presioná <kbd>Enter</kbd> para pasar a la contraseña.</li><li>Escribí tu contraseña y presioná <kbd>Enter</kbd> (o tocá <span class="btn">Ingresar</span>).</li><li>Se abre el menú principal con las opciones de tu rol.</li><li>Si hay productos sin stock o con stock bajo y tu rol puede ver el reporte de stock, te lo avisa y te ofrece abrirlo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Si es tu primer ingreso, el sistema te va a pedir cambiar la contraseña temporal antes de seguir.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<p class="intro">Pasa cuando se erra la contraseña tres veces seguidas.</p>
+<ol class="pasos"><li>No sigas probando: el sistema ya bloqueó la cuenta.</li><li>Pedile a un administrador que la desbloquee desde Gestión de usuarios.</li><li>Cuando te avise, ingresá de nuevo con tu contraseña.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Cada intento fallido queda registrado en la Bitácora de eventos.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">9</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Por favor completá todos los campos.</td><td>Faltó escribir el usuario o la contraseña.</td></tr>
+<tr><td><span class="tipo error">Error</span>Usuario no encontrado.</td><td>Ese usuario no existe. Revisá cómo lo escribiste (Nombre.Apellido).</td></tr>
+<tr><td><span class="tipo error">Error</span>Contraseña incorrecta.</td><td>Probá de nuevo. A la tercera vez seguida, la cuenta se bloquea.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El usuario está bloqueado. Contacte al Administrador.</td><td>Un administrador tiene que desbloquearlo.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El usuario está inactivo. Contacte al Administrador.</td><td>Tu usuario está dado de baja. Solo un administrador puede volver a activarlo.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Por seguridad, debe cambiar su contraseña antes de continuar.</td><td>Es tu primer ingreso o te pidieron cambiarla: se abre la pantalla Cambiar contraseña.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Ya hay una sesión activa como … / No se puede crear más de una instancia de la sesión.</td><td>Ya hay alguien con la sesión iniciada en este programa. Cerrá esa sesión primero.</td></tr>
+<tr><td><span class="tipo error">Error</span>Se detectó un Error en el Sistema. Contacte al Administrador para resolver el problema.</td><td>El sistema encontró datos que no coinciden con los controles de seguridad. Entrás con un menú reducido (solo cambiar contraseña, idioma y cerrar sesión) hasta que el administrador lo repare.</td></tr>
+<tr><td><span class="tipo error">Error</span>Error al verificar integridad / Error inesperado</td><td>No se pudo comprobar la base de datos. No se abre el sistema: avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>A la tercera contraseña incorrecta seguida, la cuenta se bloquea.</li><li>No se puede abrir una segunda sesión mientras haya una activa en el mismo programa.</li><li>Al entrar, el sistema revisa que los datos no hayan sido alterados. Si encuentra algo raro, el administrador ve la pantalla de reparación.</li><li>Tu idioma elegido se recuerda: al ingresar, el sistema vuelve a usar el que dejaste la última vez.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="cambiar-contrasena.html">Cambiar contraseña</a><a href="cerrar-sesion.html">Cerrar sesión</a><a href="reparacion-bd.html">Reparar la base de datos</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Iniciar sesión. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

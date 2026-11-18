@@ -1,29 +1,15 @@
-﻿/* ============================================================
-   SneakRush - Instalador de la base de datos (SneakRushDB)
-
-   Crea la base SneakRushDB si todavia no existe en la instancia y
-   despues crea las tablas, los datos y los procedimientos.
-   Se puede ejecutar en SSMS (conectado a la instancia, sin elegir
-   ninguna base en particular) o dejarlo como SneakRushDB_Instalador.sql
-   junto al .exe, y el sistema lo ejecuta solo la primera vez.
-
-   Si la base YA existe no se ejecuta nada (para no pisar datos).
-   Para reinstalar desde cero hay que borrarla antes:
-       USE [master]; ALTER DATABASE [SneakRushDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [SneakRushDB];
-   ============================================================ */
-USE [master]
-GO
-IF DB_ID(N'SneakRushDB') IS NOT NULL
-BEGIN
-    RAISERROR(N'La base SneakRushDB ya existe: no se ejecuto nada. Para reinstalar, borrala primero (ver el comentario del inicio del script).', 10, 1) WITH NOWAIT;
-    SET NOEXEC ON;
-END
-GO
+﻿/*
+  SneakRush - Script de instalacion de la base de datos (v5.0)
+  Crea la base SneakRushDB en la instancia de SQL Server detectada con el esquema completo
+  (tablas, indices, claves, procedimientos y trigger) y con todos los datos cargados.
+  Lo ejecuta el propio sistema la primera vez que arranca. No hace falta correrlo a mano.
+  Los triggers se crean al final, despues de cargar los datos, para que no generen filas de historial duplicadas.
+*/
 CREATE DATABASE [SneakRushDB]
 GO
 USE [SneakRushDB]
 GO
-/****** Objeto: Table [dbo].[BitacoraEvento] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[BitacoraEvento] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -40,10 +26,10 @@ CREATE TABLE [dbo].[BitacoraEvento](
  CONSTRAINT [PK_BitacoraEvento] PRIMARY KEY CLUSTERED 
 (
 	[Numero] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Carrito] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Carrito] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -58,10 +44,10 @@ CREATE TABLE [dbo].[Carrito](
  CONSTRAINT [PK_Carrito] PRIMARY KEY CLUSTERED 
 (
 	[IdCarrito] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Categoria] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Categoria] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -73,10 +59,10 @@ CREATE TABLE [dbo].[Categoria](
  CONSTRAINT [PK_Categoria] PRIMARY KEY CLUSTERED 
 (
 	[IdCategoria] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Cliente] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Cliente] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -91,10 +77,10 @@ CREATE TABLE [dbo].[Cliente](
  CONSTRAINT [PK_Cliente] PRIMARY KEY CLUSTERED 
 (
 	[DNI] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[DetalleCarrito] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[DetalleCarrito] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -110,10 +96,10 @@ CREATE TABLE [dbo].[DetalleCarrito](
  CONSTRAINT [PK_DetalleCarrito] PRIMARY KEY CLUSTERED 
 (
 	[IdDetalle] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[DetalleImportacion] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[DetalleImportacion] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -136,10 +122,10 @@ CREATE TABLE [dbo].[DetalleImportacion](
  CONSTRAINT [PK_DetalleImportacion] PRIMARY KEY CLUSTERED 
 (
 	[IdDetalleImportacion] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[DetalleOrdenCompra] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[DetalleOrdenCompra] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,10 +141,10 @@ CREATE TABLE [dbo].[DetalleOrdenCompra](
 PRIMARY KEY CLUSTERED 
 (
 	[IdDetalleOrden] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[DetalleRecepcion] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[DetalleRecepcion] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -173,10 +159,10 @@ CREATE TABLE [dbo].[DetalleRecepcion](
 PRIMARY KEY CLUSTERED 
 (
 	[IdDetalleRecepcion] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[DetalleSolicitudCompra] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[DetalleSolicitudCompra] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -190,10 +176,10 @@ CREATE TABLE [dbo].[DetalleSolicitudCompra](
 PRIMARY KEY CLUSTERED 
 (
 	[IdDetalleSolicitud] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[DetalleVenta] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[DetalleVenta] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -209,10 +195,10 @@ CREATE TABLE [dbo].[DetalleVenta](
 PRIMARY KEY CLUSTERED 
 (
 	[IdDetalleVenta] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[DV] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[DV] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -224,10 +210,10 @@ CREATE TABLE [dbo].[DV](
 PRIMARY KEY CLUSTERED 
 (
 	[Tabla] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Factura] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Factura] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -244,10 +230,10 @@ CREATE TABLE [dbo].[Factura](
 PRIMARY KEY CLUSTERED 
 (
 	[IdFactura] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Familia] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Familia] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -259,10 +245,10 @@ CREATE TABLE [dbo].[Familia](
 PRIMARY KEY CLUSTERED 
 (
 	[IdFamilia] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Familia_Permiso] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Familia_Permiso] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -274,10 +260,10 @@ PRIMARY KEY CLUSTERED
 (
 	[IdFamilia] ASC,
 	[IdPermiso] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Idioma] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Idioma] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -289,10 +275,10 @@ CREATE TABLE [dbo].[Idioma](
  CONSTRAINT [PK_Idioma] PRIMARY KEY CLUSTERED 
 (
 	[NombreIdioma] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[ImportacionProducto] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[ImportacionProducto] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -313,10 +299,10 @@ CREATE TABLE [dbo].[ImportacionProducto](
  CONSTRAINT [PK_ImportacionProducto] PRIMARY KEY CLUSTERED 
 (
 	[IdImportacion] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Marca] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Marca] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -328,10 +314,10 @@ CREATE TABLE [dbo].[Marca](
  CONSTRAINT [PK_Marca] PRIMARY KEY CLUSTERED 
 (
 	[IdMarca] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[OrdenCompra] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[OrdenCompra] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -348,10 +334,10 @@ CREATE TABLE [dbo].[OrdenCompra](
 PRIMARY KEY CLUSTERED 
 (
 	[IdOrden] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Perfil] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Perfil] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -363,10 +349,10 @@ CREATE TABLE [dbo].[Perfil](
  CONSTRAINT [PK_Perfil] PRIMARY KEY CLUSTERED 
 (
 	[IdPerfil] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Perfil_Familia] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Perfil_Familia] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -378,10 +364,10 @@ PRIMARY KEY CLUSTERED
 (
 	[IdPerfil] ASC,
 	[IdFamilia] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Perfil_Permiso] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Perfil_Permiso] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -393,10 +379,10 @@ CREATE TABLE [dbo].[Perfil_Permiso](
 (
 	[IdPerfil] ASC,
 	[IdPermiso] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Permiso] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Permiso] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -409,10 +395,10 @@ CREATE TABLE [dbo].[Permiso](
  CONSTRAINT [PK_Permiso] PRIMARY KEY CLUSTERED 
 (
 	[IdPermiso] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Producto] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Producto] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -430,10 +416,35 @@ CREATE TABLE [dbo].[Producto](
  CONSTRAINT [PK_Producto] PRIMARY KEY CLUSTERED 
 (
 	[IdProducto] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Proveedor] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[ProductoCambio] Fecha de script: 16/11/2026 12:41:08 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ProductoCambio](
+	[IdCambio] [int] IDENTITY(1,1) NOT NULL,
+	[IdProducto] [int] NOT NULL,
+	[FechaHora] [datetime] NOT NULL,
+	[Operacion] [char](1) NOT NULL,
+	[IdMarca] [int] NOT NULL,
+	[IdCategoria] [int] NOT NULL,
+	[Modelo] [varchar](50) NOT NULL,
+	[Color] [varchar](30) NOT NULL,
+	[Talle] [varchar](10) NOT NULL,
+	[Precio] [decimal](18, 2) NOT NULL,
+	[Stock] [int] NOT NULL,
+	[Vigente] [bit] NOT NULL,
+	[DV] [varchar](255) NULL,
+ CONSTRAINT [PK_ProductoCambio] PRIMARY KEY CLUSTERED 
+(
+	[IdCambio] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Objeto: Table [dbo].[Proveedor] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -448,10 +459,10 @@ CREATE TABLE [dbo].[Proveedor](
 PRIMARY KEY CLUSTERED 
 (
 	[IdProveedor] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Recepcion] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Recepcion] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -465,10 +476,10 @@ CREATE TABLE [dbo].[Recepcion](
 PRIMARY KEY CLUSTERED 
 (
 	[IdRecepcion] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[SolicitudCompra] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[SolicitudCompra] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -482,10 +493,10 @@ CREATE TABLE [dbo].[SolicitudCompra](
 PRIMARY KEY CLUSTERED 
 (
 	[IdSolicitud] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Usuarios] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Usuarios] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -509,10 +520,10 @@ CREATE TABLE [dbo].[Usuarios](
  CONSTRAINT [PK_Usuarios] PRIMARY KEY CLUSTERED 
 (
 	[IdUsuario] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Objeto: Table [dbo].[Venta] Fecha de script: 03/11/2026 18:42:08 ******/
+/****** Objeto: Table [dbo].[Venta] Fecha de script: 16/11/2026 12:41:08 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -528,7 +539,7 @@ CREATE TABLE [dbo].[Venta](
 PRIMARY KEY CLUSTERED 
 (
 	[IdVenta] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 SET IDENTITY_INSERT [dbo].[BitacoraEvento] ON 
@@ -3408,6 +3419,162 @@ INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI]
 INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4865, CAST(N'2026-11-02T21:19:20.153' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'AF7B4F2E3F27EA552B22EF436C83CEDDA6C08716AC39944D0E0A95E35604625A')
 INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4866, CAST(N'2026-11-02T21:19:30.167' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Español''.', N'12345678', N'Lautaro.Ponce', 4, N'74CC69024427DBF1984A3CF3BA7D6847C1BA6F121EEED7DDDB2B7A41BE52471C')
 INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4867, CAST(N'2026-11-02T21:19:30.223' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'76277D80F4EF39213EE144B3EEFC09D27E32769E0CBFAB309B46C8D30A2396AA')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4868, CAST(N'2026-11-03T21:07:27.927' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'9610A0576E6F18844AC0B7E26925A314D59818D230F8047950080DF1B7E7EABE')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4869, CAST(N'2026-11-07T13:50:13.663' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'C0EA1E2386752FEF3214861BD820843731C25419629D3E5ED331ADC2AEF69084')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4870, CAST(N'2026-11-07T13:50:32.730' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'F975D15F6B8B96E97BEDCE9A7CC31361C52B9200490EC6C218A5690694673ECE')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4871, CAST(N'2026-11-07T13:50:32.783' AS DateTime), N'Maestros', N'Modificacion de producto Id 8: Pegasus 40 Negro talle 43, stock de 3 a 4', N'12345678', N'Lautaro.Ponce', 3, N'7B1B6D0014215440FBD4AD33D951D53B29F2AC34023491BE019C80BB576803D2')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4872, CAST(N'2026-11-07T13:54:02.933' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'B03B5CDE78885F44E12AD5D82CEAB08DB34B54CB8C2EEFEBD2D8C25A0C7B327C')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4873, CAST(N'2026-11-07T13:57:30.347' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'D99141A6B367717247E05C2323FDF55A014A5BF88675A26A68AF82379DE3FFA6')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4874, CAST(N'2026-11-07T13:58:31.080' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'E246584065A93A06558BDDEEA7607DBC6ECFE2DC2C877076165306C7CCFFDDBB')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4875, CAST(N'2026-11-07T13:58:31.123' AS DateTime), N'Maestros', N'Modificacion de producto Id 56: P3 Sin Modelo Negro talle 41, stock de 2 a 3', N'12345678', N'Lautaro.Ponce', 3, N'12842B62A3735C21ACAF73CA1BE52271A475655CF4B078451E3617C528F80FDF')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4876, CAST(N'2026-11-07T13:58:58.373' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'8CD73D7FC9C2EA546929FED6EA77BECCC55B3A520A8834D396B4763786588B99')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4877, CAST(N'2026-11-07T13:58:58.413' AS DateTime), N'Maestros', N'Modificacion de producto Id 1: Air Max 90 Negro talle 42, stock de 4 a 3', N'12345678', N'Lautaro.Ponce', 3, N'644337CD7B98E6D77CCEE4D38F96BB6A2B795DAF3660CA30B1D6055E4249CEFD')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4878, CAST(N'2026-11-07T13:59:07.547' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'FE9BE09F0F3A3F1110F468F34B72139167067C1A33598855962116E1559F48C4')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4879, CAST(N'2026-11-07T14:17:21.947' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'96574D144D56A5E0AAAF1E7B99034F89560E852312E72118BBE1199D6B73FFE2')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4880, CAST(N'2026-11-07T14:18:08.487' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'882032DA54B738AE6B297D5F05DBCB8218DC09A24EBAE4F5DBD31206DEB67030')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4881, CAST(N'2026-11-07T14:18:20.083' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'5A673A7622DD95DB51170A2D297F331B7FE070E7AF373C0AD5281C3C1940D6B1')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4882, CAST(N'2026-11-07T14:19:14.520' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'5F163FD5F40CC52CE94C308DABA34C76621162CC5491007637F12B18DD9DB8D8')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4883, CAST(N'2026-11-07T14:20:32.360' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'5C5939217F5BA13171D3385AF96199ACBF2AD973AB98E4DDCD484BD51623A447')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4884, CAST(N'2026-11-07T16:03:11.887' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'1CFB9CD97F8F892DEF710859B1CDE8C93AF637CD487377312A64BBF72E012AB0')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4885, CAST(N'2026-11-07T16:03:12.053' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'54AB80607C584D12B83522D7F9370C1B84F89E0D36F9A402D766A23412B75D65')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4886, CAST(N'2026-11-07T16:03:12.107' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Familia_Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'4AC6859140657D3D3A738214EECF9C94D792DA3AA73020E1192A42AEEFC3934E')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4887, CAST(N'2026-11-07T16:03:15.667' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'62FD397D72C078F91EB545130CD252BE964F94C54BF0CD4C48B5833C4C46368B')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4888, CAST(N'2026-11-07T16:03:15.723' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Familia_Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'C0CB2BFBF28295A39100198422D9FDE3CFC8A62E2DB09EBF1DF6258017469B3F')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4889, CAST(N'2026-11-07T16:05:12.403' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'947209E10EC8DA714B94D0459A499F859EDFFDF1220AE13FA5652F2FFC3E04EC')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4890, CAST(N'2026-11-07T16:05:12.450' AS DateTime), N'Maestros', N'Modificacion de producto Id 58: P3 Gazelle Verde talle 43, stock de 1 a 0', N'12345678', N'Lautaro.Ponce', 3, N'0BF43B9E59450265C040F3F33F363DC05C803097F15CC18C36C82FE5D566042C')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4891, CAST(N'2026-11-07T16:08:30.960' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'46DD60DAFBFBFEBAB3139D930C3ED784DCB7BCCD6F55382AA31D6D2218F51BA4')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4892, CAST(N'2026-11-07T16:08:59.060' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'6700C00851F9443129AD254D2379C975ED83402E7FA7E264CDBF7625A4900B59')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4893, CAST(N'2026-11-07T16:43:48.140' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'414BB9AF06457FE20892664108CBADDD8148CC8225AA59165FDBAE7A014CB94E')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4894, CAST(N'2026-11-07T16:43:48.343' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Venta''.', N'12345678', N'Lautaro.Ponce', 1, N'473C3667EB41B3D31198272D0625251DD0FECCAE967208C16EB6D8CB148299D6')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4895, CAST(N'2026-11-07T16:43:48.407' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''DetalleVenta''.', N'12345678', N'Lautaro.Ponce', 1, N'DCE2BED5C528FF507E4D6E58CD24D9878F3653626027CAE40F09C4D6E20733E3')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4896, CAST(N'2026-11-07T16:43:53.577' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Venta''.', N'12345678', N'Lautaro.Ponce', 1, N'69523C98BA063887349200B2971DC97C4E3FACB8D957CA9ACAF555989F8CBCDF')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4897, CAST(N'2026-11-07T16:43:54.480' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleVenta''.', N'12345678', N'Lautaro.Ponce', 1, N'3C5821538B563ACBA35DED2422AC3D7B668F3446F0E659874B391F78A0F7A8AB')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4898, CAST(N'2026-11-07T16:45:38.500' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'B5C09E3EBF80B7E7A60BA5ED7EB2C71798F8927C550C93432144BAA83C295F45')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4899, CAST(N'2026-11-09T20:05:38.467' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'FB7B9B0E19364A9BA4D401EB9972D30115F696B60E9997582E57EFD09AE9E1A7')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4900, CAST(N'2026-11-09T20:05:38.683' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'73748733241E39B3EFAF684EECBEB5207D8DD8BBFD3BF17431B4B75261BD0D3F')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4901, CAST(N'2026-11-09T20:05:38.750' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Familia_Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'B3B68D1424FFBA6EC5753308C378329243095ED0EA7FA6D595F3B9E8EDC54E75')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4902, CAST(N'2026-11-09T20:05:46.193' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'BEE2C69DDAEDFF5C5FDEF1526F9AA85389DB8E93AA6DEB26B64DBC312FC8A7DD')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4903, CAST(N'2026-11-09T20:05:46.327' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'C148D870B0983DCBE48FDE9A15FB692AE668F94DE35B889BC3B288EFDE348702')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4904, CAST(N'2026-11-09T20:05:46.383' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Familia_Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'90A2934CE6BA0CFEE5B592DF0EBD7C09687C01AD5885EFA601DF55AB690A753B')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4905, CAST(N'2026-11-09T20:05:58.970' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'A8AD57946D76160EF79883EB49D23CCF3309DA877D564D6AF6A987FDEAF38670')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4906, CAST(N'2026-11-09T20:05:59.103' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'A6732086F3232378899D1E494BBA264A3404D482015A44443884863FDFCD716C')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4907, CAST(N'2026-11-09T20:05:59.157' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Familia_Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'F2E2DCFB9A28470880BF977F26FB3C6E3CA073B601E1B8FC51A10B6CE5B7585C')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4908, CAST(N'2026-11-09T20:11:30.813' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'EF5F22A99AD0E4C6660CF0BBC2288E23CC2D26AA0463B3974C6C64A6C68BE383')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4909, CAST(N'2026-11-09T20:11:30.980' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'E38C4BCB58775FCDC40A6CBB06126F2F6D0A439BE716C7F9462A42DD547BFFE4')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4910, CAST(N'2026-11-09T20:11:31.067' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''Familia_Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'F776893D55C84FCD1CA6F2E4A0C895867D277C2C330366F64F44905E7795CCDA')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4911, CAST(N'2026-11-09T20:11:31.260' AS DateTime), N'Dígito Verificador', N'Inconsistencia detectada en la tabla ''ProductoCambio''.', N'12345678', N'Lautaro.Ponce', 1, N'344108BE5CD4A794AE7E24DCD8DF93D40E76FFD25906BD70B46321C66659D3D9')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4912, CAST(N'2026-11-09T20:11:34.040' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'4D870B0D6CDEB3AEE63CC73A06CB504732D0A278069581567CBC8228BF75ABDC')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4913, CAST(N'2026-11-09T20:11:34.117' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Familia_Permiso''.', N'12345678', N'Lautaro.Ponce', 1, N'D5AA551FD5C6064725B7BE84AE904E46CA15EDED28D9721160AD063351358097')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4914, CAST(N'2026-11-09T20:11:34.233' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''ProductoCambio''.', N'12345678', N'Lautaro.Ponce', 1, N'81E8C1D126016937FBA56F6781567D7FD3AF230AEE5D20999BF0FB9C5EE66131')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4915, CAST(N'2026-11-09T20:11:54.447' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'CA2937C96994C39A257E470176EAB3E091FC9FE6B40AA45C2B6D1AB870D9B645')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4916, CAST(N'2026-11-09T20:17:44.627' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'2CB3CB74E6DB9BAD0788B36BE1B416336CC67A8564A7151FC905605AAED79583')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4917, CAST(N'2026-11-09T20:18:00.347' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Inglés''.', N'12345678', N'Lautaro.Ponce', 4, N'C16AEBAE5C7C89E0504FD72839E0655657D765D9F2A8B5512CFAB22D68213DC1')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4918, CAST(N'2026-11-09T20:18:00.410' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'26A0DF47F381E858D790D18672FF0A9E1A587D0D17D47AC6572DF27A644C53BF')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4919, CAST(N'2026-11-09T20:18:09.083' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Español''.', N'12345678', N'Lautaro.Ponce', 4, N'A5CCBE4E90B4EFB555AE8732DCF1978274505F164C3F13D222CE7BCB24501F72')
+GO
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4920, CAST(N'2026-11-09T20:18:09.133' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'21BE4850E5DFCE92150480E4AFBBA8F57A763F3ED596E81F96E00F77ED116D36')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4921, CAST(N'2026-11-09T20:18:34.637' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'195821E056DD3F409E3266E122E68E35661414CCAB794B81FD3FC3F536863E94')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4922, CAST(N'2026-11-09T20:19:48.210' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'44B53E336950C5326A5B4A0ACF3FE903BA5CABF0162F4A835CDFFEBD835F6955')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4923, CAST(N'2026-11-09T20:20:22.853' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'5DD3AF1FA3706A97B35755B102B1BB33D107EAE7671AE3D6E04CAB58D17A7635')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4924, CAST(N'2026-11-09T20:20:57.367' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'13FE74692A77EEF29A13436D8EC2B51192E180F56E422D3D7A103B6E6DAD620A')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4925, CAST(N'2026-11-09T20:21:10.913' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'B7434DC84B0DB6FA1ED8CB281C7970EA505F576ECCFA97549A84C89318F5A3D2')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4926, CAST(N'2026-11-09T20:21:42.707' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'F51A0ADB9B3B24BF6A00674F4D1F259E150D7A7A3722E4A700FE838AB041EE60')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4927, CAST(N'2026-11-09T20:35:50.933' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'7C11071752FEC6B43241779A3B6987D579AF2D89195FD31808B3043865057170')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4928, CAST(N'2026-11-09T20:35:50.983' AS DateTime), N'Maestros', N'Alta de producto Id 64: ZZ Auditoria Rojo talle 42', N'12345678', N'Lautaro.Ponce', 3, N'39290697BC6AD4694246879251DCEC6B973E08D30D029B241D45F437BA908B09')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4929, CAST(N'2026-11-09T20:36:18.347' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'5993697F8FA3A0A954F0FE38E23FE71070A592E2D27A6AE39F56DCD67830FBDF')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4930, CAST(N'2026-11-09T20:36:18.403' AS DateTime), N'Maestros', N'Modificacion de producto Id 64: ZZ Auditoria Rojo talle 42', N'12345678', N'Lautaro.Ponce', 3, N'DC8878B7F985475B6D28E46B9E3ACD2456EDF6F686F570D44D059C2094C23DB1')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4931, CAST(N'2026-11-09T20:36:31.160' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'FBF5193845DB8AB2ED65B96F64A1C32292E809266D07927C13706D0FC5281184')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4932, CAST(N'2026-11-09T20:36:31.210' AS DateTime), N'Maestros', N'Modificacion de producto Id 64: ZZ Auditoria Rojo talle 42, stock de 10 a 25', N'12345678', N'Lautaro.Ponce', 3, N'12D3E520476A4C0066C52B04465802CBD019947AE6800173FB3A452E0488AE92')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4933, CAST(N'2026-11-09T20:37:16.850' AS DateTime), N'Maestros', N'Restauracion de producto Id 64: Vans ZZ Auditoria - Rojo - Talle 42 a la version del 09/11/2026 20:35:50 (stock 25 a 10, precio 150,00 a 100,00)', N'12345678', N'Lautaro.Ponce', 2, N'0C45297AAF198729000FF62A665AF42E7EBF36789440D2949CD80F437E6DEBF1')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4934, CAST(N'2026-11-09T20:37:47.540' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'F9CEC010E55EE85E49A62D8457FAF041FCE9125E171813B85C5D84C38EF2DD17')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4935, CAST(N'2026-11-09T20:37:47.590' AS DateTime), N'Maestros', N'Baja de producto Id 64: Vans ZZ Auditoria Rojo talle 42', N'12345678', N'Lautaro.Ponce', 2, N'F288C8D97596D154E48AC12B10E03E1547BBDF1A7751EC176C3D30A33B6D8E88')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4936, CAST(N'2026-11-09T20:38:05.380' AS DateTime), N'Maestros', N'Restauracion de producto Id 64: Vans ZZ Auditoria - Rojo - Talle 42 a la version del 09/11/2026 20:37:47 (el producto estaba eliminado y se volvio a crear)', N'12345678', N'Lautaro.Ponce', 2, N'E214AD1607EA7BF21A2D3687149CE768D6C832D89727B61705F488486940DA56')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4937, CAST(N'2026-11-09T20:38:51.430' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Inglés''.', N'12345678', N'Lautaro.Ponce', 4, N'37EBAD363997A91B5A7795BFD57FF9578358DD4B58BA439BE1B1D7207DA27BF4')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4938, CAST(N'2026-11-09T20:38:51.497' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'A10D016A871578F01CEABDDD292C57CC8BAC125DF8E5232CE38466E0CB1EEA55')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4939, CAST(N'2026-11-09T20:39:31.643' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Portugués''.', N'12345678', N'Lautaro.Ponce', 4, N'542349994637A47832DC6A168D151FBB41ECA1F6E9AB910616804CB58C2DF1D2')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4940, CAST(N'2026-11-09T20:39:31.710' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'A7EB891AD518259A4912B558BD6F5FED822E27FE41605898BFFB48BD5051C2A5')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4941, CAST(N'2026-11-09T20:39:59.910' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Español''.', N'12345678', N'Lautaro.Ponce', 4, N'62AE3561C9E9327CFCFB63ECD60F265E02908AA5690498D5D5A2D37A4373E1AB')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4942, CAST(N'2026-11-09T20:39:59.967' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'738654EFAFC2D882ECE34A8FA25AD703290C764BD7808A2C3B350B35C43B397C')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4943, CAST(N'2026-11-09T20:40:21.233' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'93DF518E0DB6C95DB932D1174ED9EC20486CC386C153599E3A8EB5A393E16973')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4944, CAST(N'2026-11-09T20:40:21.287' AS DateTime), N'Maestros', N'Baja de producto Id 64: Vans ZZ Auditoria Rojo talle 42', N'12345678', N'Lautaro.Ponce', 2, N'F72D86BC87DC70003A3CD5D56A692F3D96BC79C404D9F0EF00B48A9B2B94F92F')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4945, CAST(N'2026-11-09T20:46:17.927' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'C885C7F0D839B596BB8B8239D07F894EF39C922DD9C6443F9F0E44F0F8AFAB39')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4946, CAST(N'2026-11-09T21:28:42.877' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'1912BD789BA9A6994B6EE010009301BE14BC2FB33797D23A4024CB9A7E9B8BB2')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4947, CAST(N'2026-11-11T15:33:11.217' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'08FF75BB69826D5B10D45822DFA7DCE871F7535938DE2D1C2B38CB3862DEC6D3')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4948, CAST(N'2026-11-11T15:35:01.000' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'5877FF954316F10D223E2BCD564FFBB0DB913F6EE0E2CD0D8261BA8C0E995123')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4949, CAST(N'2026-11-11T15:36:29.527' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'F63CB18CA8DA72BD5710093B825FE19F5F8E60EEF96FE30768EDB0E97D698B9F')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4950, CAST(N'2026-11-11T16:20:48.407' AS DateTime), N'Ventas', N'Alta de carrito de venta #21 (Cliente DNI: 22222222, Total: 97000,00).', N'12345678', N'Lautaro.Ponce', 2, N'B5F79BF72C121C50C6FF17284491BED6A32E412FCFF0A8496082CE1466321404')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4951, CAST(N'2026-11-11T16:20:48.493' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Carrito''.', N'12345678', N'Lautaro.Ponce', 1, N'E359956C55FAAB5538F0BD274F744FFD4C4551A71A6FD60AE52BF69A42D665F8')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4952, CAST(N'2026-11-11T16:20:48.573' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleCarrito''.', N'12345678', N'Lautaro.Ponce', 1, N'EC991FE49E2CBA885216BE06A851C9E4112335949BBD96E5B62B4004BAC23AFA')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4953, CAST(N'2026-11-11T16:26:17.107' AS DateTime), N'Compras', N'Solicitud de compra #13 generada, con 1 producto(s).', N'12345678', N'Lautaro.Ponce', 2, N'2918A1257380262883A3B28C2E4F72D490CF5413ACEAC66415FD77EB31809B51')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4954, CAST(N'2026-11-11T16:26:17.183' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''SolicitudCompra''.', N'12345678', N'Lautaro.Ponce', 1, N'DE6E45CC9D0D137A6D9EDBFE1616813123E7DB1E4883A742826556FB7DA1A238')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4955, CAST(N'2026-11-11T16:26:17.243' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleSolicitudCompra''.', N'12345678', N'Lautaro.Ponce', 1, N'04B373173B899D0456C654757587D867D1008DB6E3CF4896E96FE54A00D401C4')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4956, CAST(N'2026-11-11T16:26:47.887' AS DateTime), N'Compras', N'Orden de compra 000013 generada a partir de la Solicitud #13, Costo Total $450.000,00.', N'12345678', N'Lautaro.Ponce', 2, N'739C6ADD80F9C02116409899EF1256D21E8BCB61427178C105A6D239E5E6FE5B')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4957, CAST(N'2026-11-11T16:26:47.947' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''OrdenCompra''.', N'12345678', N'Lautaro.Ponce', 1, N'19A8871F75CDF2E3461CC0500407E7FEE375DA261D4D969109AD3A4827D0739E')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4958, CAST(N'2026-11-11T16:26:48.013' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleOrdenCompra''.', N'12345678', N'Lautaro.Ponce', 1, N'2154D301354ABF9130141837EFF2C9B7EF161DB234C92003D44F08556D3F37E9')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4959, CAST(N'2026-11-11T16:28:19.387' AS DateTime), N'Compras', N'Recepción 000013 registrada para la Orden #13, sin faltantes.', N'12345678', N'Lautaro.Ponce', 2, N'E472A82684B3E858E25BEA8B864FB51659B412BCC219BAC73C90CD8B04D5F13F')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4960, CAST(N'2026-11-11T16:28:19.450' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Recepcion''.', N'12345678', N'Lautaro.Ponce', 1, N'01F1626EB864EF42F49BE75F69D32A52D5EC8730F2670B016156C80FA1604302')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4961, CAST(N'2026-11-11T16:28:19.517' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleRecepcion''.', N'12345678', N'Lautaro.Ponce', 1, N'12C96EA4FCD639B57795843CE2E32DA8D2A9472E894300F04455F8BCD9210C06')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4962, CAST(N'2026-11-11T16:28:46.043' AS DateTime), N'Compras', N'Alta de factura 000013 de la Orden #13, Total $450.000,00.', N'12345678', N'Lautaro.Ponce', 3, N'F6247B22FB5E6E652DBE21E5B41D99A3AE2C9228FC6EE9DCB78A0381C955B5D3')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4963, CAST(N'2026-11-11T16:28:46.103' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Factura''.', N'12345678', N'Lautaro.Ponce', 1, N'2EE4BDD62534D3B4E083B809F2B72AC381527FD02DBDC90D501B346C66502BDB')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4964, CAST(N'2026-11-11T16:28:46.323' AS DateTime), N'Compras', N'Stock actualizado: Producto Id 45, se sumaron 5 unidades.', N'12345678', N'Lautaro.Ponce', 3, N'1171DBF71989395C76E1495C5ACB819A365731861D63BE4727BAB08403246917')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4965, CAST(N'2026-11-11T16:28:46.367' AS DateTime), N'Compras', N'Factura 000013 pagada (Efectivo), Total $450.000,00. Stock actualizado para 1 producto(s).', N'12345678', N'Lautaro.Ponce', 2, N'69B304551FC03AD37F8AAF9C7F724F2C6DD611D419EA0994943C769998F14FD8')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4966, CAST(N'2026-11-11T19:39:38.977' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'56CF849B07FBB57C2A52B994AF8D590945CCD3754AF8403AE2A83F784DF52F09')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4967, CAST(N'2026-11-11T20:11:18.223' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'452871DFB2D26075433D570F9DDF62A5D11546C93C758270B0070B58901202A5')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4968, CAST(N'2026-11-11T20:12:02.990' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'E236095CE61DD7EF32095F1D181FBD0D7345E7C00B53ACC804679447D3225649')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4969, CAST(N'2026-11-11T20:36:32.470' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'048BE8EC00FF1D069F40295F73C3A4AF876C64D7C2AFCDB59C368C912AF7C12E')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4970, CAST(N'2026-11-11T20:36:44.150' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Inglés''.', N'12345678', N'Lautaro.Ponce', 4, N'3DDF9EFD9C7C985022D2320AD8AF31D0B3B6C182CD034AB450839FFDC8E7F590')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4971, CAST(N'2026-11-11T20:36:44.203' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'208C7CCAC2B5B88E677DBDE0865E03C857C727099843E6E258ADB10C8E55DD45')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4972, CAST(N'2026-11-11T20:36:57.060' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Portugués''.', N'12345678', N'Lautaro.Ponce', 4, N'4F5EC3B2A659F174919D328C11FE0160F5511E500AB1BD5771B20353532BE4F8')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4973, CAST(N'2026-11-11T20:36:57.123' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'CCE58B080B01E53EBEC9A6C2A24170FE2A46AA276BF42A42E9ADB2AD7CD21D02')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4974, CAST(N'2026-11-11T20:37:06.763' AS DateTime), N'Cambiar Idioma', N'Usuario cambió idioma a ''Español''.', N'12345678', N'Lautaro.Ponce', 4, N'7B8483E629F72D848ED6D7962F96844CAA561E3B3AE57D325DEF8B88E7E4BD44')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4975, CAST(N'2026-11-11T20:37:06.810' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Usuarios''.', N'12345678', N'Lautaro.Ponce', 1, N'520D876CC3EAD7BCACA73E3A74A107D60A7DFE6A091EEAB1A735A1A2062F1F0A')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4976, CAST(N'2026-11-15T14:31:40.327' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'0AFD5D82EA157BFBA8E081E08D26F2A02AD3CFA5F541BA672836FC494B4F17A3')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4977, CAST(N'2026-11-15T14:35:21.767' AS DateTime), N'Ventas', N'Reporte ''Clientes frecuentes'' exportado a PDF (8 clientes).', N'12345678', N'Lautaro.Ponce', 4, N'35763990078580423B8D1F45E7C4B7894FD30DC2E2118C874F7BD95F346B01C7')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4978, CAST(N'2026-11-15T14:43:32.597' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'4644A7AAC5547B03E0BCCC9F9D37F1503CFC7ED4BC8A0F854AE1B614897F8914')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4979, CAST(N'2026-11-15T14:43:41.390' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'3332564AADC785536570C7C33D2E3018F9228DC10A91036E4F5C1BE31D98EFD1')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4980, CAST(N'2026-11-15T14:45:26.400' AS DateTime), N'Compras', N'Reporte ''Estado de stock'' exportado a PDF (60 productos).', N'12345678', N'Lautaro.Ponce', 4, N'5A87D78259578828FE80BD20E04736D06A1CEC67378E5EE8FE777460DD973220')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4981, CAST(N'2026-11-15T14:46:20.220' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'3254E7E999FB76FEE4BFFE5519C3E78EE3A52C1821AC5DBBD9E914C2E36F6851')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4982, CAST(N'2026-11-15T16:01:26.203' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'7DF53259A32FF19151D8199F4CF3B82FDDC61C47D7169D0593D2C6788305814A')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4983, CAST(N'2026-11-15T16:08:12.740' AS DateTime), N'Ventas', N'Reporte inteligente exportado a PDF (28 periodos y 46 modelos).', N'12345678', N'Lautaro.Ponce', 4, N'0364643EA9E8415867F600D25E891F3E17601618FB451657999312BF710F7285')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4984, CAST(N'2026-11-15T16:09:04.540' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'FCEF51BAD3C88A80EE64719D0F8FDD1DE8C099624783DE10A2659DC4251D4EC1')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4985, CAST(N'2026-11-15T17:22:30.607' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'A327815F7D6F68AC2D2358ABD8B0EF056AFB572EBFAD46DFF54C0A6A1A597104')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4986, CAST(N'2026-11-16T10:41:02.893' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'DADC7A587BAE0F7AC333E9FEF168715BDBEC62EC7D31A4E8EEA4AEC4895E7A63')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4987, CAST(N'2026-11-16T10:45:21.797' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'0BF4AB0C0E7D8B21FAD84F081FB232C9C2660F5E4714BE0E8BEF04D1BB6D09CE')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4988, CAST(N'2026-11-16T10:46:43.687' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'0D061C9A875E3367AECF10385D87E56BA13176E2D34D381E1054FBB16342C9E2')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4989, CAST(N'2026-11-16T10:46:43.730' AS DateTime), N'Maestros', N'Alta de producto Id 65: Auditoria Test A Rojo talle 41', N'12345678', N'Lautaro.Ponce', 3, N'29890D9B6CE1F2175BAF3B5D249051F7495FEB10E3DDFB4534F34489FFEAE732')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4990, CAST(N'2026-11-16T10:47:02.813' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'6F93DFE81E5BC9465F6D00986DBA66B39EA706769A44D22B43C0B5754A99E44E')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4991, CAST(N'2026-11-16T10:47:02.850' AS DateTime), N'Maestros', N'Modificacion de producto Id 65: Auditoria Test A Rojo talle 41, stock de 5 a 8', N'12345678', N'Lautaro.Ponce', 3, N'BDB8F4A99F8B98E2C29ED47744C77E66624099D1615116CA089FB24B8985623D')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4992, CAST(N'2026-11-16T10:47:33.407' AS DateTime), N'Maestros', N'Restauracion de producto Id 65: Puma Auditoria Test A - Rojo - Talle 41 a la version del 16/11/2026 10:46:43 (stock 8 a 5, precio 110000,00 a 100000,00)', N'12345678', N'Lautaro.Ponce', 2, N'8ADAB9501F619AB79B59C0F1D527AF9CD6A9F791105545A7B4EBB47CD8A8DAE2')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4993, CAST(N'2026-11-16T10:47:55.030' AS DateTime), N'Maestros', N'Restauracion de producto Id 64: Vans ZZ Auditoria - Rojo - Talle 42 a la version del 09/11/2026 20:40:21 (el producto estaba eliminado y se volvio a crear)', N'12345678', N'Lautaro.Ponce', 2, N'F05E63A81B7B5D9C2E02C2D99ABFBBA341A3099BB15B8034EBFB2520F87C4028')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4994, CAST(N'2026-11-16T10:48:35.407' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'00BC6008119A9975C9E89D40027E8113A305276AA866F8E9146E7B267F7E78CC')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4995, CAST(N'2026-11-16T10:48:35.450' AS DateTime), N'Maestros', N'Baja de producto Id 65: Puma Auditoria Test A Rojo talle 41', N'12345678', N'Lautaro.Ponce', 2, N'709C2EC6995E67C7F38FB42C051C450B1593257B19B356E78950FE7938A99D45')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4996, CAST(N'2026-11-16T10:49:03.183' AS DateTime), N'Maestros', N'Exportación de productos a la venta: 60 productos, archivo ''productos_a_la_venta_20261116.xml''', N'12345678', N'Lautaro.Ponce', 3, N'87CB89254AAB04D7EC002DCDC2A90D9DC94D9D1C039CCE900CEA1C9C5846F41A')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4997, CAST(N'2026-11-16T10:52:34.870' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'F2E71F059048ED48E2ACB5A188ED1675D93A959129D0EAC61E883ADCD9CB5EEB')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4998, CAST(N'2026-11-16T10:52:34.927' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''ImportacionProducto''.', N'12345678', N'Lautaro.Ponce', 1, N'00DDC10B7A8F0F954878AAFB4C7AD288AC862AD929ABE143DD49A8A8346BCF45')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (4999, CAST(N'2026-11-16T10:52:35.033' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleImportacion''.', N'12345678', N'Lautaro.Ponce', 1, N'18451E6BCBEA941C8E9DE0DA9ABDAA607156E04461159B5633009EDF562C8C76')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5000, CAST(N'2026-11-16T10:52:35.087' AS DateTime), N'Maestros', N'Importación de productos desde XML: proveedor Calzados del Sur (Id 3), remito USR-201, archivo ''remito_mix.xml''. Productos nuevos: 2, stock sumado: 1, líneas rechazadas: 6, ya importadas antes: 0. Estado del remito: ConRechazos', N'12345678', N'Lautaro.Ponce', 3, N'B8BE3EF92B0D0A25EA1397A1DEB3E02C38AE452B209F9E4EA9DE7C56757F967C')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5001, CAST(N'2026-11-16T10:52:52.027' AS DateTime), N'Maestros', N'Exportación de líneas rechazadas: remito USR-201, 6 líneas', N'12345678', N'Lautaro.Ponce', 3, N'4FD5ACA831C3908FD3A6268A3EED2BED2D487F6710399CF837D0C40D088B54AE')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5002, CAST(N'2026-11-16T10:53:20.287' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'F352F905656423267DB607846B4A3696E80485D2D344B5FE3A1ECB2DC62D4D3D')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5003, CAST(N'2026-11-16T10:53:20.340' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''ImportacionProducto''.', N'12345678', N'Lautaro.Ponce', 1, N'9250FA610AB70148B833460D10947388E159108E5D8EC41FDC9FC771DE0666E4')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5004, CAST(N'2026-11-16T10:53:20.463' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleImportacion''.', N'12345678', N'Lautaro.Ponce', 1, N'8B534A147C1CF62DBAFC7A26453D4E3E85833541E6137BBFD42F7B354AD893B5')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5005, CAST(N'2026-11-16T10:53:20.520' AS DateTime), N'Maestros', N'Importación de productos desde XML: proveedor Calzados del Sur (Id 3), remito USR-201, archivo ''remito_USR-201_corregido.xml''. Productos nuevos: 6, stock sumado: 0, líneas rechazadas: 0, ya importadas antes: 0. Estado del remito: Completo', N'12345678', N'Lautaro.Ponce', 3, N'0FB87ACB73FCD0EEABD956FCD3DF55D417FAD06A80FFC373E3D519C034E5F7B0')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5006, CAST(N'2026-11-16T10:53:32.660' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'9F34E016CC8BF557E636AC57EA125F56075256C699095F62A276F9510430F048')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5007, CAST(N'2026-11-16T10:53:32.723' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''ImportacionProducto''.', N'12345678', N'Lautaro.Ponce', 1, N'FD6C37736FCAEE4161EDA2813695BD5A029BF2131B65C7373A495800F5AEA80B')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5008, CAST(N'2026-11-16T10:53:32.850' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''DetalleImportacion''.', N'12345678', N'Lautaro.Ponce', 1, N'6FAFB610F3EC6503F3BB47F089EFA9E57CF1CA0807750D3F83BCEF692D28FE88')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5009, CAST(N'2026-11-16T10:53:32.917' AS DateTime), N'Maestros', N'Importación de productos desde XML: proveedor Calzados del Sur (Id 3), remito USR-205, archivo ''remito_ok_simple.xml''. Productos nuevos: 1, stock sumado: 0, líneas rechazadas: 1, ya importadas antes: 0. Estado del remito: ConRechazos', N'12345678', N'Lautaro.Ponce', 3, N'23D84B42BDC3A0374F40BE9629F4123A3069CAFD8BC001D03AA7EA53A497CDF9')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5010, CAST(N'2026-11-16T10:56:58.470' AS DateTime), N'Dígito Verificador', N'Se recalcularon los dígitos verificadores de la tabla ''Producto''.', N'12345678', N'Lautaro.Ponce', 1, N'DECC1B82CE836183E05A61123C85BD4DB21EAD16E03AE4DEA9D9C82BE0DC2D47')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5011, CAST(N'2026-11-16T10:56:58.513' AS DateTime), N'Maestros', N'Modificacion de producto Id 74: Aud Simple Azul talle 41, stock de 6 a 0', N'12345678', N'Lautaro.Ponce', 3, N'1D2BA8D3405A895A540AFBF52C65DB574095B107E10556AE6A821DA29801C3C9')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5012, CAST(N'2026-11-16T10:57:30.427' AS DateTime), N'Maestros', N'Restauracion de producto Id 74: Nike Aud Simple - Azul - Talle 41 a la version del 16/11/2026 10:53:32 (stock 0 a 6, precio 130000,00 a 130000,00)', N'12345678', N'Lautaro.Ponce', 2, N'95134B4F45771E257A73FD0127700A1889C94CEE6558F172A4832520C4156CAA')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5013, CAST(N'2026-11-16T10:57:48.327' AS DateTime), N'Maestros', N'Exportación de productos a la venta: 69 productos, archivo ''productos_a_la_venta_20261116.xml''', N'12345678', N'Lautaro.Ponce', 3, N'15BCA15B61F11BAE192A3B17AE5B789B6B4F03FD4ECCE4E404E12517DF1EDA24')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5014, CAST(N'2026-11-16T11:20:13.437' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'654BCA665ED5373DACFE371E7A68A011099899E6FB1EFDECD9FEB9CA320A1553')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5015, CAST(N'2026-11-16T11:20:21.710' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'2C3B97A689A077DC49196DA2C00539A971E6F8BCD294B15910AED915688B39C3')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5016, CAST(N'2026-11-16T11:20:30.277' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'A4723C73934CF813916A598967174C752AF498555292BBE1E390E6BFEFAFB46A')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5017, CAST(N'2026-11-16T11:48:39.153' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'978AF276B93DCA28B0BFD2F260D15BAB3F2CEF79F344DEEE8E2EE612C2C1B108')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5018, CAST(N'2026-11-16T11:49:30.807' AS DateTime), N'Maestros', N'Exportación de productos a la venta: 69 productos, archivo ''productos_a_la_venta_20261116.xml''', N'12345678', N'Lautaro.Ponce', 3, N'5D85D6182DA9A410B93CC442185699405523F2FF106A092BF63BB4C9EE268B1D')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5019, CAST(N'2026-11-16T11:49:54.457' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'D515974A716191757BE950D55B8318B6B22A44CEE8019F246D349E202C70E94A')
+GO
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5020, CAST(N'2026-11-16T11:53:15.657' AS DateTime), N'Login', N'Inicio de sesión exitoso: Lautaro.Ponce.', N'12345678', N'Lautaro.Ponce', 1, N'BDF5388059F60CAD0D732B5D9E9C9861CB820BEB7C8A84206E83436F76D8F71B')
+INSERT [dbo].[BitacoraEvento] ([Numero], [Fecha], [Modulo], [Descripcion], [DNI], [NombreUsuario], [Criticidad], [DV]) VALUES (5021, CAST(N'2026-11-16T11:54:42.683' AS DateTime), N'Logout', N'Cierre de sesión exitoso.', N'12345678', N'Lautaro.Ponce', 1, N'A777A6214E666F0D150B27DCAADD2E7E2E0CF23FEA840615014312EB52C6DF77')
 SET IDENTITY_INSERT [dbo].[BitacoraEvento] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Carrito] ON 
@@ -3431,6 +3598,7 @@ INSERT [dbo].[Carrito] ([IdCarrito], [DNICliente], [Fecha], [Total], [Estado], [
 INSERT [dbo].[Carrito] ([IdCarrito], [DNICliente], [Fecha], [Total], [Estado], [DV]) VALUES (18, N'12121212', CAST(N'2026-10-30T19:21:53.487' AS DateTime), CAST(120000.00 AS Decimal(18, 2)), N'Cancelado', N'C6C4A430EB66A42CF2CF3882CDE86B07EBCEC599DFC1C9863C9EA45BD93D60D8')
 INSERT [dbo].[Carrito] ([IdCarrito], [DNICliente], [Fecha], [Total], [Estado], [DV]) VALUES (19, N'12345671', CAST(N'2026-11-01T20:01:47.617' AS DateTime), CAST(350000.00 AS Decimal(18, 2)), N'Facturado', N'1D86CE43A7482B828C5E35E30F9393B9CC72C9343FCA65771EACB0D690119D07')
 INSERT [dbo].[Carrito] ([IdCarrito], [DNICliente], [Fecha], [Total], [Estado], [DV]) VALUES (20, N'12345671', CAST(N'2026-11-01T20:18:37.810' AS DateTime), CAST(99000.00 AS Decimal(18, 2)), N'Facturado', N'9DF9BBA80EB9372F57056F1F09E021FAD30EBD33FD40F29AF0FD1D0228D3FD74')
+INSERT [dbo].[Carrito] ([IdCarrito], [DNICliente], [Fecha], [Total], [Estado], [DV]) VALUES (21, N'22222222', CAST(N'2026-11-11T16:20:48.383' AS DateTime), CAST(97000.00 AS Decimal(18, 2)), N'Activo', N'EE5714E1C237267B86291D6DB07736C7062E9CEA3C43F354EAB30CAEEB9C4C31')
 SET IDENTITY_INSERT [dbo].[Carrito] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Categoria] ON 
@@ -3472,6 +3640,7 @@ INSERT [dbo].[DetalleCarrito] ([IdDetalle], [IdCarrito], [IdProducto], [Cantidad
 INSERT [dbo].[DetalleCarrito] ([IdDetalle], [IdCarrito], [IdProducto], [Cantidad], [Precio], [Subtotal], [DV]) VALUES (18, 18, 1, 1, CAST(120000.00 AS Decimal(18, 2)), CAST(120000.00 AS Decimal(18, 2)), N'2C60C24EDD3BC2178D6E68BC9828CC516231E6E1FD8A49ACC75291056A044BD4')
 INSERT [dbo].[DetalleCarrito] ([IdDetalle], [IdCarrito], [IdProducto], [Cantidad], [Precio], [Subtotal], [DV]) VALUES (19, 19, 15, 2, CAST(175000.00 AS Decimal(18, 2)), CAST(350000.00 AS Decimal(18, 2)), N'B1F0519D77F0A2FD0C2AB6EA362ADE40846AFA58FECCC1DAAE11F20A6ECBB92C')
 INSERT [dbo].[DetalleCarrito] ([IdDetalle], [IdCarrito], [IdProducto], [Cantidad], [Precio], [Subtotal], [DV]) VALUES (20, 20, 43, 1, CAST(99000.00 AS Decimal(18, 2)), CAST(99000.00 AS Decimal(18, 2)), N'15687E691C172DFE064DDD1BE53CFE57867D58D6BE446F18D7DC0A0296A7CD52')
+INSERT [dbo].[DetalleCarrito] ([IdDetalle], [IdCarrito], [IdProducto], [Cantidad], [Precio], [Subtotal], [DV]) VALUES (21, 21, 2, 1, CAST(97000.00 AS Decimal(18, 2)), CAST(97000.00 AS Decimal(18, 2)), N'14CD554EFB8EF4EA8C9CB29E56BEF38D3837ABB55F9A624CA05CB034B547B13F')
 SET IDENTITY_INSERT [dbo].[DetalleCarrito] OFF
 GO
 SET IDENTITY_INSERT [dbo].[DetalleImportacion] ON 
@@ -3538,6 +3707,17 @@ INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Lin
 INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (60, 7, 1, N'Puma', N'Urbanas', N'P3 Correccion Ok', N'Gris', N'40', N'2', N'99000.00', N'Alta', 63, NULL, N'3FF3DF98A7C06B17661021D68B5B7E0DF90652465F90E675F35B0F767084CDC2')
 INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (61, 7, 2, N'Fila', N'Urbanas', N'P3 Marca Mala', N'Gris', N'40', N'2', N'99000', N'Rechazada', NULL, N'La marca ''Fila'' no existe. Cárguela primero en Procesar categorías y marcas.', N'F397DED8B0F81E22186925C9BC224D1509F40A0E0F7E95025174ECCBCBE6E757')
 INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (62, 7, 3, N'Puma', N'Urbanas', N'P3 Talle Malo', N'Gris', N'70', N'2', N'99000', N'Rechazada', NULL, N'El talle ''70'' no es válido: debe ser un número entre 30 y 50, con medio talle opcional (por ejemplo 42 o 42.5).', N'757993E5EB9EDCB29A4238972CC5107A23477F0AC038B3C3AF3823CD7B147678')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (63, 8, 1, N'Nike', N'Running', N'Aud Import Uno', N'Rojo', N'40', N'5', N'120000.00', N'Alta', 66, NULL, N'1DEA06B43011645EA2AE47557BF0E2495AC046184D908E4D82F5D8D4E4F1E0C5')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (64, 8, 2, N'Puma', N'Urbanas', N'RS-X', N'Gris', N'43', N'2', N'110000.00', N'SumaStock', 3, NULL, N'F6F28A38836792162166BA58DDC10D62C390F5B0169752D3CCA10CE5F0059B18')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (65, 8, 3, N'Nike', N'Running', N'Aud Marca Mala', N'Azul', N'41', N'3', N'90000.00', N'Alta', 68, NULL, N'B360604458EC1F42348A950DA9B4D4418A8841693E70C26411738F5A95AD8624')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (66, 8, 4, N'Adidas', N'Urbanas', N'Aud Cantidad Negativa', N'Negro', N'42', N'3', N'90000.00', N'Alta', 69, NULL, N'9E2EE71689DFB53AAE95B69FF0490AD0E1CF1EC56533F1E5C7560C285125B446')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (67, 8, 5, N'Adidas', N'Urbanas', N'Aud Cantidad Texto', N'Negro', N'42', N'2', N'90000.00', N'Alta', 70, NULL, N'2ABC9E64481AAA66079FCBCD3339A089169D09C4F7A5BBC189DCDC78B8F1C047')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (68, 8, 6, N'Vans', N'Skate', N'Aud Sin Talle', N'Verde', N'42', N'2', N'80000.00', N'Alta', 71, NULL, N'3C02E80AFA30842AC07053BFC3BCB50D0D8A0CF922108233134B1C678AB641AC')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (69, 8, 7, N'Vans', N'Skate', N'Aud Categoria Mala', N'Verde', N'40', N'2', N'80000.00', N'Alta', 72, NULL, N'9BA50E30BCD77D324C6EA09829D98842F881BCFDE38ABC14C4B86D9777ED1E65')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (70, 8, 8, N'Converse', N'Urbanas', N'Aud Precio Cero', N'Blanco', N'39', N'4', N'70000.00', N'Alta', 73, NULL, N'7BD36F1DC82F5DFB51CA39692D43EFA454092BD444D76CA7A109A43EB7F24F2D')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (71, 8, 9, N'Converse', N'Urbanas', N'Aud Precio Coma', N'Blanco', N'39', N'4', N'95000.50', N'Alta', 67, NULL, N'E629308ABA61B83F5C93ADBC4A453C78A5492BC727099F6CAF584D3630971147')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (72, 9, 1, N'Nike', N'Running', N'Aud Simple', N'Azul', N'41', N'6', N'130000.00', N'Alta', 74, NULL, N'817D368105398A3B392AFF9F3765A192ECE7761E142B16AC5FB0CF831C4A38AB')
+INSERT [dbo].[DetalleImportacion] ([IdDetalleImportacion], [IdImportacion], [Linea], [Marca], [Categoria], [Modelo], [Color], [Talle], [Cantidad], [Precio], [Accion], [IdProducto], [Motivo], [DV]) VALUES (73, 9, 2, N'Nike', N'Running', N'Aud Simple', N'Azul', N'41', N'4', N'130000', N'Rechazada', NULL, N'Repite el mismo producto (marca, modelo, color y talle) de la línea 1 de este remito.', N'797BD8A3FDA60D4D8239D4F4259482ECDC71BC92B7BFE266EB2A4621C621FD70')
 SET IDENTITY_INSERT [dbo].[DetalleImportacion] OFF
 GO
 SET IDENTITY_INSERT [dbo].[DetalleOrdenCompra] ON 
@@ -3558,6 +3738,7 @@ INSERT [dbo].[DetalleOrdenCompra] ([IdDetalleOrden], [IdOrden], [IdProducto], [C
 INSERT [dbo].[DetalleOrdenCompra] ([IdDetalleOrden], [IdOrden], [IdProducto], [Cantidad], [CostoUnitario], [Subtotal], [DV]) VALUES (14, 10, 41, 3, CAST(50000.00 AS Decimal(18, 2)), CAST(150000.00 AS Decimal(18, 2)), N'5BB7ACCAF24C224979DA4BD8B703444496E681D843FA72C0781B5AED229F7848')
 INSERT [dbo].[DetalleOrdenCompra] ([IdDetalleOrden], [IdOrden], [IdProducto], [Cantidad], [CostoUnitario], [Subtotal], [DV]) VALUES (15, 11, 10, 13, CAST(50000.00 AS Decimal(18, 2)), CAST(650000.00 AS Decimal(18, 2)), N'99C56CCDECD3493B6C80BDC0EF1C2921EC24C9DBCFADD50D4C10CC91FE6749B7')
 INSERT [dbo].[DetalleOrdenCompra] ([IdDetalleOrden], [IdOrden], [IdProducto], [Cantidad], [CostoUnitario], [Subtotal], [DV]) VALUES (16, 12, 15, 5, CAST(60000.00 AS Decimal(18, 2)), CAST(300000.00 AS Decimal(18, 2)), N'9668E3231CA9EB11970C8B9FC2CDC6E380CC591D24E2DDC454F1B9BC865A9CAD')
+INSERT [dbo].[DetalleOrdenCompra] ([IdDetalleOrden], [IdOrden], [IdProducto], [Cantidad], [CostoUnitario], [Subtotal], [DV]) VALUES (17, 13, 45, 5, CAST(90000.00 AS Decimal(18, 2)), CAST(450000.00 AS Decimal(18, 2)), N'7F5A404CD3FA6DF595ADCB41D2D307C0110ADF543F590C86ED4D28C4FE3E8675')
 SET IDENTITY_INSERT [dbo].[DetalleOrdenCompra] OFF
 GO
 SET IDENTITY_INSERT [dbo].[DetalleRecepcion] ON 
@@ -3578,6 +3759,7 @@ INSERT [dbo].[DetalleRecepcion] ([IdDetalleRecepcion], [IdRecepcion], [IdProduct
 INSERT [dbo].[DetalleRecepcion] ([IdDetalleRecepcion], [IdRecepcion], [IdProducto], [CantidadRecibida], [CantidadFaltante], [DV]) VALUES (14, 10, 41, 2, 1, N'E7AA7AB561836263B1E5C7F3B32687EA8800350975C065316A79DD72F9221738')
 INSERT [dbo].[DetalleRecepcion] ([IdDetalleRecepcion], [IdRecepcion], [IdProducto], [CantidadRecibida], [CantidadFaltante], [DV]) VALUES (15, 11, 10, 13, 0, N'4E196DA3BA0A138184AD50D6B537008D6FEB1C693BAE8B8817754F7D760F47CB')
 INSERT [dbo].[DetalleRecepcion] ([IdDetalleRecepcion], [IdRecepcion], [IdProducto], [CantidadRecibida], [CantidadFaltante], [DV]) VALUES (16, 12, 15, 5, 0, N'F58D912755EEA7CE8EA09203A8B5DB95220F9CEE40F01FA990C2AC9CC6235381')
+INSERT [dbo].[DetalleRecepcion] ([IdDetalleRecepcion], [IdRecepcion], [IdProducto], [CantidadRecibida], [CantidadFaltante], [DV]) VALUES (17, 13, 45, 5, 0, N'A656B71867249BB66B0507ABB91926BA4F1BD2097E2B75FB8305DCB8F7A3A102')
 SET IDENTITY_INSERT [dbo].[DetalleRecepcion] OFF
 GO
 SET IDENTITY_INSERT [dbo].[DetalleSolicitudCompra] ON 
@@ -3598,6 +3780,7 @@ INSERT [dbo].[DetalleSolicitudCompra] ([IdDetalleSolicitud], [IdSolicitud], [IdP
 INSERT [dbo].[DetalleSolicitudCompra] ([IdDetalleSolicitud], [IdSolicitud], [IdProducto], [CantidadSolicitada], [DV]) VALUES (14, 10, 41, 3, N'65743A9ED17AB28281CC34E557927D4FA024CF58885D608C1754D056C7C442A8')
 INSERT [dbo].[DetalleSolicitudCompra] ([IdDetalleSolicitud], [IdSolicitud], [IdProducto], [CantidadSolicitada], [DV]) VALUES (15, 11, 10, 13, N'3D68AC4DDE2E8226F38EA54A7D33FF48E3B8D5B2861C8BEEE546A2B696566C43')
 INSERT [dbo].[DetalleSolicitudCompra] ([IdDetalleSolicitud], [IdSolicitud], [IdProducto], [CantidadSolicitada], [DV]) VALUES (16, 12, 15, 5, N'51F97F4391A64CD021FFAEE0FD627747605490AFF56B0F3BBB8B0CD23799F926')
+INSERT [dbo].[DetalleSolicitudCompra] ([IdDetalleSolicitud], [IdSolicitud], [IdProducto], [CantidadSolicitada], [DV]) VALUES (17, 13, 45, 5, N'1C59CD8DC9C00FC9DFCE9176599FC4B38B618D7454EFE5822BA25067F7954B9E')
 SET IDENTITY_INSERT [dbo].[DetalleSolicitudCompra] OFF
 GO
 SET IDENTITY_INSERT [dbo].[DetalleVenta] ON 
@@ -3792,35 +3975,683 @@ INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantida
 INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (360, 187, 26, 2, CAST(170000.00 AS Decimal(18, 2)), CAST(340000.00 AS Decimal(18, 2)), N'20E427430478F219FD68920DF4FCD35AB7CEC148EE5C1B8504296CB69B3640E7')
 INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (361, 187, 31, 1, CAST(150000.00 AS Decimal(18, 2)), CAST(150000.00 AS Decimal(18, 2)), N'71989C50D670CF8F1150FEBE4B4EBF72A88D5212D56CBA3C1C85CB29AFED75A2')
 INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (362, 187, 36, 2, CAST(78000.00 AS Decimal(18, 2)), CAST(156000.00 AS Decimal(18, 2)), N'7999997439E02C52885970C3298D76F777BC0E94F094288E43CDC56972807421')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (363, 188, 8, 1, CAST(94500.00 AS Decimal(18, 2)), CAST(94500.00 AS Decimal(18, 2)), N'77184A605A7FAB01955D7AD0E36605912D6871DA73110C55082516EEFF407B4E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (364, 188, 24, 2, CAST(115500.00 AS Decimal(18, 2)), CAST(231000.00 AS Decimal(18, 2)), N'3E118A08DB6A5A39748F836F960685CA041187A80287F02BCB7F82A8BAC41E23')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (365, 189, 8, 1, CAST(94500.00 AS Decimal(18, 2)), CAST(94500.00 AS Decimal(18, 2)), N'138645D472EABA4D704B8A3E6EEFF233D49273765DBE97F605F4E74332951CAB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (366, 189, 9, 1, CAST(94500.00 AS Decimal(18, 2)), CAST(94500.00 AS Decimal(18, 2)), N'25786CD19A9E748D7D3B2CD5B10A5A6126FF757C6C6A4CE31624F1F99E85E44C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (367, 190, 12, 1, CAST(98000.00 AS Decimal(18, 2)), CAST(98000.00 AS Decimal(18, 2)), N'0F13363ED55C62E265889BFB402851C582EEB6B1AB2E7F69EA6FCA67ADF67460')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (368, 191, 35, 1, CAST(54600.00 AS Decimal(18, 2)), CAST(54600.00 AS Decimal(18, 2)), N'745587F4D8C4E183E98292AE5E130775E2C8EAB67A8ED41FA3362E2FB02D2618')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (369, 191, 14, 1, CAST(98000.00 AS Decimal(18, 2)), CAST(98000.00 AS Decimal(18, 2)), N'A362A3C2F5C20E4E8EE345769D36C8D6A4EF3DF2151CCFDC236FED3D60C1270D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (370, 191, 9, 1, CAST(94500.00 AS Decimal(18, 2)), CAST(94500.00 AS Decimal(18, 2)), N'5F841C2F1E2A3E1722629DC9117140ADD315FA9F3614DA1944D06953F49BA486')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (371, 192, 23, 1, CAST(80500.00 AS Decimal(18, 2)), CAST(80500.00 AS Decimal(18, 2)), N'9D39E9FD173F11F7C5D03E2544A7DB019A257EE896627E7BEEDD72B37033F61F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (372, 193, 5, 1, CAST(105000.00 AS Decimal(18, 2)), CAST(105000.00 AS Decimal(18, 2)), N'F3432AF033EAE58D93C133A38FFAE6FF6EE8E30ADB83DF7515085EB7E9560F64')
+GO
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (373, 194, 15, 2, CAST(122500.00 AS Decimal(18, 2)), CAST(245000.00 AS Decimal(18, 2)), N'0B4A29B4AB4D3FCBA391ECB3D03D984D96C6DD7D0904AC2A3A06A99A5671A831')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (374, 195, 25, 1, CAST(91000.00 AS Decimal(18, 2)), CAST(91000.00 AS Decimal(18, 2)), N'F1932EA0B9EA705EC6D3BDDF9B236E5059DEE8B2A02376100AD01E0BE7A01913')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (375, 195, 34, 1, CAST(101500.00 AS Decimal(18, 2)), CAST(101500.00 AS Decimal(18, 2)), N'272991A84ACBFADCE947C8B1C42B1386C505664DE087EAD4C908974BD9C0B046')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (376, 196, 9, 1, CAST(94500.00 AS Decimal(18, 2)), CAST(94500.00 AS Decimal(18, 2)), N'35C2697C56B02297264267BC1F78494BB8BC6AE30B91A9E47DA0CE78C94D14E6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (377, 197, 3, 1, CAST(77000.00 AS Decimal(18, 2)), CAST(77000.00 AS Decimal(18, 2)), N'16A1CE0E669914A0A51B35881370A4427030FA43F8327B1FBB17A37BAE24FD78')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (378, 197, 19, 1, CAST(129500.00 AS Decimal(18, 2)), CAST(129500.00 AS Decimal(18, 2)), N'50FE19E74728A536EFF72D20C0AB8833671355D06D97AC7545911C444BF530DC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (379, 198, 5, 1, CAST(105000.00 AS Decimal(18, 2)), CAST(105000.00 AS Decimal(18, 2)), N'84AB500FC3E093B88BC7D836D3852724B167BEE47EC56938C1109F86C0D78D79')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (380, 198, 8, 1, CAST(94500.00 AS Decimal(18, 2)), CAST(94500.00 AS Decimal(18, 2)), N'9E702D1E493E9A3A88FD31612492E03A37EF9DEBE7C371ED4178D28FF83003CE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (381, 199, 24, 1, CAST(116900.00 AS Decimal(18, 2)), CAST(116900.00 AS Decimal(18, 2)), N'2A7AA6FE98AFFF0531FB5D70C4C3F36F9820D82A764E5BE636FAA97153CC5B69')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (382, 200, 14, 2, CAST(99200.00 AS Decimal(18, 2)), CAST(198400.00 AS Decimal(18, 2)), N'8342DE296A9BB37B87D3AA1443B68B45C81056D57F7984BEAC0F3B7FD2734142')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (383, 201, 14, 1, CAST(99200.00 AS Decimal(18, 2)), CAST(99200.00 AS Decimal(18, 2)), N'C75CD394C48A72C6B2F6384E79BD16ECEE2081729D90E43965D8554EB89FC527')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (384, 202, 5, 1, CAST(106300.00 AS Decimal(18, 2)), CAST(106300.00 AS Decimal(18, 2)), N'3D6EE71AA1561D3DDE94586028C2D989F1BBEA42A172C6C266D8D5D2B805F2E5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (385, 202, 24, 1, CAST(116900.00 AS Decimal(18, 2)), CAST(116900.00 AS Decimal(18, 2)), N'45A7C5A881E6FD24EC313A403B334B57E5FB6A5833EF1EC72D5C072387BF372B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (386, 203, 40, 1, CAST(65200.00 AS Decimal(18, 2)), CAST(65200.00 AS Decimal(18, 2)), N'52D8B934ED7AB1432F76474AA6C710BCEE0517D5F8A9DAEF345A4E95CE54D965')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (387, 204, 18, 1, CAST(131100.00 AS Decimal(18, 2)), CAST(131100.00 AS Decimal(18, 2)), N'27E05BBFA9489EA8A3B63F033B602886FC843503F97083D7F281704FD30BA6FA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (388, 205, 8, 1, CAST(95700.00 AS Decimal(18, 2)), CAST(95700.00 AS Decimal(18, 2)), N'EC3E8E19C1CE968AF46FD5A0843C63AAF89E5800CDBC910747C73E92E3168D61')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (389, 206, 24, 1, CAST(116900.00 AS Decimal(18, 2)), CAST(116900.00 AS Decimal(18, 2)), N'7B205572CFB21C5DC6FE958CD686C56412A2FA0DD2D8BFDCB5DF544BF34E1F1F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (390, 206, 39, 1, CAST(65200.00 AS Decimal(18, 2)), CAST(65200.00 AS Decimal(18, 2)), N'F4E5BBB01DAE4947D77B266A484518E8C204F6D8CBDDDD11C445D780F7E9CC0F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (391, 207, 13, 1, CAST(99200.00 AS Decimal(18, 2)), CAST(99200.00 AS Decimal(18, 2)), N'671AD8D6CC8B064AB11A9698AF2222F2B8FD78993E4B4D18695600F0E89442A3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (392, 208, 20, 1, CAST(113400.00 AS Decimal(18, 2)), CAST(113400.00 AS Decimal(18, 2)), N'9617875C0FE81C59C4AF34F13E27FD647670F2B023745C138C7EC01F22A060AE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (393, 209, 2, 1, CAST(68700.00 AS Decimal(18, 2)), CAST(68700.00 AS Decimal(18, 2)), N'EE8A0ECF3421DD6D132D8C2739AF06E8D5FF6AFFEBFAC0E354D34354C0085260')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (394, 209, 14, 1, CAST(99200.00 AS Decimal(18, 2)), CAST(99200.00 AS Decimal(18, 2)), N'B8979A63A4F4AE15EA0E532703F2B46D884F0F626FC0068C93DAA6401B82DFE8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (395, 210, 33, 1, CAST(102700.00 AS Decimal(18, 2)), CAST(102700.00 AS Decimal(18, 2)), N'DBA2CF47980A4E472FEDBDB76E9B368833AE44330F5E98B7B637F586533CD420')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (396, 211, 20, 1, CAST(113400.00 AS Decimal(18, 2)), CAST(113400.00 AS Decimal(18, 2)), N'6E0C936E78F2B8B2AFA73293988305F3E0A7CC0F3B95BAADEC7D56C795DB86A1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (397, 211, 12, 2, CAST(99200.00 AS Decimal(18, 2)), CAST(198400.00 AS Decimal(18, 2)), N'A0579303A4F0ADD8E532847E8C57A7D6BBEB3D67929558D2DD676924355B4D30')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (398, 212, 7, 1, CAST(95700.00 AS Decimal(18, 2)), CAST(95700.00 AS Decimal(18, 2)), N'2B033A796D2C7A3B98774E970081873494B155A6D88B3E4C8CE5442435254E32')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (399, 212, 3, 2, CAST(77900.00 AS Decimal(18, 2)), CAST(155800.00 AS Decimal(18, 2)), N'804657F27EC7DE41FD299CC6B7B3047753F8B95C233E8780F56295C14F912B58')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (400, 213, 1, 1, CAST(86100.00 AS Decimal(18, 2)), CAST(86100.00 AS Decimal(18, 2)), N'A193CBD4F48A57BAC1F65B7577CD77940DE2C6BF310D9E59247E2F01F06DEDF5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (401, 214, 8, 1, CAST(96800.00 AS Decimal(18, 2)), CAST(96800.00 AS Decimal(18, 2)), N'83DDFD89E65F496ABCFE3C3928124D81A4FA4247B4412BB4548D608D67592855')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (402, 214, 7, 1, CAST(96800.00 AS Decimal(18, 2)), CAST(96800.00 AS Decimal(18, 2)), N'967405F940F875642538AA800EEFD16E3BD5505EC6E83AFB966C3D8D7655EE0B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (403, 215, 9, 1, CAST(96800.00 AS Decimal(18, 2)), CAST(96800.00 AS Decimal(18, 2)), N'A9D66C5540797928FB1B40FFB62261A2CB482B1A18F0C355B73E5AFEF3182BD2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (404, 215, 21, 2, CAST(75300.00 AS Decimal(18, 2)), CAST(150600.00 AS Decimal(18, 2)), N'3FDFBD4F325FE41DBE5F9887EF523AFF1941EE643D60EF7C7B5A4353663A4436')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (405, 215, 14, 1, CAST(100400.00 AS Decimal(18, 2)), CAST(100400.00 AS Decimal(18, 2)), N'3AFA796801842707F18933C4EC3EF450ABB8CB284552DD15C64C64067C4A8CCD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (406, 216, 9, 1, CAST(96800.00 AS Decimal(18, 2)), CAST(96800.00 AS Decimal(18, 2)), N'86014A091559AB5C8B99428C0E68B24B76E4DE0C4E682FEEA2BD864446278D22')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (407, 216, 23, 1, CAST(82500.00 AS Decimal(18, 2)), CAST(82500.00 AS Decimal(18, 2)), N'F16E2BA62FD6BAD082BD9B85DC078E7FC286603F8EADD86BF0337CC3D2B4A183')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (408, 217, 2, 2, CAST(69600.00 AS Decimal(18, 2)), CAST(139200.00 AS Decimal(18, 2)), N'0092CEC479FA11833E4A035639119E056476D81895656C2484B1045AEA63FF43')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (409, 217, 7, 1, CAST(96800.00 AS Decimal(18, 2)), CAST(96800.00 AS Decimal(18, 2)), N'4331ED65BB827F1223CE5D5A4366B399F0AFC1902241D6F5071198518F0E07D8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (410, 217, 23, 1, CAST(82500.00 AS Decimal(18, 2)), CAST(82500.00 AS Decimal(18, 2)), N'CC66B373A14114B85054EE11EB9C4AA4BF380249B74C5E7C63E2E69ED95570FB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (411, 218, 33, 1, CAST(104000.00 AS Decimal(18, 2)), CAST(104000.00 AS Decimal(18, 2)), N'C429A34AFBD9C6621C155540BD939A1A2AB4951212D1037A4F5C13F2D434FA96')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (412, 219, 27, 1, CAST(68100.00 AS Decimal(18, 2)), CAST(68100.00 AS Decimal(18, 2)), N'3252723D6A2D81CECCB4540E8F8ACDA162154FB10B7C90E1158B08562126A00D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (413, 220, 1, 1, CAST(87100.00 AS Decimal(18, 2)), CAST(87100.00 AS Decimal(18, 2)), N'B55014E6666D4CB10AA97D035173A99D531972B004935BEE73C22F1150593369')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (414, 220, 25, 2, CAST(94300.00 AS Decimal(18, 2)), CAST(188600.00 AS Decimal(18, 2)), N'A65E684FAC63FFD124EBCE5042758B34B3A542D662AB3FEB790E12BF993002E0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (415, 221, 2, 1, CAST(70400.00 AS Decimal(18, 2)), CAST(70400.00 AS Decimal(18, 2)), N'66D9DF915F43CA290E804748B209113A89D66784B2E1D0446785440F2C45E0AA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (416, 221, 17, 1, CAST(108900.00 AS Decimal(18, 2)), CAST(108900.00 AS Decimal(18, 2)), N'8A532A03670E57C95C7DF70EBF2592D42389E76AE80FDB79B22C04639A95F87E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (417, 222, 21, 1, CAST(76200.00 AS Decimal(18, 2)), CAST(76200.00 AS Decimal(18, 2)), N'54C1306E4FA6442050D3504D3041FCC5CA34A9CE9F2D69F96AD071F2387C1051')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (418, 223, 14, 1, CAST(101600.00 AS Decimal(18, 2)), CAST(101600.00 AS Decimal(18, 2)), N'7D930032189A720A4AD2E4773BBD45AE7194B6FD4A9443BA5442CBCAD8FF66B0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (419, 224, 18, 1, CAST(134300.00 AS Decimal(18, 2)), CAST(134300.00 AS Decimal(18, 2)), N'1D9608EBF34A756459B8CFF9631D02F695883BAFB48469E46BA29830AD1A8B60')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (420, 224, 1, 1, CAST(87100.00 AS Decimal(18, 2)), CAST(87100.00 AS Decimal(18, 2)), N'AAF498E748B6D974D1FB35B312EBDFD8A4DE4BE90ECE43722CB04009F1009E4E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (421, 225, 19, 1, CAST(134300.00 AS Decimal(18, 2)), CAST(134300.00 AS Decimal(18, 2)), N'6846677C423659C39361DB25AEA45F48E5BF28DF81B8BC6B0A8125F49894058C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (422, 226, 30, 1, CAST(110100.00 AS Decimal(18, 2)), CAST(110100.00 AS Decimal(18, 2)), N'36BCD8A1014A1BAA95EC21586B3B7BE816969A59D39FD24E94B9DE943643F177')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (423, 227, 39, 1, CAST(67600.00 AS Decimal(18, 2)), CAST(67600.00 AS Decimal(18, 2)), N'5641D4182F9C60931FD48E8BE2760627FB35CBF2150A4136957D9099E8918975')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (424, 228, 39, 1, CAST(67600.00 AS Decimal(18, 2)), CAST(67600.00 AS Decimal(18, 2)), N'7069FF5496F6A5E04E810EBA8DC4CE60C8DEDD250B7D30253F9D0499326276D9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (425, 228, 7, 1, CAST(99100.00 AS Decimal(18, 2)), CAST(99100.00 AS Decimal(18, 2)), N'01ABB1DFCA87823B81EFF4E07238B12DEFC23E9053B3B37BA808F2E9674D8AC6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (426, 229, 23, 1, CAST(84400.00 AS Decimal(18, 2)), CAST(84400.00 AS Decimal(18, 2)), N'D54DC30A7CCADCA8592EE5CA98AE7269A9437A57FC78442A428E5E7D30051890')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (427, 230, 23, 2, CAST(84400.00 AS Decimal(18, 2)), CAST(168800.00 AS Decimal(18, 2)), N'9D43E266C1158B02313A2250D6E0EF2488F7850E778D0F2BBF292A65421EB31E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (428, 230, 36, 2, CAST(57300.00 AS Decimal(18, 2)), CAST(114600.00 AS Decimal(18, 2)), N'AE7225F53088AF2F8CD68E7552BA337854DAC7D53F9BEE7DC12F19B90FFD65A5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (429, 230, 33, 1, CAST(106500.00 AS Decimal(18, 2)), CAST(106500.00 AS Decimal(18, 2)), N'A2A1895FCC228D70313EB218984B4DDEE7B562EE1D91F94AF7FA67C316B4207E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (430, 231, 8, 1, CAST(99100.00 AS Decimal(18, 2)), CAST(99100.00 AS Decimal(18, 2)), N'24AEAD6FB3CC364F0F50685E431C29F3E2920F7E26488734F1D0894F09814A9B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (431, 231, 24, 1, CAST(121200.00 AS Decimal(18, 2)), CAST(121200.00 AS Decimal(18, 2)), N'4CA1845EB03A32DDB8A26C5A67FD8BD5A6556FAEEC9326203AEDCD711E61D3CF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (432, 231, 7, 1, CAST(99100.00 AS Decimal(18, 2)), CAST(99100.00 AS Decimal(18, 2)), N'13DEB84566FE58E29E97A2AE2E0B4B670AFA8DC82339A14FF80BD0016AA5FEEB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (433, 232, 8, 1, CAST(99100.00 AS Decimal(18, 2)), CAST(99100.00 AS Decimal(18, 2)), N'80D161F51886A52CCF063A9913087C45C0D38B65B78A787663977580007799E5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (434, 232, 13, 1, CAST(102800.00 AS Decimal(18, 2)), CAST(102800.00 AS Decimal(18, 2)), N'FA4712EDF043E9F2E8C6D4D3349007F7CAD17422F730B6E889A75314565B15C6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (435, 233, 20, 1, CAST(118900.00 AS Decimal(18, 2)), CAST(118900.00 AS Decimal(18, 2)), N'02FAAF32115B2BCDC36351ECC8025DCAE1D7648290E81F6B5B94302A587AC6A5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (436, 233, 12, 1, CAST(104000.00 AS Decimal(18, 2)), CAST(104000.00 AS Decimal(18, 2)), N'893DBFA34EF75D77D3E57A0CDB2C851F652634ACC7DDF50B670FF4C2BC7BF6ED')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (437, 233, 37, 1, CAST(89100.00 AS Decimal(18, 2)), CAST(89100.00 AS Decimal(18, 2)), N'AD02DDBEE4B04D31AFAA0029DF4EB4EC677CA64739D4EE2243570039CBF7A272')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (438, 234, 9, 1, CAST(100300.00 AS Decimal(18, 2)), CAST(100300.00 AS Decimal(18, 2)), N'70628AA44D6F93A705661BE7D15CD8FA8EC7CB170B6DD9DDD3076E1131FE5327')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (439, 234, 35, 1, CAST(57900.00 AS Decimal(18, 2)), CAST(57900.00 AS Decimal(18, 2)), N'2B279A162FB8D555284172797B7234474EE45CF0ECDF073ECF25FF2EBDE7CE77')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (440, 235, 29, 2, CAST(72800.00 AS Decimal(18, 2)), CAST(145600.00 AS Decimal(18, 2)), N'77409A4BA9CB6F87275709FD10CC24421DF703C1FC64E39F33CDDBA28CC6EF52')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (441, 235, 17, 1, CAST(111400.00 AS Decimal(18, 2)), CAST(111400.00 AS Decimal(18, 2)), N'61DEC513A64A3EB8ED852210AB3CFD2329F45E6EC7999F451333A67D9EE61811')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (442, 235, 7, 1, CAST(100300.00 AS Decimal(18, 2)), CAST(100300.00 AS Decimal(18, 2)), N'EC24AC27777BA904ABD5E9CCEA0806EDA56E9FB6A626DBA60C714CB9DD2D8E79')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (443, 236, 1, 1, CAST(89100.00 AS Decimal(18, 2)), CAST(89100.00 AS Decimal(18, 2)), N'6967C6A0C74FBF07AFC9E31E50F91800B2C9E35E50A8E208657AF023913419DB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (444, 237, 8, 1, CAST(100300.00 AS Decimal(18, 2)), CAST(100300.00 AS Decimal(18, 2)), N'5B1A2D6BF258193ED3AA100119F6868A8D6A85F0927ACCDFC71FDF88E769015F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (445, 238, 33, 1, CAST(107700.00 AS Decimal(18, 2)), CAST(107700.00 AS Decimal(18, 2)), N'0CBA23E03EB263B5A12AB9F919EFC3E54224994FAA8EF4B5F07732FBBE53CE1F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (446, 238, 28, 1, CAST(70600.00 AS Decimal(18, 2)), CAST(70600.00 AS Decimal(18, 2)), N'E9F0FAC18162F1ADCFF2C2440CEE87BD2103A9F16BE255AC36C8343CFC1B2C16')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (447, 239, 8, 1, CAST(100300.00 AS Decimal(18, 2)), CAST(100300.00 AS Decimal(18, 2)), N'B910A91B3E38950E4BE6674EDF747DB33EF74F64367EC0360B3EC7877BDE5670')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (448, 240, 18, 1, CAST(139000.00 AS Decimal(18, 2)), CAST(139000.00 AS Decimal(18, 2)), N'E37693FBD21651D54B6E50793FCBF487E08381858C220DE9B2ACC98DC2D9419B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (449, 240, 9, 1, CAST(101400.00 AS Decimal(18, 2)), CAST(101400.00 AS Decimal(18, 2)), N'F8E54C6E56A0641491C91E1C63EE5233E0F50E08B5251DF796C36E36E6281A9E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (450, 241, 27, 1, CAST(71400.00 AS Decimal(18, 2)), CAST(71400.00 AS Decimal(18, 2)), N'A0A3F148F77C7F58D1F2AEB9DCFD78DC6D379835C6290BBB706F5D8644A8A418')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (451, 241, 5, 2, CAST(112700.00 AS Decimal(18, 2)), CAST(225400.00 AS Decimal(18, 2)), N'756B50AB01D1E0C411FDD9CD9A457B0E91C45EDF41955EE795D9D4793A6F21C7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (452, 242, 17, 1, CAST(112700.00 AS Decimal(18, 2)), CAST(112700.00 AS Decimal(18, 2)), N'699FB69BA79DC3C8CCDDB53FE0CAFDE529F4A22940F5FAD9592D8E2C6BA51F3D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (453, 243, 1, 1, CAST(90200.00 AS Decimal(18, 2)), CAST(90200.00 AS Decimal(18, 2)), N'1F05FEF1B4304719CAE4FB43901203BCD57443A95C6F83CF7A14799786EBCF4E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (454, 243, 14, 1, CAST(105200.00 AS Decimal(18, 2)), CAST(105200.00 AS Decimal(18, 2)), N'D00444C1627D7287C45CEBAF4E09D0873095502A4090511D4E1AC25CFC8AA132')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (455, 244, 27, 1, CAST(71400.00 AS Decimal(18, 2)), CAST(71400.00 AS Decimal(18, 2)), N'2675F0B8A7102CED07430FB986DA268D6F0415BDBF2F5F88C97466DB1AE02B5F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (456, 245, 12, 2, CAST(105200.00 AS Decimal(18, 2)), CAST(210400.00 AS Decimal(18, 2)), N'E85062E789E0C20258BB54418B70DDB6944F8382BE72A7F2709F16A3BC377C16')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (457, 246, 12, 2, CAST(105200.00 AS Decimal(18, 2)), CAST(210400.00 AS Decimal(18, 2)), N'BB86A71888D28969B8D06DA7091713605008CA5F7333FEA9DFEDE56245F57A7C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (458, 247, 17, 1, CAST(112700.00 AS Decimal(18, 2)), CAST(112700.00 AS Decimal(18, 2)), N'C9AECDB3B2EC5532A16E3D55032B4729BA460D2B090A3E37708BE3BD94CA7C95')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (459, 247, 20, 2, CAST(120200.00 AS Decimal(18, 2)), CAST(240400.00 AS Decimal(18, 2)), N'DD312F2F72E206F58FE72F8453293A057F24E205C3889EDBB6560678FDE194FD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (460, 248, 35, 1, CAST(59300.00 AS Decimal(18, 2)), CAST(59300.00 AS Decimal(18, 2)), N'F32ACF8ED49101165249B31B66CBEBD1A424433918915512A6D0009EFA4D2068')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (461, 249, 36, 1, CAST(59300.00 AS Decimal(18, 2)), CAST(59300.00 AS Decimal(18, 2)), N'E735DCB50B711E70F72349731630D0DB4AC96F72D856AE2CCF0DCDAAD4D0CBC3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (462, 249, 39, 1, CAST(69900.00 AS Decimal(18, 2)), CAST(69900.00 AS Decimal(18, 2)), N'E9319572CFB0836E5131F49675E1F6722A9F0770172A1A7C7D671C9F02F9F197')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (463, 249, 37, 1, CAST(91200.00 AS Decimal(18, 2)), CAST(91200.00 AS Decimal(18, 2)), N'C37B5AD585A32FC37403098550E50AC291D5D4C0ECE3C9DB05367E258A42BF22')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (464, 250, 3, 1, CAST(83600.00 AS Decimal(18, 2)), CAST(83600.00 AS Decimal(18, 2)), N'BB38DF6BF69D5A475C8AD1BFD2B8BB014ED393898FD01570792C7C043877E53A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (465, 251, 13, 1, CAST(106400.00 AS Decimal(18, 2)), CAST(106400.00 AS Decimal(18, 2)), N'068A09A411A307EE3CF1BF66A0B39C248F1FCB62D9D8943ED506D26E83A5D4A5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (466, 252, 8, 1, CAST(102600.00 AS Decimal(18, 2)), CAST(102600.00 AS Decimal(18, 2)), N'BE5769439D0F3B97C7CD662BBDA116F880A0D92FAAF282D0C21DDCD939550EB5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (467, 253, 14, 1, CAST(106400.00 AS Decimal(18, 2)), CAST(106400.00 AS Decimal(18, 2)), N'9FAA7D890D429568040AE3DD8F5192ACCE99D14A4B74E4E5AF5EEAA28BB16EB8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (468, 254, 23, 2, CAST(87400.00 AS Decimal(18, 2)), CAST(174800.00 AS Decimal(18, 2)), N'E21DEBFD42171055A683BE03EE3193EE186C8E6B35BFA9206F7E5DEB9B701855')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (469, 254, 16, 1, CAST(133000.00 AS Decimal(18, 2)), CAST(133000.00 AS Decimal(18, 2)), N'1431238B1FDD981CE17744C0C6C71E36919F79F0B1BDFFD00ABF8E03DBFD66A3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (470, 254, 28, 1, CAST(72200.00 AS Decimal(18, 2)), CAST(72200.00 AS Decimal(18, 2)), N'7D3DFCC8B4978D16839C49656228E1D57BA237F2EFDDB70A46303E6161DFC5C6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (471, 255, 14, 1, CAST(106400.00 AS Decimal(18, 2)), CAST(106400.00 AS Decimal(18, 2)), N'BF1B0BAC01EE6A0E2113C83F5E633C12CED9C78271A232B516732119E5604DEC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (472, 256, 3, 1, CAST(83600.00 AS Decimal(18, 2)), CAST(83600.00 AS Decimal(18, 2)), N'ADED8C255A5AAE10BDF38C434510B1E413845B4D789D23E841B116B04C7972B5')
+GO
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (473, 257, 35, 1, CAST(59300.00 AS Decimal(18, 2)), CAST(59300.00 AS Decimal(18, 2)), N'02528F504AD689826EC8B80FD68D9D028E91E6E4BA17F82C132609BA9F7BE330')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (474, 258, 12, 2, CAST(107600.00 AS Decimal(18, 2)), CAST(215200.00 AS Decimal(18, 2)), N'FE363C51B773F8D4C92550073529693EAD37C9425FE72E31282F269AB57E5A7E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (475, 258, 14, 2, CAST(107600.00 AS Decimal(18, 2)), CAST(215200.00 AS Decimal(18, 2)), N'D0B52E99D7D248C30F05D9090ABC5A1153844A92AF07A42B315ACCA6EB1E1F7C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (476, 259, 40, 1, CAST(70700.00 AS Decimal(18, 2)), CAST(70700.00 AS Decimal(18, 2)), N'2587AE0549F01DC2EA3F3350C9A553ED7D658B9A6593DDD8F7EE695AB529D91E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (477, 259, 35, 1, CAST(59900.00 AS Decimal(18, 2)), CAST(59900.00 AS Decimal(18, 2)), N'2CC7E642F13715178D1B3CABBF00C35E6A9480BA00577641EB5BBA7DF500F7E9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (478, 260, 36, 1, CAST(59900.00 AS Decimal(18, 2)), CAST(59900.00 AS Decimal(18, 2)), N'5637EF101EDEAE6BAE25A27F33A58B67506C4FD132875CED24C0740090647963')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (479, 260, 3, 1, CAST(84500.00 AS Decimal(18, 2)), CAST(84500.00 AS Decimal(18, 2)), N'1B3AE975CD280FA8EFF625D562E84C07D490C799D602A1289FAECF1E7ECD700C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (480, 261, 12, 1, CAST(107600.00 AS Decimal(18, 2)), CAST(107600.00 AS Decimal(18, 2)), N'26CE0868E4E1FFDF61C6A13DABA780FC1E77F70FAD076DFE3C2ECE7C635DAC75')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (481, 262, 7, 1, CAST(103800.00 AS Decimal(18, 2)), CAST(103800.00 AS Decimal(18, 2)), N'1324B2F5CE269F01653A7AEDB29D2111D80742447707C711D0AE07EB84F8CE2E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (482, 263, 13, 1, CAST(107600.00 AS Decimal(18, 2)), CAST(107600.00 AS Decimal(18, 2)), N'061D0731AD11302401F2DA0809CA18909DADFF272A76A285D5982021124A74E5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (483, 264, 14, 1, CAST(107600.00 AS Decimal(18, 2)), CAST(107600.00 AS Decimal(18, 2)), N'39222ADE4DAB2F7DAF7788A9EFC9DA4FE1AF107A5ADD92C52BF264B82A937B97')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (484, 264, 25, 1, CAST(99900.00 AS Decimal(18, 2)), CAST(99900.00 AS Decimal(18, 2)), N'9BE0E980F0E595737C38F0EB29CA0E7FDB7ED59661830A71B9DF6078BA36CC9F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (485, 265, 35, 1, CAST(59900.00 AS Decimal(18, 2)), CAST(59900.00 AS Decimal(18, 2)), N'0978A7FDCCFB4514669230A9DF9ED30C958B4AD67C11CF4970F9674BF2465375')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (486, 265, 15, 2, CAST(134500.00 AS Decimal(18, 2)), CAST(269000.00 AS Decimal(18, 2)), N'AD3651DC2499778416C366D81219461F664F7C7B4BA5A25A2AD6BFF6F9072428')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (487, 265, 20, 1, CAST(123000.00 AS Decimal(18, 2)), CAST(123000.00 AS Decimal(18, 2)), N'65029109EA5DB6179FE663700C26E73A13B5FC184B33B0C41C8ACCDCB7871341')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (488, 266, 15, 2, CAST(134500.00 AS Decimal(18, 2)), CAST(269000.00 AS Decimal(18, 2)), N'4396EDA88E9A74AB6F3DE6D24D7EC1FFB0A12B23B704A932DDDB26EC063FC93A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (489, 266, 9, 1, CAST(103800.00 AS Decimal(18, 2)), CAST(103800.00 AS Decimal(18, 2)), N'E78C51F9E19D8BD7BD86F12D032A393E26116B8BCF3E8D4227DAB96B1A732C20')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (490, 267, 23, 1, CAST(88400.00 AS Decimal(18, 2)), CAST(88400.00 AS Decimal(18, 2)), N'3D90FEC294D71866FE04B32E586F5740A18BB65F9776675D61776F9344F58CA1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (491, 268, 5, 1, CAST(116600.00 AS Decimal(18, 2)), CAST(116600.00 AS Decimal(18, 2)), N'7E444105A70C33BA0C362B26449C38C2FAA3D537187477B1EC0B45DBD380AD1E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (492, 268, 39, 1, CAST(71500.00 AS Decimal(18, 2)), CAST(71500.00 AS Decimal(18, 2)), N'9A0169693391A7908097153356BA4B0054C6BB3A31D3DAD43E8DE541794EB84D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (493, 269, 33, 1, CAST(112700.00 AS Decimal(18, 2)), CAST(112700.00 AS Decimal(18, 2)), N'C33BE094A425949CD4DEA203C9837159A9A9D1F2ED031AA7D6AF1E93AA01FE57')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (494, 270, 24, 2, CAST(128200.00 AS Decimal(18, 2)), CAST(256400.00 AS Decimal(18, 2)), N'C01C03D7D1A061225EB9F6248AFF11D5D21EB250F637130461DD20DC2451287A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (495, 270, 23, 1, CAST(89400.00 AS Decimal(18, 2)), CAST(89400.00 AS Decimal(18, 2)), N'792C29A40B4779DF273F7A88FD556DD9AF7C7FA9332241386279BE04593AFD77')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (496, 271, 18, 1, CAST(143800.00 AS Decimal(18, 2)), CAST(143800.00 AS Decimal(18, 2)), N'34DD7BC417FE86B0A863FE7D84D74511FAC5AD9214799F640A1884FAD7471113')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (497, 272, 3, 1, CAST(85500.00 AS Decimal(18, 2)), CAST(85500.00 AS Decimal(18, 2)), N'7A5E6597808B8AA2981573F6B714AC8F8EF5C185BEA5D54C749291E870CE3495')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (498, 272, 7, 1, CAST(104900.00 AS Decimal(18, 2)), CAST(104900.00 AS Decimal(18, 2)), N'D35EEA90F72DDB086354737A1D3870BC6730E946CD455F42605F25ADF83E3FDD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (499, 273, 9, 1, CAST(104900.00 AS Decimal(18, 2)), CAST(104900.00 AS Decimal(18, 2)), N'1C1CDCB05FEFA5027DF47C50B105A38085009F7AA92F81948E9DF7BE3964BFE2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (500, 273, 3, 1, CAST(85500.00 AS Decimal(18, 2)), CAST(85500.00 AS Decimal(18, 2)), N'C17BE7688E44FAF245CCFC3628BE8AB0C71D41E4FF2E34BA86BA425D14C9041A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (501, 274, 36, 1, CAST(60600.00 AS Decimal(18, 2)), CAST(60600.00 AS Decimal(18, 2)), N'129C7D95362D6A41AEFA483AD3789DA7E25A4F7287B9F3C740F0C985B82D30B3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (502, 275, 12, 1, CAST(108800.00 AS Decimal(18, 2)), CAST(108800.00 AS Decimal(18, 2)), N'E9474402BFD01A98875BB26205E89196CA2B6361ACFC441F6086250333AF419F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (503, 276, 1, 2, CAST(94300.00 AS Decimal(18, 2)), CAST(188600.00 AS Decimal(18, 2)), N'0D2C880B1564E08018E004FFD804B3C4128F5951726A23481EC09FE89A1F5FA7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (504, 276, 39, 1, CAST(72300.00 AS Decimal(18, 2)), CAST(72300.00 AS Decimal(18, 2)), N'2ED31BF0A31595CECFE6BCDD867F133458D38E63D14C0ECAB7201D7BFB08FE15')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (505, 277, 19, 1, CAST(145400.00 AS Decimal(18, 2)), CAST(145400.00 AS Decimal(18, 2)), N'9C6B5F23614E0E39139205897D3DDBFF20E961C219E965BED6D4E19FD9D56AD7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (506, 277, 15, 1, CAST(137500.00 AS Decimal(18, 2)), CAST(137500.00 AS Decimal(18, 2)), N'98B15900FFC25C2334F5189D2ACE451C71FC8B7A292F2D0D1F2631EC86036E7C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (507, 277, 40, 1, CAST(72300.00 AS Decimal(18, 2)), CAST(72300.00 AS Decimal(18, 2)), N'614911265A254EFDF3EB4540CFDF0680F9148FD67F25E316CC5A6B3B474BC0C6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (508, 278, 2, 1, CAST(76200.00 AS Decimal(18, 2)), CAST(76200.00 AS Decimal(18, 2)), N'778945154EDF777FD1752B794890FDC6E3A8C1608ED367146746608D2BC60ABF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (509, 279, 37, 1, CAST(94300.00 AS Decimal(18, 2)), CAST(94300.00 AS Decimal(18, 2)), N'352DE5F7999EE19103C2025145971BF8E2167F5F47F60311ABDF40BBE7D85BA3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (510, 279, 21, 1, CAST(82500.00 AS Decimal(18, 2)), CAST(82500.00 AS Decimal(18, 2)), N'3FB105C59C4FFBB865A6215577042AD5AD257AAF86E5570D65AA2AF48BA2DD95')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (511, 280, 2, 1, CAST(76200.00 AS Decimal(18, 2)), CAST(76200.00 AS Decimal(18, 2)), N'64CC347A1E9717E3BCEBD0E1F49ED7389F9176C0DF9568331E20E7308AE13387')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (512, 280, 24, 1, CAST(129600.00 AS Decimal(18, 2)), CAST(129600.00 AS Decimal(18, 2)), N'943E28F640C45A1AE26E8A6E903FBEB5F35387DEF1FA2BAE219B9A603D92E453')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (513, 281, 9, 1, CAST(106100.00 AS Decimal(18, 2)), CAST(106100.00 AS Decimal(18, 2)), N'41AF7F340A4CD66A295A1C7A21E5FD4EDE07F2940127314F8AEC436D74642E08')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (514, 281, 35, 1, CAST(61300.00 AS Decimal(18, 2)), CAST(61300.00 AS Decimal(18, 2)), N'BC82C9DE9D18BD12F8CEF14FA5AD0D333E9A241B58582405B24F60E2CD745B2E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (515, 282, 2, 1, CAST(76200.00 AS Decimal(18, 2)), CAST(76200.00 AS Decimal(18, 2)), N'44C3BD89C9712A25A6B0A9FC02BAECFE2CD17BC654DACDF6FD117284A8BEFD2C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (516, 283, 8, 1, CAST(106100.00 AS Decimal(18, 2)), CAST(106100.00 AS Decimal(18, 2)), N'A713ACBEF278F73E692EDDE1E0CA2C65CE406770E0346D3C1E1DE9B3FC4CB2E8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (517, 284, 24, 1, CAST(131100.00 AS Decimal(18, 2)), CAST(131100.00 AS Decimal(18, 2)), N'F084FC1ACAE7B3840BA904E33B55E4FF29560CF1F122D0E5B81032296D32E401')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (518, 284, 35, 1, CAST(62000.00 AS Decimal(18, 2)), CAST(62000.00 AS Decimal(18, 2)), N'654F3F0CC24B9B72B2D29A30AD6C813C4416D8A14B4FAFF5A91BDF92CEEC9F6A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (519, 285, 12, 1, CAST(111200.00 AS Decimal(18, 2)), CAST(111200.00 AS Decimal(18, 2)), N'B77D192AD9B6040D18C109D1DC6D2170B7948CFB0C0B3E0EC83C0DEEFC56F2B2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (520, 285, 23, 1, CAST(91300.00 AS Decimal(18, 2)), CAST(91300.00 AS Decimal(18, 2)), N'B958D33AABCBA2C8F173C4DE44B9909690CD5E77C70E5F1086D5CD6365BC2583')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (521, 286, 8, 1, CAST(107200.00 AS Decimal(18, 2)), CAST(107200.00 AS Decimal(18, 2)), N'D05A3C74DCCE00FF8E78BD8B6636A5AF190C0E517E876B79297A4BEB4A5B6371')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (522, 286, 23, 1, CAST(91300.00 AS Decimal(18, 2)), CAST(91300.00 AS Decimal(18, 2)), N'F9E4C8817F37A7DFBD37E28CCB6680466A63DCC13120C1B1F96DF1F6ECB7693C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (523, 287, 2, 1, CAST(77000.00 AS Decimal(18, 2)), CAST(77000.00 AS Decimal(18, 2)), N'DB431BC37287C1DD3EBE9C762F4762937DEF52D2D84BF920222D5BC877736CE8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (524, 287, 35, 1, CAST(62000.00 AS Decimal(18, 2)), CAST(62000.00 AS Decimal(18, 2)), N'2473E4775799E14702434F3BC07272AAF00380074CAFBEFF0CB0DF36D96884B9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (525, 288, 35, 1, CAST(62000.00 AS Decimal(18, 2)), CAST(62000.00 AS Decimal(18, 2)), N'456C0A841CDF2AA2844FD743B02E28B2C0EDF2F0C0B0B3EABEF465ECFD7C81FE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (526, 288, 8, 1, CAST(107200.00 AS Decimal(18, 2)), CAST(107200.00 AS Decimal(18, 2)), N'8BECB5708EBE0A2FC64D3B083675DDF214A515496A5E703548BA28897F53CA7A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (527, 288, 24, 1, CAST(131100.00 AS Decimal(18, 2)), CAST(131100.00 AS Decimal(18, 2)), N'132BA9E694431889F95D8B965FABF83D7D5AF2AF27301C5654C46039AC8887B7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (528, 289, 24, 1, CAST(131100.00 AS Decimal(18, 2)), CAST(131100.00 AS Decimal(18, 2)), N'6F754129A831B16C4255E23D40F61DFBA5331CB61E1C61DF013AB638AB9B6B2A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (529, 289, 8, 1, CAST(107200.00 AS Decimal(18, 2)), CAST(107200.00 AS Decimal(18, 2)), N'415124A4ED3675BB0844BB358D9A4C806CB874433CDB4C78F181AA3C1822E4EA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (530, 290, 25, 1, CAST(103300.00 AS Decimal(18, 2)), CAST(103300.00 AS Decimal(18, 2)), N'2A798219DF463DCE9B6846C84A9A8FA92A25E24D49D88A258DE7DDCD1BAB70DB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (531, 291, 19, 1, CAST(146900.00 AS Decimal(18, 2)), CAST(146900.00 AS Decimal(18, 2)), N'73CC14C431C185E4A90186183E338149553593BEFBD571FBA82E0066ACF4EBA6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (532, 291, 9, 1, CAST(107200.00 AS Decimal(18, 2)), CAST(107200.00 AS Decimal(18, 2)), N'82A31655B9CA416D22047ABB3299F65AAF445A5944100F841D785871C8ED267A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (533, 291, 15, 1, CAST(139000.00 AS Decimal(18, 2)), CAST(139000.00 AS Decimal(18, 2)), N'B7752B7520FC2AAD6B95DC3264107F2A767CE09551133316C78CD26995BD0121')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (534, 292, 25, 1, CAST(103300.00 AS Decimal(18, 2)), CAST(103300.00 AS Decimal(18, 2)), N'7D4AB72F2DA9FC0867FAAFE0B50CFD7C3FCD1190E710C7ED9F110463B1A3A23A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (535, 292, 30, 1, CAST(119100.00 AS Decimal(18, 2)), CAST(119100.00 AS Decimal(18, 2)), N'F1103556F19DB7F75F73BE43004635F0E6F888B66DB82B231DC42257CF1CD530')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (536, 293, 7, 1, CAST(108400.00 AS Decimal(18, 2)), CAST(108400.00 AS Decimal(18, 2)), N'AC7DC4DA09D157C24DBAA06A309601676501BD6235A0225252AECD74CA6B4AD2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (537, 293, 33, 1, CAST(116400.00 AS Decimal(18, 2)), CAST(116400.00 AS Decimal(18, 2)), N'5AAC50811598C15854935C5AA39C6A41E3B41A61DFB667B93BAAAE01D2DA5155')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (538, 293, 35, 1, CAST(62600.00 AS Decimal(18, 2)), CAST(62600.00 AS Decimal(18, 2)), N'014C7E5B68F0A8F41D733ABEB0623CC1B23461900F1378CC3CA21C9C8BCF64DC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (539, 294, 2, 1, CAST(77900.00 AS Decimal(18, 2)), CAST(77900.00 AS Decimal(18, 2)), N'99805D62529D89E438F16D2A0204E5C3835669029AB007F33C45FF345049AB4C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (540, 294, 12, 1, CAST(112400.00 AS Decimal(18, 2)), CAST(112400.00 AS Decimal(18, 2)), N'64B4E031E6EE9AA8D1BF4A41E8969C2392EEF2344ECD805C583C9B59DC071CCC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (541, 295, 33, 1, CAST(116400.00 AS Decimal(18, 2)), CAST(116400.00 AS Decimal(18, 2)), N'8EA3C5C4B91D8C6E2C3FE15E9E8F13D42003C8C4D55FE9CE9C6EF13D99F7C4D6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (542, 295, 25, 1, CAST(104400.00 AS Decimal(18, 2)), CAST(104400.00 AS Decimal(18, 2)), N'4AAE20CD349963233109F5429FE01823ED0F115D2E961594876BF7F4F0041DF5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (543, 295, 9, 1, CAST(108400.00 AS Decimal(18, 2)), CAST(108400.00 AS Decimal(18, 2)), N'5EF8807B16471884409F9B27C0A88F17C01F43887BB9AC95F26CE3058724C1C5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (544, 296, 23, 1, CAST(92300.00 AS Decimal(18, 2)), CAST(92300.00 AS Decimal(18, 2)), N'6E648755459FA6C040D70BD9BF54A52389D59B893CC9082DA9D759B94B01CC6F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (545, 296, 8, 2, CAST(108400.00 AS Decimal(18, 2)), CAST(216800.00 AS Decimal(18, 2)), N'2032E1EE4B9FF0C5EDF21C6B53318FE226F541B95BAA8913662A4FC589D54601')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (546, 296, 5, 2, CAST(120400.00 AS Decimal(18, 2)), CAST(240800.00 AS Decimal(18, 2)), N'5BB2200D389F470856F133BC81215EE812D26273A3841A47C700DD425EC749C9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (547, 297, 9, 2, CAST(108400.00 AS Decimal(18, 2)), CAST(216800.00 AS Decimal(18, 2)), N'7665B654E39A4741C4259B262909F416FAB2B2C03D85961BDC60312B442B6502')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (548, 297, 33, 1, CAST(116400.00 AS Decimal(18, 2)), CAST(116400.00 AS Decimal(18, 2)), N'C9C2EC684F0F0DE37B289CE4670B2C3DCFD51661E74B65E702A73F67944AF575')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (549, 298, 30, 1, CAST(120400.00 AS Decimal(18, 2)), CAST(120400.00 AS Decimal(18, 2)), N'B2CAA0DB4ADBA23A1101038582F966328EF8EDC9C94F1ABEAAF32C2B24021B3F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (550, 299, 1, 1, CAST(96300.00 AS Decimal(18, 2)), CAST(96300.00 AS Decimal(18, 2)), N'61C00CA882A5FDC0E2207ED540B6E6FE5782517F8198ABB721E6F6CDCB8EE008')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (551, 300, 18, 1, CAST(148500.00 AS Decimal(18, 2)), CAST(148500.00 AS Decimal(18, 2)), N'AE97CAC2E08C0D41EEBCF614AC907272C01A674C8F6F3C8CF0B2B8047FF66854')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (552, 301, 27, 1, CAST(76300.00 AS Decimal(18, 2)), CAST(76300.00 AS Decimal(18, 2)), N'3C5C0AC1954A87FBF027FCD5F7995C40B6875B56EB90CAAEE1F3FB20FF0BA024')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (553, 302, 12, 1, CAST(112400.00 AS Decimal(18, 2)), CAST(112400.00 AS Decimal(18, 2)), N'486F9A5DC3AECFC6554FC9DA6EEB314058262E978BED66D8ECB7D6D3DB8B7728')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (554, 303, 5, 1, CAST(120400.00 AS Decimal(18, 2)), CAST(120400.00 AS Decimal(18, 2)), N'556C568F4DBF552BC7B2FFFB8DB9E6F08404F8955F97B80EEF160038C7C46875')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (555, 303, 34, 1, CAST(116400.00 AS Decimal(18, 2)), CAST(116400.00 AS Decimal(18, 2)), N'1FF9A7A2B60EA8788A505DAE383BA64E56743EC68780D430909C5674CAB51F60')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (556, 303, 25, 1, CAST(104400.00 AS Decimal(18, 2)), CAST(104400.00 AS Decimal(18, 2)), N'C12573AB7C463945ACA4E5D4754DE291391F20331BBE00D7B2CAC1E1D98F72C6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (557, 304, 29, 1, CAST(78700.00 AS Decimal(18, 2)), CAST(78700.00 AS Decimal(18, 2)), N'27FDE2FEE502EF68DC127EE85E1EEA0C39066637DD15DF05AB88D1F6F7BFF68F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (558, 305, 39, 1, CAST(73900.00 AS Decimal(18, 2)), CAST(73900.00 AS Decimal(18, 2)), N'0EEE2E66237EEB3EB36215910B2C9AC3342D85B2665AF655398E852D373D9DC6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (559, 306, 15, 1, CAST(140500.00 AS Decimal(18, 2)), CAST(140500.00 AS Decimal(18, 2)), N'36F829F92B9D9ECD1FF635BBC910C72F0477E93C75423AB216B557BBD2D018B7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (560, 307, 31, 1, CAST(121700.00 AS Decimal(18, 2)), CAST(121700.00 AS Decimal(18, 2)), N'38FBBD7C599C94345B89474359647C40BA66252C66901D26AF6147618EE41FF3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (561, 308, 39, 1, CAST(74700.00 AS Decimal(18, 2)), CAST(74700.00 AS Decimal(18, 2)), N'F6460D47D923E69996B5AF954765A09FE780F293036F0CB7621C11BE9F9D694D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (562, 308, 2, 1, CAST(78700.00 AS Decimal(18, 2)), CAST(78700.00 AS Decimal(18, 2)), N'D056CD6D2A033D0BE4B5740C96E66D1D49B7673EA5C6225F608EAF357344913B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (563, 309, 5, 1, CAST(121700.00 AS Decimal(18, 2)), CAST(121700.00 AS Decimal(18, 2)), N'70C784331D3643F2E0AE00C695F21B4D5D64EBFFA0FCAEC76CC3FF68B94971ED')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (564, 309, 40, 1, CAST(74700.00 AS Decimal(18, 2)), CAST(74700.00 AS Decimal(18, 2)), N'7EAFDB52B697DA41D449228664C9886745B6845AE0866AA78A72DDFF8AB42E23')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (565, 310, 31, 1, CAST(121700.00 AS Decimal(18, 2)), CAST(121700.00 AS Decimal(18, 2)), N'D97002EEB06FF05E9378124C7A6E93702D0D8891D27994C9E3781BD940EAE9B1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (566, 310, 17, 1, CAST(121700.00 AS Decimal(18, 2)), CAST(121700.00 AS Decimal(18, 2)), N'C0E259B5FBCE2BF55424BC43D41D15A50155F68BC2C59F5223BCB6CF0CA47322')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (567, 311, 7, 1, CAST(109500.00 AS Decimal(18, 2)), CAST(109500.00 AS Decimal(18, 2)), N'4CC5EB6F0D444DECE81FA8F30712F71860512ABEE817D91FB7269127BD556D47')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (568, 311, 8, 1, CAST(109500.00 AS Decimal(18, 2)), CAST(109500.00 AS Decimal(18, 2)), N'3A072EBB96CDF5B1AD979841A9241BBC65CE205E148B53C59E36AE9972B6CD8C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (569, 312, 24, 1, CAST(133900.00 AS Decimal(18, 2)), CAST(133900.00 AS Decimal(18, 2)), N'05F5BC4B1D5C4FDFB5BFF51EF20E345587D63F70ACC5197B3C47746D83779205')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (570, 312, 5, 1, CAST(121700.00 AS Decimal(18, 2)), CAST(121700.00 AS Decimal(18, 2)), N'F4D2DC14C0461E7AD7D97375490023B0A6FFB2EED1A1DCBCDDE14B4D6D3D5B51')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (571, 313, 1, 1, CAST(97400.00 AS Decimal(18, 2)), CAST(97400.00 AS Decimal(18, 2)), N'FD8D0F0ECE7902F0CD19D3B5F572FF4DEEA59F7478DCDAA5D4214C43D4F1BFA1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (572, 314, 5, 1, CAST(121700.00 AS Decimal(18, 2)), CAST(121700.00 AS Decimal(18, 2)), N'8B36320C940DC36A1DB0C9CBF9236CD09A4BDC376061E44FEE95ECC9D8C56E06')
+GO
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (573, 315, 34, 2, CAST(117700.00 AS Decimal(18, 2)), CAST(235400.00 AS Decimal(18, 2)), N'80581045EA536D5EC1D6C8CE0069BB8B168EAF0187362AFF09E68D7CD9FD6244')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (574, 315, 23, 1, CAST(93300.00 AS Decimal(18, 2)), CAST(93300.00 AS Decimal(18, 2)), N'804C4BAAECE812291C2FDC4C91F3BFFBFFDCB9E97CF6304A999EEC88F97762FA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (575, 315, 25, 1, CAST(105500.00 AS Decimal(18, 2)), CAST(105500.00 AS Decimal(18, 2)), N'B6FA137DD44B17F5EF1BA378C4F015938A03250C25507454EB9FC2A0A954D042')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (576, 316, 39, 1, CAST(74700.00 AS Decimal(18, 2)), CAST(74700.00 AS Decimal(18, 2)), N'DAB967C748C50A7795D4FF83BB41140F9845E858735B924F13D6E8FEBF4D7113')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (577, 317, 42, 2, CAST(64900.00 AS Decimal(18, 2)), CAST(129800.00 AS Decimal(18, 2)), N'C7DFA1790BF841EDFA1994B14C94CB2B80B1AA661B98AE3AB3D6133C1AD14FA3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (578, 317, 20, 2, CAST(129800.00 AS Decimal(18, 2)), CAST(259600.00 AS Decimal(18, 2)), N'BB2274A7A83D885FB081D5130608BDFA90C22E689D9BF88FD4C877D08597B6C3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (579, 318, 29, 1, CAST(79500.00 AS Decimal(18, 2)), CAST(79500.00 AS Decimal(18, 2)), N'0D9C8E49C9B8589D9797BB874750D53E1D6917E378434256A3434CA910ECCC6D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (580, 318, 24, 1, CAST(133900.00 AS Decimal(18, 2)), CAST(133900.00 AS Decimal(18, 2)), N'B55C26DFF00E245DDAEBB9E435FB7AC8AF967F64B14B1A2986062CE5569125AC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (581, 319, 31, 1, CAST(121700.00 AS Decimal(18, 2)), CAST(121700.00 AS Decimal(18, 2)), N'7ADB1E6AF49087D095DCA3023273F2BB8639CABCD8F5801013CD110CF28CE315')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (582, 320, 23, 1, CAST(93300.00 AS Decimal(18, 2)), CAST(93300.00 AS Decimal(18, 2)), N'CED56C9EA744EE667B0FDEB38C0D0DB24CE349F80C529CB65062F497FBA14686')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (583, 321, 14, 1, CAST(113600.00 AS Decimal(18, 2)), CAST(113600.00 AS Decimal(18, 2)), N'5836717C98D61E2B06BB08BE9A56697C52F7EB68F2A3451136575FA803CD0300')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (584, 322, 3, 1, CAST(89300.00 AS Decimal(18, 2)), CAST(89300.00 AS Decimal(18, 2)), N'D51688ED4CDBAFD888BBA5A84967F167429AF291DB79251BF6D66D9E77A16292')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (585, 323, 16, 2, CAST(142000.00 AS Decimal(18, 2)), CAST(284000.00 AS Decimal(18, 2)), N'DEEBCA2082CF5B3905BA80620753A1BABEA665C90CF40782A489437277AD71EA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (586, 323, 34, 1, CAST(117700.00 AS Decimal(18, 2)), CAST(117700.00 AS Decimal(18, 2)), N'388BA33EA4C280B0F0381004B28D8588F806B72B5D29072961F4847C89543170')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (587, 324, 3, 2, CAST(89300.00 AS Decimal(18, 2)), CAST(178600.00 AS Decimal(18, 2)), N'5AD62E35DC8225194F09F182B849D19E30133C6EEA16FCC55CEE59651EAACDDD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (588, 324, 23, 1, CAST(93300.00 AS Decimal(18, 2)), CAST(93300.00 AS Decimal(18, 2)), N'6F805A67CF572779403F0F9A0D23E13F66CDB81A3C529A217BDCA40A034B9789')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (589, 325, 9, 1, CAST(110700.00 AS Decimal(18, 2)), CAST(110700.00 AS Decimal(18, 2)), N'85EDEB4E4913808537C528CACC0FE1AEC304EF2D05C03ED9A5138D721D510CDA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (590, 326, 25, 1, CAST(106600.00 AS Decimal(18, 2)), CAST(106600.00 AS Decimal(18, 2)), N'339EB755D187FB41E7DAD1C445EAED75E3F6D998F3BF028DAA5A665C7AF7A96C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (591, 327, 20, 1, CAST(131200.00 AS Decimal(18, 2)), CAST(131200.00 AS Decimal(18, 2)), N'E4117971995EE391631AC9C75FDA22BD9A3D749FD0640A7EE6C9DCEC9B24B88F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (592, 328, 14, 1, CAST(114800.00 AS Decimal(18, 2)), CAST(114800.00 AS Decimal(18, 2)), N'74026C74D9FEA163A4772F39B29FAFD8BBFD890352ACB50C7E2653037E8361FD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (593, 329, 7, 1, CAST(110700.00 AS Decimal(18, 2)), CAST(110700.00 AS Decimal(18, 2)), N'5E43422663EFB6FE645F6535EC89C03244989B745A160B5E1BACFBC35C5B2A95')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (594, 330, 21, 1, CAST(86100.00 AS Decimal(18, 2)), CAST(86100.00 AS Decimal(18, 2)), N'73CD821244655B8A02C2A754825131B25CC20D96CCD37815A9E755FAB37D61E4')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (595, 330, 9, 1, CAST(110700.00 AS Decimal(18, 2)), CAST(110700.00 AS Decimal(18, 2)), N'B989432E4C62299A36FE70DCA3267A4C7A18D910DC47E43D777CE057382A1E7B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (596, 331, 28, 1, CAST(77900.00 AS Decimal(18, 2)), CAST(77900.00 AS Decimal(18, 2)), N'1E97BBD9EF4A08AB7DE32CCFEEA4945E9A1E2241FC31049ED61FF3BCD85AF643')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (597, 332, 8, 1, CAST(110700.00 AS Decimal(18, 2)), CAST(110700.00 AS Decimal(18, 2)), N'2186044765607763EBD24F045A028F313F393F18EBD2123AAE63AF3D0F84203C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (598, 333, 5, 1, CAST(123000.00 AS Decimal(18, 2)), CAST(123000.00 AS Decimal(18, 2)), N'B37DA8364187CDAFAFE8B1935CB6A5CAA3704A71AC8896A595050920F884B758')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (599, 334, 1, 1, CAST(99400.00 AS Decimal(18, 2)), CAST(99400.00 AS Decimal(18, 2)), N'7AB9E807723C6B8BBEC364DFA156B414D5ABBBCE4AA3CBC0669B6A7B78DBE9F5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (600, 334, 9, 1, CAST(111900.00 AS Decimal(18, 2)), CAST(111900.00 AS Decimal(18, 2)), N'0CE54111815EB6DA8677DCAFFAC9BC567CA7600A0240538AB6E6D2E318F500E7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (601, 335, 3, 1, CAST(91100.00 AS Decimal(18, 2)), CAST(91100.00 AS Decimal(18, 2)), N'CAE07B81E3A3177301C4473201D688BF2F1E867B2E187C818D1BCDA8049CD2AA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (602, 336, 27, 1, CAST(78700.00 AS Decimal(18, 2)), CAST(78700.00 AS Decimal(18, 2)), N'660D9B997750B6B795F9F4759A7072F2346410FCF8E1DC75702C7D9FEABB3609')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (603, 337, 7, 1, CAST(111900.00 AS Decimal(18, 2)), CAST(111900.00 AS Decimal(18, 2)), N'8D3264A15169E34A0CBCB4D2EFBF81F65C341AE053B9BE2A618A101081D59E7F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (604, 338, 9, 1, CAST(111900.00 AS Decimal(18, 2)), CAST(111900.00 AS Decimal(18, 2)), N'F30FFB2F633C75647E8A0582415B774FEAB182EDC43099CEF1E52872590B42A9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (605, 338, 24, 2, CAST(136700.00 AS Decimal(18, 2)), CAST(273400.00 AS Decimal(18, 2)), N'C23305EA0DAB038C07EE50464DBA11C88B631F0B00B45604955D4CC49E1A623F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (606, 339, 7, 1, CAST(111900.00 AS Decimal(18, 2)), CAST(111900.00 AS Decimal(18, 2)), N'AD16421047D05EA5474FCC540E54EA9FCCBEBDFC39A54EA81B895B6B1DB58A83')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (607, 339, 9, 1, CAST(111900.00 AS Decimal(18, 2)), CAST(111900.00 AS Decimal(18, 2)), N'6AF73674A3AF8CC047C83895EDE2861F1D9730B03E22F3FD6EE9887EA9131B2F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (608, 340, 2, 1, CAST(80400.00 AS Decimal(18, 2)), CAST(80400.00 AS Decimal(18, 2)), N'22BF30FB1794F75BADDB762D183B3D0661822919BB88F38643E04A2C76C38E5A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (609, 340, 9, 1, CAST(111900.00 AS Decimal(18, 2)), CAST(111900.00 AS Decimal(18, 2)), N'0D58F0ED5A7092E5E3A47A0A1C216C25B048AAED81F13536B8DD9DF7361FBBA0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (610, 340, 28, 1, CAST(78700.00 AS Decimal(18, 2)), CAST(78700.00 AS Decimal(18, 2)), N'125DCB8E8C577164CC58BA01B198589531E60CB952883C1A604DA3841B269D03')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (611, 341, 27, 1, CAST(78700.00 AS Decimal(18, 2)), CAST(78700.00 AS Decimal(18, 2)), N'8A46D41AFD549CEE4B6D79A6F19F4F3152750E5B36072E7F06890956DFD4401A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (612, 342, 18, 1, CAST(154900.00 AS Decimal(18, 2)), CAST(154900.00 AS Decimal(18, 2)), N'5F899E10C1F9E49DA63B64D1AF49F1FA18DF32892F595A048958E4B76804F373')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (613, 343, 2, 1, CAST(81200.00 AS Decimal(18, 2)), CAST(81200.00 AS Decimal(18, 2)), N'C1F105C008F3BD17AE9B37524945C4DB806A1BF6A66BA5B392BFB8F6717469C2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (614, 343, 33, 1, CAST(121400.00 AS Decimal(18, 2)), CAST(121400.00 AS Decimal(18, 2)), N'75163891C3E1C27BDF0ACDCB54D597B02AD0F6E91C4AA5B7C7C7865F400B1F24')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (615, 344, 13, 1, CAST(117200.00 AS Decimal(18, 2)), CAST(117200.00 AS Decimal(18, 2)), N'A601C22AE881D9A1D54EE2AC9B8869C045BFE9A1025DB9F2C0AF823ABD7D02A1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (616, 345, 19, 1, CAST(154900.00 AS Decimal(18, 2)), CAST(154900.00 AS Decimal(18, 2)), N'49FDB852CED0E8F731DFE171C1C5AB42CBB35754F3D269DA13B2588E2FB9065B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (617, 345, 14, 1, CAST(117200.00 AS Decimal(18, 2)), CAST(117200.00 AS Decimal(18, 2)), N'8146B3D0C67B3DF9FD120D9AAE9AC498E67D4B3B944E0D6828CAD9FA51092F0E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (618, 346, 8, 1, CAST(113000.00 AS Decimal(18, 2)), CAST(113000.00 AS Decimal(18, 2)), N'5231F6ADE7F546ECEC1C460A53BDA0B9B6C572E1CF5B8B18C69B2B94C39E5956')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (619, 346, 9, 1, CAST(113000.00 AS Decimal(18, 2)), CAST(113000.00 AS Decimal(18, 2)), N'B77F994FB303FEBF4AAC36CF57C4D6D11A3B759526AA4A7606A38CE0C662CB3E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (620, 347, 23, 1, CAST(96300.00 AS Decimal(18, 2)), CAST(96300.00 AS Decimal(18, 2)), N'E184B2F4581EDFA93BEFD34D69BA0915B68680049640F9F7D678FCC0D0DF993C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (621, 348, 23, 1, CAST(96300.00 AS Decimal(18, 2)), CAST(96300.00 AS Decimal(18, 2)), N'BFC124F367BDD2CF3B89A923B6A9836F254AAA6FA2F271A10DDB3A12F8808417')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (622, 349, 17, 1, CAST(125600.00 AS Decimal(18, 2)), CAST(125600.00 AS Decimal(18, 2)), N'D553045DE872F3160F0C8F082B471573734894DDD3BBD5EB334C48C4F814ABD8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (623, 349, 2, 1, CAST(81200.00 AS Decimal(18, 2)), CAST(81200.00 AS Decimal(18, 2)), N'4D928947B03A457A3F670199822BCBEA9C0074350FFD1C2A4E9EB4392D57AF58')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (624, 350, 24, 1, CAST(138100.00 AS Decimal(18, 2)), CAST(138100.00 AS Decimal(18, 2)), N'D10C6C6192579F1997E4A6D1FB71AE69FFEC50CE24056AD8D14E4AAD669F649B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (625, 351, 39, 1, CAST(77800.00 AS Decimal(18, 2)), CAST(77800.00 AS Decimal(18, 2)), N'B6593948C9EE933773AC44738977C9BF9B534EB3523EF9D7C098660ACED8912E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (626, 352, 1, 1, CAST(101500.00 AS Decimal(18, 2)), CAST(101500.00 AS Decimal(18, 2)), N'EA7B7C009011671F9EDA3D78780EE41818D02F16C75061204E80FDF0E55D7F20')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (627, 353, 28, 1, CAST(80300.00 AS Decimal(18, 2)), CAST(80300.00 AS Decimal(18, 2)), N'C597453EC0E6A754437325FFCBD329F900AC8355E44F233A32D59D7D65F56425')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (628, 354, 14, 1, CAST(118400.00 AS Decimal(18, 2)), CAST(118400.00 AS Decimal(18, 2)), N'26A15190DAE52EA8E3174CF193F25F5C418A637588A15B281B651739EBF4E2C9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (629, 354, 28, 2, CAST(80300.00 AS Decimal(18, 2)), CAST(160600.00 AS Decimal(18, 2)), N'A3CE668CA4E206AF57561CEE90A0828C8234CB69CE5DF881233B74544C77FB64')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (630, 355, 24, 2, CAST(139500.00 AS Decimal(18, 2)), CAST(279000.00 AS Decimal(18, 2)), N'5D5B1FBFEDB91FCF2B6FB1DC0413D1E53E524B8B2CE1DDEEDFD2BDD75BF6FB7F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (631, 355, 18, 1, CAST(156500.00 AS Decimal(18, 2)), CAST(156500.00 AS Decimal(18, 2)), N'9FEBF0A536B518493D0D8F710812E1F735864625AFAC5DD596C6B657349828C5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (632, 355, 16, 1, CAST(148000.00 AS Decimal(18, 2)), CAST(148000.00 AS Decimal(18, 2)), N'6B3B15C749AC71A1D9236CC501B6A0081996CB86D06EABDA1BE9EA92CE426DF8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (633, 356, 19, 1, CAST(156500.00 AS Decimal(18, 2)), CAST(156500.00 AS Decimal(18, 2)), N'4305E22138DF6F4BC54CDCCD05084905553DC51EBFD5A6995B81F5D178DF035F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (634, 357, 3, 1, CAST(93000.00 AS Decimal(18, 2)), CAST(93000.00 AS Decimal(18, 2)), N'03F394776011E09D4CE4043295B8CEF4FE425B5F8D5C4F830B21BA65C8770710')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (635, 358, 15, 1, CAST(148000.00 AS Decimal(18, 2)), CAST(148000.00 AS Decimal(18, 2)), N'89B97BD4B95AE64F8EA1195902FC26C987F31747D3F9E23974702588ED8EA272')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (636, 358, 23, 1, CAST(97300.00 AS Decimal(18, 2)), CAST(97300.00 AS Decimal(18, 2)), N'1DDBDFABB86315D7B12F6483D91867EC81E501E6A17EA21D12A8D6CFBFC3A2AC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (637, 359, 25, 1, CAST(109900.00 AS Decimal(18, 2)), CAST(109900.00 AS Decimal(18, 2)), N'8E43B36577F5B997FE59176758FE754E76F24E7A9F83183D0279E049D6BA4E89')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (638, 359, 18, 1, CAST(156500.00 AS Decimal(18, 2)), CAST(156500.00 AS Decimal(18, 2)), N'7DA73D293F31754C24D7612EF284924A6CAAA7B9BF840DD703E439FF78F47912')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (639, 359, 28, 1, CAST(80300.00 AS Decimal(18, 2)), CAST(80300.00 AS Decimal(18, 2)), N'8E0FBF937BF4A3D6B1D418A52EDB3880DF6EA88524B6E55E7338B80A44DFBE0D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (640, 360, 17, 1, CAST(128100.00 AS Decimal(18, 2)), CAST(128100.00 AS Decimal(18, 2)), N'F10AC26D4E0906884103F0287C0892E3FCC78A11FEF257A8E2DAD4AF66E586E4')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (641, 360, 12, 1, CAST(119600.00 AS Decimal(18, 2)), CAST(119600.00 AS Decimal(18, 2)), N'E3887B76A1A815DE2C51D3DCB08B068A5D43CF6B2F2BE97959F758E6094D4DD2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (642, 361, 16, 1, CAST(149500.00 AS Decimal(18, 2)), CAST(149500.00 AS Decimal(18, 2)), N'062A12BE131B743C90E87F18583FD46B85555D7F79EB930A90FEB75CAD416E66')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (643, 362, 23, 1, CAST(98200.00 AS Decimal(18, 2)), CAST(98200.00 AS Decimal(18, 2)), N'E0E691A83F4A102E09B29A2631F5871EFD26319B56607B5D67A64B30A1341C65')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (644, 363, 33, 1, CAST(123900.00 AS Decimal(18, 2)), CAST(123900.00 AS Decimal(18, 2)), N'5E84E6713DBCC262788C459905212217C4D79D612C6B87BECC93D7A390FEA8FA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (645, 363, 39, 1, CAST(78600.00 AS Decimal(18, 2)), CAST(78600.00 AS Decimal(18, 2)), N'202FA07392D989CE841C06E2AC8366AF36FD1D692227EA996186EAB8AB00B880')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (646, 364, 24, 1, CAST(141000.00 AS Decimal(18, 2)), CAST(141000.00 AS Decimal(18, 2)), N'D5DCC417541219B10B15CE853BAFF525CC31FEC8D83EB668C489AEA05F196E6A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (647, 365, 19, 2, CAST(158000.00 AS Decimal(18, 2)), CAST(316000.00 AS Decimal(18, 2)), N'E92BECE15F7A8326F79E3A02D817F735B87C0CAD4AF9279ACA113950F1EACC49')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (648, 366, 14, 1, CAST(119600.00 AS Decimal(18, 2)), CAST(119600.00 AS Decimal(18, 2)), N'78B6431230B3C53405ABADE23A0FBFD3F081AB0892EE92621A45C75CDB59B017')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (649, 366, 37, 1, CAST(102500.00 AS Decimal(18, 2)), CAST(102500.00 AS Decimal(18, 2)), N'1592C9B9CBA194C949D9030FCE74DE19EC45C34842F1543329A7560A343A269B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (650, 367, 2, 1, CAST(82900.00 AS Decimal(18, 2)), CAST(82900.00 AS Decimal(18, 2)), N'95136402A220AEEC9967C7C67277E0023F2BF4F58F4F16C9A2BFC549BC5988CC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (651, 367, 15, 1, CAST(149500.00 AS Decimal(18, 2)), CAST(149500.00 AS Decimal(18, 2)), N'67F0651FD9A58EEDDFD9104ACABAA294EB7E598C51BD98B46792DC373AE31BC9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (652, 368, 28, 1, CAST(81200.00 AS Decimal(18, 2)), CAST(81200.00 AS Decimal(18, 2)), N'3D1815BC6604667A005495136B9E829EE38545989742B13045ACB0D6C5891AB7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (653, 369, 42, 2, CAST(68300.00 AS Decimal(18, 2)), CAST(136600.00 AS Decimal(18, 2)), N'D98CB0F2BE577B29707D0694F4F258BB4A42DF9BF1DBE917E207B15C5996FFD3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (654, 370, 12, 1, CAST(120800.00 AS Decimal(18, 2)), CAST(120800.00 AS Decimal(18, 2)), N'2B2982A3D898DE7F64DF501B18A89DD4AD54C2160986A35C4CCF94B8BCB07F62')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (655, 371, 28, 2, CAST(82000.00 AS Decimal(18, 2)), CAST(164000.00 AS Decimal(18, 2)), N'93E3B787080861086C77ABEB878146558B526B986407139CBF1C4A0497E852D3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (656, 372, 9, 1, CAST(116500.00 AS Decimal(18, 2)), CAST(116500.00 AS Decimal(18, 2)), N'EFD58AB6E76D5D54573926B30FC73C8B7AA3629CA37126D6B514EBE1425C7421')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (657, 373, 29, 1, CAST(84600.00 AS Decimal(18, 2)), CAST(84600.00 AS Decimal(18, 2)), N'E3B116BD00A4A035B5E3A13496D6670155B0841E678DE144FD84B1B03DB882A0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (658, 373, 2, 1, CAST(83700.00 AS Decimal(18, 2)), CAST(83700.00 AS Decimal(18, 2)), N'59FD2BC839054790BEBB7B7A218A95383ED9560D40E1176AA7980AEF39ABE8FE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (659, 374, 1, 1, CAST(103500.00 AS Decimal(18, 2)), CAST(103500.00 AS Decimal(18, 2)), N'AC427C09B8B0C4A9C45950D08F561FF9EF92C5580B9700AE9BF71EF404FC2447')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (660, 374, 37, 2, CAST(103500.00 AS Decimal(18, 2)), CAST(207000.00 AS Decimal(18, 2)), N'FBAE98DD98FC3C39B64FAB862FD1C6FD10F3DB226247CB12092F79BB460D09C9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (661, 374, 19, 1, CAST(159600.00 AS Decimal(18, 2)), CAST(159600.00 AS Decimal(18, 2)), N'6FCD0A501F2861352A719CB48F8708F9388B1F036B987E2ED4E6AF259FFE4D59')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (662, 375, 20, 1, CAST(138100.00 AS Decimal(18, 2)), CAST(138100.00 AS Decimal(18, 2)), N'8B0162B3F4191B993E948825363166864BC999202931058889DBFB637AF64837')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (663, 376, 42, 1, CAST(69000.00 AS Decimal(18, 2)), CAST(69000.00 AS Decimal(18, 2)), N'EB8C6DD46C1679C9DF0F2CEF13728C0C038BBECC9D6E68E1C790A0E8A3D76F2B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (664, 377, 27, 1, CAST(82000.00 AS Decimal(18, 2)), CAST(82000.00 AS Decimal(18, 2)), N'FBE5B5598211201D5C50A2F92FCC3187F861A55CE9A2822907389F3AAE21C3F8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (665, 377, 18, 1, CAST(159600.00 AS Decimal(18, 2)), CAST(159600.00 AS Decimal(18, 2)), N'EAA220146BAD122D8D5E251D46DEC2FCD4BDBF6531C5D4C1FA2A7FF432A58EED')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (666, 378, 37, 1, CAST(103500.00 AS Decimal(18, 2)), CAST(103500.00 AS Decimal(18, 2)), N'388E43BBCDE0B5DCBCA8DB5AC4951E45E400254F0B9F7C2FCB6CD2D9B798514E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (667, 378, 2, 1, CAST(83700.00 AS Decimal(18, 2)), CAST(83700.00 AS Decimal(18, 2)), N'A8FF22F71191E6CDC167526A6606884B25EABC0C6BFE2FE12948EE1436E28203')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (668, 379, 15, 1, CAST(151000.00 AS Decimal(18, 2)), CAST(151000.00 AS Decimal(18, 2)), N'A8C77B0E73D31D0FCBD3F6843535D13EE81D6CFD453110183A6A4745E414B974')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (669, 380, 20, 1, CAST(138100.00 AS Decimal(18, 2)), CAST(138100.00 AS Decimal(18, 2)), N'C76912E5D01F9B744920612E987C0D70362CBE3A040B981F43098E731A5CBA61')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (670, 381, 19, 1, CAST(159600.00 AS Decimal(18, 2)), CAST(159600.00 AS Decimal(18, 2)), N'BD6DBA070A4602AE6D81AB2B16AF62157EF037B719A6B085487EA5F86D3ED791')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (671, 382, 14, 1, CAST(122000.00 AS Decimal(18, 2)), CAST(122000.00 AS Decimal(18, 2)), N'A7BA9EAEF79CF7AB0B9427264AEFB490F24D27A64E903E2C105E1C53A4679E39')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (672, 383, 39, 1, CAST(80200.00 AS Decimal(18, 2)), CAST(80200.00 AS Decimal(18, 2)), N'76F259F66A357FB7DACB61829AED99190D03531FE0AFCDE283D77BBF7954001C')
+GO
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (673, 383, 3, 2, CAST(95900.00 AS Decimal(18, 2)), CAST(191800.00 AS Decimal(18, 2)), N'17BFA7AFCE0EF531784EBC4CC3169DD4C13224AEE0204E32957E7A914AEA7EFD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (674, 383, 40, 1, CAST(80200.00 AS Decimal(18, 2)), CAST(80200.00 AS Decimal(18, 2)), N'42DFA3CCAD4C56F4A7E73C0DF29C4E1CD9BE1C2F7D47D2FC512737D848E828A9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (675, 384, 33, 1, CAST(126400.00 AS Decimal(18, 2)), CAST(126400.00 AS Decimal(18, 2)), N'1CF1502D3C5DE042A2D6F271B800EBFA01F6D4530B98F220A4422BB8C069050F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (676, 384, 35, 1, CAST(68000.00 AS Decimal(18, 2)), CAST(68000.00 AS Decimal(18, 2)), N'F361E1FB924A4995AADF4B2D810386D3632AFB1BC1649277F0D7A063BBCD53D0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (677, 385, 33, 2, CAST(126400.00 AS Decimal(18, 2)), CAST(252800.00 AS Decimal(18, 2)), N'16EBA1706F0ABF8933E593AA1731680793A5E4B78442ABAA0FDF9694E7758F71')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (678, 385, 39, 2, CAST(80200.00 AS Decimal(18, 2)), CAST(160400.00 AS Decimal(18, 2)), N'E40FAC35EA7BD2D748DBB4F7A5B90DF53C52CD81C88005F61A30FBF455F007A9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (679, 386, 13, 1, CAST(122000.00 AS Decimal(18, 2)), CAST(122000.00 AS Decimal(18, 2)), N'6225E795DFDF1244218D227DABC8BE29DCAFEC1EED95EA828E5C37742CD7A97F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (680, 387, 23, 1, CAST(100200.00 AS Decimal(18, 2)), CAST(100200.00 AS Decimal(18, 2)), N'2AFB3A0E181246D11639D9D599598CD02F74C9CA6D5E7E36B7F575ED94452A29')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (681, 388, 39, 1, CAST(80200.00 AS Decimal(18, 2)), CAST(80200.00 AS Decimal(18, 2)), N'9817145B2CFB798949F5B1D5E4AB2BE37B331C6CA15D06EFDD16610E7CFDB2C3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (682, 389, 28, 1, CAST(82800.00 AS Decimal(18, 2)), CAST(82800.00 AS Decimal(18, 2)), N'7EF0B4A63A184114A695C5E20C305D73C0CB36A9ADE3CA75582454DDBC13DE64')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (683, 390, 9, 2, CAST(117600.00 AS Decimal(18, 2)), CAST(235200.00 AS Decimal(18, 2)), N'1F197748C543B275E0BF5B4C2B0E430B94B81B44201DEE730C353EC8AA463F8B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (684, 390, 7, 1, CAST(117600.00 AS Decimal(18, 2)), CAST(117600.00 AS Decimal(18, 2)), N'69365D1966DC14D1106C555ABD4BF3DDB23BC302E730D6A5EE86D2A3498E5A69')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (685, 391, 25, 2, CAST(113300.00 AS Decimal(18, 2)), CAST(226600.00 AS Decimal(18, 2)), N'84BE93254087482285F88CC61B6FD16BD08911E62662C9495EF3759B8AADAB75')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (686, 391, 40, 1, CAST(80200.00 AS Decimal(18, 2)), CAST(80200.00 AS Decimal(18, 2)), N'CE0C527195738B2487DD677F8E9259C60F65A4D9E9915EDEF94622616480B4D6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (687, 392, 35, 1, CAST(68000.00 AS Decimal(18, 2)), CAST(68000.00 AS Decimal(18, 2)), N'023D95D30479FAED8C77BD481926ECF30C3AA9AF7EAD94C66E2D1DFEE8B69BF5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (688, 393, 39, 1, CAST(80200.00 AS Decimal(18, 2)), CAST(80200.00 AS Decimal(18, 2)), N'DB68986CB0485B4A3A2F575AEF24D3C105AB7C9CFA6FBC4158AE25D5E21F4C7E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (689, 393, 23, 1, CAST(100200.00 AS Decimal(18, 2)), CAST(100200.00 AS Decimal(18, 2)), N'763EF440917DAA7C7122196737D91EC3F9B7FFA8B6D5BF72FE9EE11DC139A366')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (690, 394, 38, 1, CAST(85400.00 AS Decimal(18, 2)), CAST(85400.00 AS Decimal(18, 2)), N'5D87E3946EC619A536477DBA0E26F38E1692DB054A827F3E741D8509369DBA24')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (691, 395, 39, 1, CAST(81000.00 AS Decimal(18, 2)), CAST(81000.00 AS Decimal(18, 2)), N'CCD313787035B5A26CE9BA7E474300BC362F35EB357CD14776B0F998465744ED')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (692, 395, 1, 1, CAST(105600.00 AS Decimal(18, 2)), CAST(105600.00 AS Decimal(18, 2)), N'4DB11FC3CB77A16D6F1C48DF5FB2AFD9659F1698592B17D5F893750AAF5344E0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (693, 396, 19, 1, CAST(162800.00 AS Decimal(18, 2)), CAST(162800.00 AS Decimal(18, 2)), N'BF46BE9B2D89AE9C4BE6C7D8BAFF40476DDBA02AA42F1B766D5986C2E0802036')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (694, 397, 7, 1, CAST(118800.00 AS Decimal(18, 2)), CAST(118800.00 AS Decimal(18, 2)), N'AD5169C880E7DB4C4FD7132B9D0079C7C1D3ADB1D664C8FB24F435CD056167B3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (695, 397, 14, 1, CAST(123200.00 AS Decimal(18, 2)), CAST(123200.00 AS Decimal(18, 2)), N'462FB913CD83A9DF0169C44AC9515355B74DCA4E634CB1217A91041DBF3118D8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (696, 398, 37, 1, CAST(105600.00 AS Decimal(18, 2)), CAST(105600.00 AS Decimal(18, 2)), N'0FB750A767A727E38E4A4F79C37BE97D787B2FF5D48A0D55E3BF43F1D451E55D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (697, 398, 39, 1, CAST(81000.00 AS Decimal(18, 2)), CAST(81000.00 AS Decimal(18, 2)), N'9B87107131445C1642ABEEDFFFE119F872AE59364FD3AD134618B71A2BA50C09')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (698, 399, 40, 1, CAST(81000.00 AS Decimal(18, 2)), CAST(81000.00 AS Decimal(18, 2)), N'4244C2AD28AF1F4DABAE152C51AFD21B33374B2EC4C139CDC9E20324AA3DB453')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (699, 400, 35, 2, CAST(68600.00 AS Decimal(18, 2)), CAST(137200.00 AS Decimal(18, 2)), N'F4848949D13D722EEE9F6BF0E218526B68757AE0242E8CB329B2C668283DBCA3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (700, 400, 18, 2, CAST(162800.00 AS Decimal(18, 2)), CAST(325600.00 AS Decimal(18, 2)), N'C2AA0007ED136AA40C5438CD9D178601906215D811FD9723ABCE8659B323724B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (701, 401, 19, 1, CAST(162800.00 AS Decimal(18, 2)), CAST(162800.00 AS Decimal(18, 2)), N'6E55EFA79AC6BD65CA3CA4144ECB8CDD49004E14AB055C4AF66F93A227C2B4D0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (702, 402, 28, 1, CAST(83600.00 AS Decimal(18, 2)), CAST(83600.00 AS Decimal(18, 2)), N'BF7F0CBB9DCA8B2E0D827341CC176F9B2710E2DA9748A4B155F563E5EFB607BA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (703, 402, 36, 1, CAST(68600.00 AS Decimal(18, 2)), CAST(68600.00 AS Decimal(18, 2)), N'BC190FD428EE4D683134A549A51EFA9A199DB2345FF998EFFE5075B80698BD24')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (704, 403, 16, 1, CAST(154000.00 AS Decimal(18, 2)), CAST(154000.00 AS Decimal(18, 2)), N'A425CF86750F098326DF29E04823A5E3096E9904BC2C5C2F714896873DE78D40')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (705, 404, 2, 1, CAST(85400.00 AS Decimal(18, 2)), CAST(85400.00 AS Decimal(18, 2)), N'043D5AF85AAF4B3C5C43FED2D04C54F12B072B09A66DCD7A7D8B6B277E599DD2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (706, 404, 27, 1, CAST(83600.00 AS Decimal(18, 2)), CAST(83600.00 AS Decimal(18, 2)), N'13219ABD5029687531E5EA4A3A2C51A43D004DBA7F513028CCF897E748FFEEB8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (707, 405, 33, 1, CAST(128800.00 AS Decimal(18, 2)), CAST(128800.00 AS Decimal(18, 2)), N'88CDECB04BB2A4AA724AC3895C4A2F190051165EA2C4C360D316A9762FE4D67A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (708, 405, 28, 1, CAST(84400.00 AS Decimal(18, 2)), CAST(84400.00 AS Decimal(18, 2)), N'8F9B507F26879CE52D9A0352F39A62B92776973E9D1866ED1061320E94A0B737')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (709, 406, 1, 1, CAST(106600.00 AS Decimal(18, 2)), CAST(106600.00 AS Decimal(18, 2)), N'61F247219DD4CD6CAA031494A1AB1AAFB30F1663D10F01BEA67FE508622FFA0B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (710, 407, 20, 1, CAST(142200.00 AS Decimal(18, 2)), CAST(142200.00 AS Decimal(18, 2)), N'A3541FC83307A72F600D98816585EC7B53767AA38241A9BD9F77EF219C8143CC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (711, 408, 20, 1, CAST(142200.00 AS Decimal(18, 2)), CAST(142200.00 AS Decimal(18, 2)), N'3F754450BB2FD73DA38D9FBB77187B67DFCBA5DB2FA20F511AFD4C66192156BA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (712, 409, 35, 1, CAST(69300.00 AS Decimal(18, 2)), CAST(69300.00 AS Decimal(18, 2)), N'7A9401B70BBC67CA8AD0613B0A320A98A8575DF1510F55923F8FC3A731686C5E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (713, 409, 16, 1, CAST(155500.00 AS Decimal(18, 2)), CAST(155500.00 AS Decimal(18, 2)), N'DB14930CF0C9015311718D44626AC5D9920C921A5F4F195A30C787E053CD66D7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (714, 409, 40, 2, CAST(81700.00 AS Decimal(18, 2)), CAST(163400.00 AS Decimal(18, 2)), N'43B6DED9B928628F5D3959DE76C7580D72B4E5297CA31A210BF335C2EA45CE9A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (715, 410, 14, 1, CAST(124400.00 AS Decimal(18, 2)), CAST(124400.00 AS Decimal(18, 2)), N'396AFF571B2900CFE76D93CBD072FCD80282864AB406FEF92A8533EF1EABDE57')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (716, 411, 1, 1, CAST(106600.00 AS Decimal(18, 2)), CAST(106600.00 AS Decimal(18, 2)), N'EBC8727C546140D08A7E86C4478EB43A541988F986BBD85B371226F1D034A5CB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (717, 411, 5, 1, CAST(133300.00 AS Decimal(18, 2)), CAST(133300.00 AS Decimal(18, 2)), N'EAD747812935F9C836327E06C28308647BCC9D9EB8644FE307234143BCBD9CCF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (718, 412, 33, 1, CAST(128800.00 AS Decimal(18, 2)), CAST(128800.00 AS Decimal(18, 2)), N'AFCD415A8C7618D10EFE9A09D73BE47EEF2795E3AA553446EBAA4D4B008FBA26')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (719, 412, 1, 1, CAST(106600.00 AS Decimal(18, 2)), CAST(106600.00 AS Decimal(18, 2)), N'E03F91A3186D738A4493B42E50A58CD8E46A6B6F1774DFD401186EE27191A4CB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (720, 413, 20, 1, CAST(142200.00 AS Decimal(18, 2)), CAST(142200.00 AS Decimal(18, 2)), N'800A92BFA8F98353A2F0713160CF19EB86C52F24473B5668E669D375BD90B424')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (721, 414, 30, 2, CAST(133300.00 AS Decimal(18, 2)), CAST(266600.00 AS Decimal(18, 2)), N'7054FA37A100756B7585CFE39780706C19B85218E7E76B43AA9CA0891BECB7AD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (722, 414, 17, 1, CAST(133300.00 AS Decimal(18, 2)), CAST(133300.00 AS Decimal(18, 2)), N'5D691366353C22979921E0FAD8395A03E728AAF4C5873CA04B2969485C2BF2C6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (723, 415, 8, 1, CAST(121100.00 AS Decimal(18, 2)), CAST(121100.00 AS Decimal(18, 2)), N'B71070D0C0A3FCD1FEDE364F8B7147BB9C13B642339D77F2C3B41290B83CEE6A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (724, 416, 37, 1, CAST(107700.00 AS Decimal(18, 2)), CAST(107700.00 AS Decimal(18, 2)), N'E46383EE13813B24F7B5AE95A8082DFECFBF7A1BBF35A2C0B79819690E171D19')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (725, 417, 5, 1, CAST(134600.00 AS Decimal(18, 2)), CAST(134600.00 AS Decimal(18, 2)), N'689AC37126BA452386030F30D03E816E3316007E8E20B9F0863D776A247E6BD3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (726, 417, 20, 2, CAST(143500.00 AS Decimal(18, 2)), CAST(287000.00 AS Decimal(18, 2)), N'2BACA199F8C4AF632F05B37302B3098AAD20A54DC136EEE0264875E2950A8142')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (727, 418, 7, 1, CAST(121100.00 AS Decimal(18, 2)), CAST(121100.00 AS Decimal(18, 2)), N'31DF751AA819F97A7ECD6385F244D0E8FCCD71176C202D450EF168B4841F092A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (728, 419, 39, 2, CAST(82500.00 AS Decimal(18, 2)), CAST(165000.00 AS Decimal(18, 2)), N'705F08EC63B7A989DF613BFBA931866F11FB2FA1E43AD2FC105B0799A74BDF02')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (729, 420, 14, 1, CAST(125600.00 AS Decimal(18, 2)), CAST(125600.00 AS Decimal(18, 2)), N'561CE8680DBE0C71D0F3C12A2093157A0F92081E2CB8254720F5AEF4392C5DD2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (730, 420, 26, 1, CAST(152500.00 AS Decimal(18, 2)), CAST(152500.00 AS Decimal(18, 2)), N'237DDE2A53FAAB257CE22EB443A57117B0068D60E93BF878510C685094ACB80A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (731, 421, 34, 1, CAST(130100.00 AS Decimal(18, 2)), CAST(130100.00 AS Decimal(18, 2)), N'E68F3B489327CE8F9B7D81E0523B1807C6C0322870D235ED61B6CF8FEF38E8AB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (732, 421, 8, 1, CAST(121100.00 AS Decimal(18, 2)), CAST(121100.00 AS Decimal(18, 2)), N'277C37E0D11B4ED88378E783A13C3ED25B358464218405562265E98148E523DE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (733, 422, 36, 2, CAST(70000.00 AS Decimal(18, 2)), CAST(140000.00 AS Decimal(18, 2)), N'82474553845EB6828456A627776D244317832BEB046C0838C99CC789433B5BA2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (734, 422, 39, 1, CAST(82500.00 AS Decimal(18, 2)), CAST(82500.00 AS Decimal(18, 2)), N'B994A1D182BCFA079856604E05E001457B99C51ED62CB8FCCF58BE8CE2DA9902')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (735, 423, 14, 1, CAST(125600.00 AS Decimal(18, 2)), CAST(125600.00 AS Decimal(18, 2)), N'24E644299522693692920C0CE900EC785EA0160826176FE2C879CCDBA692A66B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (736, 424, 16, 1, CAST(157000.00 AS Decimal(18, 2)), CAST(157000.00 AS Decimal(18, 2)), N'6D5A899595A9DB68F4BE8AFB3B85D71E19A9DD5E6B3DBB98388FDA1F98141C54')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (737, 425, 9, 2, CAST(121100.00 AS Decimal(18, 2)), CAST(242200.00 AS Decimal(18, 2)), N'290828F95031DCF36D6C19F91382CAF17C40147815FCC99BCC404BFAC4E5D578')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (738, 426, 20, 1, CAST(144900.00 AS Decimal(18, 2)), CAST(144900.00 AS Decimal(18, 2)), N'A33C49B478DFAD836002A7B80906AEE47E628F39B2F02394388DB914ED046E9A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (739, 427, 3, 1, CAST(99600.00 AS Decimal(18, 2)), CAST(99600.00 AS Decimal(18, 2)), N'7BAA5AB27E41074A6EC6B78581BED5BEC719F9795236B021F84EF5C08680571C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (740, 428, 9, 2, CAST(122300.00 AS Decimal(18, 2)), CAST(244600.00 AS Decimal(18, 2)), N'FF31714B3690EDADC1345AD31AEFE8416F10B05CC41BCFAE61172CC672C01530')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (741, 429, 19, 1, CAST(167600.00 AS Decimal(18, 2)), CAST(167600.00 AS Decimal(18, 2)), N'65237EFFCBBF443FF0007E26E084A3B19797EE98DAED6FDF4E90DCB842EF3618')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (742, 430, 31, 1, CAST(135900.00 AS Decimal(18, 2)), CAST(135900.00 AS Decimal(18, 2)), N'841911C97646148BBCD781D6F42AB7DBB30849366F2C376DF49907F8DDB3A365')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (743, 430, 15, 1, CAST(158500.00 AS Decimal(18, 2)), CAST(158500.00 AS Decimal(18, 2)), N'10F90F50294B8553CDC54E4F9DFD0E9E86D57E6823471FB997D190728D248297')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (744, 431, 7, 1, CAST(122300.00 AS Decimal(18, 2)), CAST(122300.00 AS Decimal(18, 2)), N'CF55EFD340F671447ABEDAAD746A9464BC4988C69662339865BCD20DD7DD9720')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (745, 432, 18, 1, CAST(167600.00 AS Decimal(18, 2)), CAST(167600.00 AS Decimal(18, 2)), N'BB6E55B5A9013BFA76514C8AEA92E995CE8BBE46E6E69BF883E0E6EF6AF84417')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (746, 432, 2, 1, CAST(87900.00 AS Decimal(18, 2)), CAST(87900.00 AS Decimal(18, 2)), N'755086BC08750BA55CC6B1C997F887C32B87B0C41C5B9DE102E2858C4D5CF91A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (747, 433, 7, 1, CAST(122300.00 AS Decimal(18, 2)), CAST(122300.00 AS Decimal(18, 2)), N'C0769332C7B15D8BE8F941D74CF80CDB1C77490D12A4FD11B53D219D24257935')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (748, 434, 26, 1, CAST(154000.00 AS Decimal(18, 2)), CAST(154000.00 AS Decimal(18, 2)), N'84216D11E292A3D2A176E49F4D30CE2CBA8A1AFD4C696772C6C79013A515FAB6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (749, 435, 40, 1, CAST(83300.00 AS Decimal(18, 2)), CAST(83300.00 AS Decimal(18, 2)), N'0E9382BB5695325FF456DEA07B784BEBA2A2648059C281BA04E03DE61423248A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (750, 435, 12, 1, CAST(126800.00 AS Decimal(18, 2)), CAST(126800.00 AS Decimal(18, 2)), N'50A80C1F80C9FF30D8A91C4A1ACD64F31B378F113CB9553697635AF3D503BA74')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (751, 436, 27, 1, CAST(86000.00 AS Decimal(18, 2)), CAST(86000.00 AS Decimal(18, 2)), N'1710DCB7067F66F62BFFAE13F9A82D76202C77CD8FDD15F48CF15AC431BB7E92')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (752, 437, 1, 1, CAST(108700.00 AS Decimal(18, 2)), CAST(108700.00 AS Decimal(18, 2)), N'01CD56EE31E81245F5250B118C895D94732EF30804DA1ADFFF5755E74AA54114')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (753, 438, 39, 2, CAST(83300.00 AS Decimal(18, 2)), CAST(166600.00 AS Decimal(18, 2)), N'9C015303ECC51F6A99F1CC1A0D09DE4BF6F06247F68D5C04AE41137B0C58ACB6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (754, 438, 17, 1, CAST(135900.00 AS Decimal(18, 2)), CAST(135900.00 AS Decimal(18, 2)), N'A958FC021879922E31D15685CE7B5F7B2AB974FEF6DD4E3DFDA9B5A09DD2832C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (755, 438, 12, 1, CAST(126800.00 AS Decimal(18, 2)), CAST(126800.00 AS Decimal(18, 2)), N'31DF02FCCBFF73E5AE0E9B0D1625AD7B8A4B6D9F5446D393A8D576CB297FD2CE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (756, 439, 19, 1, CAST(167600.00 AS Decimal(18, 2)), CAST(167600.00 AS Decimal(18, 2)), N'DD0B771AB5E32F2258A639EB23BC1EE09F73391A512771ED4B47029A1AF612F8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (757, 439, 9, 1, CAST(122300.00 AS Decimal(18, 2)), CAST(122300.00 AS Decimal(18, 2)), N'195688C4D4DA903BE750D791ECB09E78E52C8DEF6DDF6A34FEC7AAD536980CC6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (758, 439, 3, 1, CAST(99600.00 AS Decimal(18, 2)), CAST(99600.00 AS Decimal(18, 2)), N'0B99943359798743AA9B679E32F20B8EC584C5F7AE63A0C0DE794AE0AFB52B16')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (759, 440, 39, 1, CAST(83300.00 AS Decimal(18, 2)), CAST(83300.00 AS Decimal(18, 2)), N'1F5650BB42094702F638CD8A13E4327B04F0403BDD6E343EC22467EA41F0EC49')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (760, 441, 27, 2, CAST(86000.00 AS Decimal(18, 2)), CAST(172000.00 AS Decimal(18, 2)), N'E10627011DBFD9C77075838FE10D77E0E0FB69AB76B267FE2E2836A42A8FC3FF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (761, 441, 22, 1, CAST(95100.00 AS Decimal(18, 2)), CAST(95100.00 AS Decimal(18, 2)), N'C77D30A255142BAC422F4FE56171017589F05CE9F88645B276A542B562DE1F2F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (762, 442, 17, 1, CAST(135900.00 AS Decimal(18, 2)), CAST(135900.00 AS Decimal(18, 2)), N'BD08CDEA57235256CA697D68D99A7A74600562A1FC783CB48827A2A71C10F421')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (763, 443, 23, 1, CAST(104200.00 AS Decimal(18, 2)), CAST(104200.00 AS Decimal(18, 2)), N'E4ABBB2F61429E89FA675BA89FE1989A06784446FE330289985BD5721FEF397F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (764, 443, 14, 2, CAST(126800.00 AS Decimal(18, 2)), CAST(253600.00 AS Decimal(18, 2)), N'029D520CA41370AA7C3603AE29F4E628A40751F0DE0CBF636468B7003A0E84A8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (765, 444, 29, 2, CAST(89600.00 AS Decimal(18, 2)), CAST(179200.00 AS Decimal(18, 2)), N'88F0F5B929676AB30B8C1007598296D20A5D006A9FD5CCE1154710E61D15B208')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (766, 444, 13, 1, CAST(128000.00 AS Decimal(18, 2)), CAST(128000.00 AS Decimal(18, 2)), N'EA5E16D51E22D2407EF976B53D9642A80238A2643EC40B9CC3747F647B4BB6BE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (767, 445, 14, 1, CAST(128000.00 AS Decimal(18, 2)), CAST(128000.00 AS Decimal(18, 2)), N'FC7B7B8E1F4CD53862A30FFEBE02B5F07C86943917CC51EBEBE450EE812511E8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (768, 445, 31, 1, CAST(137100.00 AS Decimal(18, 2)), CAST(137100.00 AS Decimal(18, 2)), N'9830258D17DBAD1105B973E886C1E7CC564C502C2B6E3E72209808DEC40BE7D2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (769, 445, 3, 1, CAST(100600.00 AS Decimal(18, 2)), CAST(100600.00 AS Decimal(18, 2)), N'3E29DD6458F11CE02820A880FCBD6931AB2FFDA20482CD57261AC8DF4BBF9116')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (770, 446, 1, 1, CAST(109700.00 AS Decimal(18, 2)), CAST(109700.00 AS Decimal(18, 2)), N'4574324578D2845562DDC9F16ABDB7B89F2626F0D69CE78DC2E61A3FC959E827')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (771, 446, 25, 1, CAST(118900.00 AS Decimal(18, 2)), CAST(118900.00 AS Decimal(18, 2)), N'9E063732F72EF3442567BBA893BF9CE85407E4CA5ACD771F80680304EAFA4319')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (772, 447, 27, 2, CAST(86900.00 AS Decimal(18, 2)), CAST(173800.00 AS Decimal(18, 2)), N'FAEC4A31FC50F3B08287778505129660989F40E3C9A9BD194E0121BC1B9EA1D8')
+GO
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (773, 448, 36, 1, CAST(71300.00 AS Decimal(18, 2)), CAST(71300.00 AS Decimal(18, 2)), N'60AE5B7330D90E2FA296D6B5AA3DC8FB29517A67CDEA3356949B9648397CB124')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (774, 449, 27, 1, CAST(86900.00 AS Decimal(18, 2)), CAST(86900.00 AS Decimal(18, 2)), N'2E069E63700824568F52D1531D764CC4FE982A00C64272C9EB5B240A3729E522')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (775, 450, 2, 1, CAST(88700.00 AS Decimal(18, 2)), CAST(88700.00 AS Decimal(18, 2)), N'03882E479BD8673F579D8CFD86507DE378980CD64DC02FE3C951AE1A5FEA007A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (776, 451, 40, 1, CAST(84100.00 AS Decimal(18, 2)), CAST(84100.00 AS Decimal(18, 2)), N'A58B84346193A5375AA7060E07448E6EF7BF9D3624CFAE90EF2FE0EE7285BFB1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (777, 451, 17, 1, CAST(137100.00 AS Decimal(18, 2)), CAST(137100.00 AS Decimal(18, 2)), N'4BD71548DFD1FBE682CC84ADE1AAF3CC67DCAD70216176445AF56FB1FE99BD8E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (778, 452, 28, 1, CAST(86900.00 AS Decimal(18, 2)), CAST(86900.00 AS Decimal(18, 2)), N'5190E32651E933E4B808FB1EAA9C19EBC08C0CA475DF1816B101C459BB759F61')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (779, 453, 15, 1, CAST(160000.00 AS Decimal(18, 2)), CAST(160000.00 AS Decimal(18, 2)), N'0E9118D61D30737BD9165FCB1625AF80A2FE0756AF1131AE84653F16CCA4A090')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (780, 454, 16, 1, CAST(160000.00 AS Decimal(18, 2)), CAST(160000.00 AS Decimal(18, 2)), N'9E0B9B758ACC91B8F69CD649649DA3D7C8F6DD948236DF13BA47A81A11D39B06')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (781, 455, 19, 1, CAST(169100.00 AS Decimal(18, 2)), CAST(169100.00 AS Decimal(18, 2)), N'1769D7CF46DB7CE589880CEB6439D66A46E956B09A4B3C011E8F3942D7CE2FD8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (782, 455, 36, 1, CAST(71300.00 AS Decimal(18, 2)), CAST(71300.00 AS Decimal(18, 2)), N'66BBC2BC26F2A3D93D06AEC3C6C8F8CD8E2F139AC35B278DE704F7E7D43ACE13')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (783, 456, 2, 1, CAST(88700.00 AS Decimal(18, 2)), CAST(88700.00 AS Decimal(18, 2)), N'42541DE9C3DDF0CCA8BE12E9582EDF5419DD4469BEB2294717B88F40CA653B32')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (784, 456, 34, 1, CAST(132600.00 AS Decimal(18, 2)), CAST(132600.00 AS Decimal(18, 2)), N'17ED05F514722A632CC3683C2A6C3E7AFA0060472A2D9467213DAF9B6EE2ECE8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (785, 457, 19, 1, CAST(169100.00 AS Decimal(18, 2)), CAST(169100.00 AS Decimal(18, 2)), N'94E84BEC295F2FE71069EFD70138AC9CA8B7E3FA31CC3F4B82985141BDAB14E7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (786, 458, 18, 1, CAST(169100.00 AS Decimal(18, 2)), CAST(169100.00 AS Decimal(18, 2)), N'E30B31F4870FA82087D7D9525FD82FAA5AFBD435445A7CE2AD214171874A7539')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (787, 459, 18, 1, CAST(169100.00 AS Decimal(18, 2)), CAST(169100.00 AS Decimal(18, 2)), N'BD8883A6573770F367224DD4B702D16C363DDFF8C6D36CAF50F05F18D7055E52')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (788, 460, 1, 1, CAST(109700.00 AS Decimal(18, 2)), CAST(109700.00 AS Decimal(18, 2)), N'47427FD4F8E9EAA96426B283130054F1EB6BA4EE084878B58757024E69F07A58')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (789, 461, 28, 1, CAST(86900.00 AS Decimal(18, 2)), CAST(86900.00 AS Decimal(18, 2)), N'817F3122551986CA7D4DEEE64B86395682EE478F83FC371D05ADB35F05BBDD4C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (790, 462, 1, 1, CAST(109700.00 AS Decimal(18, 2)), CAST(109700.00 AS Decimal(18, 2)), N'C446208F6F9C5ECD15BD1D230FF7AD81212573A275BD5A1BC030B4EEDC6C2A4E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (791, 462, 19, 1, CAST(169100.00 AS Decimal(18, 2)), CAST(169100.00 AS Decimal(18, 2)), N'5E24F5BA79141B1B19F16CF85E5744165DCA5A62936D5F6FFBB023D55319E35B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (792, 463, 1, 1, CAST(109700.00 AS Decimal(18, 2)), CAST(109700.00 AS Decimal(18, 2)), N'3AF89078E1E257B80CC678AB838BAAD0D3214B9324E0C1F6EC3E917246796C79')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (793, 463, 34, 1, CAST(132600.00 AS Decimal(18, 2)), CAST(132600.00 AS Decimal(18, 2)), N'BE4987FC3551D3312C6F9C86C1022FCB801182459E0E3C918901E91C7319F7E8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (794, 464, 39, 1, CAST(84100.00 AS Decimal(18, 2)), CAST(84100.00 AS Decimal(18, 2)), N'98A1F99DF6BB89723A26E22F51A70426B99718756275D45ADCF701B7545E53CA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (795, 465, 7, 1, CAST(123400.00 AS Decimal(18, 2)), CAST(123400.00 AS Decimal(18, 2)), N'9AD83204214C559560D9A4FE8790D98430F2B167A8562A2CDB1638C5BD198C46')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (796, 465, 39, 1, CAST(84100.00 AS Decimal(18, 2)), CAST(84100.00 AS Decimal(18, 2)), N'436CA4C79BE34AC724B8608685D82B8AF3A23705159111189C4EC4A29FEA1334')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (797, 465, 17, 1, CAST(137100.00 AS Decimal(18, 2)), CAST(137100.00 AS Decimal(18, 2)), N'38B649C7922FCC8B63EDE90A2A9C6CAF7A0D991A6B4983965F92AB2CE61DDFF6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (798, 466, 39, 1, CAST(84100.00 AS Decimal(18, 2)), CAST(84100.00 AS Decimal(18, 2)), N'2541C4FC3D0F4DC7A254A646E52C4A06F6D09D614C5BF9A2566820B161787038')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (799, 467, 35, 1, CAST(72000.00 AS Decimal(18, 2)), CAST(72000.00 AS Decimal(18, 2)), N'EFBFEDA4C7D841294A7DF4C10E4207EB832982E403FE0CBC4915C3635A3F44B3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (800, 467, 1, 1, CAST(110700.00 AS Decimal(18, 2)), CAST(110700.00 AS Decimal(18, 2)), N'BD7583ACB9DFFB4EEBF6F08D9BC5B255A6296238C26A1528761EC1C3E6833CF4')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (801, 468, 27, 1, CAST(87700.00 AS Decimal(18, 2)), CAST(87700.00 AS Decimal(18, 2)), N'2305DDF6BBF98F6385C2337804D09725BC13E72555555E9F6E03CFC1BA9B20F0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (802, 468, 20, 1, CAST(147700.00 AS Decimal(18, 2)), CAST(147700.00 AS Decimal(18, 2)), N'383661D5B1C85D305FB22466197692310052ABE17361427C42F8EEB2CD87C60E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (803, 468, 36, 1, CAST(72000.00 AS Decimal(18, 2)), CAST(72000.00 AS Decimal(18, 2)), N'9A137469EFE036AB6FD5E262B8EE099F90C10FB21418B2E86886FE255A76C392')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (804, 469, 25, 2, CAST(120000.00 AS Decimal(18, 2)), CAST(240000.00 AS Decimal(18, 2)), N'994A25C0423B62B0B1C36E5B74D6024F9AE28B210975FA29D86F195728A3B863')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (805, 470, 18, 1, CAST(170700.00 AS Decimal(18, 2)), CAST(170700.00 AS Decimal(18, 2)), N'FC574C579F20CEC7BB0FC6E1AC9A13CF6D38D7623C564515BD7E5B5EE099D0C1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (806, 471, 39, 1, CAST(84900.00 AS Decimal(18, 2)), CAST(84900.00 AS Decimal(18, 2)), N'EB3E269E41832BB2FE9683A6AE9C0D4C9152708F3792988AFFEA1F969F5338E0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (807, 471, 5, 1, CAST(138400.00 AS Decimal(18, 2)), CAST(138400.00 AS Decimal(18, 2)), N'9EDF6BF4C282A9DDBD75411EA79C0FC22AE77F5D1B9A4F3E359BE6D79007441B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (808, 472, 36, 1, CAST(72000.00 AS Decimal(18, 2)), CAST(72000.00 AS Decimal(18, 2)), N'565D41A0EB93BF62A71E60A456E30BF888174AF89233414C54E9A21466DE50E9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (809, 473, 23, 1, CAST(106100.00 AS Decimal(18, 2)), CAST(106100.00 AS Decimal(18, 2)), N'65A84147D123289F505879B08131F56BEA1CB327D504DB58A33B77F9977D1361')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (810, 474, 27, 1, CAST(87700.00 AS Decimal(18, 2)), CAST(87700.00 AS Decimal(18, 2)), N'3DEEBF5C17202F30C5DC87DB480B95575EABE361B9EEFA3E3CA4B5466D08A5A5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (811, 475, 35, 1, CAST(72000.00 AS Decimal(18, 2)), CAST(72000.00 AS Decimal(18, 2)), N'2B5FA868B93C4316202699F3EDAB8A44E39CE5736D4B73DADBEFFC7E0AD49C5C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (812, 476, 34, 1, CAST(133800.00 AS Decimal(18, 2)), CAST(133800.00 AS Decimal(18, 2)), N'FBAC94E2420E4F13CD59E5A66B30589094A6026317C55A4E9FC4E8EAE46816CD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (813, 477, 1, 2, CAST(110700.00 AS Decimal(18, 2)), CAST(221400.00 AS Decimal(18, 2)), N'9D84FF456615B7731331087D249F236092E7E69006C0874D27FD94A441C51942')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (814, 477, 31, 1, CAST(138400.00 AS Decimal(18, 2)), CAST(138400.00 AS Decimal(18, 2)), N'90B3A9819E00EA60E94B4B9695E6508F58BF97D9BCA1978E7DD1887850479CC1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (815, 478, 12, 1, CAST(129200.00 AS Decimal(18, 2)), CAST(129200.00 AS Decimal(18, 2)), N'725CB86DC82AEE342ECBA3F3163478A130C49F577779DAEB82B142CF7A7DD313')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (816, 479, 1, 1, CAST(111800.00 AS Decimal(18, 2)), CAST(111800.00 AS Decimal(18, 2)), N'59940B72DB20CC3F16D0A88D576C9C56DCA7EDC59B05ABCE4CC5DE5C1BC8E6DD')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (817, 480, 16, 1, CAST(163000.00 AS Decimal(18, 2)), CAST(163000.00 AS Decimal(18, 2)), N'8066B1910206B85BDACAB97C32A0EBC4F033EC87877EBA92AFFF8B541133E878')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (818, 480, 12, 1, CAST(130400.00 AS Decimal(18, 2)), CAST(130400.00 AS Decimal(18, 2)), N'8DBFC31DEF5CC7FDFC2E14D57D4E9538CD3446E10F8ADAD14540E5C03A2AFACF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (819, 480, 23, 1, CAST(107100.00 AS Decimal(18, 2)), CAST(107100.00 AS Decimal(18, 2)), N'B9550B9303247A2E35874F06D149BA069A69932570960035B3FE1A3640AF24ED')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (820, 481, 15, 1, CAST(163000.00 AS Decimal(18, 2)), CAST(163000.00 AS Decimal(18, 2)), N'8261582ABB325EB327A47DBB143C35FF39946EA9F2D7234C957690905C5E4B55')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (821, 481, 2, 1, CAST(90300.00 AS Decimal(18, 2)), CAST(90300.00 AS Decimal(18, 2)), N'15DC155D6CA9E70878263F6EBDFCB3CD96E5DE4F20822E42B7328BB94B04AD65')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (822, 482, 40, 1, CAST(85700.00 AS Decimal(18, 2)), CAST(85700.00 AS Decimal(18, 2)), N'4A0B61156B415BDB45BA136CF0E04873E5BAEAD92FBBCC5C48FF08FD10703D5F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (823, 482, 33, 1, CAST(135100.00 AS Decimal(18, 2)), CAST(135100.00 AS Decimal(18, 2)), N'9E84F96BA2AC16A4BCDBFAF921BFDDCDF73FD0FA6AE5325F90919D5FCBD8CCC8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (824, 483, 33, 1, CAST(135100.00 AS Decimal(18, 2)), CAST(135100.00 AS Decimal(18, 2)), N'47967FD51AA0AE8ACA585B484425F76CEAF1D1B8B1B4212530922B5573F88F62')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (825, 483, 35, 1, CAST(72700.00 AS Decimal(18, 2)), CAST(72700.00 AS Decimal(18, 2)), N'F4962492A54B780F12FC386B31BF490E920AE0AF4738CB62A231924AF0156A9A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (826, 484, 5, 1, CAST(139700.00 AS Decimal(18, 2)), CAST(139700.00 AS Decimal(18, 2)), N'00D199F3CC828E93F8280DCA04593D01B51866FB1F61D4812772CBCD6CBE0CE1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (827, 484, 23, 1, CAST(107100.00 AS Decimal(18, 2)), CAST(107100.00 AS Decimal(18, 2)), N'B50D17B544317CFE034E3B576519F51E06A925A432FE03A466E0791F0DEF4063')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (828, 485, 5, 1, CAST(139700.00 AS Decimal(18, 2)), CAST(139700.00 AS Decimal(18, 2)), N'ADF4BDEDB586CC576990BD1BE5381961905A486FFDFEBBA1B4D8904DDC9612ED')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (829, 486, 39, 1, CAST(85700.00 AS Decimal(18, 2)), CAST(85700.00 AS Decimal(18, 2)), N'1F5B7F246F8884769749D239AB2AA50232EAC1668C0441C815577CF1888D03AA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (830, 486, 30, 2, CAST(139700.00 AS Decimal(18, 2)), CAST(279400.00 AS Decimal(18, 2)), N'A05F77C6BB69F7492FC00EDB6D3FD0EBA386A5E0472119C59764728978243099')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (831, 487, 14, 1, CAST(130400.00 AS Decimal(18, 2)), CAST(130400.00 AS Decimal(18, 2)), N'E8CA38C17D9E456C0D8105E78AF8BEEA687C46F2AD9398EA79EFEADCC1D9FE64')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (832, 488, 40, 1, CAST(85700.00 AS Decimal(18, 2)), CAST(85700.00 AS Decimal(18, 2)), N'B61A2B7D724267D8DFB0D110589850B822DBCB1461AF501ABE58DE206F22E061')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (833, 489, 40, 2, CAST(86500.00 AS Decimal(18, 2)), CAST(173000.00 AS Decimal(18, 2)), N'1AE86CF514129361192D98D699C39F21EFFDE6EF615540FC111AD2E5FD93A795')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (834, 489, 27, 1, CAST(89300.00 AS Decimal(18, 2)), CAST(89300.00 AS Decimal(18, 2)), N'793A4698DAC7166B1B7690647A2059763129AD7D973EE00DC1F331ED5590EC8C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (835, 490, 35, 1, CAST(73300.00 AS Decimal(18, 2)), CAST(73300.00 AS Decimal(18, 2)), N'7DE205B2101AF7B2D74C82CBD65EBEE9477A666778D1BABBD49518D356E220BE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (836, 491, 20, 1, CAST(150400.00 AS Decimal(18, 2)), CAST(150400.00 AS Decimal(18, 2)), N'6DF8289342619CE22EC41C0515B23D982CBD6C8277AB7BD77093E7AA61CB1EF6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (837, 492, 1, 1, CAST(112800.00 AS Decimal(18, 2)), CAST(112800.00 AS Decimal(18, 2)), N'131F47E7EFBA9B19C2CE0ECD73DA05CB4A8AF33B5B6542A6A411DB92DAAF9D7C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (838, 493, 1, 1, CAST(112800.00 AS Decimal(18, 2)), CAST(112800.00 AS Decimal(18, 2)), N'1CD1665AC7EC5EF3CC5A33857EE7E2AF5E42F62D70E671B2AAD87D15090CFA04')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (839, 493, 33, 1, CAST(136300.00 AS Decimal(18, 2)), CAST(136300.00 AS Decimal(18, 2)), N'CAD68CCEADEBDE27B85B238610B295ADDA31F69FD59B1BA948E2E06A20D10D32')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (840, 494, 7, 1, CAST(126900.00 AS Decimal(18, 2)), CAST(126900.00 AS Decimal(18, 2)), N'03754CE881B497B3CB3A8912938E895BE8EDA73C877F211423F842D703192CE9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (841, 495, 39, 1, CAST(86500.00 AS Decimal(18, 2)), CAST(86500.00 AS Decimal(18, 2)), N'E9EA2C15C6BDC0A6B19917B8D6A4B9DB25B54977C6673F720A01FC1AB16ACED7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (842, 496, 14, 1, CAST(131600.00 AS Decimal(18, 2)), CAST(131600.00 AS Decimal(18, 2)), N'DAC7F709B8DB9A0AEA4525FC954D161CA0A80A13272D0A4D72607056312575B2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (843, 497, 8, 1, CAST(126900.00 AS Decimal(18, 2)), CAST(126900.00 AS Decimal(18, 2)), N'BA93AA5A4B13AC9D8DE5A8C3302FD201A66099C2179444695459D51329FB7204')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (844, 497, 13, 1, CAST(131600.00 AS Decimal(18, 2)), CAST(131600.00 AS Decimal(18, 2)), N'254206F4046279BB97F5F532D13307619BF7B119BA37AC12B4EADB4EBAD99A2C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (845, 498, 13, 1, CAST(131600.00 AS Decimal(18, 2)), CAST(131600.00 AS Decimal(18, 2)), N'F7BBB7CD5F658937A9B16A5F8B733A9BC5913F835E6297B6EA3B0D9E5B9C89C2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (846, 499, 37, 1, CAST(112800.00 AS Decimal(18, 2)), CAST(112800.00 AS Decimal(18, 2)), N'3C88F72106B52EC10391B941A1ED6D5816EA1AE6DB526BA8F6E4D2D55448682E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (847, 499, 23, 1, CAST(108100.00 AS Decimal(18, 2)), CAST(108100.00 AS Decimal(18, 2)), N'AF3402F4D45EB848B8D2B929DADDAFA94BAE2A02063929C2959DBD76A0D910D4')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (848, 500, 40, 1, CAST(86500.00 AS Decimal(18, 2)), CAST(86500.00 AS Decimal(18, 2)), N'E8172060D911A50370EC48F3A03AEF560DCF93D0E305BA53E8FC2BF7BF79594A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (849, 500, 23, 1, CAST(108100.00 AS Decimal(18, 2)), CAST(108100.00 AS Decimal(18, 2)), N'F3DF748F63C55836F433CFFA6EEAC747A0AC593BA1D931BE1B845A787D145C0C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (850, 501, 1, 1, CAST(113800.00 AS Decimal(18, 2)), CAST(113800.00 AS Decimal(18, 2)), N'25CF3EAC4A6E83B4DB17890169DB1CA040243A8C9C27EEAAAC88B34486C06ED3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (851, 501, 27, 1, CAST(90100.00 AS Decimal(18, 2)), CAST(90100.00 AS Decimal(18, 2)), N'D8562B19FBBD0BBC821AF9201806FD9415CB2B8BE8826A8032978D9272C9C18A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (852, 502, 14, 2, CAST(132800.00 AS Decimal(18, 2)), CAST(265600.00 AS Decimal(18, 2)), N'FEBED2974BC40A523BA4045D298A719E1F27345F743B0AF4312B1881ABC078BF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (853, 502, 39, 1, CAST(87300.00 AS Decimal(18, 2)), CAST(87300.00 AS Decimal(18, 2)), N'2857249DBF0E2679CF881C060C4DC634A09E7E321D86315E46693482D8368680')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (854, 503, 24, 1, CAST(156500.00 AS Decimal(18, 2)), CAST(156500.00 AS Decimal(18, 2)), N'AF3D7E01FC0CE3D1A83CB2E6901285503BD67623DBED672464F0076094A05825')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (855, 503, 3, 1, CAST(104300.00 AS Decimal(18, 2)), CAST(104300.00 AS Decimal(18, 2)), N'8B16BBA00D47A979CAD49F18D98F67947E4A72A60E0601B74980CE743DA790AF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (856, 504, 37, 1, CAST(113800.00 AS Decimal(18, 2)), CAST(113800.00 AS Decimal(18, 2)), N'D2D434B82DAFB60A7D98F5380D8AB2290E6ED4DBEAD7E1A33CB0EB6EC3A1B502')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (857, 504, 40, 1, CAST(87300.00 AS Decimal(18, 2)), CAST(87300.00 AS Decimal(18, 2)), N'C63CAE05A13C67E8AFAA0F4613EF04DA7B2498B848842D6DA984989F67DD6807')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (858, 505, 26, 1, CAST(161300.00 AS Decimal(18, 2)), CAST(161300.00 AS Decimal(18, 2)), N'F2D74080DFC26480BD913356A0C20C9576518A6CF02ABA8EF515155F43AAEED2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (859, 506, 39, 1, CAST(87300.00 AS Decimal(18, 2)), CAST(87300.00 AS Decimal(18, 2)), N'172E51C006FAD6EF74558E1F342944AEFFDDAE72DC81C0336B9FDAB22689F885')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (860, 506, 13, 1, CAST(132800.00 AS Decimal(18, 2)), CAST(132800.00 AS Decimal(18, 2)), N'6AF668C825941C7C15111F126EFD5E39FD9721DB9E13A4147866CB77E5E8B6E7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (861, 507, 21, 2, CAST(99600.00 AS Decimal(18, 2)), CAST(199200.00 AS Decimal(18, 2)), N'90F3AF3252B30C9F02951FA7FCE869CAFE37A18063F9C36A0851A5CDCF13A394')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (862, 507, 36, 1, CAST(74000.00 AS Decimal(18, 2)), CAST(74000.00 AS Decimal(18, 2)), N'FC6E6C37E377E8D72E4669A185DE136E03EB195F30AAFD309F42C65153CE1022')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (863, 508, 39, 1, CAST(87300.00 AS Decimal(18, 2)), CAST(87300.00 AS Decimal(18, 2)), N'4C8AF586039A0397436788CAB13BA2181100E9197714516837F60CA0D2CD66B1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (864, 508, 20, 2, CAST(151800.00 AS Decimal(18, 2)), CAST(303600.00 AS Decimal(18, 2)), N'345A3CE7DEF635CC8B8AD76DA5AC8EEAC4AF5C848253BBE12F4C5120E9F822B7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (865, 509, 5, 1, CAST(142300.00 AS Decimal(18, 2)), CAST(142300.00 AS Decimal(18, 2)), N'CDF635CC175A66A8A5F25A7C7EBE44C158046A34804CA53F123A33B1025D02D5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (866, 509, 23, 1, CAST(109100.00 AS Decimal(18, 2)), CAST(109100.00 AS Decimal(18, 2)), N'91ABD2C50CCE896CD6BF687DA2CE1DB12DFAB10962295E4116AC7BBB004F6331')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (867, 509, 3, 1, CAST(104300.00 AS Decimal(18, 2)), CAST(104300.00 AS Decimal(18, 2)), N'C558AD5AC992113511DEDAC2179789B12518F8D17ADD7A68BE7D07D35757C547')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (868, 510, 39, 1, CAST(87300.00 AS Decimal(18, 2)), CAST(87300.00 AS Decimal(18, 2)), N'C575C4E4C2F625F2FCCF4E9CE279AB884D8786AFDBB1AA908A899D4D4D1CB87F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (869, 510, 27, 1, CAST(90100.00 AS Decimal(18, 2)), CAST(90100.00 AS Decimal(18, 2)), N'40E9E5D763F9A826E61632B31E01B815625A8CC363A094E5A7AD46F6710077AC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (870, 510, 23, 1, CAST(109100.00 AS Decimal(18, 2)), CAST(109100.00 AS Decimal(18, 2)), N'D42BA12B375F095535BC0DB0F9EBAE3BCAFA4D83A47722051D47D21585E6DAC7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (871, 511, 17, 1, CAST(142300.00 AS Decimal(18, 2)), CAST(142300.00 AS Decimal(18, 2)), N'D02CE157D90C1D7DC14E5C173EAA0D9EED57A90597EC09FA42C1F440366D2DAE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (872, 511, 39, 1, CAST(87300.00 AS Decimal(18, 2)), CAST(87300.00 AS Decimal(18, 2)), N'80AEDC3D46139ACE0D5CB0E6ED2F6B515B51245C3BE3CAA29A970566A78D7896')
+GO
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (873, 512, 34, 1, CAST(137500.00 AS Decimal(18, 2)), CAST(137500.00 AS Decimal(18, 2)), N'950F41A41FED312FF5B28B84B711DE83F424DD941E6568CF822CB7E09522EC34')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (874, 513, 1, 1, CAST(114900.00 AS Decimal(18, 2)), CAST(114900.00 AS Decimal(18, 2)), N'AA9D4EDB792B2F2D5B5134640B624CDFAD02DD60402F3651DC4E4177E5C86AD4')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (875, 514, 14, 1, CAST(134000.00 AS Decimal(18, 2)), CAST(134000.00 AS Decimal(18, 2)), N'6871CC4BEBECAB686586041328811E9EA05F07A38CC67354A3468DFEFAC1FC25')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (876, 515, 16, 1, CAST(167500.00 AS Decimal(18, 2)), CAST(167500.00 AS Decimal(18, 2)), N'027B9BC296E269DEAD1D329D7C4EDFF05B30985FABE215CED2EBDD75B5D01DD2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (877, 515, 17, 1, CAST(143600.00 AS Decimal(18, 2)), CAST(143600.00 AS Decimal(18, 2)), N'2949A09999EA3310248EB84A6A725AB5B71A585C63BADD6E5F6B7D1BD1E26FFA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (878, 515, 1, 1, CAST(114900.00 AS Decimal(18, 2)), CAST(114900.00 AS Decimal(18, 2)), N'75C8CE836DB4C55C3447DA7C9E956A0677F4E91024807E4C509E44F2E12490D2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (879, 516, 5, 1, CAST(143600.00 AS Decimal(18, 2)), CAST(143600.00 AS Decimal(18, 2)), N'F838BCC657021B36E4D3E2A0C2D569B52D112D73AC2221EDDE55E4B77619DA53')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (880, 517, 37, 1, CAST(114900.00 AS Decimal(18, 2)), CAST(114900.00 AS Decimal(18, 2)), N'BC54B8E40192B09B60A6FDBF85B7CE9405A9752DE3DEDED725D81BB9D314B4F6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (881, 517, 19, 1, CAST(177100.00 AS Decimal(18, 2)), CAST(177100.00 AS Decimal(18, 2)), N'3FD1DFAB73CE623FA490A5097F5E0095F7622F1A2A19A63B908117B08809ECBA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (882, 518, 1, 1, CAST(114900.00 AS Decimal(18, 2)), CAST(114900.00 AS Decimal(18, 2)), N'C829D16A889D4ECF7EB1D770EE083657441D51483274F55BD24D5981D04C6EA8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (883, 518, 13, 1, CAST(134000.00 AS Decimal(18, 2)), CAST(134000.00 AS Decimal(18, 2)), N'3346F8259A2289E275BE2CA1C76FEE4F16A462576246F423957ECEBB3420B8F5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (884, 518, 12, 2, CAST(134000.00 AS Decimal(18, 2)), CAST(268000.00 AS Decimal(18, 2)), N'38C195BF84C53E5BA220F52C78F7E7B2BE1C5FB72087C65C418E5A62AF1085FC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (885, 519, 1, 1, CAST(114900.00 AS Decimal(18, 2)), CAST(114900.00 AS Decimal(18, 2)), N'5AAAD7A7D7056A2222891EE703C5DE1ABA0889418BB68949EA99AC2CA90E55F0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (886, 520, 15, 1, CAST(167500.00 AS Decimal(18, 2)), CAST(167500.00 AS Decimal(18, 2)), N'5314F48CF0F59DED57FBAA83F3BBCB61684F953DBF357035553FAD22ABCD1A73')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (887, 520, 13, 1, CAST(134000.00 AS Decimal(18, 2)), CAST(134000.00 AS Decimal(18, 2)), N'E06910D24CF1BE995149E9BDFA612E7D6AFF79F493E4FAF326CFAEAD00B03F01')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (888, 521, 17, 1, CAST(143600.00 AS Decimal(18, 2)), CAST(143600.00 AS Decimal(18, 2)), N'99BA5BBA0B3E0C9F1C9B0E0558526D4F6C2764584BC6033E7EFE1723DA44FD6E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (889, 522, 40, 1, CAST(88100.00 AS Decimal(18, 2)), CAST(88100.00 AS Decimal(18, 2)), N'9DC96F16B4BDCD45AC6A579255E169D6FEAD93C5E76406C97D54020922BF4E9B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (890, 522, 23, 1, CAST(110100.00 AS Decimal(18, 2)), CAST(110100.00 AS Decimal(18, 2)), N'D5B9944370BF978283B13ECABBC5C5820502C3CFD4B786249FDBE87A5B4AC0BF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (891, 523, 30, 1, CAST(143600.00 AS Decimal(18, 2)), CAST(143600.00 AS Decimal(18, 2)), N'15392519AE9108466FEE9FEF136B59C840D34250626EE7926BD045D57750FA0B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (892, 523, 28, 1, CAST(90900.00 AS Decimal(18, 2)), CAST(90900.00 AS Decimal(18, 2)), N'6A18A663DDEFC9CBF31A733AEB54AA24D56F42569FBE7F54811453149D7F6724')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (893, 524, 25, 2, CAST(124400.00 AS Decimal(18, 2)), CAST(248800.00 AS Decimal(18, 2)), N'43FFFB9B3987D5212FB22FF21D8A66083F741A5AD4EB4BCC2CBC0FDFE1B9BA23')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (894, 525, 33, 1, CAST(138800.00 AS Decimal(18, 2)), CAST(138800.00 AS Decimal(18, 2)), N'4C4B77DF6AC02CD7AB8888BA2D82EB0FCDC71C3F6D883E0635AD63FB91C8566E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (895, 526, 16, 1, CAST(169000.00 AS Decimal(18, 2)), CAST(169000.00 AS Decimal(18, 2)), N'31C04B6372C20575F76336EFC9F51C45A6D7C63890D20597280288A1A73A66C2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (896, 526, 1, 1, CAST(115900.00 AS Decimal(18, 2)), CAST(115900.00 AS Decimal(18, 2)), N'786AF00413D6119079B78277F33C0C234E39B3D8EEA3B47300757F5B88107001')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (897, 527, 16, 1, CAST(169000.00 AS Decimal(18, 2)), CAST(169000.00 AS Decimal(18, 2)), N'6BA6573887082CF8CEDA4D992484740F72E37E2842C355723F685665F8AF2B23')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (898, 528, 14, 2, CAST(135200.00 AS Decimal(18, 2)), CAST(270400.00 AS Decimal(18, 2)), N'0E7375F5E050B935E55F488B1C26EED418CCEFF4FFE63D80B83CDF78F4A55736')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (899, 528, 2, 1, CAST(93700.00 AS Decimal(18, 2)), CAST(93700.00 AS Decimal(18, 2)), N'DEBB1EE8CBE82BE5F5D76AB0F1F2D994BFECA876101D67F1A281BFDC0F92770E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (900, 529, 14, 1, CAST(135200.00 AS Decimal(18, 2)), CAST(135200.00 AS Decimal(18, 2)), N'0E30D33F0FFE4DD0E619CFE3083FE420D1D0915519A4D84437C696C7DF47EB37')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (901, 530, 17, 1, CAST(144900.00 AS Decimal(18, 2)), CAST(144900.00 AS Decimal(18, 2)), N'A8AED94FF302683EDB816FA3802767C341DEFCBAB281D6DB3DA433F165C1B32B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (902, 531, 16, 1, CAST(169000.00 AS Decimal(18, 2)), CAST(169000.00 AS Decimal(18, 2)), N'4E87CBF0A38E523CDC4253CA2B3CEA567A6EF8C3C2B41AA175A2320C105C8B8C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (903, 532, 20, 1, CAST(154500.00 AS Decimal(18, 2)), CAST(154500.00 AS Decimal(18, 2)), N'50DDA180A784281F75FAD26FEED816A9E6A2E15F70F27FAF46206AD13AD7392A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (904, 533, 23, 1, CAST(111100.00 AS Decimal(18, 2)), CAST(111100.00 AS Decimal(18, 2)), N'E1EB02B7EE60950E31A9ADB3D7C954B7937E84D2FEAB6A12D3E46D8036398F61')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (905, 533, 21, 2, CAST(101400.00 AS Decimal(18, 2)), CAST(202800.00 AS Decimal(18, 2)), N'CD86C91ADA7F7E9822EE4FD73A828918F07002FE58D7B1F00DB375CE0E797CEB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (906, 533, 42, 1, CAST(77300.00 AS Decimal(18, 2)), CAST(77300.00 AS Decimal(18, 2)), N'D54BFF7CD41F1C9EF4F8BBE59315C2F25293D47DC7BC17D4AFAD230EC64A90B1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (907, 534, 2, 1, CAST(93700.00 AS Decimal(18, 2)), CAST(93700.00 AS Decimal(18, 2)), N'740FE2B2E29AFC55EB918A15F2357BE28A3B8859E4C5E5FE6C599F27D4037277')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (908, 534, 9, 1, CAST(130400.00 AS Decimal(18, 2)), CAST(130400.00 AS Decimal(18, 2)), N'E2DBD727BF95F344DA25FDC718F6653C41AE3B5A61B29D220A7291977C2EF491')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (909, 535, 17, 1, CAST(144900.00 AS Decimal(18, 2)), CAST(144900.00 AS Decimal(18, 2)), N'39EDE0DC6A01C97040DA8A0A52BFADBBC68F05A78336F3CA42EDECA0CDF33ED3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (910, 535, 9, 2, CAST(130400.00 AS Decimal(18, 2)), CAST(260800.00 AS Decimal(18, 2)), N'82F1D0CE9539C40C79508A4C93CA1C42E0E9C1EFBB33A339FD640716DF813CFA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (911, 535, 5, 1, CAST(144900.00 AS Decimal(18, 2)), CAST(144900.00 AS Decimal(18, 2)), N'3FE73107BCC39751AFA6AD387AD5D46AA2596F82EB07DE1DA3A17FBCE2956768')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (912, 536, 1, 1, CAST(115900.00 AS Decimal(18, 2)), CAST(115900.00 AS Decimal(18, 2)), N'8952D8499416F7260859C94E3FFF1704EEC4877561B3AB962B0F29FA3B9154E5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (913, 537, 26, 1, CAST(164200.00 AS Decimal(18, 2)), CAST(164200.00 AS Decimal(18, 2)), N'5F23C37AA80FEA8153C247C54A9B6C16D64A2847672A1B5CC82AD79F4BE84F47')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (914, 537, 40, 1, CAST(88800.00 AS Decimal(18, 2)), CAST(88800.00 AS Decimal(18, 2)), N'B542924C7CE6683CAD8673D6DD87A8AD5B42FC2C1B15BD69C678F8F244600142')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (915, 538, 15, 1, CAST(169000.00 AS Decimal(18, 2)), CAST(169000.00 AS Decimal(18, 2)), N'C386820B5FD14D69B7690D29E998ACBECDD4E3A7D695E5AC3F41E5FED3D4DEF3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (916, 539, 3, 1, CAST(106200.00 AS Decimal(18, 2)), CAST(106200.00 AS Decimal(18, 2)), N'D83F8D8D9B8B8D9DF980AE37DFB79E8A5CBC12BF40D39EBA6AFB242DC5F2AEF9')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (917, 540, 12, 1, CAST(135200.00 AS Decimal(18, 2)), CAST(135200.00 AS Decimal(18, 2)), N'70DDE12979297465BA407DF38069F5CEABC9108A2A4C86CE885B4D1FCF994A16')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (918, 540, 39, 1, CAST(88800.00 AS Decimal(18, 2)), CAST(88800.00 AS Decimal(18, 2)), N'8D2E42FDDC7C0139C9DF647530D0FB41E9ACDFD0C57F306E2F3395CE19C43C16')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (919, 541, 5, 1, CAST(144900.00 AS Decimal(18, 2)), CAST(144900.00 AS Decimal(18, 2)), N'4EEB88C288CAD13D04DF1BA825B97ED11383DD50B24EADD58326B04FB15283BE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (920, 541, 38, 2, CAST(94600.00 AS Decimal(18, 2)), CAST(189200.00 AS Decimal(18, 2)), N'ECA63BCD9708EC2D074D5FB4C947A2A34D6A3D9D2DDC5D5563B51F76CAA4F962')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (921, 542, 35, 1, CAST(76000.00 AS Decimal(18, 2)), CAST(76000.00 AS Decimal(18, 2)), N'734425D8E4B09A9111AE504BD23EAC4265C5F501D8D48CFF3C95A6F53BFF65F7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (922, 543, 5, 1, CAST(146100.00 AS Decimal(18, 2)), CAST(146100.00 AS Decimal(18, 2)), N'2271AF2CCBD9CCA781E8762859491E42E57BBC8705EF17A6774129B8EABD6C4C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (923, 544, 25, 1, CAST(126700.00 AS Decimal(18, 2)), CAST(126700.00 AS Decimal(18, 2)), N'79273AF1FE8B3B3768ADFAA735434629B3520F6EBA3E95B3A24FB3739DBE4D19')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (924, 545, 18, 1, CAST(180200.00 AS Decimal(18, 2)), CAST(180200.00 AS Decimal(18, 2)), N'A25EB45D41506957E18CC0EC642C48B63577A39BEAB85A738D9AFD04C6E19475')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (925, 546, 17, 1, CAST(146100.00 AS Decimal(18, 2)), CAST(146100.00 AS Decimal(18, 2)), N'C7720C6607F6EFD6F3AE1945AC73A8037F0201458B25229FACBD3322C68059D3')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (926, 547, 12, 2, CAST(136400.00 AS Decimal(18, 2)), CAST(272800.00 AS Decimal(18, 2)), N'9C639AFD7CBA2C325F7D14CF013F041A0F8ED0F275AE1D7AD4948C4F5B416331')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (927, 547, 37, 1, CAST(116900.00 AS Decimal(18, 2)), CAST(116900.00 AS Decimal(18, 2)), N'288C33535D107B77955B81F5053D65F89154A336A7F0D5B1D949E542DE1E7659')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (928, 548, 13, 2, CAST(136400.00 AS Decimal(18, 2)), CAST(272800.00 AS Decimal(18, 2)), N'F14B04BE2B55ABA781A886AC58AE9D190A2AEF55BCD56CAE850BA3A4F1669C92')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (929, 549, 33, 2, CAST(141300.00 AS Decimal(18, 2)), CAST(282600.00 AS Decimal(18, 2)), N'6739C26205AF42A8BB67DE9D0CEE63BCE4A42EED3F003FC15075729401834574')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (930, 550, 25, 1, CAST(126700.00 AS Decimal(18, 2)), CAST(126700.00 AS Decimal(18, 2)), N'5F8CD658B01808C48BB464140C8BBDAD5E5BA53A3C096BC04D83586568A38F18')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (931, 551, 28, 1, CAST(92600.00 AS Decimal(18, 2)), CAST(92600.00 AS Decimal(18, 2)), N'84892CF0A732651A0FC08922B1D03B6601BE0E2879E980A4EE78B045E43112DF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (932, 551, 17, 1, CAST(146100.00 AS Decimal(18, 2)), CAST(146100.00 AS Decimal(18, 2)), N'AD80081307A771F7C331AE73A7EDFCCC6796AB76669CC6CD560C1DA5C6A9565A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (933, 552, 5, 1, CAST(146100.00 AS Decimal(18, 2)), CAST(146100.00 AS Decimal(18, 2)), N'7573164B9F24C71CA2BB090D0F046AC1F002133D353C538C6CE364E0B1379279')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (934, 553, 12, 1, CAST(136400.00 AS Decimal(18, 2)), CAST(136400.00 AS Decimal(18, 2)), N'71E89731B8549B6B27E72DA5EC31963F6FF72A72ECC75AEBC8C51F3323AB271E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (935, 553, 5, 1, CAST(146100.00 AS Decimal(18, 2)), CAST(146100.00 AS Decimal(18, 2)), N'990AE7FA2E41E3484B7C96B38FA5E92EEAC3D62B66759CBCFBB7562A4A98EA9A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (936, 554, 14, 1, CAST(136400.00 AS Decimal(18, 2)), CAST(136400.00 AS Decimal(18, 2)), N'02B611F03BD1358CE0A4F5BE467E0CB934A3F20F60AB41420D567FC8F87251E1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (937, 555, 17, 1, CAST(146100.00 AS Decimal(18, 2)), CAST(146100.00 AS Decimal(18, 2)), N'692AA43157FF0D5F1AC1FBECC5CE7C1CECD898F4C39B3581607705E54E6E6B6A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (938, 556, 5, 1, CAST(146100.00 AS Decimal(18, 2)), CAST(146100.00 AS Decimal(18, 2)), N'BAEA15476137106C786974B3A2F88D7A423363660360C6E5E2FBCC66B3B47675')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (939, 557, 2, 1, CAST(94500.00 AS Decimal(18, 2)), CAST(94500.00 AS Decimal(18, 2)), N'C46806C2B6C26A221406FE00C556C89BF0B14387F137E0C3C65068A849886FA4')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (940, 558, 28, 1, CAST(92600.00 AS Decimal(18, 2)), CAST(92600.00 AS Decimal(18, 2)), N'1B22F287083C2A48994DD7B2618F65D31493CCF935A2E58CC52C00EDA94D5AFF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (941, 559, 13, 1, CAST(137600.00 AS Decimal(18, 2)), CAST(137600.00 AS Decimal(18, 2)), N'CE74B6F5DC9CB0CED1B1B6CCAB4B2D04FAD1AE0D2B9358FDEFCEB1CB82B5E8EF')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (942, 560, 17, 1, CAST(147400.00 AS Decimal(18, 2)), CAST(147400.00 AS Decimal(18, 2)), N'B9B8DE0C4812DC9FB74B1AF88AB2AF8A8F0CEE7E27C74B77925D79FE3A911DD1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (943, 561, 28, 1, CAST(93400.00 AS Decimal(18, 2)), CAST(93400.00 AS Decimal(18, 2)), N'D3F1EF38125E749DEBD732C27520371C71EEAB2185B06DE0836222E1645BE6F7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (944, 562, 28, 1, CAST(93400.00 AS Decimal(18, 2)), CAST(93400.00 AS Decimal(18, 2)), N'C162089D3D218CAAF9AECD5FCD12481F32538F6CA932B50B5B21246A2E737FE7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (945, 562, 40, 1, CAST(90400.00 AS Decimal(18, 2)), CAST(90400.00 AS Decimal(18, 2)), N'5D40F4ACEA4FCB121C316AFF94A4DB23163EF280A38A779DF87260296D508ADE')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (946, 562, 14, 1, CAST(137600.00 AS Decimal(18, 2)), CAST(137600.00 AS Decimal(18, 2)), N'CB8CC84F1E2473221978A5CAA70F7B17DE00CA5EA20E860DC8286FD1CC1A1F6D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (947, 563, 5, 1, CAST(147400.00 AS Decimal(18, 2)), CAST(147400.00 AS Decimal(18, 2)), N'657409DA423E9E96618ECF1737C0E89DD39BBCC826F36771850F27178159B171')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (948, 564, 20, 1, CAST(157300.00 AS Decimal(18, 2)), CAST(157300.00 AS Decimal(18, 2)), N'64DEF3FE9E5245951310CED9902A75E0CE9AA0F114633A66B9F217C7A3EC62C8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (949, 564, 7, 1, CAST(132700.00 AS Decimal(18, 2)), CAST(132700.00 AS Decimal(18, 2)), N'4BE7DF8E65E41EDE4F6CE8130157E4741B97DBBADBB310FE4B0162B4E42369E6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (950, 565, 37, 1, CAST(117900.00 AS Decimal(18, 2)), CAST(117900.00 AS Decimal(18, 2)), N'4DA928817B6F7D6E497A37D36D92D04F4FEE25EB3826F7AF2D6BF566135747FC')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (951, 566, 2, 1, CAST(95300.00 AS Decimal(18, 2)), CAST(95300.00 AS Decimal(18, 2)), N'9785973CF15C1EF50D3B341B6EFA75A32BED9E1B6AD1F776DB92D7FC3AEE8A82')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (952, 567, 8, 1, CAST(132700.00 AS Decimal(18, 2)), CAST(132700.00 AS Decimal(18, 2)), N'3BDD10127CB8A001012FFAC7E3AEAFC4874C6B20685A5699597A38F4DC762EB5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (953, 568, 16, 1, CAST(172000.00 AS Decimal(18, 2)), CAST(172000.00 AS Decimal(18, 2)), N'5160BDC39570F463204F1119DD06EE2C8E7A90A7768DBEF54BA052A3119B6587')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (954, 568, 2, 1, CAST(95300.00 AS Decimal(18, 2)), CAST(95300.00 AS Decimal(18, 2)), N'DC96FC3682B250E3A9C3CEF8F3AA2FA5E40597C8BFBBD5A33A2007A2D08B763D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (955, 569, 17, 1, CAST(147400.00 AS Decimal(18, 2)), CAST(147400.00 AS Decimal(18, 2)), N'000E2EEDD89D55C871D09DB013C94A2A40A63E67211BBA6A098A5A54F01C23F1')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (956, 570, 39, 1, CAST(90400.00 AS Decimal(18, 2)), CAST(90400.00 AS Decimal(18, 2)), N'89F5CFA1E3271FC49A6E3E492E301DF293504C3E48A6CD894E16C97E7FE6856D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (957, 571, 18, 1, CAST(181800.00 AS Decimal(18, 2)), CAST(181800.00 AS Decimal(18, 2)), N'81E1F2E4C32E7B875E6588C5D6995D845DB97DC98CBD6BFB5B92802A243B4C88')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (958, 572, 1, 1, CAST(119000.00 AS Decimal(18, 2)), CAST(119000.00 AS Decimal(18, 2)), N'8283A858676605EDB419695C5BA4DD3193286AA6C1CFA5E2A831F60EB4E1458A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (959, 572, 14, 1, CAST(138800.00 AS Decimal(18, 2)), CAST(138800.00 AS Decimal(18, 2)), N'DE3E56C9C375D85313B74E2A018F63F80E3FA5BE77D2903BA515C7A83FD78F7A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (960, 573, 2, 1, CAST(96200.00 AS Decimal(18, 2)), CAST(96200.00 AS Decimal(18, 2)), N'7A69ABBDBC1DB38667716A4479518FB684070246C23F5A30F822B4F490DA5CBA')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (961, 573, 35, 1, CAST(77300.00 AS Decimal(18, 2)), CAST(77300.00 AS Decimal(18, 2)), N'663AE553439CE9027A0759373BB7F59668928735872DB8CF7086B335C273AE07')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (962, 574, 24, 2, CAST(163600.00 AS Decimal(18, 2)), CAST(327200.00 AS Decimal(18, 2)), N'3590696B169DFFF2698D1FFC1769A109DB31751DF59CC16FED3283F4443E96E4')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (963, 574, 18, 1, CAST(183400.00 AS Decimal(18, 2)), CAST(183400.00 AS Decimal(18, 2)), N'B498681B143B5223780C4094207D8CBC7435CF676A03ABB24D5F8CDA2CC61116')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (964, 575, 12, 1, CAST(138800.00 AS Decimal(18, 2)), CAST(138800.00 AS Decimal(18, 2)), N'B3EBAEC27DF6D269A3FDBDC79A2F763BAD427C7C4849B4AAC782ED0EC4469A1A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (965, 576, 40, 1, CAST(91200.00 AS Decimal(18, 2)), CAST(91200.00 AS Decimal(18, 2)), N'1AD1B962C050168D1C499EDC8FFFABDC3BD974AE32F47C10D4892F9EC46E7830')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (966, 576, 39, 1, CAST(91200.00 AS Decimal(18, 2)), CAST(91200.00 AS Decimal(18, 2)), N'BAB01FEA4719F5D470EC479DA486DACBFDA1D732ED30D4EC55E0F0930EC11854')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (967, 576, 20, 1, CAST(158600.00 AS Decimal(18, 2)), CAST(158600.00 AS Decimal(18, 2)), N'5A2F5CB0EB6F5DE13805DA4219CC49FB9BEBA18058236B8A68AAA897505C5E2B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (968, 577, 34, 1, CAST(143800.00 AS Decimal(18, 2)), CAST(143800.00 AS Decimal(18, 2)), N'D3420B3BFE1474733483B5205AC6C16DCB70E770B10ACA9E88C3021B0ED3FFA2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (969, 578, 33, 2, CAST(143800.00 AS Decimal(18, 2)), CAST(287600.00 AS Decimal(18, 2)), N'35A86C7D0FBA240DFE0D88B6680197180FEBD581D9E46CBD363BEF3CF12C7038')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (970, 578, 18, 1, CAST(183400.00 AS Decimal(18, 2)), CAST(183400.00 AS Decimal(18, 2)), N'52001D2A716276AB20EE5B6367ACF4CFB61F5C6D638F76D5B7CDA903C7C51A49')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (971, 579, 23, 1, CAST(114000.00 AS Decimal(18, 2)), CAST(114000.00 AS Decimal(18, 2)), N'74D2CBC1F89A085DCC437B65288F152E3F4AB67AEB664277BA5FF18670232BD5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (972, 579, 39, 1, CAST(91200.00 AS Decimal(18, 2)), CAST(91200.00 AS Decimal(18, 2)), N'512FA1F9DEF7577E84B816A195D4D81138A7720B419357814187DADC8D3725BD')
+GO
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (973, 579, 1, 1, CAST(119000.00 AS Decimal(18, 2)), CAST(119000.00 AS Decimal(18, 2)), N'2C22070168F67B98BABFB0F03455F67E248B9FA691ACB64246316784B99A5A7A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (974, 580, 36, 1, CAST(77300.00 AS Decimal(18, 2)), CAST(77300.00 AS Decimal(18, 2)), N'B7B3391DD8284C7DF80FBA2584F0E2EAAE5859AD628F9118D2F997E6140FBE08')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (975, 581, 17, 1, CAST(148700.00 AS Decimal(18, 2)), CAST(148700.00 AS Decimal(18, 2)), N'49E1D30D7F0E59349F72DFB7441AFB2F7E89073A25365CDFDABD7A83A432C6A8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (976, 582, 12, 1, CAST(138800.00 AS Decimal(18, 2)), CAST(138800.00 AS Decimal(18, 2)), N'80F9AF6D02A418349646A3425D8B3CCC2ED4217DA312096EDD1406747E830690')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (977, 583, 33, 1, CAST(143800.00 AS Decimal(18, 2)), CAST(143800.00 AS Decimal(18, 2)), N'70D761A5CBD2B60C678A1A2AA4E1EED11F86ED40057996FFB57D4BEBB1B126D7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (978, 584, 20, 1, CAST(158600.00 AS Decimal(18, 2)), CAST(158600.00 AS Decimal(18, 2)), N'0601BA17BBF0BDDD4AAEE77A2830B2B9807076CA6BD806F94D4232630A764270')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (979, 585, 12, 1, CAST(140000.00 AS Decimal(18, 2)), CAST(140000.00 AS Decimal(18, 2)), N'3856BB2DB93B871C7587AB0021D6164748EF13284D77A12B7B7C004A7436134E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (980, 585, 27, 1, CAST(95000.00 AS Decimal(18, 2)), CAST(95000.00 AS Decimal(18, 2)), N'30F0FCD27C1BE51DC200BD2C2C6A72E895428F8CE26807CE6706B92AA823A0F7')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (981, 585, 5, 1, CAST(150000.00 AS Decimal(18, 2)), CAST(150000.00 AS Decimal(18, 2)), N'79C2D15834FFF309075891DD95FCEC7EEED45AE3B177A13949D2D7D8A4860F6A')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (982, 586, 39, 1, CAST(92000.00 AS Decimal(18, 2)), CAST(92000.00 AS Decimal(18, 2)), N'257D25C941671000D9B319F8A4076C556F3DD96B9345712EF5D1EAB2DDE938F2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (983, 586, 2, 1, CAST(97000.00 AS Decimal(18, 2)), CAST(97000.00 AS Decimal(18, 2)), N'A3FE4804421F4DC4D3FF0E27E6518DFBB027CA2BA7EF8C1D2FB2C094A753BAA0')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (984, 587, 36, 1, CAST(78000.00 AS Decimal(18, 2)), CAST(78000.00 AS Decimal(18, 2)), N'3A4C9C2B045984FA55A1C537AC1D68477E72085D05FBFE6F11E83BEC193CC5C6')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (985, 587, 19, 1, CAST(185000.00 AS Decimal(18, 2)), CAST(185000.00 AS Decimal(18, 2)), N'D22909C94C77464233C6370826832B883B7796AF03EDD534C37AA365B9559AC8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (986, 588, 29, 1, CAST(98000.00 AS Decimal(18, 2)), CAST(98000.00 AS Decimal(18, 2)), N'9892AF2EB232F5C3C63C01BF279E70C3788FDFF9865976C7C8A7E557D4041862')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (987, 588, 18, 1, CAST(185000.00 AS Decimal(18, 2)), CAST(185000.00 AS Decimal(18, 2)), N'7033FE8FA89B7A1C2F6E8D512379E395412DA25E3D71E1458E1189B7C0D179F8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (988, 589, 28, 1, CAST(95000.00 AS Decimal(18, 2)), CAST(95000.00 AS Decimal(18, 2)), N'E1472A8DEFC1D3B411305D785B8653A4CF32B77371B164C3BDB3424937B5B278')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (989, 590, 1, 1, CAST(120000.00 AS Decimal(18, 2)), CAST(120000.00 AS Decimal(18, 2)), N'5A01D5BACAFC88133E16FD91C6CD44FE9E3129B673E3DE30D455DD6454D1F419')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (990, 591, 2, 1, CAST(97000.00 AS Decimal(18, 2)), CAST(97000.00 AS Decimal(18, 2)), N'D932D392CDA4081645D251E65A668F6485497B4864281FAAFBA7A02BD74CD379')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (991, 592, 17, 1, CAST(150000.00 AS Decimal(18, 2)), CAST(150000.00 AS Decimal(18, 2)), N'0D61829400B537EC42A053A236C705402C65EF737E4B7A7C738572C3E2549CE5')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (992, 593, 23, 1, CAST(115000.00 AS Decimal(18, 2)), CAST(115000.00 AS Decimal(18, 2)), N'95E85990CBB2F3ABCB5BC3C1342632E39E41EFE3423AE3FA04564515906F2AAB')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (993, 593, 8, 1, CAST(135000.00 AS Decimal(18, 2)), CAST(135000.00 AS Decimal(18, 2)), N'ED96D5811077286B6374F48A7408259E428E1394EDE30E61637A9D4D5CA22EB2')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (994, 594, 23, 1, CAST(115000.00 AS Decimal(18, 2)), CAST(115000.00 AS Decimal(18, 2)), N'B75CD4C7E59DB4BA9A9EDB67EA57393C6F232D775ECCB67C864A1F27A2F6492D')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (995, 594, 13, 1, CAST(140000.00 AS Decimal(18, 2)), CAST(140000.00 AS Decimal(18, 2)), N'F16EAF643E6CC2A6F086A1BA354F52FA2BDA052165F11C4C33D4C21168F0D579')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (996, 595, 35, 2, CAST(78000.00 AS Decimal(18, 2)), CAST(156000.00 AS Decimal(18, 2)), N'A81C2672C52ECD9D0548871F4CFCECF878E22F5454C76F1F85758F6C83151E2F')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (997, 596, 40, 1, CAST(92000.00 AS Decimal(18, 2)), CAST(92000.00 AS Decimal(18, 2)), N'178599DE01E1E88AE321F71ECE61709206381CDAAEDA299D7FFB5AEA2BB16ED8')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (998, 596, 30, 1, CAST(150000.00 AS Decimal(18, 2)), CAST(150000.00 AS Decimal(18, 2)), N'DBFA9E6AB608712E4CFCB92A653DB9353AAF82E7D25835D9732AE8B86010655E')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (999, 596, 42, 2, CAST(80000.00 AS Decimal(18, 2)), CAST(160000.00 AS Decimal(18, 2)), N'92C65DF85BCE82224C1C58CCF82F63D84114320DBD230FCCD37D1A92B1A7C06C')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (1000, 597, 39, 1, CAST(92000.00 AS Decimal(18, 2)), CAST(92000.00 AS Decimal(18, 2)), N'661A8F1C3B11760A72ACBDB487BCB5E36CF94B1F74F41CC609C8273FD7CAF89B')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (1001, 598, 35, 1, CAST(78000.00 AS Decimal(18, 2)), CAST(78000.00 AS Decimal(18, 2)), N'E2D8C5C4370B78D6CAC41055EF2DA33F862F0CBD7BBEFD712AFDEF12BE5AF533')
+INSERT [dbo].[DetalleVenta] ([IdDetalleVenta], [IdVenta], [IdProducto], [Cantidad], [PrecioUnitario], [Subtotal], [DV]) VALUES (1002, 598, 17, 2, CAST(150000.00 AS Decimal(18, 2)), CAST(300000.00 AS Decimal(18, 2)), N'1257E70F7552420F22E618A40F8AF2BF66BDA21F77C9062D86122EEE9F9ED121')
 SET IDENTITY_INSERT [dbo].[DetalleVenta] OFF
 GO
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'BitacoraEvento', N'FA83B30FE932A32C8BE6ACF59B4C44BB4F56B3FFA9F758A3E1F42A05C33B1310', N'1F5ACED4E8F5809DBABCA049B37834E21C0C13416DB340C081DF15D120A1BE6A')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Carrito', N'62C388E0D9B0AB188C7E1E30ABF39A03E677FC599202D12F4D72CD32114B7356', N'D4EAD876FC91B4E0091F2E45B158743755DF43B169301F8971E4710A97DB74A0')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'BitacoraEvento', N'32CC31B4611D2BB21DEAEDDC096FAAF5BCE30071E3BD0C6E8CA3DEAE06655BA5', N'F614C99A333B8C042D17E378CE6715E3901619388E2243654BE11201AAF0C84D')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Carrito', N'9306DA39A9389C1FD4D08DAE2A78B3E83C548787C22F4A566E5C53510D1F12CB', N'CE544C0F3FA5B8F1BB34925253CC2E00401CE999E44767D8C5C3C179AA708038')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Categoria', N'E15B56824414A6FDB2F935A36178548DAAA9EEC0A8709F5265A4FB60A7C140BF', N'0C01DC9FCA47EBD1E98F6004BF6D8AF9EC243A759D03CF95F394117D5709DA87')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Cliente', N'A67E5393C84E8197BD797E9059A1B65033A57A803AF478273566B2F760815308', N'A515DE5E7F8898CD332673AE4E697380BBA808C46D8A75651EB5D1621687770A')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleCarrito', N'3C536413001A31AF04F261C9590124A075DEFD7142E4D9E43F5973824DC76859', N'E0A6E9FBEBEE4D5C0C42ACCB1190E9F60D6C8A83D1B3C17D21FA6B8B5CEDA85B')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleImportacion', N'9559E5C382575A67CE1FEB7A32C93244644481F5F7FD68D942C4BB0DAF90BB52', N'8A2601146DA5D5A08C33A134598EEF7A74C69A0FF5F24CF74E7D40C2A2F2E56C')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleOrdenCompra', N'1E67D6FC332F0D2494B5DB1B3A4712EFC86E3FA0F04444ADD83C4C15A92E2202', N'42D8B11F2388B51D0737B85B83FF297D986062DF22A5A01A8B245E5FAB14E67F')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleRecepcion', N'C77006246DEE8F1593725DA245408BBB544A5571278D6334C3BF348FD8681F2D', N'327AEE537ABF4BBC281DF9D30984686A2F1424D3D3F27316D82BE7E11683E0B4')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleSolicitudCompra', N'04FA0A4EB9CC5DAEEAAE9289619DAD245A2F3B14C7F8EAFE228F978BAA8A7F5D', N'A35505C7E60BFC27907D21052FF6665BC835EB0E2172477E3AC561978AA66624')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleVenta', N'F13F8C27323AC57C17702FD1BDE2F8AC0484CBD930D1ABDAA469EF6DA163DD6A', N'49F29C490F2E034849F918A7E794AF4606B0FF53AEB5791D6E73345A02D9F80E')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Factura', N'322D7786DFAF08542E7360699994033D5181EA30847B3DDAD368C30459250B10', N'2608130D7FCBE903C50F5C809673F7D2CE96CE0D177B94C1E5AA3132D549291C')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleCarrito', N'FE7A8FE498651BE84785E5A5151D0988B6BCF2321E372EFE223D2A650AF004D4', N'97186DD1A5048DD55AB06FBD2C8A7E15E945D5CA84762FA69AF362CEA8524AF2')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleImportacion', N'CB9C5C49B28536C83F1B44DF77E9DD115AC0EE942CD83B5DE6289F322E334856', N'31A06AB20333C9868EF9AEBB5193AEBAEF2014B74B4D49376A339DDFBF52F31B')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleOrdenCompra', N'36EDB6A42DBB9C4784C2DF889014758BDB47885556D456373C0D9CC5D5DCB7B7', N'D733C804655C2756D6909E3AF02E81F83FCF76C7F8D702DB3191729BEBA9EA7E')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleRecepcion', N'2690982B8BB77168FAA081F701A0BFB8487DFD5F85755574154EDBE812A7B6E8', N'DA0169E9F58A0483ADA445FA5A0518C2ED694DB197BEA00E2972DF50835CF376')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleSolicitudCompra', N'308BF4D1B04097D6AAD2DF8B5EF39922036805E1845B1EF5C11FCD52BBFD5D27', N'B0AAF123309FE40D75B503B461115C9B79C14F13443819B6CCBAC87642DA181F')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'DetalleVenta', N'DB2FAC8934548949BB14BAAFF1F3118E129FC877754FAF1AAA9B6E6E9331F1DB', N'B8D55259F3EB28AA4C234AD9AF644A9E10E981AD0B7BBFEFFC4062050A63D8F7')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Factura', N'950BEBEF00DAF91FF1884869443BF8B39C81B375E23019161EA1B01402A9336E', N'526716AC08C72828CB28F357E0BC83023FC11E1D8589F91FD9748B2BD8C9C1FE')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Familia', N'D11F63D9A7593E7FEB80063C97BEDECC8EC936C17427722EF2075D819DBDDED3', N'07DCE64ABF803344E446746F8DB65A47F6842247D65DAE7B7DDA94FBEABC5153')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Familia_Permiso', N'F32EA21E3DC6AA289DCEBB9CA224503460CBB68F89156CB828817ED1D656DCB3', N'A889957214C741705F1EC3451E536D3645A0EC08144AD809EC46D3F5A6E7B31D')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Familia_Permiso', N'00D5F3F7781FED4C66F1B1521B94BEEE9552566DF2E74981AF6065C40A229F7D', N'30653BBB1639D7842CBA602E5BEEAECF9901F9025138F26FBC3DB77DA2837F48')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Idioma', N'98774049D08F0EA42553A7317B30A776A15000D583B3249C71FFD0625B877C5E', N'62537EE1C6966F79ACAFD9A93E741633CB5A58D502D22AAD20275005DE93DC69')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'ImportacionProducto', N'E472F1DE3F7CF0B3C663FBC1FB2639D08534B221C337DAF090A75EEF72037D72', N'8F2C5B7D0512F448D9DC1A3D378430E22D313EED93316EE09EBBBF4A5291397E')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'ImportacionProducto', N'604E7CEBE077697074E0769FC436FBD641136CA7CBE40F59CEB83A1ED434DF09', N'7F35DC1B20972EC06B8B792FA4713FB6053C3BCBFB56768E231F6A0D442AD704')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Marca', N'9402AB43748B3D088E83E95619BD7BA169C1FBE65765EB33742523B739887491', N'BD2A516033D391F9DAD36B7FED925B734D44A121516C92637470C4623AB18FC2')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'OrdenCompra', N'169F68C4EC2D47CFE08DD365F0DB29A385E4767B6EE4538647428FF4032BF810', N'545BE4B01283424A9325AAD470D476807AA9FF3CF66D6A23FC83412BF997D43D')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'OrdenCompra', N'C2844763B7938C236289769A592D93D4F45B23BCD80CEA1CCF8BF0DF5BB16383', N'C7A21E86283AA8BDB28683E2E83267DE7A482222363BDD74C8ADA07720C343EE')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Perfil', N'073630C886CC4E27BBBF6CF14E47F355F6E4ED73CD73AA1B9ABF4384821AD122', N'80FBFF7D48DBF914ACBE201C92F9B19E4524DF2DD15B2E370488689BBA1A9DA9')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Perfil_Familia', N'55F7F68C1A45C463B8145D2A18EA7F5D59C271A55038A7F464913F405BF87F9D', N'87125BB11D43E4FBCE02470A07972961ACD1E6FC16936071D53535F8B31210F1')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Perfil_Permiso', N'5BFB37C30A872B3899E824502274B205E1CE8DA03C6ACB4048CF63C09D773EAF', N'0C1488D599FFBAF379EAF97BF4A4E03516F30BF625D9953DCA32A755E1345A63')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Permiso', N'B7DFD30C8DA11DDD28322CA9C4A220535486C67FAC005ECFBAE74463F9DC3E56', N'BDE6F34FACE3610EB7A358BBB107E450220796001C7968E87A9F58B841CC36DB')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Producto', N'BCAA8D8315277E3442BA124B12104AF156675F94035C3BAD2CB9CF5D4EBDCF69', N'0AC80DD8AEA25DEAAA7BFF30341FE04B13B3EBCE96EB3456EDA6B8606A5E1856')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Permiso', N'0A71FFBF9D1575455A61A1AC8F22229119243D73C310E0C3DEBB6FB5EE92BFB1', N'37ACDBF4CFCFF3C4BEE46523E80D0D1666B01F24DF2EC352584DE8A87627BA3D')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Producto', N'0593AA1605845648B4C488E49626CF70C60E3BDB8D679264847F73DB8980B720', N'BD1FE9EF790E37F1214011A96A11BB48814A26FC4440B354C20EF96E270F49A4')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'ProductoCambio', N'7798A8FB0D9CF9E52A9E8B77D8FB626B99D1C42DCD68D434581F7C0030AA795E', N'0FA10740A794DB8A88370D7818E0175E69283C8328C715C9B101394D3A48A946')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Proveedor', N'69CF13988EB318036C091B6E00BDBD2B07FA9C22D232C12590B243C0A03B90BB', N'835A3EDF836D08DE12CCC59E91859D5E99A279C85E6EF0986E2CB0523B34568A')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Recepcion', N'1EEB39D124407952BB839E7221130BC75F5619614D259C31CD424E0EAE20FA20', N'40D6E6100530E6C39891CC740EEB10D7833683733C0392F24BC7CA38055F1B33')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'SolicitudCompra', N'83C61EB2C89CAA574D505573D4966C8178BA6D632C219FE8C37CAC121AECFC4E', N'E8331269918028AC9189FC72A5152E5C8CB9A245D1DF6D594BAC1A4ABCDF8665')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Recepcion', N'148D7D7DC4E2E7ED765B6599E3534EC0D19EB67552737E0355FF3DD0D41DF185', N'852A36DE05DA4EA67A618ADF41D1EB56459D4661B25C911F51F414EB8F48B3FB')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'SolicitudCompra', N'D7321A0993BDF8332D2AA1511E86BB1EEC06F631B7AC698C54079EF1BE3C97C5', N'58931FF300B9C80BDF6CF046D73FFE7600665C5CF28FE56BC320065114733414')
 INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Usuarios', N'F8C3E84C693FA00BA537862E5BD9029E43D722529BCDB7295467D500B76CE584', N'D8441BA1F989415D3D6A4976FD6E1576BB10DA6868BF056890444664D8E8F155')
-INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Venta', N'EB55CAE1EEE36A9C114EFDF7B7BBC73AF8DF345B2BFECB3623FCB5FD7F9E963A', N'F17EADB78A0D83D0BC14C33ADFA5036020F97612636BD3EFC946065112E55454')
+INSERT [dbo].[DV] ([Tabla], [DVH], [DVV]) VALUES (N'Venta', N'4FA1F20AF276A13EBE56A781F11D55774555B47C0B365B1AB21A6CCB3D664842', N'5BA005F892B86786F36360912C7EC5D7A234DAD0A419DD9AED292C15B5858088')
 GO
 SET IDENTITY_INSERT [dbo].[Factura] ON 
 
@@ -3836,6 +4667,7 @@ INSERT [dbo].[Factura] ([IdFactura], [NroFactura], [Fecha], [IdOrden], [MedioPag
 INSERT [dbo].[Factura] ([IdFactura], [NroFactura], [Fecha], [IdOrden], [MedioPago], [Total], [Estado], [DV]) VALUES (10, N'000010', CAST(N'2026-10-30T19:20:57.500' AS DateTime), 10, N'Efectivo', CAST(400000.00 AS Decimal(18, 2)), N'Pagada', N'D2535A6561E8EB34DAD45880D759F935823169D4ED9F5A45887804ABD103B0B7')
 INSERT [dbo].[Factura] ([IdFactura], [NroFactura], [Fecha], [IdOrden], [MedioPago], [Total], [Estado], [DV]) VALUES (11, N'000011', CAST(N'2026-10-30T19:27:13.233' AS DateTime), 11, N'Transferencia', CAST(650000.00 AS Decimal(18, 2)), N'Pagada', N'4B64D1D0FA0929A614B80986E6F712B5AB8D5A8A21F78EE27D0FA3F46681892C')
 INSERT [dbo].[Factura] ([IdFactura], [NroFactura], [Fecha], [IdOrden], [MedioPago], [Total], [Estado], [DV]) VALUES (12, N'000012', CAST(N'2026-11-01T20:00:32.197' AS DateTime), 12, N'Efectivo', CAST(300000.00 AS Decimal(18, 2)), N'Pagada', N'40C393A6CCD308211EA17DB0EE4B4AAA1F4A91C3339E7BC9A1B62709FD7CB749')
+INSERT [dbo].[Factura] ([IdFactura], [NroFactura], [Fecha], [IdOrden], [MedioPago], [Total], [Estado], [DV]) VALUES (13, N'000013', CAST(N'2026-11-11T16:28:46.027' AS DateTime), 13, N'Efectivo', CAST(450000.00 AS Decimal(18, 2)), N'Pagada', N'F5DB392CB00E3F54B58F4AFC8AFFA30B26A600862E91EC4CA98B9C54D3CD55C7')
 SET IDENTITY_INSERT [dbo].[Factura] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Familia] ON 
@@ -3931,6 +4763,11 @@ INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 111)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 112)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 121)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 122)
+INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 127)
+INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 128)
+INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 129)
+INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 130)
+INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (5, 131)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 10)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 11)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 12)
@@ -3945,28 +4782,16 @@ INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 80)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 81)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 82)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 85)
+GO
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 86)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 87)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (6, 88)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 16)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 18)
-GO
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 19)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 41)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 42)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 43)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 113)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 114)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 115)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 116)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 117)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 118)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 119)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 120)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 123)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 124)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 125)
-INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (8, 126)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (19, 13)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (19, 15)
 INSERT [dbo].[Familia_Permiso] ([IdFamilia], [IdPermiso]) VALUES (19, 41)
@@ -4026,6 +4851,8 @@ INSERT [dbo].[ImportacionProducto] ([IdImportacion], [IdProveedor], [NroRemito],
 INSERT [dbo].[ImportacionProducto] ([IdImportacion], [IdProveedor], [NroRemito], [Estado], [FechaImportacion], [Usuario], [NombreArchivo], [LineasAlta], [LineasSuma], [LineasRechazadas], [DV], [HashContenido]) VALUES (5, 3, N'P3-002', N'Completo', CAST(N'2026-11-02T19:38:49.247' AS DateTime), N'Lautaro.Ponce', N'PASO3_corregido_final_con_linea_cambiada.xml', 13, 0, 0, N'BC2E288A06349A6FF0C7B4BBE75172F53B659AECA16541313E7F4E05F7E7A9AC', N'AF04FCA237AD5ED5DA326B962F6255EE1C520037B282E8E149C6424D48D6AB78')
 INSERT [dbo].[ImportacionProducto] ([IdImportacion], [IdProveedor], [NroRemito], [Estado], [FechaImportacion], [Usuario], [NombreArchivo], [LineasAlta], [LineasSuma], [LineasRechazadas], [DV], [HashContenido]) VALUES (6, 3, N'P3-001', N'Completo', CAST(N'2026-11-02T19:37:49.520' AS DateTime), N'Lautaro.Ponce', N'PASO3_remito_BUENO.xml', 3, 1, 0, N'666A1E8AF72A14E7859FC4E201E11A82817CDB0B6EB051CC9BA7DD2D0CE3177F', N'2E0FC989F6A28AFB5D68A1074D64B51D716E4A05E7EC727B075B068BB0A1F70D')
 INSERT [dbo].[ImportacionProducto] ([IdImportacion], [IdProveedor], [NroRemito], [Estado], [FechaImportacion], [Usuario], [NombreArchivo], [LineasAlta], [LineasSuma], [LineasRechazadas], [DV], [HashContenido]) VALUES (7, 3, N'P3-009', N'ConRechazos', CAST(N'2026-11-02T19:52:02.247' AS DateTime), N'Lautaro.Ponce', N'PASO3_remito_ERRORES2.xml', 1, 0, 2, N'98E565D9BC9E00885573B89C47BE8BB1477A40281A13901F0201F01F0ADC47EF', N'A2800E9FE3F9697F8956F1C4E683E01D1FD7A5DB1AC74DE0C397D81DD8CBE2C4')
+INSERT [dbo].[ImportacionProducto] ([IdImportacion], [IdProveedor], [NroRemito], [Estado], [FechaImportacion], [Usuario], [NombreArchivo], [LineasAlta], [LineasSuma], [LineasRechazadas], [DV], [HashContenido]) VALUES (8, 3, N'USR-201', N'Completo', CAST(N'2026-11-16T10:53:20.163' AS DateTime), N'Lautaro.Ponce', N'remito_USR-201_corregido.xml', 8, 1, 0, N'CFC2F5E829D23A1C9B9A63E4E84F6DCAC3B6416B66284479A82B55D7779BBDEA', N'1E92D7389046F91531CDA708E4ADD6BE1D741C070865893BAF1ECAA0E74B9BFF')
+INSERT [dbo].[ImportacionProducto] ([IdImportacion], [IdProveedor], [NroRemito], [Estado], [FechaImportacion], [Usuario], [NombreArchivo], [LineasAlta], [LineasSuma], [LineasRechazadas], [DV], [HashContenido]) VALUES (9, 3, N'USR-205', N'ConRechazos', CAST(N'2026-11-16T10:53:32.473' AS DateTime), N'Lautaro.Ponce', N'remito_ok_simple.xml', 1, 0, 1, N'652BFA002657248F47F4B854D94E7018FE255A85600199362E88F9496AAC7E93', N'98A63849F11C4EF4B6E9EB44719EEABAAFF60C2388F2C5ED7E70D53F52D7E07D')
 SET IDENTITY_INSERT [dbo].[ImportacionProducto] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Marca] ON 
@@ -4052,6 +4879,7 @@ INSERT [dbo].[OrdenCompra] ([IdOrden], [NroOrden], [Fecha], [IdProveedor], [IdSo
 INSERT [dbo].[OrdenCompra] ([IdOrden], [NroOrden], [Fecha], [IdProveedor], [IdSolicitud], [CostoTotal], [DV], [Estado]) VALUES (10, N'000010', CAST(N'2026-10-29T23:09:37.157' AS DateTime), 3, 10, CAST(450000.00 AS Decimal(18, 2)), N'0036FE11712CF41E6C79B9E11658982627CA44CDF68920391C73A839344B5711', N'Facturada')
 INSERT [dbo].[OrdenCompra] ([IdOrden], [NroOrden], [Fecha], [IdProveedor], [IdSolicitud], [CostoTotal], [DV], [Estado]) VALUES (11, N'000011', CAST(N'2026-10-30T19:26:45.650' AS DateTime), 3, 11, CAST(650000.00 AS Decimal(18, 2)), N'81C8D8BC51A05265C13DC7E1F411444BD61C50C47FBED58DD07EFD64B342F1C1', N'Facturada')
 INSERT [dbo].[OrdenCompra] ([IdOrden], [NroOrden], [Fecha], [IdProveedor], [IdSolicitud], [CostoTotal], [DV], [Estado]) VALUES (12, N'000012', CAST(N'2026-11-01T19:59:53.163' AS DateTime), 3, 12, CAST(300000.00 AS Decimal(18, 2)), N'2DE8D7EFB483ADD7DC103C469AB38F80FB57F295AA9CC92B9D996DA9C9C1CE84', N'Facturada')
+INSERT [dbo].[OrdenCompra] ([IdOrden], [NroOrden], [Fecha], [IdProveedor], [IdSolicitud], [CostoTotal], [DV], [Estado]) VALUES (13, N'000013', CAST(N'2026-11-11T16:26:47.857' AS DateTime), 3, 13, CAST(450000.00 AS Decimal(18, 2)), N'8E3B2A32579D1B9C39346779971BC604152E34641A2A30F1165ADDC7DC1F0F87', N'Facturada')
 SET IDENTITY_INSERT [dbo].[OrdenCompra] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Perfil] ON 
@@ -4195,30 +5023,23 @@ INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (109,
 INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (110, N'MAESTRO_PRODUCTOS_IMPORTAR_EJECUTAR', N'Permite ejecutar la importacion de productos desde el XML del proveedor', N'C182CF7F4B1C3424A451F533289C413D05E53A0E0CD7F701721DBCF302334412')
 INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (111, N'MAESTRO_PRODUCTOS_IMPORTAR_EXPORTAR', N'Permite exportar a un XML las lineas rechazadas de la importacion', N'A549F4E24E1C670BB6D51FFC14520C9C3F61008B40B5B019DC366BF3A902747B')
 INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (112, N'MAESTRO_PRODUCTOS_IMPORTAR_CERRAR', N'Permite cerrar el dialogo Importar productos', N'468E3255C63CA9C3116E47A175F5968B539244C2A9AD28A44AAAADCDC59B202F')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (113, N'REPORTE_VENTAS_GENERAR', N'Permite generar el reporte de clientes frecuentes', N'7AD668D841A8BB3C0060902481F5A21B2B7839FF5CC9E9C43F20B5054F55A273')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (114, N'REPORTE_VENTAS_LIMPIAR', N'Permite limpiar los filtros del reporte de clientes frecuentes', N'4D017244254389E86FF3AE3BEC3C273B60DC021BFC4B0CBA42C142BBD562021A')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (115, N'REPORTE_VENTAS_EXPORTAR', N'Permite exportar a PDF el reporte de clientes frecuentes', N'BAAAEF2DA5FEE7E236FE9784599C4174C3A58BCF58E74DA8EDEE9BEC32F83311')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (116, N'REPORTE_VENTAS_CERRAR', N'Permite cerrar el formulario del reporte de clientes frecuentes', N'64D75D159343DEBDE510394ACC7732B19DCABBD77223C64B06818FDAAA12090E')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (117, N'REPORTE_COMPRAS_GENERAR', N'Permite generar el reporte de estado de stock', N'EEF9F01692B2B90C417A32076B2EEFDA2DA44BA9AF25E956F090295F692AD5AD')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (118, N'REPORTE_COMPRAS_LIMPIAR', N'Permite limpiar los filtros del reporte de estado de stock', N'4E929EC5E492C6C885E730B65123F3F671AB7BEF62CED44D9B405E2B73B379B1')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (119, N'REPORTE_COMPRAS_EXPORTAR', N'Permite exportar a PDF el reporte de estado de stock', N'F20562B0C182B4D3EE9F0E0065D3F317A9474A8378DE20E3CC6E3022E9940FA8')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (120, N'REPORTE_COMPRAS_CERRAR', N'Permite cerrar el formulario del reporte de estado de stock', N'11E5F91E47C3C38F52D864A91D28B3A7ED9B1D52EC3F84CE328C68D07A733CED')
 INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (121, N'MAESTRO_PRODUCTOS_IMPORTAR_VER', N'Permite ver una vista previa del contenido del XML antes de importarlo', N'28D465063E24103490326F2E4231AC320EF1EF54FD1E97471D16995939C9E3CE')
 INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (122, N'MAESTRO_PRODUCTOS_EXPORTAR_VENTA', N'Permite exportar a un XML los productos que estan a la venta', N'00B62A30EF924910FA5145D4593C5E1FDCF9331CBEE0ED955F9C9C9658B9C3EB')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (123, N'REPORTE_INTELIGENTE_GENERAR', N'Permite generar el reporte inteligente', N'54DAFD66225A84BA773DCD78D41AE9A8EEF75AFDA7979D82ABABF39BFA82228F')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (124, N'REPORTE_INTELIGENTE_LIMPIAR', N'Permite limpiar los filtros del reporte inteligente', N'B8421541110BAF5715941CA0E85D75E7CCC5A290E3259A57A6B11EBC69B41AB0')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (125, N'REPORTE_INTELIGENTE_EXPORTAR', N'Permite exportar el reporte inteligente a PDF', N'CAB8785D545F15EEC87484419C0911B80D6FE6234EB029DDF25D4B29C58D606F')
-INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (126, N'REPORTE_INTELIGENTE_CERRAR', N'Permite cerrar el reporte inteligente', N'22BD7D430A6FED82A0D90DD8F42B3B739FE9BB7594FDEF81C044D67ECAE0E5AA')
+INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (127, N'MAESTRO_PRODUCTOS_HISTORIAL', N'Permite abrir el historial de cambios de productos desde Procesar productos', N'F706EA4FF895D700CCB037078ADDC57D1AD6BAD5AF9F7FDBBC38019D3C62C835')
+INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (128, N'MAESTRO_PRODUCTOS_HISTORIAL_APLICAR', N'Permite aplicar los filtros del historial de cambios de productos', N'302EA5FA1122EC1D762281B082DE6865853DD30407108ED51CA284B5F2CBB581')
+INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (129, N'MAESTRO_PRODUCTOS_HISTORIAL_LIMPIAR', N'Permite limpiar los filtros del historial de cambios de productos', N'4C0090D918E37A14C913F0449DC2E0197BE270906B004839CEF7F589FC8DCDE4')
+INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (130, N'MAESTRO_PRODUCTOS_HISTORIAL_RESTAURAR', N'Permite restaurar una version anterior de un producto, o un producto eliminado, desde el historial', N'BFB6D3BAD73D40BC44F279ACE4C3324218F691881A2BCB1E1AF8761047A8CBA6')
+INSERT [dbo].[Permiso] ([IdPermiso], [Nombre], [Descripcion], [DV]) VALUES (131, N'MAESTRO_PRODUCTOS_HISTORIAL_CERRAR', N'Permite cerrar el historial de cambios de productos', N'AB9DC6E697246BF436930992DF52A9C5CB9A76EB6BF27D3DDB16487FDE1A113A')
 SET IDENTITY_INSERT [dbo].[Permiso] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Producto] ON 
 
-INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (1, N'Air Max 90', N'Negro', N'42', CAST(120000.00 AS Decimal(18, 2)), 4, N'D4EAE83D4F858528ABAC260809F46EDC87EF8284860586301A170860A3C9C0E8', 2, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (1, N'Air Max 90', N'Negro', N'42', CAST(120000.00 AS Decimal(18, 2)), 3, N'71FA170D9A0E77C4DC7DA76BE4323490CCCBE73662442758A2692FA9A3B800B9', 2, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (2, N'Superstar', N'Blanco', N'41', CAST(97000.00 AS Decimal(18, 2)), 7, N'832476049A0933482A6E0FA5EBB30053579F34F622BCBAC4849B8D0987E54011', 1, 1)
-INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (3, N'RS-X', N'Gris', N'43', CAST(110000.00 AS Decimal(18, 2)), 8, N'4DDED0DCF36D904FD48473D9EC6DA7C59713F7D4F656B4BA59D7899FB6772BA1', 3, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (3, N'RS-X', N'Gris', N'43', CAST(110000.00 AS Decimal(18, 2)), 10, N'D729DEA57AD8A2EBCBD480784DC52986F7879F32507CB3CB6D5C7800F954DD90', 3, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (5, N'Dunk Low', N'Blanco', N'40', CAST(150000.00 AS Decimal(18, 2)), 18, N'5BBAD4C3BAFC9FA5F9ABCE18661CABD38989185C319A64AFAEF06B9F68557257', 2, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (7, N'Pegasus 40', N'Negro', N'42', CAST(135000.00 AS Decimal(18, 2)), 27, N'19192F983C7B0F0CD088D3559E627962082483FE4D7D798A0E71D0E2E087228B', 2, 4)
-INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (8, N'Pegasus 40', N'Negro', N'43', CAST(135000.00 AS Decimal(18, 2)), 3, N'D7A0FBDC20EF3B25CBC6F234FDE51EE76A2DC329E0C4B6DF56B2383F87E0A106', 2, 4)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (8, N'Pegasus 40', N'Negro', N'43', CAST(135000.00 AS Decimal(18, 2)), 4, N'7F76B022876E7779A36D12669B17DF1C74AB5499EC20762F891F453E6CB8F533', 2, 4)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (9, N'Pegasus 40', N'Azul', N'41', CAST(135000.00 AS Decimal(18, 2)), 8, N'CC3F1AE90FE637A36A50941011610EDCA1AE7975C798D98537CBCDFFB3E32E33', 2, 4)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (10, N'Revolution 7', N'Gris', N'40', CAST(89000.00 AS Decimal(18, 2)), 15, N'A04E4313A31F916011E34DA64FC9E8A492A15F4F50D57838EAD060598FB972E1', 2, 4)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (11, N'Revolution 7', N'Negro', N'44', CAST(89000.00 AS Decimal(18, 2)), 15, N'A934195754742ED56AC03B495BE169DD6EBFD6D74A2E26F769C4C2AA2A8E6A51', 2, 4)
@@ -4255,7 +5076,7 @@ INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [St
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (42, N'Authentic', N'Azul', N'41', CAST(80000.00 AS Decimal(18, 2)), 12, N'63290407C32E547F653F780067D6A203C31213DC684A732759244578DCD9CE72', 9, 5)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (43, N'Audit Modelo X', N'Rojo', N'41', CAST(99000.00 AS Decimal(18, 2)), 5, N'CB00E241D7F7117058F581E526F7AF394F64CB621FC8D2EE950E88EF0AB21C60', 2, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (44, N'Audit Modelo Z', N'Azul', N'40', CAST(88000.00 AS Decimal(18, 2)), 4, N'51B6D489F1E604276A643FED7E4B6C914A23EEA51C5150332BD17D8EFD46ACC2', 2, 1)
-INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (45, N'Audit Modelo W', N'Azul', N'40', CAST(88000.00 AS Decimal(18, 2)), 2, N'664C0936C2898147D05153CF6290DE43D504E36065F65C3AF89624D65D694A23', 2, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (45, N'Audit Modelo W', N'Azul', N'40', CAST(88000.00 AS Decimal(18, 2)), 7, N'AF14CC9A19AE0391C7C375D253D3E16398DBDCF95B4BA10A769588D7D62AC82E', 2, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (47, N'P3 Gazelle', N'Verde', N'42', CAST(110000.00 AS Decimal(18, 2)), 4, N'7F696914EA4CF57C1BD0B54885916185AB436A0E6A1FECD11E92F9F837CEDE10', 1, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (48, N'P3 Palermo', N'Negro', N'39', CAST(98000.00 AS Decimal(18, 2)), 2, N'D33076ADE3428D484DAC3AD4D6020379F6D3674E74816211E78AF5B2500131B1', 3, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (49, N'P3 Club C', N'Blanco', N'41', CAST(90000.00 AS Decimal(18, 2)), 3, N'DE2F40B27976EA2CB511EBB03E9FD70F5A7828EF800C0413B54385E6C8E9CFCE', 2, 1)
@@ -4265,15 +5086,109 @@ INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [St
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (53, N'P3 Sin Stock', N'Blanco', N'41', CAST(100000.00 AS Decimal(18, 2)), 3, N'CCA2A04DDEC504487FFD20C1F5F8BB12B650ED43457669016863223AF2CF5D9B', 1, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (54, N'P3 Cant Texto', N'Blanco', N'41', CAST(100000.00 AS Decimal(18, 2)), 5, N'2664DF38630F163B7F549044867A3685AA565E3EC7377FDE633497289699AD80', 1, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (55, N'P3 Precio Neg', N'Negro', N'41', CAST(95000.00 AS Decimal(18, 2)), 2, N'29F19C3268B7933591EB6AFAF8CE73BCDF3652808897DDBEBF67E59474BA2A85', 3, 1)
-INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (56, N'P3 Sin Modelo', N'Negro', N'41', CAST(100000.00 AS Decimal(18, 2)), 2, N'C66D7894D7F6A11127143133189C8FD5C317FD0C8A81C2DCCF72280CAF3DC801', 3, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (56, N'P3 Sin Modelo', N'Negro', N'41', CAST(100000.00 AS Decimal(18, 2)), 3, N'596A380F4E2DFA19D51FB545B7E4AD4C537BD494F14FA9EDDE862E03845CADA8', 3, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (57, N'P3 Color Num', N'Rojo', N'41', CAST(100000.00 AS Decimal(18, 2)), 2, N'DC0AAAE1D97861D099EB561864314E0F86828EE0B8E5A54607869EDC28183FB8', 3, 1)
-INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (58, N'P3 Gazelle', N'Verde', N'43', CAST(110000.00 AS Decimal(18, 2)), 1, N'BC0A244399419DE904E6C1F6DAC893A322FD887FFD396A773AD9642DB0E9BEA6', 1, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (58, N'P3 Gazelle', N'Verde', N'43', CAST(110000.00 AS Decimal(18, 2)), 0, N'2735A9A3702028AC3331EA77811AF4F3D59B982452A43B649D1ED0EBAE2A99A1', 1, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (59, N'P3 Superstar', N'Blanco', N'41', CAST(120000.00 AS Decimal(18, 2)), 6, N'FD215E6C69CA7A138760CD5E6BC658B0AC3831335B31014A4FD22497934CBB75', 1, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (60, N'P3 Suede Classic', N'Azul', N'43', CAST(95500.50 AS Decimal(18, 2)), 3, N'2C8B18193F4C281847C576AD82F0090E6C84E47C3F1B58C3ECB5C90017B83069', 3, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (61, N'P3 Air Max', N'Rojo', N'40.5', CAST(175000.00 AS Decimal(18, 2)), 2, N'DAE5C3FEDD646E6340FB79440DEABA8380959CAEF21019A32FD89A0CBC5F81E4', 2, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (62, N'P3 Cant Enorme', N'Blanco', N'41', CAST(100000.00 AS Decimal(18, 2)), 20, N'49067376ED095B8CDE0D9B8F7483603CF7B93C9B343FA4E298AB1D73FF6A7FB4', 1, 1)
 INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (63, N'P3 Correccion Ok', N'Gris', N'40', CAST(99000.00 AS Decimal(18, 2)), 2, N'96164D743CC678C8D7D241DBD1D525953D4338EF0890E62D11CA88B11C4A5B00', 3, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (64, N'ZZ Auditoria', N'Rojo', N'42', CAST(100.00 AS Decimal(18, 2)), 10, N'894545CF74CEB3787D64E1C41A1C651DC4EAD302E148BDB65D98072FD1C9CD87', 9, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (66, N'Aud Import Uno', N'Rojo', N'40', CAST(120000.00 AS Decimal(18, 2)), 5, N'F29B27877297C3BB29E2EC5AA9171666A3F8B0909567AE5A65D7A40E3D3D8901', 2, 4)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (67, N'Aud Precio Coma', N'Blanco', N'39', CAST(95000.50 AS Decimal(18, 2)), 4, N'CE826BAF1AA8CCE5880D4CC196FC840EA9008E5CA8BE707A92C13010F85947D4', 8, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (68, N'Aud Marca Mala', N'Azul', N'41', CAST(90000.00 AS Decimal(18, 2)), 3, N'3BDAAC9495FE5D3DDCF35D68A11CBCE4370EC24E3FB88ACBB4AAE16C8DDB9DEA', 2, 4)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (69, N'Aud Cantidad Negativa', N'Negro', N'42', CAST(90000.00 AS Decimal(18, 2)), 3, N'C3EAC6875973EC2A1B3C6AD73D07F92CD5275218B1A79D2171934D8A81A33C6A', 1, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (70, N'Aud Cantidad Texto', N'Negro', N'42', CAST(90000.00 AS Decimal(18, 2)), 2, N'E333CB739E8818C0AAA71FFE47EEEAA3E4D0B8204066A9A4DA2BB9AF748522E0', 1, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (71, N'Aud Sin Talle', N'Verde', N'42', CAST(80000.00 AS Decimal(18, 2)), 2, N'FCF9CBB34FDBED8B64532A2F2B15F6998A2124AF7D6325FF4E44D7A359030063', 9, 5)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (72, N'Aud Categoria Mala', N'Verde', N'40', CAST(80000.00 AS Decimal(18, 2)), 2, N'7651EABAD41ADADEEF4FFE0541B4E4EDDCDA8A5C751EBD7839DEC36873607A30', 9, 5)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (73, N'Aud Precio Cero', N'Blanco', N'39', CAST(70000.00 AS Decimal(18, 2)), 4, N'8D84359ABCFCAD1E5CEC11558F164562CA9040DC1E9C319215F0EAC751A6A83F', 8, 1)
+INSERT [dbo].[Producto] ([IdProducto], [Modelo], [Color], [Talle], [Precio], [Stock], [DV], [IdMarca], [IdCategoria]) VALUES (74, N'Aud Simple', N'Azul', N'41', CAST(130000.00 AS Decimal(18, 2)), 6, N'3CDFE8A3BC3AE0FA141B337FC864ED65038A7CFC500A390627DB75819FA7E391', 2, 4)
 SET IDENTITY_INSERT [dbo].[Producto] OFF
+GO
+SET IDENTITY_INSERT [dbo].[ProductoCambio] ON 
+
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (1, 1, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Air Max 90', N'Negro', N'42', CAST(120000.00 AS Decimal(18, 2)), 3, 1, N'9CFD12C5CF5F3B753F157DB7B20677B442D721F5906EF513AF86C0D389FD3267')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (2, 2, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'Superstar', N'Blanco', N'41', CAST(97000.00 AS Decimal(18, 2)), 7, 1, N'833E2ADDE19AF2EFFCECA211340D0D0FFBF4CAE213822BEF9B7C459CE525B24A')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (3, 3, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'RS-X', N'Gris', N'43', CAST(110000.00 AS Decimal(18, 2)), 8, 0, N'926891C619F1D993380B2E8C72D9B8D136270017B05B6A6198EC88EA45373AE6')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (4, 5, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Dunk Low', N'Blanco', N'40', CAST(150000.00 AS Decimal(18, 2)), 18, 1, N'A6D3DA796031F93C82F3324D4596CFC4A2BF097751A99111E5006752E6082CB7')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (5, 7, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 4, N'Pegasus 40', N'Negro', N'42', CAST(135000.00 AS Decimal(18, 2)), 27, 1, N'F57CED91740B3641E029806230E7B22F36CAECEA1E83A8EEC84447C59900BB27')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (6, 8, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 4, N'Pegasus 40', N'Negro', N'43', CAST(135000.00 AS Decimal(18, 2)), 4, 1, N'332E245D4DA2D7E53ABB5F6C06596B859C6936BAC2C2EDA244A3F42A670715D0')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (7, 9, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 4, N'Pegasus 40', N'Azul', N'41', CAST(135000.00 AS Decimal(18, 2)), 8, 1, N'A83403726D14F30215EB9772559C580C162AC693D6B97604D0B77F57BAB7D6A8')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (8, 10, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 4, N'Revolution 7', N'Gris', N'40', CAST(89000.00 AS Decimal(18, 2)), 15, 1, N'1593CCDE5BCAD74D015451F66725CEB78B3ED4A57AEBFE0846F838218F8139CF')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (9, 11, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 4, N'Revolution 7', N'Negro', N'44', CAST(89000.00 AS Decimal(18, 2)), 15, 1, N'C27B4E209BCBAE500C945FE10CB0D3FF078F1A302E52C78A2B28A6D6867B4552')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (10, 12, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Air Force 1', N'Blanco', N'42', CAST(140000.00 AS Decimal(18, 2)), 20, 1, N'E065420FC1C4D3A8E9047F31202E1E70FDF0EF789040D5FC739373D151934010')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (11, 13, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Air Force 1', N'Blanco', N'38', CAST(140000.00 AS Decimal(18, 2)), 4, 1, N'BB4A108F9958F1591DDAEF466A8591362401BFD2F9BD842AE344D6D2E23DC665')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (12, 14, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Air Force 1', N'Negro', N'41', CAST(140000.00 AS Decimal(18, 2)), 10, 1, N'9EB572A642C3307252D335324B599816FE859979D1E9718B9B81520367F83996')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (13, 15, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 5, N'SB Dunk Low', N'Negro', N'41', CAST(175000.00 AS Decimal(18, 2)), 5, 1, N'67B4519D489F07B8088E59304704BA7D2ECB8D9099A8C05986B8CE568FCAA0CE')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (14, 16, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 5, N'SB Dunk Low', N'Verde', N'43', CAST(175000.00 AS Decimal(18, 2)), 7, 1, N'2E73B8EB04A49FFE72BD4C8BE532B0A64C103E0886F7D5EF3735F24B454E8EC0')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (15, 17, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 6, N'Pegasus Trail', N'Verde', N'42', CAST(150000.00 AS Decimal(18, 2)), 4, 1, N'AD16CB37397FA443A231E4ACA9F0CEE4C7A833B3FEA6A09F807568454AA66CCA')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (16, 18, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 4, N'Ultraboost', N'Negro', N'43', CAST(185000.00 AS Decimal(18, 2)), 6, 1, N'8391A8B756B47217CED850A03057A55BDBD253ACA37AE71AD60CF135AFEFD0EA')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (17, 19, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 4, N'Ultraboost', N'Gris', N'41.5', CAST(185000.00 AS Decimal(18, 2)), 5, 1, N'067FE14F525E0589C294122B365ED943F15CFA314BA5FAFA576B1C5075018BEE')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (18, 20, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 4, N'Adizero Boston', N'Azul', N'42', CAST(160000.00 AS Decimal(18, 2)), 9, 1, N'767BC6195B2FEBEA4789ACE18587191B66054BC6192DE9B9D33B255A98D41E9C')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (19, 21, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'Gazelle', N'Verde', N'40', CAST(105000.00 AS Decimal(18, 2)), 7, 1, N'C5193E134697124D8E31321C95E7F187602ECB22989A15933D019A2DD6F2D747')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (20, 22, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'Gazelle', N'Bordo', N'39', CAST(105000.00 AS Decimal(18, 2)), 2, 1, N'B5B59F9D4352E74916C1FD49497ECD29C2E7E1CEBD463972E126CE57F6B7D6FC')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (21, 23, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'Samba OG', N'Blanco', N'42', CAST(115000.00 AS Decimal(18, 2)), 11, 1, N'68258A2DE496A445BD03AB07268B7D5F414EBB6ED6CEF4002F3CBF7B6CE4413A')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (22, 24, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 6, N'Terrex Swift', N'Negro', N'43', CAST(165000.00 AS Decimal(18, 2)), 10, 1, N'E5442176086B507C9B1E63148C2E4F1A755C13D24E56D9D4A56BC86A1444BB59')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (23, 25, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 4, N'Velocity Nitro', N'Negro', N'42', CAST(130000.00 AS Decimal(18, 2)), 3, 1, N'777604DFD16FD53A1446A884AEC004E29F4AD5C1F8781CA2711B555E26F1997A')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (24, 26, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 4, N'Deviate Nitro', N'Rojo', N'44', CAST(170000.00 AS Decimal(18, 2)), 10, 1, N'566D43F394C959B82A88B7E66DEF72A8F6AE604CFF22E3C6A95B265819181A26')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (25, 27, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'Suede Classic', N'Azul', N'41', CAST(95000.00 AS Decimal(18, 2)), 14, 1, N'E7548A40A58049B520458A139F62E1567B67DDB51EEAD2CE11429E6948C705B6')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (26, 28, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'Suede Classic', N'Negro', N'43', CAST(95000.00 AS Decimal(18, 2)), 6, 1, N'2F14D1160C999D62C9F42E36DCF5D21503F99266F0E5B813C3AED63E49BDB6A8')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (27, 29, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'Palermo', N'Blanco', N'38.5', CAST(98000.00 AS Decimal(18, 2)), 5, 1, N'A170270CD83D85E9C4D604F70329A598550A46AF8F4640EC73C5B16137F271DC')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (28, 30, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 7, 4, N'Fresh Foam 880', N'Negro', N'43', CAST(150000.00 AS Decimal(18, 2)), 4, 1, N'FE758AFE188CD984E54418F9D72275C7DF301C1B37C6E74FA77BC817642AC598')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (29, 31, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 7, 4, N'Fresh Foam 880', N'Azul', N'40', CAST(150000.00 AS Decimal(18, 2)), 9, 1, N'7FC220917A82FE2BA48BF7F0334C006EC32AD2583A1CA455FD12A77E0877B14C')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (30, 32, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 7, 1, N'574', N'Gris', N'42', CAST(120000.00 AS Decimal(18, 2)), 13, 1, N'21B38524187366291D6EB431FD2E8C407EB11E961836DA21230021691F206072')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (31, 33, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 7, 1, N'550', N'Blanco', N'41', CAST(145000.00 AS Decimal(18, 2)), 6, 1, N'5C22FAD011A888D8610BF670717D23580465FEB67DD9607ABA089D0DA87B3E4F')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (32, 34, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 7, 1, N'550', N'Verde', N'44', CAST(145000.00 AS Decimal(18, 2)), 2, 1, N'0CFC95178EE784962B21E82AFF4D2F70AB0FE18599910890B259E1C74AB35B73')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (33, 35, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 8, 1, N'Chuck Taylor All Star', N'Negro', N'40', CAST(78000.00 AS Decimal(18, 2)), 25, 1, N'775C9CE4E6FCF41FE8752D53135B14482313C3E9A84CFF79CE8B3388AC6E5685')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (34, 36, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 8, 1, N'Chuck Taylor All Star', N'Blanco', N'38', CAST(78000.00 AS Decimal(18, 2)), 3, 1, N'E728D05D202266CFAD323A5FBBF14C2A33F7979945A0DC6EC12601541D6C55B5')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (35, 37, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 8, 1, N'Chuck 70', N'Crudo', N'42', CAST(120000.00 AS Decimal(18, 2)), 8, 1, N'1CEA46149B5FEBA7CDBC950C2889430AB7AE9EA0011FCFFCB28455B26A156F95')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (36, 38, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 8, 5, N'Cons One Star Pro', N'Gris', N'42', CAST(98000.00 AS Decimal(18, 2)), 6, 1, N'F5924F94A042CDF52FE695DCCB7D62CA760D3DD6BE78E3CDF983C0132DB3EFE3')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (37, 39, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 9, 5, N'Old Skool', N'Negro', N'42', CAST(92000.00 AS Decimal(18, 2)), 18, 1, N'EE0D5824D4B51582F9FD2D3210644D05DFA4830770B7E109E0C64F5BBD0BBCEA')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (38, 40, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 9, 5, N'Old Skool', N'Blanco', N'40', CAST(92000.00 AS Decimal(18, 2)), 5, 1, N'7FFA49A784819633522E07A9B5294525E3897F0953BEEED660F60F6FF2D6BC91')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (39, 41, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 9, 5, N'Sk8-Hi', N'Negro', N'43', CAST(105000.00 AS Decimal(18, 2)), 3, 1, N'3C5C4FD364F1D11E4C08AC4D4E5C017941DC6D59A96CD83E77B1C21B10D9A46F')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (40, 42, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 9, 5, N'Authentic', N'Azul', N'41', CAST(80000.00 AS Decimal(18, 2)), 12, 1, N'80D49A3295A1CEB7BAC7CB7107A5ECCC446F35490E5B963A761FEB8F7823DF78')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (41, 43, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Audit Modelo X', N'Rojo', N'41', CAST(99000.00 AS Decimal(18, 2)), 5, 1, N'502FD303B14FEE2B2A46B4A9C01935ABA6F75BF928851C1F20E1B6712D28724D')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (42, 44, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Audit Modelo Z', N'Azul', N'40', CAST(88000.00 AS Decimal(18, 2)), 4, 1, N'29717ED22C36156AED5B4A308B55ABD04926DD9729AF6B6153CC14363AAE2AD5')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (43, 45, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'Audit Modelo W', N'Azul', N'40', CAST(88000.00 AS Decimal(18, 2)), 2, 0, N'AA0C24FC1D00973B1BAF10390B9323F56F8FFAD2919C9D6D1B491B864190C761')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (44, 47, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'P3 Gazelle', N'Verde', N'42', CAST(110000.00 AS Decimal(18, 2)), 4, 1, N'437604008769BA9BA2855D5D9AACDF862192E87909D792AC81D5B0CEB12F4A46')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (45, 48, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'P3 Palermo', N'Negro', N'39', CAST(98000.00 AS Decimal(18, 2)), 2, 1, N'D9F670B16E96B8E92AB20DA3E2F3629289325810D5FF4A6B35E0A32BF51278C2')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (46, 49, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'P3 Club C', N'Blanco', N'41', CAST(90000.00 AS Decimal(18, 2)), 3, 1, N'3B79D28D709757667AB7CDD7DAD9D40C90C5E7C0918D999CDF115147CF3CD7FC')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (47, 50, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 4, N'P3 Pegasus Trail', N'Gris', N'42', CAST(130000.00 AS Decimal(18, 2)), 3, 1, N'B2CC7D53232F422A94BE66728861EBB47BC7A8D8FF262B7A468BFC10628491F0')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (48, 51, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'P3 Talle Alto', N'Negro', N'44', CAST(130000.00 AS Decimal(18, 2)), 3, 1, N'FDB730723BBD4F000F0E51E7F36265F7C1E6B99DA1C2724398E1539BBACF18C4')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (49, 52, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'P3 Talle Texto', N'Negro', N'43', CAST(130000.00 AS Decimal(18, 2)), 3, 1, N'B20023607AAFB15E23FD37A10351C655DEBE3012C63FB6A6FBFE1961AC8238D4')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (50, 53, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'P3 Sin Stock', N'Blanco', N'41', CAST(100000.00 AS Decimal(18, 2)), 3, 1, N'ECB92CE962E64E5E207FD8080AE4E2CE63C84423FAC9D0FA75E47C616D6CCE96')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (51, 54, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'P3 Cant Texto', N'Blanco', N'41', CAST(100000.00 AS Decimal(18, 2)), 5, 1, N'6C31F8D37777DA456FD68285556A7B1A69DC75C0DAFF58B9B4DC56BC9B5E20A0')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (52, 55, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'P3 Precio Neg', N'Negro', N'41', CAST(95000.00 AS Decimal(18, 2)), 2, 1, N'21BDFCA4635E60BAA38E17F57FB93DB722A4FE9FC8F61256EF62CB01B9440FCD')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (53, 56, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'P3 Sin Modelo', N'Negro', N'41', CAST(100000.00 AS Decimal(18, 2)), 3, 1, N'66B814EC0F5561A9996A75AA3B26235580BDFBC0A84AD9A9E8525DAFDA9C2CA2')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (54, 57, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'P3 Color Num', N'Rojo', N'41', CAST(100000.00 AS Decimal(18, 2)), 2, 1, N'005F38752F3C242E22D59E81511F5D1122D7B6A580FF3F6D0CC5DBDF87B5C5B4')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (55, 58, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'P3 Gazelle', N'Verde', N'43', CAST(110000.00 AS Decimal(18, 2)), 0, 1, N'227785F18C1302F838943BB6EF0026C6CD7B4C2E9F585A6AD5F298300A783A60')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (56, 59, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'P3 Superstar', N'Blanco', N'41', CAST(120000.00 AS Decimal(18, 2)), 6, 1, N'5D1D14BD00DF6EAA4588F7CB45341181B028D4F94F85F2A1B8DB91746BC84E35')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (57, 60, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'P3 Suede Classic', N'Azul', N'43', CAST(95500.50 AS Decimal(18, 2)), 3, 1, N'672F6ACDAB726100730673BEEC1EBBEDAF83A08256332EA5FA214982447BA6DC')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (58, 61, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 2, 1, N'P3 Air Max', N'Rojo', N'40.5', CAST(175000.00 AS Decimal(18, 2)), 2, 1, N'3815E0BB8BBCF32BFF104DCF6E8A4F34C6EC1201A29C55B9370868815B1679E1')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (59, 62, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 1, 1, N'P3 Cant Enorme', N'Blanco', N'41', CAST(100000.00 AS Decimal(18, 2)), 20, 1, N'DFD8D87B09F7C5049B3B6FCA24C86A74F5F1752EE7EFD535BB4A15C2FBB835B4')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (60, 63, CAST(N'2026-11-09T19:33:32.977' AS DateTime), N'I', 3, 1, N'P3 Correccion Ok', N'Gris', N'40', CAST(99000.00 AS Decimal(18, 2)), 2, 1, N'E119A96DCE6CE8726F175B72B752F92F60A5F13CC828BBA53E5D607E5114FDD1')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (61, 64, CAST(N'2026-11-09T20:35:50.773' AS DateTime), N'A', 9, 1, N'ZZ Auditoria', N'Rojo', N'42', CAST(100.00 AS Decimal(18, 2)), 10, 1, N'49CB8078299C27D63DDB62471FBB3BE46A5C142A5B6ED265DD8CBC9320EE790D')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (62, 64, CAST(N'2026-11-09T20:36:18.200' AS DateTime), N'M', 9, 1, N'ZZ Auditoria', N'Rojo', N'42', CAST(150.00 AS Decimal(18, 2)), 10, 0, N'AE30F9B5D3AF3AEC68CA17FA314C1CC927D72EAE2E12D65D8B9C9DD4A21644AF')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (63, 64, CAST(N'2026-11-09T20:36:31.017' AS DateTime), N'M', 9, 1, N'ZZ Auditoria', N'Rojo', N'42', CAST(150.00 AS Decimal(18, 2)), 25, 0, N'3F24E18283EEA3DCF53F538B3E70B1401C79AAE3F5CF465AEBB79F3EEDE8B737')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (64, 64, CAST(N'2026-11-09T20:37:47.410' AS DateTime), N'B', 9, 1, N'ZZ Auditoria', N'Rojo', N'42', CAST(100.00 AS Decimal(18, 2)), 10, 0, N'B4A00FCD099021F137FDD152AFFE83AB5AAFE95AA1D4A6D04640C8E1454DB818')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (65, 64, CAST(N'2026-11-09T20:40:21.090' AS DateTime), N'B', 9, 1, N'ZZ Auditoria', N'Rojo', N'42', CAST(100.00 AS Decimal(18, 2)), 10, 0, N'26C752F79A5E8DB801BF4C6613103017CB7918B3A01913559AA4280AAA5BE4A9')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (66, 45, CAST(N'2026-11-11T16:28:46.273' AS DateTime), N'M', 2, 1, N'Audit Modelo W', N'Azul', N'40', CAST(88000.00 AS Decimal(18, 2)), 7, 1, N'FBBCEE24E8C46D202F351C9DE3C6082CF9D7486DA0FB06F1A47DE179D71F6C7E')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (67, 65, CAST(N'2026-11-16T10:46:43.560' AS DateTime), N'A', 3, 4, N'Auditoria Test A', N'Rojo', N'41', CAST(100000.00 AS Decimal(18, 2)), 5, 0, N'D8465760625D55308A131D0AF4A80AF61A9EA80C2EF8FAC00D4740D26C79BF13')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (68, 65, CAST(N'2026-11-16T10:47:02.737' AS DateTime), N'M', 3, 4, N'Auditoria Test A', N'Rojo', N'41', CAST(110000.00 AS Decimal(18, 2)), 8, 0, N'FC4EAA8E681ABAC6328570A9B40B4B7DEA153D472A44DC98782B0D6A1A34BE37')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (69, 65, CAST(N'2026-11-16T10:48:35.283' AS DateTime), N'B', 3, 4, N'Auditoria Test A', N'Rojo', N'41', CAST(100000.00 AS Decimal(18, 2)), 5, 0, N'37C5138FF5095C1F2EF752B90C1B3513495CF68C98F14F041543E3F02BFFC48D')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (70, 66, CAST(N'2026-11-16T10:52:34.677' AS DateTime), N'A', 2, 4, N'Aud Import Uno', N'Rojo', N'40', CAST(120000.00 AS Decimal(18, 2)), 5, 1, N'52DDC6910B26DEE847351CC913AFA591249CFFFE0C31B7BED30D873DD4F02367')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (71, 3, CAST(N'2026-11-16T10:52:34.707' AS DateTime), N'M', 3, 1, N'RS-X', N'Gris', N'43', CAST(110000.00 AS Decimal(18, 2)), 10, 1, N'418ECF91EB2733E9F6BF7EA9EDAF43262941B0E708CAB217153A1A6579EF4935')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (72, 67, CAST(N'2026-11-16T10:52:34.727' AS DateTime), N'A', 8, 1, N'Aud Precio Coma', N'Blanco', N'39', CAST(95000.50 AS Decimal(18, 2)), 4, 1, N'16E99C3316690ED94A667CCD1233CB90F84A081B37CFF7377DAE396175527E66')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (73, 68, CAST(N'2026-11-16T10:53:20.093' AS DateTime), N'A', 2, 4, N'Aud Marca Mala', N'Azul', N'41', CAST(90000.00 AS Decimal(18, 2)), 3, 1, N'7A6BD1E6E5A9ED0876B4601A38AD4FE3FDD65F53108E41634F8C92C8860422F4')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (74, 69, CAST(N'2026-11-16T10:53:20.127' AS DateTime), N'A', 1, 1, N'Aud Cantidad Negativa', N'Negro', N'42', CAST(90000.00 AS Decimal(18, 2)), 3, 1, N'B44B86F99688FC9F17C1D19D9D076C9901B6599395C7BD043431E6CCE8489306')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (75, 70, CAST(N'2026-11-16T10:53:20.130' AS DateTime), N'A', 1, 1, N'Aud Cantidad Texto', N'Negro', N'42', CAST(90000.00 AS Decimal(18, 2)), 2, 1, N'D7150FB794316784C05903B09DB859390C0E240A9EBFAF475FDB6344BEF1967D')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (76, 71, CAST(N'2026-11-16T10:53:20.130' AS DateTime), N'A', 9, 5, N'Aud Sin Talle', N'Verde', N'42', CAST(80000.00 AS Decimal(18, 2)), 2, 1, N'20D4B7A3A0DEE4CE82A18C6369B8B1D5500AE5AA8157D7CBBE24DC0B5D931BBD')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (77, 72, CAST(N'2026-11-16T10:53:20.133' AS DateTime), N'A', 9, 5, N'Aud Categoria Mala', N'Verde', N'40', CAST(80000.00 AS Decimal(18, 2)), 2, 1, N'0DA238F9446DA58AF7E7230FE6E7DD7DDF06643EFE48425B58B8ED77421BB374')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (78, 73, CAST(N'2026-11-16T10:53:20.133' AS DateTime), N'A', 8, 1, N'Aud Precio Cero', N'Blanco', N'39', CAST(70000.00 AS Decimal(18, 2)), 4, 1, N'96F016D3839261546F04403FECC989B15D1C8DFF462BC3A74F8C83393D44E26D')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (79, 74, CAST(N'2026-11-16T10:53:32.417' AS DateTime), N'A', 2, 4, N'Aud Simple', N'Azul', N'41', CAST(130000.00 AS Decimal(18, 2)), 6, 1, N'1993A8F15BCB7804E53B716B65DBC36F8D559D9ECD3DE5D684A90166A1B10BB1')
+INSERT [dbo].[ProductoCambio] ([IdCambio], [IdProducto], [FechaHora], [Operacion], [IdMarca], [IdCategoria], [Modelo], [Color], [Talle], [Precio], [Stock], [Vigente], [DV]) VALUES (80, 74, CAST(N'2026-11-16T10:56:58.320' AS DateTime), N'M', 2, 4, N'Aud Simple', N'Azul', N'41', CAST(130000.00 AS Decimal(18, 2)), 0, 0, N'07C69F38A4622708AEC440126A5723227B09F43FE71E12EA7B6F25724706EDA8')
+SET IDENTITY_INSERT [dbo].[ProductoCambio] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Proveedor] ON 
 
@@ -4296,6 +5211,7 @@ INSERT [dbo].[Recepcion] ([IdRecepcion], [NroRecepcion], [Fecha], [IdOrden], [DV
 INSERT [dbo].[Recepcion] ([IdRecepcion], [NroRecepcion], [Fecha], [IdOrden], [DV]) VALUES (10, N'000010', CAST(N'2026-10-29T23:11:48.283' AS DateTime), 10, N'2BC318729FEC1FED76D5161FF23F375A9AAF47881A342C41D591E5F1B87BE4F7')
 INSERT [dbo].[Recepcion] ([IdRecepcion], [NroRecepcion], [Fecha], [IdOrden], [DV]) VALUES (11, N'000011', CAST(N'2026-10-30T19:26:58.267' AS DateTime), 11, N'F25EDF8D8F40B4AE05CF2B578CD4760FAC995729DC3AE85141F57C20C6701472')
 INSERT [dbo].[Recepcion] ([IdRecepcion], [NroRecepcion], [Fecha], [IdOrden], [DV]) VALUES (12, N'000012', CAST(N'2026-11-01T20:00:17.553' AS DateTime), 12, N'D6BE1CD6C0D6262FD851B222A087F2064E45FA4D1254C61F6EECAB42208E9BDF')
+INSERT [dbo].[Recepcion] ([IdRecepcion], [NroRecepcion], [Fecha], [IdOrden], [DV]) VALUES (13, N'000013', CAST(N'2026-11-11T16:28:19.363' AS DateTime), 13, N'EB798516593BD68EF12E716DF2A02DD75B91E2E6FF3F2F39A665213C6A1FEC13')
 SET IDENTITY_INSERT [dbo].[Recepcion] OFF
 GO
 SET IDENTITY_INSERT [dbo].[SolicitudCompra] ON 
@@ -4312,6 +5228,7 @@ INSERT [dbo].[SolicitudCompra] ([IdSolicitud], [Fecha], [DNIAdministrador], [Est
 INSERT [dbo].[SolicitudCompra] ([IdSolicitud], [Fecha], [DNIAdministrador], [Estado], [DV]) VALUES (10, CAST(N'2026-10-29T23:09:18.153' AS DateTime), N'12345678', N'Procesada', N'B56C2425C6D792D6E38E646C5A3D835CE4BFA2F9740B07B826B144616CEFCD1F')
 INSERT [dbo].[SolicitudCompra] ([IdSolicitud], [Fecha], [DNIAdministrador], [Estado], [DV]) VALUES (11, CAST(N'2026-10-30T19:26:21.057' AS DateTime), N'12345678', N'Procesada', N'5EA53FA1805A7A83DC17A493B79FB34E9E64EDA798D11CD70E0EDE2FC714953D')
 INSERT [dbo].[SolicitudCompra] ([IdSolicitud], [Fecha], [DNIAdministrador], [Estado], [DV]) VALUES (12, CAST(N'2026-11-01T19:59:15.863' AS DateTime), N'12345678', N'Procesada', N'4D365CD19A108A4E21B2ACA9401BB51E57A94CFFCCDB1440B3D8AC932EDA521F')
+INSERT [dbo].[SolicitudCompra] ([IdSolicitud], [Fecha], [DNIAdministrador], [Estado], [DV]) VALUES (13, CAST(N'2026-11-11T16:26:17.087' AS DateTime), N'12345678', N'Procesada', N'C4FA402FC003B31B956657EDCBF53E36CDB635AA3BD8C03D2CA692908C467082')
 SET IDENTITY_INSERT [dbo].[SolicitudCompra] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Usuarios] ON 
@@ -4429,81 +5346,530 @@ INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [Medio
 GO
 INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (186, N'DEMO-0085', CAST(N'2026-11-01T11:00:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(305000.00 AS Decimal(18, 2)), N'19FD7A2E8E5CE8B331E15D6DEC1FC677DD859EA3662D5A3CC9E9A73B71F71678')
 INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (187, N'DEMO-0086', CAST(N'2026-11-02T09:00:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(646000.00 AS Decimal(18, 2)), N'8384BA6356755CFF1C25FD34CBE8A9138DF55437C1341311B6E4876B708160BC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (188, N'HIST-00001', CAST(N'2022-11-07T18:20:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(325500.00 AS Decimal(18, 2)), N'6E4A0FAEE96B3EF336E60C1C5BB6C96D64459FB1CEF057A0537444D3E83F59A2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (189, N'HIST-00002', CAST(N'2022-11-25T12:59:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(189000.00 AS Decimal(18, 2)), N'4FFE92EDC75242AD1C249732411FD2215DD258FAB1962C873D4DC97D3459709D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (190, N'HIST-00003', CAST(N'2022-11-12T10:07:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(98000.00 AS Decimal(18, 2)), N'DA47FF264AA4DC5FE6FD9CC9F4A71CD724DFEE62E88B5CFBFFB5646453C0256A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (191, N'HIST-00004', CAST(N'2022-11-06T12:14:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(247100.00 AS Decimal(18, 2)), N'A9BD0E72010BE296DC7B0E53EC399FA6239E25C7BDA4C919917078C1446054E5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (192, N'HIST-00005', CAST(N'2022-11-09T16:05:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(80500.00 AS Decimal(18, 2)), N'552FFCD30A608EC320A54774C84A5DBE13FC2C3457D4DEFDCCAFE17643BA7989')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (193, N'HIST-00006', CAST(N'2022-11-30T15:51:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(105000.00 AS Decimal(18, 2)), N'9FF2A56FD2757B9B894A6C7B73F619A16BF662E42A54014E054363E3ED8847F1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (194, N'HIST-00007', CAST(N'2022-11-13T17:16:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(245000.00 AS Decimal(18, 2)), N'DCE66F5678F6A1EB61AF92E333781FAF92CE8E0ED64F234697B5543AF59FAF0F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (195, N'HIST-00008', CAST(N'2022-11-18T19:57:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(192500.00 AS Decimal(18, 2)), N'EE0ED36DC20050EBE4BED8578FB486EEE3F90A3B67CA962A662C647DA4353026')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (196, N'HIST-00009', CAST(N'2022-11-27T16:28:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(94500.00 AS Decimal(18, 2)), N'070B1F6061F24A610529BC6068DC315E8B234BF35004ED6322F7E09064CC20C5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (197, N'HIST-00010', CAST(N'2022-11-12T12:18:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(206500.00 AS Decimal(18, 2)), N'DE6B35F6C7ADEBE838135F2BE8D4EC51326AE887BD585B22E83232294F2AECB2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (198, N'HIST-00011', CAST(N'2022-11-19T10:42:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(199500.00 AS Decimal(18, 2)), N'C0ABF29E0A6FB9E1F964E795D184A3D53921B55821646AB242E0B5465D1EB999')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (199, N'HIST-00012', CAST(N'2022-12-04T13:09:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(116900.00 AS Decimal(18, 2)), N'EBF413410093A192DB0168B23114B5E609D4FF94F83F4C5DD0743A8DC19E1DE9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (200, N'HIST-00013', CAST(N'2022-12-08T15:01:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(198400.00 AS Decimal(18, 2)), N'DEB3052A1F57E43698F686B75B44E59A9A12AC90E051B286D2162FEF44EFC710')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (201, N'HIST-00014', CAST(N'2022-12-11T17:32:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(99200.00 AS Decimal(18, 2)), N'1DECAC7703A8006CF4D22D6F7CBFE8799CFB7309D113604ED4DFB301D762F26C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (202, N'HIST-00015', CAST(N'2022-12-21T16:04:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(223200.00 AS Decimal(18, 2)), N'91ADA0C3FD3092870EDDF84E70FC7C284DCF34479481C4E35BD9E2887D69E7AD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (203, N'HIST-00016', CAST(N'2022-12-05T18:20:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(65200.00 AS Decimal(18, 2)), N'71242E7B9C9951AF679AFA904E73A2AC2B2DE71053ED9E3EAE05D81F4B2B5431')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (204, N'HIST-00017', CAST(N'2022-12-31T11:38:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(131100.00 AS Decimal(18, 2)), N'63C288413B950BC8D4078D93F7C87E561725222F69042026BBE83E254A6E826E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (205, N'HIST-00018', CAST(N'2022-12-29T13:14:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(95700.00 AS Decimal(18, 2)), N'AC062A01D2DF03D9370A831E37FAA889780653AF38E222E6C010ABA43A679623')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (206, N'HIST-00019', CAST(N'2022-12-25T13:58:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(182100.00 AS Decimal(18, 2)), N'30EF97CDF58F7F7B3D6442F7C16AE24AC18BD904D4E843E9B3A693E3FC39EDBD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (207, N'HIST-00020', CAST(N'2022-12-18T13:29:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(99200.00 AS Decimal(18, 2)), N'1EC21D5C2C837FDE3EADD8903D31F0ED927EDE74395FF71A59CDBED66CA8315A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (208, N'HIST-00021', CAST(N'2022-12-16T15:27:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(113400.00 AS Decimal(18, 2)), N'6A69DF873C35B26D7BF791ED9A99467A5C6B5A16CE6446C809BC3DB5537BFF17')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (209, N'HIST-00022', CAST(N'2022-12-02T16:31:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(167900.00 AS Decimal(18, 2)), N'C39300053A31D14BF70CAF13936D534C395325416D5FA01D9E59F50E976F66AC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (210, N'HIST-00023', CAST(N'2022-12-02T13:28:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(102700.00 AS Decimal(18, 2)), N'1BCE1A06BE6869BE6D6E7B7845321AC5439F923F7FCC8E95FC06FA42A4303BFC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (211, N'HIST-00024', CAST(N'2022-12-30T14:22:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(311800.00 AS Decimal(18, 2)), N'7846C00F634EA3F777D13D19A094571CF27A2A4DE089FFDAA6F26E456EDA6DA0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (212, N'HIST-00025', CAST(N'2022-12-30T16:57:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(251500.00 AS Decimal(18, 2)), N'2BF1A25E85209EB5870DFB53091937A064A3D0936CCCE4D8CAFCB4309349BD60')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (213, N'HIST-00026', CAST(N'2023-01-22T13:52:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(86100.00 AS Decimal(18, 2)), N'F3DF03AE0D446CE18F1A9D2422B35C5D83278209291427F26E088D7C6AED068F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (214, N'HIST-00027', CAST(N'2023-01-17T18:09:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(193600.00 AS Decimal(18, 2)), N'F13DC0AE75F528358558CCC8484D7D99A06DBE6851ABAD9436E75FD20BB7DBF9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (215, N'HIST-00028', CAST(N'2023-01-12T10:34:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(347800.00 AS Decimal(18, 2)), N'14F1B2E6953C6301F5EA279D0776F47DEACFD863C63BB5461A214D2D738B541C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (216, N'HIST-00029', CAST(N'2023-01-26T10:15:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(179300.00 AS Decimal(18, 2)), N'CB75C1DFD802C1E2DB7E87C41B74250BF0A83A08EE3951871AD3EF85B6C49D39')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (217, N'HIST-00030', CAST(N'2023-01-29T18:31:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(318500.00 AS Decimal(18, 2)), N'E9516618F33973A2E5347F62D3C7113E5F607AE78AAE2467473F0967ADF33035')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (218, N'HIST-00031', CAST(N'2023-01-07T18:37:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(104000.00 AS Decimal(18, 2)), N'281FB52FD54F99131EB6635DB145761ADBA07270C9EC34FE9F319229E4EE7A16')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (219, N'HIST-00032', CAST(N'2023-01-31T15:11:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(68100.00 AS Decimal(18, 2)), N'48F09FF0E39E9732E22CC89870BC636C99000374E547DDED1C2D54074DCDEBE0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (220, N'HIST-00033', CAST(N'2023-02-12T19:28:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(275700.00 AS Decimal(18, 2)), N'069EF11FA6E1D21752B15026FCB7EBE60403D2DEAF7407318C764B5312F40D31')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (221, N'HIST-00034', CAST(N'2023-02-17T16:04:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(179300.00 AS Decimal(18, 2)), N'293071607706B4A711D55DE633CF5A69BDB17A14125D2E1724183BD03F798BB0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (222, N'HIST-00035', CAST(N'2023-02-05T15:17:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(76200.00 AS Decimal(18, 2)), N'66BEB694E26F2D1D1ADB0B9C5FD69AB17912B5F933B01FA3237CF94927124A3B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (223, N'HIST-00036', CAST(N'2023-02-02T13:11:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(101600.00 AS Decimal(18, 2)), N'4BC7129C7222476968957E4773D30C908CD3E6045951B05854F391B60139C8B0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (224, N'HIST-00037', CAST(N'2023-02-17T19:11:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(221400.00 AS Decimal(18, 2)), N'646FF3A403131DB08798109B254DF10E632DA530A3321BD4A73F0D753ABC092B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (225, N'HIST-00038', CAST(N'2023-02-18T17:56:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(134300.00 AS Decimal(18, 2)), N'2B76432FEA9D8B9D831A1FE81ACEB595CAD17AB194028A42D825A3069B1A4F50')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (226, N'HIST-00039', CAST(N'2023-03-24T14:28:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(110100.00 AS Decimal(18, 2)), N'2B2C9275ACF21B4F3AD2B4380488CAB83E1957E4A1B0737F140ED78EBFFCC6F3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (227, N'HIST-00040', CAST(N'2023-03-05T15:08:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(67600.00 AS Decimal(18, 2)), N'41E888C512D5778503668A838ABE0CC7FE42E416A2905C2B2C66B33430D39D8C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (228, N'HIST-00041', CAST(N'2023-03-24T15:59:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(166700.00 AS Decimal(18, 2)), N'C6F486A93BA5EC442F0D48DD536EBF5D1186B4DB5F2EA8CDA5DD4564FE1C4089')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (229, N'HIST-00042', CAST(N'2023-03-15T14:21:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(84400.00 AS Decimal(18, 2)), N'0CBDF0D9016669B5B946AF90ABF035F253127ECFA15EF9D076013A5BF7BAA21C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (230, N'HIST-00043', CAST(N'2023-03-31T11:36:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(389900.00 AS Decimal(18, 2)), N'4F8891DFBEE618D7CBBA1737EA237CDAC9248996EADF60456FC92D5880836B38')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (231, N'HIST-00044', CAST(N'2023-03-11T12:46:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(319400.00 AS Decimal(18, 2)), N'2A5BA25ECDACE0B022DB140243058935326F364741057B395695C36755AB8C24')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (232, N'HIST-00045', CAST(N'2023-03-01T15:21:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(201900.00 AS Decimal(18, 2)), N'2D42F46FDA031917EA7EC5E210E4B2771D46ACAF900F879273B0F9E4B7F192E9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (233, N'HIST-00046', CAST(N'2023-04-10T14:08:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(312000.00 AS Decimal(18, 2)), N'3516A6621DB6B28E4FC3DBC40A25DC5D70D344BDC2CACB2E9DAF24A4A2B2955C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (234, N'HIST-00047', CAST(N'2023-04-26T18:43:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(158200.00 AS Decimal(18, 2)), N'4D314896C787C679C7D9425D56C7B6C6BC585B9BB42432EC2A935DEC26112DFA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (235, N'HIST-00048', CAST(N'2023-04-13T13:00:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(357300.00 AS Decimal(18, 2)), N'1CE2D322F0AE0C78DDCEC5F29DBABE71EF7D009FB272ACD8D1CA58435FE2174F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (236, N'HIST-00049', CAST(N'2023-04-02T19:14:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(89100.00 AS Decimal(18, 2)), N'48380D2895CB72069906C81A9DB6AEC00FC5489A089215BECF2F7209CD42D00B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (237, N'HIST-00050', CAST(N'2023-04-20T16:28:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(100300.00 AS Decimal(18, 2)), N'293F6C085AEBBE1484FD4BD9A3A225F4161A36BAA2A39F51022C83E6ED18FAC8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (238, N'HIST-00051', CAST(N'2023-04-03T13:52:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(178300.00 AS Decimal(18, 2)), N'4674C9D2883B12A8B0FA27F96AD6D80F7459655C9EC04EDE289E3C0FFC8D527C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (239, N'HIST-00052', CAST(N'2023-04-20T19:12:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(100300.00 AS Decimal(18, 2)), N'95C56741124197B791F04AAFFD0F7FE504502156EA28FA36A72F994A87695EF1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (240, N'HIST-00053', CAST(N'2023-05-01T15:04:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(240400.00 AS Decimal(18, 2)), N'C55D3C6FA7C6F91D3C75D7CBA2B46B5BD983F3E1D260ADF176985C40DDB7AA4C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (241, N'HIST-00054', CAST(N'2023-05-05T16:49:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(296800.00 AS Decimal(18, 2)), N'F8D2788F45E68A4D52452A8AE2097ABA4092226774910FC43823A8767A442E3C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (242, N'HIST-00055', CAST(N'2023-05-13T17:51:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(112700.00 AS Decimal(18, 2)), N'633A347427E758E8491BBFF7AE5426A691379246C0E39B081EA0C7205D227EDA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (243, N'HIST-00056', CAST(N'2023-05-07T11:27:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(195400.00 AS Decimal(18, 2)), N'16A14200687E55B5204AC0A0B845C16536CFDB00531E38D0835D967D300D31E0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (244, N'HIST-00057', CAST(N'2023-05-23T18:32:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(71400.00 AS Decimal(18, 2)), N'4993138D057FA2A09ADA1F4117DC46E598528D54013E470A036155902914DEA0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (245, N'HIST-00058', CAST(N'2023-05-03T16:46:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(210400.00 AS Decimal(18, 2)), N'60EB31EE0181ED9C4B338D6D7DD0693017FFC511B85F3F8E3C62BCAC992BEAC2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (246, N'HIST-00059', CAST(N'2023-05-26T14:56:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(210400.00 AS Decimal(18, 2)), N'D5A414589F498DD67A61E4276D8E1397849ECC07969BDA081AAF58B00F4B9984')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (247, N'HIST-00060', CAST(N'2023-05-19T18:49:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(353100.00 AS Decimal(18, 2)), N'7D090B5D278F28F47E246C7F7DE924744CC9CCA034FAD27E54C30AB53F6C1338')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (248, N'HIST-00061', CAST(N'2023-06-04T16:15:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(59300.00 AS Decimal(18, 2)), N'E109B9775BCD07F8C14CD162C2FC41D9FDEC5E22AEC0F670A51AD0BA391EC384')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (249, N'HIST-00062', CAST(N'2023-06-16T18:30:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(220400.00 AS Decimal(18, 2)), N'A37D31A03D0D37A710922CA1540A6E034ADBE6521FB599851FFB94BADCB1E6C7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (250, N'HIST-00063', CAST(N'2023-06-22T17:29:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(83600.00 AS Decimal(18, 2)), N'04F62B70B05D13C375107A3B7C4D62FBFF25DEB3B6B87CDE27476563C322E1AB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (251, N'HIST-00064', CAST(N'2023-06-10T12:40:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(106400.00 AS Decimal(18, 2)), N'E134CE6E8B4883BD2345D1C7A026AF3424A66C25645690DBF065126A90782D49')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (252, N'HIST-00065', CAST(N'2023-06-30T18:13:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(102600.00 AS Decimal(18, 2)), N'A7E97A7D24F3EEE0F543EC6D38B00A85A4DB215623B9FA15C736F7EA45100FED')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (253, N'HIST-00066', CAST(N'2023-06-20T16:37:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(106400.00 AS Decimal(18, 2)), N'F5C31DC4B9B69ABC483A29CBE77F17B0E923666BA05B2248AF2D1EA6BEAB8D9C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (254, N'HIST-00067', CAST(N'2023-06-14T11:13:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(380000.00 AS Decimal(18, 2)), N'90CC2282756DEBF7D3E3F96618AD15CC1EFBFC5E25D861A90E542D33B837365E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (255, N'HIST-00068', CAST(N'2023-06-01T14:46:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(106400.00 AS Decimal(18, 2)), N'563025E6CC2E8CBEFB8F20C88DFA05C6C39F4F1D207BF8198C267FF8826C5D24')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (256, N'HIST-00069', CAST(N'2023-06-24T18:52:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(83600.00 AS Decimal(18, 2)), N'11200FC47FEC473D80C72513783D78C8FBFB62A95D08815AC9F0292574F4859D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (257, N'HIST-00070', CAST(N'2023-06-02T19:02:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(59300.00 AS Decimal(18, 2)), N'B9D4745DA39692233BF103C0CFD7AE361C28BF6EAFDDCE05BB94A9CFCF32E4E7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (258, N'HIST-00071', CAST(N'2023-07-02T19:44:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(430400.00 AS Decimal(18, 2)), N'9EC694E4219D45E7B4D86EF1AA4D6DCF2235E24A92C49239721C9D5EB0FA16A6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (259, N'HIST-00072', CAST(N'2023-07-20T12:54:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(130600.00 AS Decimal(18, 2)), N'510493B34CE8B9037C2DD3EF46FB43D9F40501A647C75B57FF843A98D966E43F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (260, N'HIST-00073', CAST(N'2023-07-12T12:10:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(144400.00 AS Decimal(18, 2)), N'FBD8AB0C6F5F423C182AC843C2EDB466EF954CFEB8A5EAF8C4A618D53FD4C7DB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (261, N'HIST-00074', CAST(N'2023-07-29T17:05:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(107600.00 AS Decimal(18, 2)), N'EFA38E69F2AEEF322F987F1FE0B2FB6FCD14E2EC55ACD56C349F7DD6EB9C3D14')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (262, N'HIST-00075', CAST(N'2023-07-12T14:11:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(103800.00 AS Decimal(18, 2)), N'9E6D13446AA65A3E28FCDFFF94CFF04A1532096478025DA7B16B18342EB1AAEA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (263, N'HIST-00076', CAST(N'2023-07-30T16:59:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(107600.00 AS Decimal(18, 2)), N'315221349175C50086F2C5E3499E5E25E82050077C0B1BE8EE2ABF2FAC9E3290')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (264, N'HIST-00077', CAST(N'2023-07-14T11:04:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(207500.00 AS Decimal(18, 2)), N'D853AB1C839D9251E339E5F607EFC18AB691D32FA3E213D1E0EF1B058936CAB5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (265, N'HIST-00078', CAST(N'2023-07-22T15:59:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(451900.00 AS Decimal(18, 2)), N'8401E0D92832717840C3A2DF906EBCD81EAC388F87B2939378D43BED08B0A08F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (266, N'HIST-00079', CAST(N'2023-07-22T11:49:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(372800.00 AS Decimal(18, 2)), N'06AB1DE65F544C248C7D171CF911377432BA616388DA0A69525C5A4861E31F7D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (267, N'HIST-00080', CAST(N'2023-07-15T19:44:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(88400.00 AS Decimal(18, 2)), N'738C7B1B9D4F3D07F12944341D2A6B0E35BF7EFF9AAAA9C70A7F756E8FCA01B8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (268, N'HIST-00081', CAST(N'2023-08-18T14:21:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(188100.00 AS Decimal(18, 2)), N'6FBD38AFE2E9E19F0B83F8DA90B360B8C6930573D9E4E95171B69A605D4C1E3E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (269, N'HIST-00082', CAST(N'2023-08-03T18:53:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(112700.00 AS Decimal(18, 2)), N'DB5E4757680F41DEA97DF229C8BFCE87C0D1015CB50C9091F88508E0D083C388')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (270, N'HIST-00083', CAST(N'2023-08-19T17:36:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(345800.00 AS Decimal(18, 2)), N'B0190A30BB13C78DE961AC09F6E7410236517391C62A60691DA8550618FCBAFF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (271, N'HIST-00084', CAST(N'2023-08-28T12:12:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(143800.00 AS Decimal(18, 2)), N'BCFC126997B85747B857CF53EBF9CC729C338D004206419A40A073CA7BC641FC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (272, N'HIST-00085', CAST(N'2023-08-12T16:09:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(190400.00 AS Decimal(18, 2)), N'99023C376A44F0B2CBC1A9DCDE25CFA8B70BBC3CF9B1E2A3DC83531839345248')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (273, N'HIST-00086', CAST(N'2023-08-17T17:48:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(190400.00 AS Decimal(18, 2)), N'4247F08038D1EB7F74D02BF3B1702E83F90ABA46683532FE8704920B8921F326')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (274, N'HIST-00087', CAST(N'2023-08-17T13:30:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(60600.00 AS Decimal(18, 2)), N'2E55EE698081C24A7E516BA4D4DB6C33029C2BFE481E83DEEAEE99A0EC230F7C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (275, N'HIST-00088', CAST(N'2023-08-28T14:10:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(108800.00 AS Decimal(18, 2)), N'F5A0258D7092CD0F2BF22DD1882CD7357BF0F6BF9CFABDBD142D941FA694EAAF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (276, N'HIST-00089', CAST(N'2023-09-24T11:11:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(260900.00 AS Decimal(18, 2)), N'F3A80657CCC8C0281DF2134AF3276F5E79D5BD16C57EA58681DD005483B16FD8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (277, N'HIST-00090', CAST(N'2023-09-08T19:41:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(355200.00 AS Decimal(18, 2)), N'0F50846A9160CA77ACC6699069D65A109BC765D3440E401F1F623170874B3825')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (278, N'HIST-00091', CAST(N'2023-09-08T17:04:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(76200.00 AS Decimal(18, 2)), N'6CF5C2DD4DB59FBCFBD5B8291A653DA0469F9D4AC654A7248DAE6927F79D97BB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (279, N'HIST-00092', CAST(N'2023-09-09T18:46:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(176800.00 AS Decimal(18, 2)), N'011947368805C4D05A2B60CA9DAF6AAF1B9E54A90790334D4381E59D9E4D97AB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (280, N'HIST-00093', CAST(N'2023-09-03T16:23:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(205800.00 AS Decimal(18, 2)), N'888DB26550F2A0E5C53E3DEF50D763A02A4E79939CA431E9D133222664F73EB3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (281, N'HIST-00094', CAST(N'2023-09-30T17:53:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(167400.00 AS Decimal(18, 2)), N'AC38FF3DC12B826DE794EABE5D46A7B08DFC97322890ECBBE0D57CFA7F790CC4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (282, N'HIST-00095', CAST(N'2023-09-21T18:08:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(76200.00 AS Decimal(18, 2)), N'782BD277AA72D18DD3ACFE007AF24B9C3A1030DEEC5BFCBAB17AC9ABF92F80A2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (283, N'HIST-00096', CAST(N'2023-09-30T17:22:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(106100.00 AS Decimal(18, 2)), N'12A6D8C2B1AFABB234D7FDFEB78D6341A08E957A7F0E11DF4F35F8C389BFB688')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (284, N'HIST-00097', CAST(N'2023-10-02T18:10:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(193100.00 AS Decimal(18, 2)), N'2325D8009B09FA5EB6FD2BCB1DDC425E9992FCEA8242718A1C7427C86B2DF076')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (285, N'HIST-00098', CAST(N'2023-10-08T11:43:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(202500.00 AS Decimal(18, 2)), N'A42944DAE18F4E6314D5C194E0B5977091EF53EAEC115FBF2B79F006067660FB')
+GO
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (286, N'HIST-00099', CAST(N'2023-10-19T14:26:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(198500.00 AS Decimal(18, 2)), N'FA924F15FD0292DE1B61630177534129992ECB932EBFB004FF0972C3D1849155')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (287, N'HIST-00100', CAST(N'2023-10-18T17:45:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(139000.00 AS Decimal(18, 2)), N'42B78151C5498FB13823E409A1A40FFCC276315CABD9B81B50F827439E3228B9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (288, N'HIST-00101', CAST(N'2023-10-28T14:13:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(300300.00 AS Decimal(18, 2)), N'3211C9930D67B8FEBC6A28565321193F003AC8BBDDF927CA721CBA5A779CAD96')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (289, N'HIST-00102', CAST(N'2023-10-29T10:40:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(238300.00 AS Decimal(18, 2)), N'D206F3F2F1D85FD56521112F34DB1C9AF2736507652C28DB5D76E0645C6784BA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (290, N'HIST-00103', CAST(N'2023-10-25T18:48:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(103300.00 AS Decimal(18, 2)), N'409E8CD4DE9355EDB3ACD4A2285561482F37BD540A3E5E423160260B35C40030')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (291, N'HIST-00104', CAST(N'2023-10-30T19:33:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(393100.00 AS Decimal(18, 2)), N'073C6CC253D4ECEFD85555DFB2EB04CF50E9D7BF6BC50B6F1A9F08F9CC1291C3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (292, N'HIST-00105', CAST(N'2023-10-16T10:26:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(222400.00 AS Decimal(18, 2)), N'724AB908B128B853716220ADADB5F13F2AE7FAB3C58A29FF1619A8957B8EDDBD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (293, N'HIST-00106', CAST(N'2023-11-11T10:09:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(287400.00 AS Decimal(18, 2)), N'AAA9F2C9B467711489D15DEFDE0018D49B95DEB2719C45C3509680D9A021E904')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (294, N'HIST-00107', CAST(N'2023-11-05T11:14:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(190300.00 AS Decimal(18, 2)), N'4A5DAB51A79ED3BF76617DFDBB9A431D9ACBA24595E6CE01DD65F0CDB05389DD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (295, N'HIST-00108', CAST(N'2023-11-22T16:14:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(329200.00 AS Decimal(18, 2)), N'904E71260BE865915DCCBA7B7D01B77D322D6F0497C57A0FEC7CF42CA6CE1769')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (296, N'HIST-00109', CAST(N'2023-11-14T19:54:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(549900.00 AS Decimal(18, 2)), N'7E0EC642CB891064267D2314C448509FD1BD637A2675B14D8728E8F2F51BA264')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (297, N'HIST-00110', CAST(N'2023-11-08T14:33:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(333200.00 AS Decimal(18, 2)), N'9437C1C8641F8C8C9AFBDBC82E3F0B9E9EACD6833565A2E39B09FC1375BC40C8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (298, N'HIST-00111', CAST(N'2023-11-21T12:39:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(120400.00 AS Decimal(18, 2)), N'A1F4E624487D0F0B0D064C893AC2D19A3E013B5E413800E890A7BC01EE041916')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (299, N'HIST-00112', CAST(N'2023-11-07T18:18:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(96300.00 AS Decimal(18, 2)), N'D731A810B8EE5E5285A40972FE2977F60158ADDAFD1B29C107E3EB8B036FB773')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (300, N'HIST-00113', CAST(N'2023-11-26T16:33:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(148500.00 AS Decimal(18, 2)), N'8E12395AABA2158507D791A59CE59AFE2F3384F1AEA79BAF7EBFE2381B92C674')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (301, N'HIST-00114', CAST(N'2023-11-20T16:04:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(76300.00 AS Decimal(18, 2)), N'ABDBB18DDAAFC2C5D8339C3608F100F55C2D93F898BA8BB1FDA6725784A88DB2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (302, N'HIST-00115', CAST(N'2023-11-29T12:05:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(112400.00 AS Decimal(18, 2)), N'4C71B31048D3506AB2FBBD311A6F2121107D2E35CCB5F01307BD85FF7DE52477')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (303, N'HIST-00116', CAST(N'2023-11-21T14:50:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(341200.00 AS Decimal(18, 2)), N'6A24A1CF4EA44D13705D2BA3356D4B5D52D00735FD60AD422FF2F1323F37EDF4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (304, N'HIST-00117', CAST(N'2023-11-19T11:31:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(78700.00 AS Decimal(18, 2)), N'7B131FAF6F28379F194C84C1BD2474A635BB11269F29650553BF9BF992C69E4C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (305, N'HIST-00118', CAST(N'2023-11-02T10:04:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(73900.00 AS Decimal(18, 2)), N'F3C6852354BC804C6D40706C595940DE601E7C86A26636F872E783A8BB8C33CB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (306, N'HIST-00119', CAST(N'2023-11-16T14:15:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(140500.00 AS Decimal(18, 2)), N'BA03D380A1762D9463178E6C1211E63795DE3BA4EAA3788FB9311BD273247C3C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (307, N'HIST-00120', CAST(N'2023-12-14T10:07:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(121700.00 AS Decimal(18, 2)), N'E3DA2ECA6D3BE549378ADB8C1427927EFB1ABF71F37771FBBFF8DFFBBFB465A7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (308, N'HIST-00121', CAST(N'2023-12-28T18:57:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(153400.00 AS Decimal(18, 2)), N'B5126C82DA9EBA2E07223864F9371654A643D40A60C081DF5E449375B5935040')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (309, N'HIST-00122', CAST(N'2023-12-15T14:38:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(196400.00 AS Decimal(18, 2)), N'B84990039F953D34EF150E45650E63AB4D576D5403FED9532B43D1C06670AB68')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (310, N'HIST-00123', CAST(N'2023-12-06T19:33:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(243400.00 AS Decimal(18, 2)), N'64FDFA6036F9E163003CAF5219529B153886EDA103E2099C6984A24273ABAE0A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (311, N'HIST-00124', CAST(N'2023-12-20T14:30:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(219000.00 AS Decimal(18, 2)), N'002FF02E0D9DAA9A9A0A4B691691CE31847A7F89738A954A199E54D77D96DB8A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (312, N'HIST-00125', CAST(N'2023-12-26T13:41:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(255600.00 AS Decimal(18, 2)), N'08BCCEA835FCFE98D7C5DB76C41332EE6D1C0EB488CF2C05D91606497BCE6D58')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (313, N'HIST-00126', CAST(N'2023-12-08T10:37:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(97400.00 AS Decimal(18, 2)), N'7BC5DCCE092FBC1E5FD7FE1B47B303DC1D43DBB8BF5B79905250E35635A36120')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (314, N'HIST-00127', CAST(N'2023-12-11T14:09:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(121700.00 AS Decimal(18, 2)), N'01D7F54224375EED66B678336E4475C2FED556B4B9E77A7C71A9B150DBBDA753')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (315, N'HIST-00128', CAST(N'2023-12-30T18:08:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(434200.00 AS Decimal(18, 2)), N'9EEA6E0D6F421728512F41AC9030B12AB6E776EBDB1D4E4177973C07E2807CC2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (316, N'HIST-00129', CAST(N'2023-12-25T15:05:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(74700.00 AS Decimal(18, 2)), N'6DD5E2B5B0522F26D767E391075312BCF7FA117ED74F96789CE10EF5C697DFF8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (317, N'HIST-00130', CAST(N'2023-12-01T19:26:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(389400.00 AS Decimal(18, 2)), N'B650490DE05356C5548683ED24BF28E0DB4A379D79C1EFF068801FDFA736B505')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (318, N'HIST-00131', CAST(N'2023-12-18T15:11:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(213400.00 AS Decimal(18, 2)), N'3BBF0ADCBDFD80086D9EE6CB93878F0F0DDDEB5EDA5F3472FCBF83E29612125A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (319, N'HIST-00132', CAST(N'2023-12-04T19:11:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(121700.00 AS Decimal(18, 2)), N'7EA0A94C62CB8A9A2A7AC5E53A52DC6184434BD86864D9E7295E6892F502052C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (320, N'HIST-00133', CAST(N'2023-12-23T14:00:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(93300.00 AS Decimal(18, 2)), N'790C1625A81FAB9B62FAAA2BBAC09FF00F4525468066D4C8FA07C3249793753F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (321, N'HIST-00134', CAST(N'2023-12-22T11:31:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(113600.00 AS Decimal(18, 2)), N'3C3C4AE50A8175EC722A3C886B1AC8447D05F69B37AAC89F504B56C326C4D926')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (322, N'HIST-00135', CAST(N'2023-12-04T13:38:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(89300.00 AS Decimal(18, 2)), N'7357541E99275AFDFB0CBC44EDAB4C282265C0971A8AB9DAF052CCD6B539D40F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (323, N'HIST-00136', CAST(N'2023-12-31T18:27:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(401700.00 AS Decimal(18, 2)), N'12F9623060EE7ECEC54A1B0EB3BB9AE86FD36401E9F040A9B6865B6449CD6EA2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (324, N'HIST-00137', CAST(N'2023-12-22T15:54:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(271900.00 AS Decimal(18, 2)), N'CBA10E6530027D753F2A8B3E6CDC48B1EFA4F28783FF74F927DA06E1B4088859')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (325, N'HIST-00138', CAST(N'2024-01-01T14:06:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(110700.00 AS Decimal(18, 2)), N'E1EB3E74FF695ECA6F787EA4D3EFA8E630CBD8BF10DBB2CC9D1B437F8608E646')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (326, N'HIST-00139', CAST(N'2024-01-05T11:23:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(106600.00 AS Decimal(18, 2)), N'B49CE86F6316C01D52269C01D87808274CCB3D1AE8C6D62701A6439A002F3417')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (327, N'HIST-00140', CAST(N'2024-01-29T12:30:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(131200.00 AS Decimal(18, 2)), N'A535052FD39330DB2A9AAB14232CED810CFCCE5E4CEE2349C16B2F7D3242C6BF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (328, N'HIST-00141', CAST(N'2024-01-11T17:04:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(114800.00 AS Decimal(18, 2)), N'088E1D5CE2D9B50A4A2008D78273F250F7E5ECC8BB78338852BF2C98B8EFEAB5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (329, N'HIST-00142', CAST(N'2024-01-29T19:21:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(110700.00 AS Decimal(18, 2)), N'B1F4063A548810059BA4887B23EAACFC828C282B5CFB4B79703D52E2C27CBB31')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (330, N'HIST-00143', CAST(N'2024-01-24T15:23:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(196800.00 AS Decimal(18, 2)), N'89A9010A1B264F85F61A3A6939CEFFFDD8F0CDF773AAF034F8302BAC2C7CB69C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (331, N'HIST-00144', CAST(N'2024-01-26T13:25:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(77900.00 AS Decimal(18, 2)), N'6BE3A0B1CB7B8BD664C5B2C48AB946CC833B11BB873976C51CC775BCE6CFA59E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (332, N'HIST-00145', CAST(N'2024-01-17T19:15:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(110700.00 AS Decimal(18, 2)), N'FEF6085EE268F78672B4CE0BE4BD9F0AB0AE42758CAFDF47460C18005E79B3CE')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (333, N'HIST-00146', CAST(N'2024-01-30T17:25:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(123000.00 AS Decimal(18, 2)), N'6E6A5B7680E22AD382982E69D7E76789E66D369B984071ACF17A0E89999B472B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (334, N'HIST-00147', CAST(N'2024-02-24T11:18:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(211300.00 AS Decimal(18, 2)), N'E7596CC20651C6BC8ED671726480FA15E7B1813729844A698C617D80A7C6AD42')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (335, N'HIST-00148', CAST(N'2024-02-22T14:09:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(91100.00 AS Decimal(18, 2)), N'97F011BD20CDBBD916E1373226134DDC6AFEE65FC7A8CEF1E441792DC79889B1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (336, N'HIST-00149', CAST(N'2024-02-26T16:32:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(78700.00 AS Decimal(18, 2)), N'8453D2D1A3944FC0A7633074427D7DB3C2CAB970546D27196661558CE0EBB32C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (337, N'HIST-00150', CAST(N'2024-02-27T19:35:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(111900.00 AS Decimal(18, 2)), N'03F1D86927790F580D334859F811AE765C7839E52099DCF64AA64295F964DEC5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (338, N'HIST-00151', CAST(N'2024-02-09T11:52:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(385300.00 AS Decimal(18, 2)), N'8B81A39BF6873ED8A09429B93B85338C502DCF8F880DFE0C6EB81A430FED56D3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (339, N'HIST-00152', CAST(N'2024-02-20T10:59:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(223800.00 AS Decimal(18, 2)), N'C528145DD2E8F133FD95964FD8D6AD84395DE1074807E3D71712E4CB41EB862A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (340, N'HIST-00153', CAST(N'2024-02-18T18:32:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(271000.00 AS Decimal(18, 2)), N'1099B7329A5C4DECA8B22444E4F2F9D12952CBD400F14D0A94B1667446A059D9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (341, N'HIST-00154', CAST(N'2024-02-14T18:27:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(78700.00 AS Decimal(18, 2)), N'CA270DB4E4AEEEEE36306F5ABF310DC3C0F76F853BCC775732F7B8B02DC7BB35')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (342, N'HIST-00155', CAST(N'2024-03-01T19:13:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(154900.00 AS Decimal(18, 2)), N'7E5411F6C3450CB1EE314129A12B8FA451B688BB07B951C3ACBA762F4D93A4C7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (343, N'HIST-00156', CAST(N'2024-03-02T14:24:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(202600.00 AS Decimal(18, 2)), N'99A9676D540A8D574080B8119B09726E358129777409385F7D7DCA3BB1A0F9E4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (344, N'HIST-00157', CAST(N'2024-03-07T16:07:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(117200.00 AS Decimal(18, 2)), N'9C7677752DF9340D47DCDDB13E37B0D99AFAC1E799613A12B85A619503B51283')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (345, N'HIST-00158', CAST(N'2024-03-06T18:17:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(272100.00 AS Decimal(18, 2)), N'93B503B2676EED3559B4B88724A39CED2E5AFC57A751C1713B1FD2E7A541BF48')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (346, N'HIST-00159', CAST(N'2024-03-25T13:21:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(226000.00 AS Decimal(18, 2)), N'36872E160F74C09CA589689EBCD0BC1854AC4E7AEBC382527FA65D728C3CED4F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (347, N'HIST-00160', CAST(N'2024-03-22T12:18:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(96300.00 AS Decimal(18, 2)), N'EE1BF510688B488DB9F1548AB443C9C843B1D1E037AA4867BF470E9747917723')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (348, N'HIST-00161', CAST(N'2024-03-26T19:53:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(96300.00 AS Decimal(18, 2)), N'E049A6CC1CF82C073147B8CCC0EF1558708D88DC0C104D99F355BF0BB19EB926')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (349, N'HIST-00162', CAST(N'2024-03-15T12:19:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(206800.00 AS Decimal(18, 2)), N'FDFC982C44515994B0964DC75670CF6A712FAED80CFC7BD7BD0A0F51FBBCC507')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (350, N'HIST-00163', CAST(N'2024-03-25T15:19:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(138100.00 AS Decimal(18, 2)), N'BD8525F80F66C499C494F52B4F48BFB63929F6D9B82606795CE073B3E3756424')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (351, N'HIST-00164', CAST(N'2024-04-09T10:47:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(77800.00 AS Decimal(18, 2)), N'F1E46A60864AC0B7436D19EDA1667576DFC5B8467E490076518DD55094D78E9B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (352, N'HIST-00165', CAST(N'2024-04-27T15:57:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(101500.00 AS Decimal(18, 2)), N'BC45F459CBAC393B05C7525BA6B20844A00FDA3459FF55299AAA4B20E0973160')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (353, N'HIST-00166', CAST(N'2024-04-17T12:14:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(80300.00 AS Decimal(18, 2)), N'2CD234281832C36E16B963B2783CC5C73E6069069ECA1099240CBEFD5D46631C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (354, N'HIST-00167', CAST(N'2024-04-20T13:41:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(279000.00 AS Decimal(18, 2)), N'00D75B4C60F4A3C0F46163A95A03208C7CA9BADE1FEABC1035D571EA71538BB4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (355, N'HIST-00168', CAST(N'2024-04-21T15:33:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(583500.00 AS Decimal(18, 2)), N'EF75A85B274735C983090DD9E5570F64E396F1936946BF7F4AF406F8B60E096A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (356, N'HIST-00169', CAST(N'2024-04-14T12:16:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(156500.00 AS Decimal(18, 2)), N'90F42440747D9A50870BD8593EA72A725C1D95A3DB74569CA01F28E1A94718B8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (357, N'HIST-00170', CAST(N'2024-04-26T18:45:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(93000.00 AS Decimal(18, 2)), N'0CFD5FB34A2D2798F2B06A180F01B5F30274126D41DA019462E8CFB04B51F4AC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (358, N'HIST-00171', CAST(N'2024-04-09T10:53:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(245300.00 AS Decimal(18, 2)), N'1C4F5D27EB5638189C7431AC9A93532EA4F7EEDE8739455827C24955D2D85BC9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (359, N'HIST-00172', CAST(N'2024-04-08T10:26:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(346700.00 AS Decimal(18, 2)), N'13C84C363A8AE20982A6BA18D4376C6B11434E6DBA2DDC42920D31E2C8647965')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (360, N'HIST-00173', CAST(N'2024-05-01T17:34:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(247700.00 AS Decimal(18, 2)), N'BAB2DAC530F6B251C61F13ECF13F419385406DF4AFE548F5881EE06D077DABFA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (361, N'HIST-00174', CAST(N'2024-05-10T14:21:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(149500.00 AS Decimal(18, 2)), N'F1AFCDCFD68ACF387BC0ED0B43AA296B87311E3F47F8CF95A2AEA03BF09A598C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (362, N'HIST-00175', CAST(N'2024-05-04T15:51:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(98200.00 AS Decimal(18, 2)), N'215431B38B99D829E372FA8E02C3F8C1CA358E25EB3CC357094E2F267DA559B1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (363, N'HIST-00176', CAST(N'2024-05-24T16:38:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(202500.00 AS Decimal(18, 2)), N'B03C8407E440B36C03068B2D80E22CF6382C344E01DFAB441415DFCCA6942434')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (364, N'HIST-00177', CAST(N'2024-05-08T11:49:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(141000.00 AS Decimal(18, 2)), N'2B4CC14E6183EF1AE85C711538EE36B67F773D6C425884C1DCAC07389E824DA0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (365, N'HIST-00178', CAST(N'2024-05-26T11:54:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(316000.00 AS Decimal(18, 2)), N'AF7E16B973EBDC747FB83EB5FD00D17DB2183386F816CDAC12F2F7E5A6B3133F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (366, N'HIST-00179', CAST(N'2024-05-05T14:27:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(222100.00 AS Decimal(18, 2)), N'9B1B999D59A33A17711B9DC69CE5E1E944F9077F43802E9EC63689B0590B5018')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (367, N'HIST-00180', CAST(N'2024-05-28T10:23:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(232400.00 AS Decimal(18, 2)), N'0FA1A372CC7FD0FBE1111C3395F396E07A5E9574F5D7B987660FA5556C50ADE8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (368, N'HIST-00181', CAST(N'2024-05-31T11:29:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(81200.00 AS Decimal(18, 2)), N'6B573F0AEF9CEC178B438BDBACFF985EF5D95F7D8A9A26D7FFFCFC3E909FD736')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (369, N'HIST-00182', CAST(N'2024-05-04T12:30:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(136600.00 AS Decimal(18, 2)), N'35B7C98F561374D47DCA53911E0EABD488093065104D65F2145F129FE9B0E0AD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (370, N'HIST-00183', CAST(N'2024-06-26T15:34:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(120800.00 AS Decimal(18, 2)), N'4EB3A4372921FAF004E7E5E97E8BFD7946C9033C60A6C2CDE470C0FAF95F54DD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (371, N'HIST-00184', CAST(N'2024-06-16T19:03:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(164000.00 AS Decimal(18, 2)), N'35FEC510A5E90068517198C47EFE7DCD9AFAFFCC5759F54CE6D5E6B8B37387C1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (372, N'HIST-00185', CAST(N'2024-06-14T18:19:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(116500.00 AS Decimal(18, 2)), N'F944D8C6422F7F70E000B9552EA8635111174E650405C40FBF6C7C8949F6CE5C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (373, N'HIST-00186', CAST(N'2024-06-04T14:36:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(168300.00 AS Decimal(18, 2)), N'3F0FCF35D6540AA80E8DB06853521B5F349D724448FB53EF3C94DA354FC84D76')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (374, N'HIST-00187', CAST(N'2024-06-19T16:19:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(470100.00 AS Decimal(18, 2)), N'A164B88C0E536FCFD3C1219753F0460C8A4309D9F6523DA8A64EABCD8F2F1BDE')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (375, N'HIST-00188', CAST(N'2024-06-28T10:24:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(138100.00 AS Decimal(18, 2)), N'EED820F0F408166B0E1878D0D96766D3AA07D283AFC15EA7E6A464C6E4F965D2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (376, N'HIST-00189', CAST(N'2024-06-12T16:53:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(69000.00 AS Decimal(18, 2)), N'C2D33A27CD22D1687537047676F6989A357B5CA416FA1649BC815D663CD66D58')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (377, N'HIST-00190', CAST(N'2024-06-28T14:11:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(241600.00 AS Decimal(18, 2)), N'EA98C30AF6DAD531FF26E2CBAAF6F645B3D69BEBDB8D4786BC8B9A7D6AAE565E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (378, N'HIST-00191', CAST(N'2024-06-13T18:15:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(187200.00 AS Decimal(18, 2)), N'677001C7B33A42907C509BE032A9F71022BCF173B2699612A9D1E7DA2CB6CE9B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (379, N'HIST-00192', CAST(N'2024-06-30T14:37:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(151000.00 AS Decimal(18, 2)), N'7A7872BD5D6C81C6E1EF98E055D9E0AB0D0CCFC4EA3B766B8D25D6F3071F8457')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (380, N'HIST-00193', CAST(N'2024-06-03T11:27:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(138100.00 AS Decimal(18, 2)), N'2177E74A928BC5EF117C63DC00FBE712BEF6C19611C6CA11B49B925A18499517')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (381, N'HIST-00194', CAST(N'2024-06-02T15:32:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(159600.00 AS Decimal(18, 2)), N'A06FF369E4B0072D8E6C1277C14B011C1A6B5BF54340CDD94006544A4F38B44D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (382, N'HIST-00195', CAST(N'2024-07-15T11:33:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(122000.00 AS Decimal(18, 2)), N'E40ABC658C432E774A4787749CD24ADB7388BDD44795BC5472F46757642046F0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (383, N'HIST-00196', CAST(N'2024-07-26T13:05:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(352200.00 AS Decimal(18, 2)), N'141455E759936CB852AEC807FE1E48D8F4300122A95CF5FEAA328C85654247CA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (384, N'HIST-00197', CAST(N'2024-07-19T10:03:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(194400.00 AS Decimal(18, 2)), N'7AA0B4F1BC9D8C1F7C93859819AFBF6ECF2F2872F8BC9F3215C0B5831B22CF0E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (385, N'HIST-00198', CAST(N'2024-07-13T12:12:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(413200.00 AS Decimal(18, 2)), N'FAE1355356B1CC792A20B99FF37803175CBB958D60FD82801815A09D6AA06CFD')
+GO
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (386, N'HIST-00199', CAST(N'2024-07-10T11:52:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(122000.00 AS Decimal(18, 2)), N'D567836F971C43F5BAE941B70945B20B5816CE52ED6EE8E1596EAA747D1F5D4B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (387, N'HIST-00200', CAST(N'2024-07-01T17:12:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(100200.00 AS Decimal(18, 2)), N'B2912718C2FAEA54DD7769D3561BDF81DDFA0C2092790A4D2F5A8DF8DBE9CBB7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (388, N'HIST-00201', CAST(N'2024-07-18T15:39:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(80200.00 AS Decimal(18, 2)), N'E196D288AA35E3F94C4B7F5C1D9E741BCD074DB6D7EB911B8C0B819FCF384A24')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (389, N'HIST-00202', CAST(N'2024-07-18T15:53:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(82800.00 AS Decimal(18, 2)), N'E97C101DBB7F7150D528AD68EE99A0D59DACF65BE5C588BB1F44A8BA3E234EF0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (390, N'HIST-00203', CAST(N'2024-07-05T17:23:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(352800.00 AS Decimal(18, 2)), N'47D5C6EB728336835DA757CAD08A9FC436A4808A61D6B0B633113DB4A33CA6BE')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (391, N'HIST-00204', CAST(N'2024-07-08T10:29:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(306800.00 AS Decimal(18, 2)), N'3F2FB7AB97F1C3384EBA534408613CE9A949E288FD08BFEB63FE590D0C596BEF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (392, N'HIST-00205', CAST(N'2024-07-07T13:19:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(68000.00 AS Decimal(18, 2)), N'C274F32051709711E0E1C14F1113FF3771E786AB25325F909734217434F4D89E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (393, N'HIST-00206', CAST(N'2024-07-03T13:19:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(180400.00 AS Decimal(18, 2)), N'6A68334699679ED6FB07DF4339E6741488DDC112CB2364CE781FA8CA497F82A7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (394, N'HIST-00207', CAST(N'2024-07-23T15:03:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(85400.00 AS Decimal(18, 2)), N'9D8E3D15ACBDE36299191C6CD69BE49520D42E96539E676E3ED8EE4E1AC991C8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (395, N'HIST-00208', CAST(N'2024-08-17T18:53:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(186600.00 AS Decimal(18, 2)), N'CDE1C6AB63F387F04D4FBBBC71E5E8A4849997189B090DCFA1680BEEE4B49A70')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (396, N'HIST-00209', CAST(N'2024-08-20T16:43:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(162800.00 AS Decimal(18, 2)), N'BA6D8459E7DF7C860CA10C20DB5953F0216218F706C4AB544BBA4C4963DBCB18')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (397, N'HIST-00210', CAST(N'2024-08-20T16:41:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(242000.00 AS Decimal(18, 2)), N'1C08C902EA324DF190895941823CC81A11528BDAEF0088F72F813007E1A14EB6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (398, N'HIST-00211', CAST(N'2024-08-04T12:40:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(186600.00 AS Decimal(18, 2)), N'43EDBAA482FE89D6328546B22B38A697118B42C0E3FFCA0BF07C5A0875271C53')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (399, N'HIST-00212', CAST(N'2024-08-03T14:15:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(81000.00 AS Decimal(18, 2)), N'E47F124B8CB7DA0BB9862B36891EBD4447F6CC1B27D046E6AAA17E9001377819')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (400, N'HIST-00213', CAST(N'2024-08-10T19:07:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(462800.00 AS Decimal(18, 2)), N'B5527A6D4E9C52F58A24C529247C7F99DAC66ECF1AD680C5A38BC3C2D59F7BD2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (401, N'HIST-00214', CAST(N'2024-08-05T18:39:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(162800.00 AS Decimal(18, 2)), N'3E7B70A05A4C584BEE14E718757B2DE7EF39A7ECDA5CCD48CF7617806730F521')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (402, N'HIST-00215', CAST(N'2024-08-16T11:26:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(152200.00 AS Decimal(18, 2)), N'E229835A362BE4C5573E34A819C3E0859D1F83ADA1FB5C122E9312316B59AD63')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (403, N'HIST-00216', CAST(N'2024-08-07T10:24:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(154000.00 AS Decimal(18, 2)), N'A1B321616BE39A8415EFC19356B80093CD92A415738C3D1E6BD3328B2FA848D4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (404, N'HIST-00217', CAST(N'2024-08-14T16:16:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(169000.00 AS Decimal(18, 2)), N'DE5060E8B6E7F738C72DABD94F95A9AAA23D9C5828F5DD8DB368A64A5F2E175C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (405, N'HIST-00218', CAST(N'2024-09-10T16:13:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(213200.00 AS Decimal(18, 2)), N'6746EB85A2D2062FCB63EEDB17FE643BFC221DA601686CFC8D187504D5DEE8A9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (406, N'HIST-00219', CAST(N'2024-09-07T12:38:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(106600.00 AS Decimal(18, 2)), N'310973CD59C104B6786ECE9ED351AD1F10F9625FD6EBE133F7A8C95542353E95')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (407, N'HIST-00220', CAST(N'2024-09-28T14:05:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(142200.00 AS Decimal(18, 2)), N'14F6BA3F0D68433C3335A4EE4F437EBAB2050411A06D7D4991EDE9B7121F6174')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (408, N'HIST-00221', CAST(N'2024-09-03T16:33:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(142200.00 AS Decimal(18, 2)), N'1AE773AEB6F52A004AC64B019CFFA1DD41A659FE4930876A8131FC7733E67CCB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (409, N'HIST-00222', CAST(N'2024-09-13T15:48:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(388200.00 AS Decimal(18, 2)), N'DF39FCD287A105128C58DA40D5F3B5F9712979CF361103E303FB23A85A3FE9B7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (410, N'HIST-00223', CAST(N'2024-09-12T11:18:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(124400.00 AS Decimal(18, 2)), N'ADAB8DA8AB5B3D645B98388E696A31BFEB5831FA189B3674257E0315683E5967')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (411, N'HIST-00224', CAST(N'2024-09-30T14:18:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(239900.00 AS Decimal(18, 2)), N'80A415756B5ADA70244510D4724432E5D3F84CB85F0CDC4EB43F9C3BF14666BF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (412, N'HIST-00225', CAST(N'2024-09-03T16:09:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(235400.00 AS Decimal(18, 2)), N'E85A0142BFD9D8F6A25190B7DE08FA95ABB37D972CBCA4F41F26721AD358F55A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (413, N'HIST-00226', CAST(N'2024-09-15T10:28:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(142200.00 AS Decimal(18, 2)), N'649E5F529B1DB02AEE255E49D8F09A165ED58A58B5975026193D251AAD3996B6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (414, N'HIST-00227', CAST(N'2024-09-08T18:17:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(399900.00 AS Decimal(18, 2)), N'EC37EA0CDD9FE73BAA6B203D3B5843AA607532CE240C76BD22CEBE15529776E5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (415, N'HIST-00228', CAST(N'2024-10-24T16:36:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(121100.00 AS Decimal(18, 2)), N'EEDB1553B202BA0F5CC743CC0ABF3B81D3FB4D5698B0A26F88859A929D9590C0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (416, N'HIST-00229', CAST(N'2024-10-19T16:47:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(107700.00 AS Decimal(18, 2)), N'730BC8BFF57BBC795900FF9BB3B978439792A73B77D169723920BBFD1A655CE3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (417, N'HIST-00230', CAST(N'2024-10-08T16:46:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(421600.00 AS Decimal(18, 2)), N'D3A9199218C4FDBB32D7ABFBC2EC38DC22B9F3BFE024815FC6676FF6BE2ABFF3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (418, N'HIST-00231', CAST(N'2024-10-31T15:10:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(121100.00 AS Decimal(18, 2)), N'59C70BAB0BE0E50121EA052831C590AF59740B58AADC9B44B5EBE8404F3A020A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (419, N'HIST-00232', CAST(N'2024-10-10T13:40:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(165000.00 AS Decimal(18, 2)), N'8A9F9A90E7F67B23588DF931ECE2ED0AF0674FD1830B3B168CEB0AE56C287E70')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (420, N'HIST-00233', CAST(N'2024-10-16T13:21:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(278100.00 AS Decimal(18, 2)), N'18C811D753154A29DFF381AAC50578C9E2F759CC82B73BA9041E279375786321')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (421, N'HIST-00234', CAST(N'2024-10-06T17:10:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(251200.00 AS Decimal(18, 2)), N'4A17AAD42AE996842A30633F41C60D5ED00597A3655BF0B605B8697E35074F95')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (422, N'HIST-00235', CAST(N'2024-10-28T10:57:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(222500.00 AS Decimal(18, 2)), N'94835ABD2E3E71A2190067419AE14BE7E858315F7759FA5FBF5946B08137DBC4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (423, N'HIST-00236', CAST(N'2024-10-30T10:21:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(125600.00 AS Decimal(18, 2)), N'52ED6EEDA98662AB63D642A32DC2B21D7D452489F1FC745DC60A8A8CCFA7305A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (424, N'HIST-00237', CAST(N'2024-10-26T15:54:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(157000.00 AS Decimal(18, 2)), N'CB283A4CCA4D270DEAE48138E14E47DCC779739EAA8AE302D149876C6762F2E8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (425, N'HIST-00238', CAST(N'2024-10-28T12:14:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(242200.00 AS Decimal(18, 2)), N'82118205B1816B2251C46BFF34ABA2023B649B5A8873042A67D11B49719E167E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (426, N'HIST-00239', CAST(N'2024-11-27T12:16:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(144900.00 AS Decimal(18, 2)), N'DA44F12A7FD307C9E05E759F07FA0793A97ACADBD7B2CBE1A05D3060ED516B9D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (427, N'HIST-00240', CAST(N'2024-11-28T14:19:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(99600.00 AS Decimal(18, 2)), N'D4056640E2A1D75339945A545AB60D03FB7E50FE06884AB5AD89470619F39B47')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (428, N'HIST-00241', CAST(N'2024-11-05T14:04:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(244600.00 AS Decimal(18, 2)), N'2ED45739947E61488C2BDDACE6EC7F10F91DB9FFB0F56EFF98B16D166FC3F824')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (429, N'HIST-00242', CAST(N'2024-11-04T11:55:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(167600.00 AS Decimal(18, 2)), N'DA920E5B78691B58B09CC774E07C2A48BAFD52CB488535B79F5FF1A5762B1AE6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (430, N'HIST-00243', CAST(N'2024-11-29T12:28:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(294400.00 AS Decimal(18, 2)), N'959AC5EF1A95E8A7BFE04A4A3113743B8644ABDEE446C3A8FE96FD75547AD549')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (431, N'HIST-00244', CAST(N'2024-11-16T13:25:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(122300.00 AS Decimal(18, 2)), N'2107912A3E526FC0F5415B7EB90FACF5B68A4219AE3B131D16EB6796CCD53601')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (432, N'HIST-00245', CAST(N'2024-11-04T18:26:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(255500.00 AS Decimal(18, 2)), N'4A5383894F7A23E4868F05F0681740CEA44DC9E3C73BA46A592C85FDF15B9E7A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (433, N'HIST-00246', CAST(N'2024-11-06T12:05:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(122300.00 AS Decimal(18, 2)), N'E252140E0C56FC820F6267CDD5E18DA2FE4A445A481E59BC0CEA55C6A9FD0E99')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (434, N'HIST-00247', CAST(N'2024-11-18T17:11:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(154000.00 AS Decimal(18, 2)), N'E99E0966A1061B4094C036FAFB1EE19036049DFF2DBE77D1F027731A57226AF8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (435, N'HIST-00248', CAST(N'2024-11-08T10:59:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(210100.00 AS Decimal(18, 2)), N'1E6AD16C3D5C2B476FC7CD897ACB3EAAD4FE731E065995D25B3C2A146E372523')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (436, N'HIST-00249', CAST(N'2024-11-04T15:50:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(86000.00 AS Decimal(18, 2)), N'F3E6AC1AC90A7C36930905CC0E2927370B58890FDB62B10A9F162796123389C4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (437, N'HIST-00250', CAST(N'2024-11-16T17:21:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(108700.00 AS Decimal(18, 2)), N'4F266881DFE84B052A81CDB3366E06FF518CD3DDE5C23CD52E736A95A9FFAE0A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (438, N'HIST-00251', CAST(N'2024-11-18T19:24:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(429300.00 AS Decimal(18, 2)), N'DE371B2796384971700A1C215B79C66833DDBD4EEB9C54BF34A38036D121FED3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (439, N'HIST-00252', CAST(N'2024-11-03T15:00:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(389500.00 AS Decimal(18, 2)), N'EC8D2D7039A5C5812F6EB6AC58AAF4773642EECE3415A5ECA30190F2465F25C1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (440, N'HIST-00253', CAST(N'2024-11-23T11:28:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(83300.00 AS Decimal(18, 2)), N'129F776739BB851AACB018C0CF79DE441E85A7FC1EF24A6E52BBA76A2B30A397')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (441, N'HIST-00254', CAST(N'2024-11-06T16:07:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(267100.00 AS Decimal(18, 2)), N'8CB9B65C7A8C9050FFEFE1F3682852FC6A329CC3EA5B4C4B31DAEC351D3CEA87')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (442, N'HIST-00255', CAST(N'2024-11-11T19:43:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(135900.00 AS Decimal(18, 2)), N'98EB81377040278CF2491D550766D49B8AFBC73D27A7F0E2A3EF5097B81599E4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (443, N'HIST-00256', CAST(N'2024-11-15T10:40:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(357800.00 AS Decimal(18, 2)), N'D55D3A7DBA976A824E2D0FD6F83D26E5AAC783F0CDADB5C9647E866706FBB689')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (444, N'HIST-00257', CAST(N'2024-12-20T19:40:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(307200.00 AS Decimal(18, 2)), N'65C1C9ECEBF53A1B24E7D5D6AF27D1894142FEBC2E852312F2A55FCEF12CBA4B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (445, N'HIST-00258', CAST(N'2024-12-13T12:58:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(365700.00 AS Decimal(18, 2)), N'8C20094DEF6570C485C786BFD152E1221735CE077797D136DE6CCB15B41C9295')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (446, N'HIST-00259', CAST(N'2024-12-01T15:24:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(228600.00 AS Decimal(18, 2)), N'943EB27EB221418D3AD4966F128F2AA80429C917AA1A0445E5FF918DD0956010')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (447, N'HIST-00260', CAST(N'2024-12-18T13:46:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(173800.00 AS Decimal(18, 2)), N'135D35790EAA3460D24268A3D22EFB5034E84FB7768620942E589EF340123F9B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (448, N'HIST-00261', CAST(N'2024-12-23T19:09:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(71300.00 AS Decimal(18, 2)), N'AF0E8F4BF15FCFA02B418CE7B54706B3FE3466111F4ACC4845D2B44F820A4A74')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (449, N'HIST-00262', CAST(N'2024-12-06T10:47:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(86900.00 AS Decimal(18, 2)), N'FB37FDEB8F4E6BBA54B6BD889C785BE2831829B8D9664E28E6054D4AC2C524BE')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (450, N'HIST-00263', CAST(N'2024-12-14T19:03:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(88700.00 AS Decimal(18, 2)), N'19A388E54B6588F9FF56917E30E9489CA1449F885AFB815ECD182D2C848FABDF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (451, N'HIST-00264', CAST(N'2024-12-07T10:41:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(221200.00 AS Decimal(18, 2)), N'3C7BB7D3FD9567145375D1BBF1A44973796C5ACF3257EFADC5BEFA68A28F4C16')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (452, N'HIST-00265', CAST(N'2024-12-29T15:56:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(86900.00 AS Decimal(18, 2)), N'F7548A6E2D61B8D7362788FFB295743AFCD8F3A1091FD83735572FC991DB9A26')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (453, N'HIST-00266', CAST(N'2024-12-06T10:48:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(160000.00 AS Decimal(18, 2)), N'A3E9329A9A65A5FDF3779E8AB05B3735769103F1C7287858D66D9D08E1FEF9C8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (454, N'HIST-00267', CAST(N'2024-12-29T16:42:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(160000.00 AS Decimal(18, 2)), N'EB6F33650A156211EB7F62E9D573E8BC7A1BECFABBC113FE9400DE480CFFC555')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (455, N'HIST-00268', CAST(N'2024-12-12T13:09:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(240400.00 AS Decimal(18, 2)), N'F6887A9A186166216ACEDEC2B61955F6E87F60CA8DEAB595C5D9A12D82B4EF8E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (456, N'HIST-00269', CAST(N'2024-12-08T16:11:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(221300.00 AS Decimal(18, 2)), N'70492C88D8687452FD10DD1819B00FFD736A52A3378F7E80C6D8C52F07810036')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (457, N'HIST-00270', CAST(N'2024-12-01T17:46:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(169100.00 AS Decimal(18, 2)), N'F242735E70B1F2BB98CD980F0737F8873C2F071F9C3376FB8D7E6812F3A1DB55')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (458, N'HIST-00271', CAST(N'2024-12-11T14:25:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(169100.00 AS Decimal(18, 2)), N'F53F88BAFC698FAC8E0A85F671751D6701DCBF5A83249B694BD9B729912E0804')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (459, N'HIST-00272', CAST(N'2024-12-06T19:04:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(169100.00 AS Decimal(18, 2)), N'F7AF60CCB86E4900671275F6713C1423BF9ACF065625EE76E986CA9369D7D0E4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (460, N'HIST-00273', CAST(N'2024-12-24T11:34:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(109700.00 AS Decimal(18, 2)), N'973D71482CBCB2019A0BCD2F9E18101D9C78AE3109A1DE334FE5CA1A79297E89')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (461, N'HIST-00274', CAST(N'2024-12-03T11:06:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(86900.00 AS Decimal(18, 2)), N'ED168DA2A12AF93DAB9996A362F01873C14FDBEF3D5C09DAF3E2766A408F9F80')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (462, N'HIST-00275', CAST(N'2024-12-10T17:35:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(278800.00 AS Decimal(18, 2)), N'E7EED768D80928AF198C1C85C04F98CA786A907FA19C6D422BEF8EFA674C6924')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (463, N'HIST-00276', CAST(N'2024-12-27T15:48:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(242300.00 AS Decimal(18, 2)), N'485B260EA9A1898E13C5A9D9EF5ADBD1F95E8078373B920789C8EE816E258ACB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (464, N'HIST-00277', CAST(N'2024-12-13T17:13:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(84100.00 AS Decimal(18, 2)), N'B3C7B5E6619E2C81BF5BE9D615FA431414CFC50E2905C0F60B3E2F9974C54AE0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (465, N'HIST-00278', CAST(N'2024-12-16T19:37:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(344600.00 AS Decimal(18, 2)), N'1A6C0133A25E5AF9E3CFAE58132192E7ECD02D83B54D4232C9AC38D81DC5E0E6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (466, N'HIST-00279', CAST(N'2024-12-17T16:40:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(84100.00 AS Decimal(18, 2)), N'C4B118FEA733E458A353E30A6910722C70CF761BB3A34F8A4248742FE97B4720')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (467, N'HIST-00280', CAST(N'2025-01-04T15:29:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(182700.00 AS Decimal(18, 2)), N'7759CEC519243B7F03451595AF22743712450E0F54CFBC91739EEE1F2B308182')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (468, N'HIST-00281', CAST(N'2025-01-23T10:15:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(307400.00 AS Decimal(18, 2)), N'D1F0A5FE01266F34175689FB330C9C75BD3BFD3A1F18DD6BFBD3A64AA1433A07')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (469, N'HIST-00282', CAST(N'2025-01-02T16:28:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(240000.00 AS Decimal(18, 2)), N'F744B228D132A352EFE1DD8D56AD3A82EACDC37EE41062EE37507263D632D157')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (470, N'HIST-00283', CAST(N'2025-01-16T11:43:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(170700.00 AS Decimal(18, 2)), N'2316207448BB04CE2D5BF990059C9CAAF358E52AE06ACB4689552A70D5B962B1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (471, N'HIST-00284', CAST(N'2025-01-06T17:33:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(223300.00 AS Decimal(18, 2)), N'2430CB16F33E69927BB2316A84DFB1445BE9640ACB46A69B326204A48A518659')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (472, N'HIST-00285', CAST(N'2025-01-07T14:04:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(72000.00 AS Decimal(18, 2)), N'E783D7CF421D3E0B0CC91B0EFFE4BEC3D8A66DE07E50BFC2CD9395CEADA4ED6B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (473, N'HIST-00286', CAST(N'2025-01-08T17:18:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(106100.00 AS Decimal(18, 2)), N'CC0B3BC34E88AAFA7834235D532FF97ACCFF8A6881B9ADFD7366A19DD23DF4FA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (474, N'HIST-00287', CAST(N'2025-01-24T14:09:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(87700.00 AS Decimal(18, 2)), N'CDFEEDD541275E652651C0E1F6B339CFC2AE1A4F958E56B6415469BFC5A4FC4F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (475, N'HIST-00288', CAST(N'2025-01-08T13:54:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(72000.00 AS Decimal(18, 2)), N'0759C4B441130ACEC31A660864F68D165438884B43A9F9C75F6C493FF465ED3A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (476, N'HIST-00289', CAST(N'2025-01-10T13:20:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(133800.00 AS Decimal(18, 2)), N'8AFCD9E1FFF238EC6C1491D84910BDC70B7B5458E1A5165A42C76DBBC8797799')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (477, N'HIST-00290', CAST(N'2025-01-13T12:31:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(359800.00 AS Decimal(18, 2)), N'53FC11F6F11482F8982A2A00A0534D767F9EDEDAB4A4066257F3B430E1238743')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (478, N'HIST-00291', CAST(N'2025-01-23T16:37:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(129200.00 AS Decimal(18, 2)), N'44D376A909E98D2975819BACD61D0CA8AEF6EB1F276B7314FC147ABF35C237CE')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (479, N'HIST-00292', CAST(N'2025-02-16T17:08:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(111800.00 AS Decimal(18, 2)), N'208B6D09A8E7744082A365E17D60EC686C31E42E340A6F2A28B66664D73C6416')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (480, N'HIST-00293', CAST(N'2025-02-06T10:18:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(400500.00 AS Decimal(18, 2)), N'7F508FBF0F1D110868CEC91BBFFC767AFA71C4DEF614027AE5A3C54E50EC08E6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (481, N'HIST-00294', CAST(N'2025-02-19T12:12:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(253300.00 AS Decimal(18, 2)), N'8848FA201FF351BE63BEFD9B1A52A6227BB832D9378584848009AA635EA38B6C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (482, N'HIST-00295', CAST(N'2025-02-04T14:21:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(220800.00 AS Decimal(18, 2)), N'22C7A5ED90AB7A57D408D530593598A55BA216F51B945F22E3743359AAC9D9A5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (483, N'HIST-00296', CAST(N'2025-02-22T14:44:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(207800.00 AS Decimal(18, 2)), N'68551B5BE5DCD3D79CFCAA65A55EB74FA86D54C21A16E9CCCD420A6ADFAD2C85')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (484, N'HIST-00297', CAST(N'2025-02-26T17:20:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(246800.00 AS Decimal(18, 2)), N'5A0A6617F3887EAEFC7FB2E7D4ADFD8D4C7161AF40CE3E08B30D36467BF91956')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (485, N'HIST-00298', CAST(N'2025-02-06T19:56:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(139700.00 AS Decimal(18, 2)), N'8DA0ADFAFAF1FC97FD8AB537D3E10124BF75BD47495822ED564C7CCC28A2F7E4')
+GO
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (486, N'HIST-00299', CAST(N'2025-02-03T19:03:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(365100.00 AS Decimal(18, 2)), N'A313215D48D46C3DEE83330B2C04FB10DF3A96A7942C4BF8156726F216B5D1EE')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (487, N'HIST-00300', CAST(N'2025-02-27T16:24:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(130400.00 AS Decimal(18, 2)), N'84B9716C6A142D574508856C19FD933E1B092FA80598D082FAE1BA237DEBD0A1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (488, N'HIST-00301', CAST(N'2025-02-07T17:24:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(85700.00 AS Decimal(18, 2)), N'81E1445D434ADDAE64B7FE64BE025BEA15EA3717BB2ED40B99F0DB528043EA16')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (489, N'HIST-00302', CAST(N'2025-03-14T14:24:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(262300.00 AS Decimal(18, 2)), N'30121F8420F8E0850081737376FF3EB26F03F0C034CAA8C4E7ADFB932FE0D5EA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (490, N'HIST-00303', CAST(N'2025-03-31T11:05:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(73300.00 AS Decimal(18, 2)), N'F6A266FE373E51269B8D413D05502039B335D351D0CB7EC47C499EF8DF05A6D8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (491, N'HIST-00304', CAST(N'2025-03-18T12:04:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(150400.00 AS Decimal(18, 2)), N'3B533681650C211EA0254C3204E2CA9FA865BED706C72671E5D5C386623052B9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (492, N'HIST-00305', CAST(N'2025-03-03T14:07:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(112800.00 AS Decimal(18, 2)), N'80FBC819CE4F249CA4D026F89C16A7A0DDC717C6366AD751D0704683651ED107')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (493, N'HIST-00306', CAST(N'2025-03-29T17:17:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(249100.00 AS Decimal(18, 2)), N'6A036F3FD56688555BF32481A638368DB659C4DE44E9C171AD5D61507B234E9A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (494, N'HIST-00307', CAST(N'2025-03-02T18:33:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(126900.00 AS Decimal(18, 2)), N'067A2368AD519F67C11B5DD46122D802166D3A79127902BD23574C1E4721E0AA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (495, N'HIST-00308', CAST(N'2025-03-29T13:50:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(86500.00 AS Decimal(18, 2)), N'CBDBC61B7E91DFECD69D337F9DA2ED8DD37DAEC8EE04395007675C02752CB18C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (496, N'HIST-00309', CAST(N'2025-03-07T10:17:00.000' AS DateTime), N'12345671', N'Efectivo', CAST(131600.00 AS Decimal(18, 2)), N'CEBF208CE124B7A316FC73D8FA68585BDD0F497F51201FDADD1A36EBB617408C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (497, N'HIST-00310', CAST(N'2025-03-13T12:30:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(258500.00 AS Decimal(18, 2)), N'53D48589048867BD4F46277458EA0555C3CD80D623EE0FD3DAB3B8117AAE0EE3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (498, N'HIST-00311', CAST(N'2025-03-07T16:26:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(131600.00 AS Decimal(18, 2)), N'09CBE789C8A84D5F79555614091BF8A383310A72C20457D405A0E0D52ABF1FBF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (499, N'HIST-00312', CAST(N'2025-03-16T14:56:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(220900.00 AS Decimal(18, 2)), N'013681682E51FD465CDE0319EDA93E7F3C4EE6A20AB2A1D6A0BD77FF8D2BBFC3')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (500, N'HIST-00313', CAST(N'2025-03-07T11:12:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(194600.00 AS Decimal(18, 2)), N'6946954FD705375A51B077ADB7F698B31B6526CA4D3ECD3FF46ADDF9040949CC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (501, N'HIST-00314', CAST(N'2025-04-28T11:40:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(203900.00 AS Decimal(18, 2)), N'900CEF9AA58DF17C1DCF93E48E96FEDAD1D55061CF6BC44BB11077B2C254260C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (502, N'HIST-00315', CAST(N'2025-04-04T10:05:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(352900.00 AS Decimal(18, 2)), N'7BB88281A806C37924E770E65BC315A7E4585887324EF5888B0CBA2AF3C93113')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (503, N'HIST-00316', CAST(N'2025-04-07T18:08:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(260800.00 AS Decimal(18, 2)), N'D2F37526E7B19785990C47B751DC6EE5933C0247E6D4162C4448121D74EECB93')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (504, N'HIST-00317', CAST(N'2025-04-03T15:54:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(201100.00 AS Decimal(18, 2)), N'F34B3CC1EE275199C1A0BC76FF508DDBE6CFD3943F9019D534F1B40338E39CC0')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (505, N'HIST-00318', CAST(N'2025-04-15T13:16:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(161300.00 AS Decimal(18, 2)), N'EB50A6FBBDEB66BF2B28BF6CB4E6FF531B47D43DB9D8558C766E614C741A332B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (506, N'HIST-00319', CAST(N'2025-04-25T18:37:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(220100.00 AS Decimal(18, 2)), N'DDB0E8F5730E50471099D74A8FC9DAD10BBB14207EFEE1978631204C1510388F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (507, N'HIST-00320', CAST(N'2025-04-11T19:48:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(273200.00 AS Decimal(18, 2)), N'2A0AF553EE8C8997493716DB95B97AF594CA098CA1785AC97642BE21D716DF67')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (508, N'HIST-00321', CAST(N'2025-04-17T11:23:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(390900.00 AS Decimal(18, 2)), N'343529AF490C0F59FB85EB82EC8A4A5928A49C8EAC48679A36D4B0B1E0F44CF6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (509, N'HIST-00322', CAST(N'2025-04-10T13:34:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(355700.00 AS Decimal(18, 2)), N'C38F32381AC52BD4881CBE6BFC831801B3982665A6E8C424715174AA60CFBC40')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (510, N'HIST-00323', CAST(N'2025-04-09T18:46:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(286500.00 AS Decimal(18, 2)), N'74CA2550A86B55E9AE1F49120FB84EF278F24BF1D31653B7B0F69FF239542170')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (511, N'HIST-00324', CAST(N'2025-04-18T11:01:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(229600.00 AS Decimal(18, 2)), N'75445C739760CA8BD74C013AC7EB2B66350CDB64F8F2794F43561E087EFFDE26')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (512, N'HIST-00325', CAST(N'2025-04-25T18:22:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(137500.00 AS Decimal(18, 2)), N'804E99B2ED08EE77D1D1B1CA428D6E4FE187AB8B19CB100D3028386AE77E0E1A')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (513, N'HIST-00326', CAST(N'2025-05-11T15:12:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(114900.00 AS Decimal(18, 2)), N'2304FF4D69C7A8F05B175A2B1ABCBF8FF40AD3C5DD6BC721709F94BDF34A7640')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (514, N'HIST-00327', CAST(N'2025-05-28T11:32:00.000' AS DateTime), N'98765432', N'Efectivo', CAST(134000.00 AS Decimal(18, 2)), N'7B679F0473A0C78A2E5FB838BCEA4AAB9EE6BCF0291FA4FF65C7FC266E112E86')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (515, N'HIST-00328', CAST(N'2025-05-18T15:09:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(426000.00 AS Decimal(18, 2)), N'AB9B1EBA57DC2CF6E1C7BE2C8A0EB54EE95CEAAEC886C3C4A8CF8E198938FED4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (516, N'HIST-00329', CAST(N'2025-05-30T11:22:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(143600.00 AS Decimal(18, 2)), N'D90AA80C61490122A6908E4B70F715867B74E4F505F544A2173EB8E598BB97AC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (517, N'HIST-00330', CAST(N'2025-05-05T18:20:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(292000.00 AS Decimal(18, 2)), N'FE4A4DFD176BC9466011CD98342A8B25A5EC2CA133B202DF2DB62E252887157D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (518, N'HIST-00331', CAST(N'2025-05-04T13:19:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(516900.00 AS Decimal(18, 2)), N'A5F651D2CCC71E1B196B673558E5D72FF2D01D2C0A9D0DF5B7A73F3A4C211C07')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (519, N'HIST-00332', CAST(N'2025-05-02T16:15:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(114900.00 AS Decimal(18, 2)), N'0E3FDF68AE56FCE5D3C09090D54ECDF6FF600C76327E6887096F9EA0E9FFBA42')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (520, N'HIST-00333', CAST(N'2025-05-16T16:25:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(301500.00 AS Decimal(18, 2)), N'898AA176974E75A4F123A56273D25E2C6E04475D5B05633A2614EDDC776197E2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (521, N'HIST-00334', CAST(N'2025-05-29T11:07:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(143600.00 AS Decimal(18, 2)), N'6A63296229B15B4BEE98EFEDEB84E2162DD182C659B67EBF2F9BBB90B3E04447')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (522, N'HIST-00335', CAST(N'2025-05-04T19:37:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(198200.00 AS Decimal(18, 2)), N'92FD353B4879B16B80F221DBB6154ECA7B8CC5755DDE71CB6AB4861FF29E2500')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (523, N'HIST-00336', CAST(N'2025-05-20T16:29:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(234500.00 AS Decimal(18, 2)), N'12D986C627E8C29D0C9045D5A8B6D38BE69C34A80A3CE332687F3764E5C1C4B7')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (524, N'HIST-00337', CAST(N'2025-05-24T15:33:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(248800.00 AS Decimal(18, 2)), N'766DC26EC906C0D07C00A2036665E717AC9EB2E577052169071F69C0518BEBF6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (525, N'HIST-00338', CAST(N'2025-05-16T15:45:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(138800.00 AS Decimal(18, 2)), N'847710DBED8683E06185954746345F993A2EBA3D37CE22F345FD0086968865CC')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (526, N'HIST-00339', CAST(N'2025-06-22T16:18:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(284900.00 AS Decimal(18, 2)), N'EE3892D025415D7D0A2766C34710C8FCF46AD81FA478F925B52F02F44CF15695')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (527, N'HIST-00340', CAST(N'2025-06-21T19:54:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(169000.00 AS Decimal(18, 2)), N'5AD694BE01E581CBB88251D6F5F79D6EFF44F97AF4DFA42FCDFEFBE4016ACE8C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (528, N'HIST-00341', CAST(N'2025-06-25T14:35:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(364100.00 AS Decimal(18, 2)), N'B3C81740598E7111A26FC644CDB611411E3F353ABF8B92BEF5C2DE2BE8069E7C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (529, N'HIST-00342', CAST(N'2025-06-25T11:54:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(135200.00 AS Decimal(18, 2)), N'D131495F5238140374CBDD90E5D19B0AD34CDBCACE9F4A2DD3C0BC0284F710CA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (530, N'HIST-00343', CAST(N'2025-06-10T13:03:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(144900.00 AS Decimal(18, 2)), N'0755DE67CD2EEA23D214705EAF24F7E4D062A50A2250B2D002A284DBB6C9A641')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (531, N'HIST-00344', CAST(N'2025-06-04T18:52:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(169000.00 AS Decimal(18, 2)), N'7B1271F492B1EBE30067CCD9E87D0B70C3458A1D321D8274030A1185E06FFF59')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (532, N'HIST-00345', CAST(N'2025-06-16T14:13:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(154500.00 AS Decimal(18, 2)), N'E26707BEDC7638D62F558926B55771497A54643EB68F49AECB27AF2D3A2DAE7B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (533, N'HIST-00346', CAST(N'2025-06-07T17:52:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(391200.00 AS Decimal(18, 2)), N'F8D2432E741803EEBF6852F2851721B8706899394C0024AEB636109DBFEE8562')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (534, N'HIST-00347', CAST(N'2025-06-25T10:18:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(224100.00 AS Decimal(18, 2)), N'145B74AF0A9339DD2384DD22C5BEAFF4E5E862A821100B2C842F0FC596C8664F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (535, N'HIST-00348', CAST(N'2025-06-07T13:01:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(550600.00 AS Decimal(18, 2)), N'E4DC689D37CC96123CBE85F2EC1D36187EA14F369B76D18B1BFA516D3AC64E42')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (536, N'HIST-00349', CAST(N'2025-06-08T19:30:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(115900.00 AS Decimal(18, 2)), N'392C4243F2C5F8B92B1CF221B324681B9016B6E172A079236EA4E30E1457603D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (537, N'HIST-00350', CAST(N'2025-06-25T16:17:00.000' AS DateTime), N'33333333', N'Tarjeta', CAST(253000.00 AS Decimal(18, 2)), N'607406F4B91D3E4F45461D31D064A4F206F74B1710ECB6E1EC3AE95DF3CA1CB5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (538, N'HIST-00351', CAST(N'2025-06-13T18:28:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(169000.00 AS Decimal(18, 2)), N'96361BC3EBEFB24A4158EB23DCFBA161D2AAA368294DABBA562E97A4E960C50B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (539, N'HIST-00352', CAST(N'2025-06-02T10:01:00.000' AS DateTime), N'98765432', N'Tarjeta', CAST(106200.00 AS Decimal(18, 2)), N'4BA1D9B900C9E9F2DF8F2D5D3E89700DCD0FD73ECA999389D04EB5F465DFFD38')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (540, N'HIST-00353', CAST(N'2025-06-21T15:49:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(224000.00 AS Decimal(18, 2)), N'0CE0B24A8373033685D5467E85C8809151F9188F8318FB43899F8D938841A0A9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (541, N'HIST-00354', CAST(N'2025-06-09T14:19:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(334100.00 AS Decimal(18, 2)), N'005EE6492AEE948606A233C26293B2DA32F891C2DE9150874AA8806A1AF4E6E5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (542, N'HIST-00355', CAST(N'2025-07-26T12:19:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(76000.00 AS Decimal(18, 2)), N'CEC0B0FA68235C73526387ED16A8D00BAD1CA675B407765869DA950AB0D4F233')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (543, N'HIST-00356', CAST(N'2025-07-23T16:40:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(146100.00 AS Decimal(18, 2)), N'B2B5BAF4A48A10CD138EB29FE95C8DB17D4693D3B14BFB53989B1BB90D6A7441')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (544, N'HIST-00357', CAST(N'2025-07-30T12:13:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(126700.00 AS Decimal(18, 2)), N'1B99E2400D0D7552C94473FC468F72F2730127AC711B8F29DB10E0E85CA4A9FF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (545, N'HIST-00358', CAST(N'2025-07-16T19:54:00.000' AS DateTime), N'12345671', N'Tarjeta', CAST(180200.00 AS Decimal(18, 2)), N'BDAD8DA64337F112A9E564840CDA573BE3147D9333B1B2629565985E99EC0904')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (546, N'HIST-00359', CAST(N'2025-07-19T17:34:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(146100.00 AS Decimal(18, 2)), N'3649B09ABB901AFD71AA28ACF0EC98427509BD3B6B9C9F54E0B08AE384B411EA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (547, N'HIST-00360', CAST(N'2025-07-26T12:27:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(389700.00 AS Decimal(18, 2)), N'63A360BC302F730BF32D56A910430F217E8F154FBADE309A659175530BBBE0B6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (548, N'HIST-00361', CAST(N'2025-07-24T13:58:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(272800.00 AS Decimal(18, 2)), N'DA44093E6E4AB53CBE05E78A0B1F729A6FEC8A94D308C9D48D0237861A840463')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (549, N'HIST-00362', CAST(N'2025-07-21T19:41:00.000' AS DateTime), N'44444444', N'Efectivo', CAST(282600.00 AS Decimal(18, 2)), N'1FCF8CF47C700AF038D827ED1B4D7CDA57A1361A12F73A873D0B1BEEB0C769A4')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (550, N'HIST-00363', CAST(N'2025-07-28T16:30:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(126700.00 AS Decimal(18, 2)), N'4B9EFB60D1E6923807CD51A3952F0DEB70C6BCB1258BBBC7947268B8D795B1D2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (551, N'HIST-00364', CAST(N'2025-07-22T10:47:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(238700.00 AS Decimal(18, 2)), N'47B3F52F18D1073717F7B18BB815FFC669457974D3C69C4C1D3074091EEB1F69')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (552, N'HIST-00365', CAST(N'2025-07-10T16:35:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(146100.00 AS Decimal(18, 2)), N'8C1280B12D4187E7EE9F28109C81179C328B3C14C0FD4736D2B70BAA7BFC7EDD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (553, N'HIST-00366', CAST(N'2025-07-12T19:20:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(282500.00 AS Decimal(18, 2)), N'8F742839F84C0E1D4D1BF34533C4018030757B1584BF96C9C2A582E1FF6B3E80')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (554, N'HIST-00367', CAST(N'2025-07-08T16:05:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(136400.00 AS Decimal(18, 2)), N'01239CDFBC38DDA637B7E130027431C3E206BAB313C222A448BE2233B09A182E')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (555, N'HIST-00368', CAST(N'2025-07-02T14:38:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(146100.00 AS Decimal(18, 2)), N'162C869EE21871BC0067EF5C74D477BDB82E718C7569E0C4A558A7F81B3CF45C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (556, N'HIST-00369', CAST(N'2025-07-09T12:08:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(146100.00 AS Decimal(18, 2)), N'0B965E38AB76F4D52DF64055DD237FE7552A96750EDFA5DDAF5C1B6BE50622A2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (557, N'HIST-00370', CAST(N'2025-07-02T19:04:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(94500.00 AS Decimal(18, 2)), N'6313C944DD9790D100925B0645F641C65126B34158C40389D26418A07BC830AB')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (558, N'HIST-00371', CAST(N'2025-07-02T11:15:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(92600.00 AS Decimal(18, 2)), N'149ECA2D8FF8065C0C80F63EC32D2DD889FA7C943FA92F2EEEDDB94FB6D52B85')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (559, N'HIST-00372', CAST(N'2025-08-02T17:54:00.000' AS DateTime), N'40000002', N'Tarjeta', CAST(137600.00 AS Decimal(18, 2)), N'DB5A700A9B8B43AE60C1171E15AD4CF89EB325509069598BF6137146949483FF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (560, N'HIST-00373', CAST(N'2025-08-12T14:50:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(147400.00 AS Decimal(18, 2)), N'3ED54578A7B2BE1BBDC26A7CF982137AC20128A7E7EFC5C61FC99043A0701F79')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (561, N'HIST-00374', CAST(N'2025-08-18T15:17:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(93400.00 AS Decimal(18, 2)), N'D23788375D3B951C9D34903EA8B72F9D56911BF2C7776AF5224847F174277F7D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (562, N'HIST-00375', CAST(N'2025-08-04T19:05:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(321400.00 AS Decimal(18, 2)), N'91A8947E80D93926A83766033AE40272C8EB3C14F5DDE28A32B7FB45260C0528')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (563, N'HIST-00376', CAST(N'2025-08-27T10:27:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(147400.00 AS Decimal(18, 2)), N'5023D180D72A169FC3ED6CFC8C9E3E120837F5893B985C97AF2E3CE12E39656C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (564, N'HIST-00377', CAST(N'2025-08-19T16:34:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(290000.00 AS Decimal(18, 2)), N'28234050CEB9F55B83397C1A5F3102170565394DAF808B6BD4DB5933FE409B22')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (565, N'HIST-00378', CAST(N'2025-08-19T11:12:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(117900.00 AS Decimal(18, 2)), N'7793F41EEC5CE0EF32652A8D45B61AF9CD0DF52364ADD1FBC0CBAB478444F90D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (566, N'HIST-00379', CAST(N'2025-08-28T10:59:00.000' AS DateTime), N'33333333', N'Efectivo', CAST(95300.00 AS Decimal(18, 2)), N'A231C6A5C926A1E97F8DD51FEA7365666AAB2706EA6E9F58D668CBAE29BC2979')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (567, N'HIST-00380', CAST(N'2025-08-10T15:20:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(132700.00 AS Decimal(18, 2)), N'8762A1E9E1A7C49C1727802722C120E163D081364BDAC3853BA32B5E64686A81')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (568, N'HIST-00381', CAST(N'2025-08-08T13:42:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(267300.00 AS Decimal(18, 2)), N'702B5E8AF3DA73349F245337247C3C7B38A67ED433258CB08BE1397F66972022')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (569, N'HIST-00382', CAST(N'2025-08-07T15:07:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(147400.00 AS Decimal(18, 2)), N'75C98DE0BF4A78BF2739F7885874C51A960F6FFEA18B8FA2C26F45519C9F753B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (570, N'HIST-00383', CAST(N'2025-08-27T10:29:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(90400.00 AS Decimal(18, 2)), N'92B2B5C71B012DC999D6FD72B92753A237B56F35213111D5478E0CC46E4BF083')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (571, N'HIST-00384', CAST(N'2025-08-05T17:43:00.000' AS DateTime), N'22222222', N'Transferencia', CAST(181800.00 AS Decimal(18, 2)), N'634E3D49D4687B52B7C55F55763420AC179511B61DE64674FE93A356B55A44CA')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (572, N'HIST-00385', CAST(N'2025-09-02T18:23:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(257800.00 AS Decimal(18, 2)), N'2D6144CCAE530FA5BB40EC9EBBAAFAE30C4A2060F2E52519A10827576767BC41')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (573, N'HIST-00386', CAST(N'2025-09-11T12:16:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(173500.00 AS Decimal(18, 2)), N'5087740D485594344CCF3E37F979DD6358642BFDF4265DB2736334CF3F00C887')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (574, N'HIST-00387', CAST(N'2025-09-24T10:59:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(510600.00 AS Decimal(18, 2)), N'9372EDE0A10CE711AE3C37B7F6BFE2371A7508183A4EFE12DC863AB17A8BE9F6')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (575, N'HIST-00388', CAST(N'2025-09-25T16:33:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(138800.00 AS Decimal(18, 2)), N'0CADB1E6CAD8E88163F6FD644F96E40E0EFFC954E02284D186E95962F5752F4B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (576, N'HIST-00389', CAST(N'2025-09-03T17:39:00.000' AS DateTime), N'55555555', N'Efectivo', CAST(341000.00 AS Decimal(18, 2)), N'52762E9D9A31E5976478CBCBEC806B79917882D6EE762720B4BDC3B43A10D026')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (577, N'HIST-00390', CAST(N'2025-09-23T16:50:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(143800.00 AS Decimal(18, 2)), N'313966EEBDEE23036C807E14E676264BE62111F43EE114245F00E4FC0914F2AD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (578, N'HIST-00391', CAST(N'2025-09-11T19:52:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(471000.00 AS Decimal(18, 2)), N'479FD62FFDA42291B583B370D7A3BA22B6457EEE41D5688B6B503A52278400C5')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (579, N'HIST-00392', CAST(N'2025-09-16T15:55:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(324200.00 AS Decimal(18, 2)), N'8B5F4586DCDB4AE44AF0D1FB01649D05CF0382ADBCA07B63395AFE3081A5184B')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (580, N'HIST-00393', CAST(N'2025-09-15T14:18:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(77300.00 AS Decimal(18, 2)), N'EBFBB15E817D80EAFB338A2AEC2A7CD3E51A9ECDD16B6FFC66D004FCF9DC8B2F')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (581, N'HIST-00394', CAST(N'2025-09-25T17:42:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(148700.00 AS Decimal(18, 2)), N'42B41D05AD872A14E79C20BE0E9C0BD6B948348D2FE2CC36BB2795CEC61F42BF')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (582, N'HIST-00395', CAST(N'2025-09-17T13:05:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(138800.00 AS Decimal(18, 2)), N'924646A5366F8DD16B3EB175742646CFF2B4AC966C3632B44E1586E06A0C09E9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (583, N'HIST-00396', CAST(N'2025-09-03T18:16:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(143800.00 AS Decimal(18, 2)), N'6AFC9B15583559AA392477DC7FC72F0B00EB68BE7831DA3764A030D03828DC67')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (584, N'HIST-00397', CAST(N'2025-09-13T15:49:00.000' AS DateTime), N'33333333', N'Transferencia', CAST(158600.00 AS Decimal(18, 2)), N'154CBA792903DEAFB807A1080DB8D9F9C89E31EE0B39FE4DFD1B80E04D9FE3E9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (585, N'HIST-00398', CAST(N'2025-10-31T12:41:00.000' AS DateTime), N'40000002', N'Efectivo', CAST(385000.00 AS Decimal(18, 2)), N'35F98E3E087F0EB74D09C717215476A75565D1B47561500C93EAF6FEACD2EB17')
+GO
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (586, N'HIST-00399', CAST(N'2025-10-08T19:58:00.000' AS DateTime), N'55555555', N'Transferencia', CAST(189000.00 AS Decimal(18, 2)), N'78927405622E18D8947CAAB79A3B138EA5BD933D9B27340B459D65A474C1A717')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (587, N'HIST-00400', CAST(N'2025-10-01T18:18:00.000' AS DateTime), N'40000001', N'Tarjeta', CAST(263000.00 AS Decimal(18, 2)), N'6E185C305D49CF2D8AED0F9FE3F244B352D73F0ADDA6053D90699EB61CC22A5D')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (588, N'HIST-00401', CAST(N'2025-10-04T18:56:00.000' AS DateTime), N'40000001', N'Transferencia', CAST(283000.00 AS Decimal(18, 2)), N'8A0F5695F3E62EF9EE4EFF6E19669F544A597DC82A75F5E39C83937B321D35D2')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (589, N'HIST-00402', CAST(N'2025-10-11T16:55:00.000' AS DateTime), N'44444444', N'Transferencia', CAST(95000.00 AS Decimal(18, 2)), N'FAA100B9BA0FD63AFC58F1A9C23AC0188AFD31F48EA601AFBC9F4721BE6FCCB9')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (590, N'HIST-00403', CAST(N'2025-10-25T13:50:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(120000.00 AS Decimal(18, 2)), N'436529FBEA058F35E15015580D84419E04D9AC22189460B522F8A7911A508159')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (591, N'HIST-00404', CAST(N'2025-10-12T10:18:00.000' AS DateTime), N'22222222', N'Efectivo', CAST(97000.00 AS Decimal(18, 2)), N'DDC35C43EB4F47F83DFF29FA0FDD4665E3153C26A70F2D667D04D1A5713A7FBD')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (592, N'HIST-00405', CAST(N'2025-10-07T11:30:00.000' AS DateTime), N'22222222', N'Tarjeta', CAST(150000.00 AS Decimal(18, 2)), N'FE736F3E223A2472999C2BB657B7F2B8B3756E3B791D5BA624AD7FEEC89AC053')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (593, N'HIST-00406', CAST(N'2025-10-11T19:27:00.000' AS DateTime), N'40000002', N'Transferencia', CAST(250000.00 AS Decimal(18, 2)), N'1291706122CBF674592CC51DCEB32D3254DFD7D49486EA25EBCE85969294640C')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (594, N'HIST-00407', CAST(N'2025-10-01T18:38:00.000' AS DateTime), N'40000001', N'Efectivo', CAST(255000.00 AS Decimal(18, 2)), N'A8294DCA958D7A8FBD7C0EC068013FA8180676ACF6612B1CB03F4F4A1DEE9FA1')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (595, N'HIST-00408', CAST(N'2025-10-28T11:51:00.000' AS DateTime), N'98765432', N'Transferencia', CAST(156000.00 AS Decimal(18, 2)), N'9A7DA283FF1B0507C8F6EC0EF680061E3634C9712C1A122F593DDEBBC426C712')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (596, N'HIST-00409', CAST(N'2025-10-03T15:29:00.000' AS DateTime), N'44444444', N'Tarjeta', CAST(402000.00 AS Decimal(18, 2)), N'C96622232CA93A0ED6CD050EFF1D12EE3DDC8F9BEBBC31E157AA535E0218A4A8')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (597, N'HIST-00410', CAST(N'2025-10-14T18:45:00.000' AS DateTime), N'55555555', N'Tarjeta', CAST(92000.00 AS Decimal(18, 2)), N'2803A292C488E376EC9F76273F630F89506784336B9F7761E3218B1E807A1133')
+INSERT [dbo].[Venta] ([IdVenta], [NroComprobante], [Fecha], [DNICliente], [MedioPago], [Total], [DV]) VALUES (598, N'HIST-00411', CAST(N'2025-10-03T15:07:00.000' AS DateTime), N'12345671', N'Transferencia', CAST(378000.00 AS Decimal(18, 2)), N'7A984F62CCFE411A534EBE2984C5C8ADA9944E065337D75DBBE129CCB36C583E')
 SET IDENTITY_INSERT [dbo].[Venta] OFF
 GO
 SET ANSI_PADDING ON
 GO
-/****** Objeto: Index [UQ_Categoria_Nombre] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_Categoria_Nombre] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[Categoria] ADD  CONSTRAINT [UQ_Categoria_Nombre] UNIQUE NONCLUSTERED 
 (
 	[Nombre] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Objeto: Index [UQ_DetalleImportacion_Linea] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_DetalleImportacion_Linea] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[DetalleImportacion] ADD  CONSTRAINT [UQ_DetalleImportacion_Linea] UNIQUE NONCLUSTERED 
 (
 	[IdImportacion] ASC,
 	[Linea] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Objeto: Index [UQ_Factura_IdOrden] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_Factura_IdOrden] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[Factura] ADD  CONSTRAINT [UQ_Factura_IdOrden] UNIQUE NONCLUSTERED 
 (
 	[IdOrden] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Objeto: Index [UQ_ImportacionProducto_Remito] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_ImportacionProducto_Remito] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[ImportacionProducto] ADD  CONSTRAINT [UQ_ImportacionProducto_Remito] UNIQUE NONCLUSTERED 
 (
 	[IdProveedor] ASC,
 	[NroRemito] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Objeto: Index [UQ_Marca_Nombre] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_Marca_Nombre] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[Marca] ADD  CONSTRAINT [UQ_Marca_Nombre] UNIQUE NONCLUSTERED 
 (
 	[Nombre] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Objeto: Index [UQ_OrdenCompra_IdSolicitud] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_OrdenCompra_IdSolicitud] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[OrdenCompra] ADD  CONSTRAINT [UQ_OrdenCompra_IdSolicitud] UNIQUE NONCLUSTERED 
 (
 	[IdSolicitud] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
-/****** Objeto: Index [UQ_Recepcion_IdOrden] Fecha de script: 03/11/2026 18:42:09 ******/
+SET ANSI_PADDING ON
+GO
+/****** Objeto: Index [UQ_Producto_Atributos] Fecha de script: 16/11/2026 12:41:09 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_Producto_Atributos] ON [dbo].[Producto]
+(
+	[IdMarca] ASC,
+	[Modelo] ASC,
+	[Color] ASC,
+	[Talle] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+/****** Objeto: Index [IX_ProductoCambio_Fecha] Fecha de script: 16/11/2026 12:41:09 ******/
+CREATE NONCLUSTERED INDEX [IX_ProductoCambio_Fecha] ON [dbo].[ProductoCambio]
+(
+	[FechaHora] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+/****** Objeto: Index [IX_ProductoCambio_Producto] Fecha de script: 16/11/2026 12:41:09 ******/
+CREATE NONCLUSTERED INDEX [IX_ProductoCambio_Producto] ON [dbo].[ProductoCambio]
+(
+	[IdProducto] ASC,
+	[IdCambio] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Objeto: Index [UQ_Proveedor_CUIT] Fecha de script: 16/11/2026 12:41:09 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [UQ_Proveedor_CUIT] ON [dbo].[Proveedor]
+(
+	[CUIT] ASC
+)
+WHERE ([CUIT] IS NOT NULL)
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+/****** Objeto: Index [UQ_Recepcion_IdOrden] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[Recepcion] ADD  CONSTRAINT [UQ_Recepcion_IdOrden] UNIQUE NONCLUSTERED 
 (
 	[IdOrden] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Objeto: Index [UQ_Usuarios_DNI] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_Usuarios_DNI] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[Usuarios] ADD  CONSTRAINT [UQ_Usuarios_DNI] UNIQUE NONCLUSTERED 
 (
 	[DNI] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Objeto: Index [UQ_Usuarios_Email] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_Usuarios_Email] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[Usuarios] ADD  CONSTRAINT [UQ_Usuarios_Email] UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 SET ANSI_PADDING ON
 GO
-/****** Objeto: Index [UQ_Usuarios_Usuario] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: Index [UQ_Usuarios_Usuario] Fecha de script: 16/11/2026 12:41:09 ******/
 ALTER TABLE [dbo].[Usuarios] ADD  CONSTRAINT [UQ_Usuarios_Usuario] UNIQUE NONCLUSTERED 
 (
 	[NombreUsuario] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[BitacoraEvento] ADD  DEFAULT (getdate()) FOR [Fecha]
 GO
@@ -4522,6 +5888,8 @@ GO
 ALTER TABLE [dbo].[ImportacionProducto] ADD  CONSTRAINT [DF_ImportacionProducto_Rechazadas]  DEFAULT ((0)) FOR [LineasRechazadas]
 GO
 ALTER TABLE [dbo].[OrdenCompra] ADD  DEFAULT ('Pendiente de Recepción') FOR [Estado]
+GO
+ALTER TABLE [dbo].[ProductoCambio] ADD  CONSTRAINT [DF_ProductoCambio_FechaHora]  DEFAULT (getdate()) FOR [FechaHora]
 GO
 ALTER TABLE [dbo].[Usuarios] ADD  DEFAULT ((1)) FOR [Activo]
 GO
@@ -4683,7 +6051,11 @@ ALTER TABLE [dbo].[Producto]  WITH CHECK ADD  CONSTRAINT [CK_Producto_Stock] CHE
 GO
 ALTER TABLE [dbo].[Producto] CHECK CONSTRAINT [CK_Producto_Stock]
 GO
-/****** Objeto: StoredProcedure [dbo].[BitacoraEvento_Filtrar] Fecha de script: 03/11/2026 18:42:09 ******/
+ALTER TABLE [dbo].[ProductoCambio]  WITH CHECK ADD  CONSTRAINT [CK_ProductoCambio_Operacion] CHECK  (([Operacion]='B' OR [Operacion]='M' OR [Operacion]='A' OR [Operacion]='I'))
+GO
+ALTER TABLE [dbo].[ProductoCambio] CHECK CONSTRAINT [CK_ProductoCambio_Operacion]
+GO
+/****** Objeto: StoredProcedure [dbo].[BitacoraEvento_Filtrar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4712,7 +6084,7 @@ BEGIN
     ORDER BY b.Fecha DESC;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[BitacoraEvento_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[BitacoraEvento_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4729,7 +6101,7 @@ BEGIN
     ORDER BY b.Fecha DESC;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[BitacoraEvento_Registrar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[BitacoraEvento_Registrar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4750,7 +6122,7 @@ BEGIN
     SELECT CAST(SCOPE_IDENTITY() AS int) AS Numero;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Carrito_ActualizarEstado] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Carrito_ActualizarEstado] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4771,7 +6143,7 @@ BEGIN
     UPDATE Carrito SET Estado = @Estado WHERE IdCarrito = @IdCarrito;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Carrito_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Carrito_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4794,7 +6166,7 @@ BEGIN
     SELECT CAST(SCOPE_IDENTITY() AS int) AS IdCarrito;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Carrito_Obtener] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Carrito_Obtener] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4813,7 +6185,7 @@ BEGIN
     WHERE IdCarrito = @IdCarrito;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Carrito_ObtenerActivoPorDNI] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Carrito_ObtenerActivoPorDNI] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4836,7 +6208,7 @@ BEGIN
     ORDER BY Fecha DESC;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Categoria_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Categoria_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4852,7 +6224,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Categoria_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Categoria_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4867,7 +6239,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Categoria_EstaEnUso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Categoria_EstaEnUso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4883,7 +6255,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Categoria_ExisteNombre] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Categoria_ExisteNombre] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4900,7 +6272,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Categoria_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Categoria_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4919,7 +6291,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Categoria_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Categoria_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4935,7 +6307,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Cliente_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Cliente_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4957,7 +6329,7 @@ BEGIN
     VALUES (@DNI, @Nombre, @Apellido, @Correo, @Telefono);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Cliente_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Cliente_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4975,7 +6347,7 @@ BEGIN
     WHERE DNI = @DNI;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Cliente_Existe] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Cliente_Existe] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -4994,7 +6366,7 @@ BEGIN
     WHERE DNI = @DNI;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Cliente_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Cliente_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5011,7 +6383,7 @@ BEGIN
     FROM Cliente;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Cliente_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Cliente_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5037,7 +6409,7 @@ BEGIN
     WHERE DNI = @DNI;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Cliente_Obtener] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Cliente_Obtener] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5056,7 +6428,7 @@ BEGIN
     WHERE DNI = @DNI;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Cliente_TieneVentas] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Cliente_TieneVentas] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5071,7 +6443,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleCarrito_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleCarrito_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5093,7 +6465,7 @@ BEGIN
     VALUES (@IdCarrito, @IdProducto, @Cantidad, @Precio, @Subtotal);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleCarrito_ListarPorCarrito] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleCarrito_ListarPorCarrito] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5112,7 +6484,7 @@ BEGIN
     WHERE IdCarrito = @IdCarrito;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleImportacion_ListarPorImportacion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleImportacion_ListarPorImportacion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5131,7 +6503,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleImportacion_ProcesarLinea] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleImportacion_ProcesarLinea] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5213,7 +6585,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleImportacion_RegistrarRechazo] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleImportacion_RegistrarRechazo] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5257,7 +6629,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleOrdenCompra_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleOrdenCompra_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5280,7 +6652,7 @@ BEGIN
     VALUES (@IdOrden, @IdProducto, @Cantidad, @CostoUnitario, @Subtotal);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleOrdenCompra_ListarPorOrden] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleOrdenCompra_ListarPorOrden] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5303,7 +6675,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleOrdenCompra_ObtenerUltimoCosto] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleOrdenCompra_ObtenerUltimoCosto] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5320,7 +6692,7 @@ BEGIN
     ORDER BY o.Fecha DESC;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleRecepcion_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleRecepcion_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5338,7 +6710,7 @@ BEGIN
     VALUES (@IdRecepcion, @IdProducto, @CantidadRecibida, @CantidadFaltante);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleRecepcion_ListarPorRecepcion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleRecepcion_ListarPorRecepcion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5358,7 +6730,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleSolicitudCompra_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleSolicitudCompra_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5379,7 +6751,7 @@ BEGIN
     VALUES (@IdSolicitud, @IdProducto, @CantidadSolicitada);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleSolicitudCompra_ListarPorSolicitud] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleSolicitudCompra_ListarPorSolicitud] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5399,7 +6771,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleVenta_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleVenta_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5422,7 +6794,7 @@ BEGIN
     VALUES (@IdVenta, @IdProducto, @Cantidad, @PrecioUnitario, @Subtotal);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DetalleVenta_ListarPorVenta] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DetalleVenta_ListarPorVenta] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5442,7 +6814,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_BitacoraEvento] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_BitacoraEvento] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5462,7 +6834,7 @@ BEGIN
     UPDATE BitacoraEvento SET DV = @DV WHERE Numero = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Carrito] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Carrito] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5476,7 +6848,7 @@ BEGIN
     UPDATE Carrito SET DV = @DV WHERE IdCarrito = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Categoria] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Categoria] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5492,7 +6864,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Cliente] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Cliente] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5506,7 +6878,7 @@ BEGIN
     UPDATE Cliente SET DV = @DV WHERE DNI = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleCarrito] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleCarrito] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5520,7 +6892,7 @@ BEGIN
     UPDATE DetalleCarrito SET DV = @DV WHERE IdDetalle = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleImportacion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleImportacion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5536,7 +6908,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleOrdenCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleOrdenCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5551,7 +6923,7 @@ BEGIN
     UPDATE DetalleOrdenCompra SET DV = @DV WHERE IdDetalleOrden = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleRecepcion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleRecepcion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5566,7 +6938,7 @@ BEGIN
     UPDATE DetalleRecepcion SET DV = @DV WHERE IdDetalleRecepcion = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleSolicitudCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleSolicitudCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5581,7 +6953,7 @@ BEGIN
     UPDATE DetalleSolicitudCompra SET DV = @DV WHERE IdDetalleSolicitud = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleVenta] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_DetalleVenta] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5596,7 +6968,7 @@ BEGIN
     UPDATE DetalleVenta SET DV = @DV WHERE IdDetalleVenta = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Factura] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Factura] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5611,7 +6983,7 @@ BEGIN
     UPDATE Factura SET DV = @DV WHERE IdFactura = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Familia] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Familia] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5625,7 +6997,7 @@ BEGIN
     UPDATE Familia SET DV = @DV WHERE IdFamilia = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Idioma] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Idioma] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5639,7 +7011,7 @@ BEGIN
     UPDATE Idioma SET DV = @DV WHERE NombreIdioma = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_ImportacionProducto] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_ImportacionProducto] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5655,7 +7027,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Marca] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Marca] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5671,7 +7043,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_OrdenCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_OrdenCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5686,7 +7058,7 @@ BEGIN
     UPDATE OrdenCompra SET DV = @DV WHERE IdOrden = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Perfil] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Perfil] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5700,7 +7072,7 @@ BEGIN
     UPDATE Perfil SET DV = @DV WHERE IdPerfil = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Permiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Permiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5714,7 +7086,7 @@ BEGIN
     UPDATE Permiso SET DV = @DV WHERE IdPermiso = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Producto] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Producto] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5728,7 +7100,21 @@ BEGIN
     UPDATE Producto SET DV = @DV WHERE IdProducto = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Proveedor] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_ProductoCambio] Fecha de script: 16/11/2026 12:41:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROC [dbo].[DV_ActualizarFila_ProductoCambio]
+    @Id int, @DV varchar(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE dbo.ProductoCambio SET DV = @DV WHERE IdCambio = @Id;
+END
+GO
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Proveedor] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5743,7 +7129,7 @@ BEGIN
     UPDATE Proveedor SET DV = @DV WHERE IdProveedor = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Recepcion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Recepcion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5758,7 +7144,7 @@ BEGIN
     UPDATE Recepcion SET DV = @DV WHERE IdRecepcion = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_SolicitudCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_SolicitudCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5773,7 +7159,7 @@ BEGIN
     UPDATE SolicitudCompra SET DV = @DV WHERE IdSolicitud = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Usuarios] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Usuarios] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5787,7 +7173,7 @@ BEGIN
     UPDATE Usuarios SET DV = @DV WHERE IdUsuario = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Venta] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ActualizarFila_Venta] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5802,7 +7188,7 @@ BEGIN
     UPDATE Venta SET DV = @DV WHERE IdVenta = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_GuardarDV] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_GuardarDV] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5818,7 +7204,7 @@ BEGIN
     UPDATE DV SET DVH = @DVH, DVV = @DVV WHERE Tabla = @Tabla;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_BitacoraEvento] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_BitacoraEvento] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5830,14 +7216,14 @@ GO
 
 CREATE   PROC [dbo].[DV_Leer_BitacoraEvento] AS BEGIN SET NOCOUNT ON; SELECT * FROM BitacoraEvento; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Carrito] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Carrito] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Carrito] AS BEGIN SET NOCOUNT ON; SELECT * FROM Carrito; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Categoria] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Categoria] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5854,21 +7240,21 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Cliente] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Cliente] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Cliente] AS BEGIN SET NOCOUNT ON; SELECT * FROM Cliente; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleCarrito] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleCarrito] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_DetalleCarrito] AS BEGIN SET NOCOUNT ON; SELECT * FROM DetalleCarrito; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleImportacion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleImportacion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5882,7 +7268,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleOrdenCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleOrdenCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5895,7 +7281,7 @@ BEGIN
     SELECT * FROM DetalleOrdenCompra;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleRecepcion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleRecepcion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5908,7 +7294,7 @@ BEGIN
     SELECT * FROM DetalleRecepcion;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleSolicitudCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleSolicitudCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5921,7 +7307,7 @@ BEGIN
     SELECT * FROM DetalleSolicitudCompra;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleVenta] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_DetalleVenta] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5938,7 +7324,7 @@ BEGIN
     SELECT * FROM DetalleVenta;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Factura] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Factura] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5955,28 +7341,28 @@ BEGIN
     SELECT * FROM Factura;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Familia] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Familia] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Familia] AS BEGIN SET NOCOUNT ON; SELECT * FROM Familia; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Familia_Permiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Familia_Permiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Familia_Permiso] AS BEGIN SET NOCOUNT ON; SELECT * FROM Familia_Permiso; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Idioma] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Idioma] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Idioma] AS BEGIN SET NOCOUNT ON; SELECT * FROM Idioma; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_ImportacionProducto] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_ImportacionProducto] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -5993,7 +7379,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Marca] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Marca] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6007,7 +7393,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_OrdenCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_OrdenCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6020,42 +7406,54 @@ BEGIN
     SELECT * FROM OrdenCompra;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Perfil] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Perfil] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Perfil] AS BEGIN SET NOCOUNT ON; SELECT * FROM Perfil; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Perfil_Familia] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Perfil_Familia] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Perfil_Familia] AS BEGIN SET NOCOUNT ON; SELECT * FROM Perfil_Familia; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Perfil_Permiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Perfil_Permiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Perfil_Permiso] AS BEGIN SET NOCOUNT ON; SELECT * FROM Perfil_Permiso; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Permiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Permiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Permiso] AS BEGIN SET NOCOUNT ON; SELECT * FROM Permiso; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Producto] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Producto] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Producto] AS BEGIN SET NOCOUNT ON; SELECT * FROM Producto; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Proveedor] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_ProductoCambio] Fecha de script: 16/11/2026 12:41:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROC [dbo].[DV_Leer_ProductoCambio] AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT * FROM dbo.ProductoCambio ORDER BY IdCambio;
+END
+GO
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Proveedor] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6072,7 +7470,7 @@ BEGIN
     SELECT * FROM Proveedor;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Recepcion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Recepcion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6089,7 +7487,7 @@ BEGIN
     SELECT * FROM Recepcion;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_SolicitudCompra] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_SolicitudCompra] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6106,14 +7504,14 @@ BEGIN
     SELECT * FROM SolicitudCompra;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Usuarios] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Usuarios] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE   PROC [dbo].[DV_Leer_Usuarios] AS BEGIN SET NOCOUNT ON; SELECT * FROM Usuarios; END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_Leer_Venta] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_Leer_Venta] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6132,7 +7530,7 @@ BEGIN
     SELECT * FROM Venta;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ObtenerDVH] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ObtenerDVH] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6146,7 +7544,7 @@ BEGIN
     SELECT DVH FROM DV WHERE Tabla = @Tabla;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[DV_ObtenerDVV] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[DV_ObtenerDVV] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6166,7 +7564,7 @@ BEGIN
     SELECT DVV FROM DV WHERE Tabla = @Tabla;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Factura_ActualizarEstadoYPago] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Factura_ActualizarEstadoYPago] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6182,7 +7580,7 @@ BEGIN
     UPDATE Factura SET Estado = @Estado, MedioPago = @MedioPago WHERE IdFactura = @IdFactura;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Factura_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Factura_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6213,7 +7611,7 @@ BEGIN
     SELECT @IdFactura;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6228,7 +7626,7 @@ BEGIN
     SELECT CAST(SCOPE_IDENTITY() AS int) AS Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_AsignarPermiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_AsignarPermiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6243,7 +7641,7 @@ BEGIN
     INSERT INTO Familia_Permiso (IdFamilia, IdPermiso) VALUES (@IdFamilia, @IdPermiso);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6257,7 +7655,7 @@ BEGIN
     DELETE FROM Familia WHERE IdFamilia = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_EliminarVinculosPerfil] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_EliminarVinculosPerfil] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6273,7 +7671,7 @@ BEGIN
     DELETE FROM Perfil_Familia WHERE IdFamilia = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_EliminarVinculosPermiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_EliminarVinculosPermiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6287,7 +7685,7 @@ BEGIN
     DELETE FROM Familia_Permiso WHERE IdFamilia = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_EstaAsignadaAPerfil] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_EstaAsignadaAPerfil] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6301,7 +7699,7 @@ BEGIN
     SELECT COUNT(*) FROM Perfil_Familia WHERE IdFamilia = @IdFamilia;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6315,7 +7713,7 @@ BEGIN
     FROM Familia;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_ListarPermisos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_ListarPermisos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6332,7 +7730,7 @@ BEGIN
     WHERE fp.IdFamilia = @IdFamilia;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6347,7 +7745,7 @@ BEGIN
     UPDATE Familia SET Nombre = @Nombre WHERE IdFamilia = @Id;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_QuitarPermiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_QuitarPermiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6362,7 +7760,7 @@ BEGIN
     DELETE FROM Familia_Permiso WHERE IdFamilia = @IdFamilia AND IdPermiso = @IdPermiso;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Familia_TienePermiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Familia_TienePermiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6377,7 +7775,7 @@ BEGIN
     SELECT COUNT(1) FROM Familia_Permiso WHERE IdFamilia = @IdFamilia AND IdPermiso = @IdPermiso;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_Cerrar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_Cerrar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6408,7 +7806,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_Crear] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_Crear] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6429,7 +7827,7 @@ BEGIN
     SELECT CAST(SCOPE_IDENTITY() AS int);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_ObtenerPorHuella] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_ObtenerPorHuella] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6449,7 +7847,7 @@ BEGIN
     ORDER BY IdImportacion;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_ObtenerPorRemito] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[ImportacionProducto_ObtenerPorRemito] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6473,7 +7871,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Marca_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Marca_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6489,7 +7887,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Marca_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Marca_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6504,7 +7902,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Marca_EstaEnUso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Marca_EstaEnUso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6520,7 +7918,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Marca_ExisteNombre] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Marca_ExisteNombre] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6536,7 +7934,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Marca_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Marca_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6551,7 +7949,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Marca_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Marca_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6567,7 +7965,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ActualizarEstado] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ActualizarEstado] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6582,7 +7980,7 @@ BEGIN
     UPDATE OrdenCompra SET Estado = @Estado WHERE IdOrden = @IdOrden;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[OrdenCompra_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[OrdenCompra_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6612,7 +8010,7 @@ BEGIN
     SELECT @IdOrden;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ListarPendientesDeFacturacion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ListarPendientesDeFacturacion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6632,7 +8030,7 @@ BEGIN
     ORDER BY Fecha ASC;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ListarPendientesDeRecepcion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ListarPendientesDeRecepcion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6655,7 +8053,7 @@ BEGIN
     ORDER BY Fecha ASC;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ObtenerPorId] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[OrdenCompra_ObtenerPorId] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6670,7 +8068,7 @@ BEGIN
     WHERE IdOrden = @IdOrden;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6684,7 +8082,7 @@ BEGIN
     INSERT INTO Perfil (Nombre) VALUES (@Nombre);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_AsignarFamilia] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_AsignarFamilia] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6699,7 +8097,7 @@ BEGIN
     INSERT INTO Perfil_Familia (IdPerfil, IdFamilia) VALUES (@IdPerfil, @IdFamilia);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_AsignarPermiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_AsignarPermiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6714,7 +8112,7 @@ BEGIN
     INSERT INTO Perfil_Permiso (IdPerfil, IdPermiso) VALUES (@IdPerfil, @IdPermiso);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6728,7 +8126,7 @@ BEGIN
     DELETE FROM Perfil WHERE IdPerfil = @IdPerfil;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6742,7 +8140,7 @@ BEGIN
     FROM Perfil;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_ListarFamilias] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_ListarFamilias] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6760,7 +8158,7 @@ BEGIN
     WHERE pf.IdPerfil = @IdPerfil;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_ListarPermisos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_ListarPermisos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6778,7 +8176,7 @@ BEGIN
     WHERE pp.IdPerfil = @IdPerfil;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6793,7 +8191,7 @@ BEGIN
     UPDATE Perfil SET Nombre = @Nombre WHERE IdPerfil = @IdPerfil;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_ObtenerPermisosPorRol] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_ObtenerPermisosPorRol] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6822,7 +8220,7 @@ BEGIN
     WHERE per.Nombre = @NombreRol;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_QuitarFamilia] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_QuitarFamilia] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6837,7 +8235,7 @@ BEGIN
     DELETE FROM Perfil_Familia WHERE IdPerfil = @IdPerfil AND IdFamilia = @IdFamilia;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_QuitarPermiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_QuitarPermiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6852,7 +8250,7 @@ BEGIN
     DELETE FROM Perfil_Permiso WHERE IdPerfil = @IdPerfil AND IdPermiso = @IdPermiso;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_TieneFamilia] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_TieneFamilia] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6867,7 +8265,7 @@ BEGIN
     SELECT COUNT(1) FROM Perfil_Familia WHERE IdPerfil = @IdPerfil AND IdFamilia = @IdFamilia;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_TienePermiso] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_TienePermiso] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6882,7 +8280,7 @@ BEGIN
     SELECT COUNT(1) FROM Perfil_Permiso WHERE IdPerfil = @IdPerfil AND IdPermiso = @IdPermiso;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Perfil_TieneUsuarios] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Perfil_TieneUsuarios] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6896,7 +8294,7 @@ BEGIN
     SELECT COUNT(*) FROM Usuarios WHERE IdPerfil = @IdPerfil;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Permiso_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Permiso_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6910,7 +8308,7 @@ BEGIN
     FROM Permiso;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_ActualizarStock] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_ActualizarStock] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6932,7 +8330,7 @@ BEGIN
         THROW 50001, 'Stock insuficiente o producto inexistente.', 1;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6957,7 +8355,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_AumentarStock] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_AumentarStock] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -6977,7 +8375,7 @@ BEGIN
     UPDATE Producto SET Stock = Stock + @Cantidad WHERE IdProducto = @IdProducto;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_Buscar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_Buscar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7007,7 +8405,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7022,7 +8420,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_ExisteCombinacion] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_ExisteCombinacion] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7045,7 +8443,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7066,13 +8464,12 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
--- El stock NO se modifica desde aca: solo cambia con ventas (resta) y compras (suma)
 CREATE   PROC [dbo].[Producto_Modificar]
     @IdProducto int,
     @IdMarca int,
@@ -7080,7 +8477,8 @@ CREATE   PROC [dbo].[Producto_Modificar]
     @Modelo varchar(50),
     @Color varchar(30),
     @Talle varchar(10),
-    @Precio decimal(18,2)
+    @Precio decimal(18,2),
+    @Stock int
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -7090,12 +8488,12 @@ BEGIN
         Modelo = @Modelo,
         Color = @Color,
         Talle = @Talle,
-        Precio = @Precio
+        Precio = @Precio,
+        Stock = @Stock
     WHERE IdProducto = @IdProducto;
 END
-
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_ObtenerPorAtributos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_ObtenerPorAtributos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7118,7 +8516,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_ObtenerPorId] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_ObtenerPorId] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7138,7 +8536,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Producto_TieneMovimientos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Producto_TieneMovimientos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7160,7 +8558,160 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Proveedor_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[ProductoCambio_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE   PROC [dbo].[ProductoCambio_Listar]
+    @Marca  varchar(50) = NULL,
+    @Modelo varchar(50) = NULL,
+    @Color  varchar(50) = NULL,
+    @Talle  varchar(10) = NULL,
+    @Desde  datetime = NULL,
+    @Hasta  datetime = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT c.IdCambio, c.IdProducto, c.FechaHora, c.Operacion,
+           c.IdMarca, ISNULL(m.Nombre, '(' + CAST(c.IdMarca AS varchar(10)) + ')') AS Marca,
+           c.IdCategoria, ISNULL(ca.Nombre, '(' + CAST(c.IdCategoria AS varchar(10)) + ')') AS Categoria,
+           c.Modelo, c.Color, c.Talle, c.Precio, c.Stock, c.Vigente
+    FROM dbo.ProductoCambio c
+    LEFT JOIN dbo.Marca m ON m.IdMarca = c.IdMarca
+    LEFT JOIN dbo.Categoria ca ON ca.IdCategoria = c.IdCategoria
+    WHERE (@Marca  IS NULL OR m.Nombre LIKE '%' + @Marca  + '%')
+      AND (@Modelo IS NULL OR c.Modelo LIKE '%' + @Modelo + '%')
+      AND (@Color  IS NULL OR c.Color  LIKE '%' + @Color  + '%')
+      AND (@Talle  IS NULL OR c.Talle  LIKE '%' + @Talle  + '%')
+      AND (@Desde  IS NULL OR c.FechaHora >= @Desde)
+      AND (@Hasta  IS NULL OR c.FechaHora < DATEADD(DAY, 1, @Hasta))
+    ORDER BY c.FechaHora DESC, c.IdCambio DESC;
+END
+GO
+/****** Objeto: StoredProcedure [dbo].[ProductoCambio_Restaurar] Fecha de script: 16/11/2026 12:41:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROC [dbo].[ProductoCambio_Restaurar]
+    @IdCambio int
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    DECLARE @IdProducto int, @Operacion char(1), @IdMarca int, @IdCategoria int,
+            @Modelo varchar(50), @Color varchar(30), @Talle varchar(10), @Precio decimal(18,2), @Stock int,
+            @Destino int;
+
+    SELECT @IdProducto = IdProducto, @Operacion = Operacion, @IdMarca = IdMarca, @IdCategoria = IdCategoria,
+           @Modelo = Modelo, @Color = Color, @Talle = Talle, @Precio = Precio, @Stock = Stock
+    FROM dbo.ProductoCambio
+    WHERE IdCambio = @IdCambio;
+
+    IF @IdProducto IS NULL
+    BEGIN
+        SELECT 1 AS Codigo;
+        RETURN;
+    END
+
+    SET @Destino = @IdCambio;
+
+    -- La baja guarda los ultimos datos que tenia el producto: se restauran esos datos. La version que pasa a ser la vigente es
+    -- la ultima anterior a la baja que tiene exactamente esos datos (puede no ser la ultima por fecha si antes se restauro una version vieja).
+    IF @Operacion = 'B'
+    BEGIN
+        SET @Destino = NULL;
+
+        SELECT TOP (1) @Destino = IdCambio
+        FROM dbo.ProductoCambio
+        WHERE IdProducto = @IdProducto AND IdCambio < @IdCambio AND Operacion <> 'B'
+          AND IdMarca = @IdMarca AND IdCategoria = @IdCategoria
+          AND Modelo COLLATE Latin1_General_BIN2 = @Modelo COLLATE Latin1_General_BIN2
+          AND Color COLLATE Latin1_General_BIN2 = @Color COLLATE Latin1_General_BIN2
+          AND Talle COLLATE Latin1_General_BIN2 = @Talle COLLATE Latin1_General_BIN2
+          AND Precio = @Precio AND Stock = @Stock
+        ORDER BY IdCambio DESC;
+
+        -- Si ninguna version tiene esos datos, se usa la ultima version real anterior a la baja
+        IF @Destino IS NULL
+            SELECT TOP (1) @Destino = IdCambio
+            FROM dbo.ProductoCambio
+            WHERE IdProducto = @IdProducto AND IdCambio < @IdCambio AND Operacion <> 'B'
+            ORDER BY IdCambio DESC;
+
+        IF @Destino IS NULL SET @Destino = @IdCambio;
+    END
+
+    IF EXISTS (SELECT 1 FROM dbo.Producto WHERE IdProducto = @IdProducto)
+       AND EXISTS (SELECT 1 FROM dbo.ProductoCambio WHERE IdCambio = @Destino AND Vigente = 1)
+    BEGIN
+        SELECT 2 AS Codigo;
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.Marca WHERE IdMarca = @IdMarca)
+    BEGIN
+        SELECT 3 AS Codigo;
+        RETURN;
+    END
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.Categoria WHERE IdCategoria = @IdCategoria)
+    BEGIN
+        SELECT 4 AS Codigo;
+        RETURN;
+    END
+
+    IF EXISTS (SELECT 1 FROM dbo.Producto
+               WHERE IdMarca = @IdMarca AND Modelo = @Modelo AND Color = @Color AND Talle = @Talle AND IdProducto <> @IdProducto)
+    BEGIN
+        SELECT 5 AS Codigo;
+        RETURN;
+    END
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Avisa al trigger que este cambio no se registra como una version nueva
+        EXEC sp_set_session_context @key = N'RestaurandoProducto', @value = 1;
+
+        IF EXISTS (SELECT 1 FROM dbo.Producto WHERE IdProducto = @IdProducto)
+        BEGIN
+            UPDATE dbo.Producto
+            SET IdMarca = @IdMarca, IdCategoria = @IdCategoria, Modelo = @Modelo, Color = @Color,
+                Talle = @Talle, Precio = @Precio, Stock = @Stock
+            WHERE IdProducto = @IdProducto;
+        END
+        ELSE
+        BEGIN
+            SET IDENTITY_INSERT dbo.Producto ON;
+            INSERT INTO dbo.Producto (IdProducto, IdMarca, IdCategoria, Modelo, Color, Talle, Precio, Stock)
+            VALUES (@IdProducto, @IdMarca, @IdCategoria, @Modelo, @Color, @Talle, @Precio, @Stock);
+            SET IDENTITY_INSERT dbo.Producto OFF;
+        END
+
+        -- La marca de version vigente pasa a la version restaurada
+        UPDATE dbo.ProductoCambio SET Vigente = 0 WHERE IdProducto = @IdProducto AND Vigente = 1;
+        UPDATE dbo.ProductoCambio SET Vigente = 1 WHERE IdCambio = @Destino;
+
+        EXEC sp_set_session_context @key = N'RestaurandoProducto', @value = NULL;
+
+        COMMIT TRANSACTION;
+        SELECT 0 AS Codigo;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+        SET IDENTITY_INSERT dbo.Producto OFF;
+        EXEC sp_set_session_context @key = N'RestaurandoProducto', @value = NULL;
+        THROW;
+    END CATCH
+END
+
+GO
+/****** Objeto: StoredProcedure [dbo].[Proveedor_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7180,7 +8731,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Proveedor_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Proveedor_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7195,7 +8746,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Proveedor_ExisteCUIT] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Proveedor_ExisteCUIT] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7211,7 +8762,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Proveedor_ExisteNombre] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Proveedor_ExisteNombre] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7227,7 +8778,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Proveedor_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Proveedor_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7246,7 +8797,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Proveedor_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Proveedor_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7270,7 +8821,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Proveedor_TieneMovimientos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Proveedor_TieneMovimientos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7287,7 +8838,7 @@ BEGIN
 END
 
 GO
-/****** Objeto: StoredProcedure [dbo].[Recepcion_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Recepcion_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7316,7 +8867,7 @@ BEGIN
     SELECT @IdRecepcion;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Recepcion_ObtenerPorIdOrden] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Recepcion_ObtenerPorIdOrden] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7337,7 +8888,7 @@ BEGIN
     WHERE IdOrden = @IdOrden;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Reporte_ClientesFrecuentes] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Reporte_ClientesFrecuentes] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7367,7 +8918,7 @@ BEGIN
     ORDER BY SUM(v.Total) DESC, c.Apellido, c.Nombre;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Reporte_EstadoStock] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Reporte_EstadoStock] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7406,7 +8957,7 @@ BEGIN
     ORDER BY t.Estado, t.Marca, t.Modelo, t.Color, t.Talle;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Reporte_ResumenVentas] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Reporte_ResumenVentas] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7428,7 +8979,42 @@ BEGIN
     WHERE v.Fecha >= @Desde AND v.Fecha < DATEADD(DAY, 1, @Hasta);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Reporte_TopProductos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Reporte_RotacionProductos] Fecha de script: 16/11/2026 12:41:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROC [dbo].[Reporte_RotacionProductos]
+    @Desde date,
+    @Hasta date
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Ventas del rango por producto (cada producto es un modelo + color + talle)
+    ;WITH Vendido AS (
+        SELECT d.IdProducto,
+               SUM(d.Cantidad) AS Unidades,
+               SUM(d.Subtotal) AS Monto
+        FROM dbo.Venta v
+        INNER JOIN dbo.DetalleVenta d ON d.IdVenta = v.IdVenta
+        WHERE v.Fecha >= @Desde AND v.Fecha < DATEADD(DAY, 1, @Hasta)
+        GROUP BY d.IdProducto
+    )
+    SELECT m.Nombre AS Marca,
+           p.Modelo AS Modelo,
+           CAST(ISNULL(SUM(x.Unidades), 0) AS INT) AS Unidades,
+           CAST(ISNULL(SUM(x.Monto), 0) AS DECIMAL(18, 2)) AS Monto,
+           CAST(ISNULL(SUM(p.Stock), 0) AS INT) AS Stock
+    FROM dbo.Producto p
+    INNER JOIN dbo.Marca m ON m.IdMarca = p.IdMarca
+    LEFT JOIN Vendido x ON x.IdProducto = p.IdProducto
+    GROUP BY m.Nombre, p.Modelo
+    ORDER BY SUM(ISNULL(x.Unidades, 0)) DESC, m.Nombre, p.Modelo;
+END
+GO
+/****** Objeto: StoredProcedure [dbo].[Reporte_TopProductos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7457,7 +9043,7 @@ BEGIN
     ORDER BY SUM(d.Cantidad) DESC, SUM(d.Subtotal) DESC, m.Nombre, p.Modelo;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Reporte_VentasMedioPago] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Reporte_VentasMedioPago] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7480,7 +9066,7 @@ BEGIN
     ORDER BY SUM(v.Total) DESC, v.MedioPago;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Reporte_VentasPorPeriodo] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Reporte_VentasPorPeriodo] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7529,7 +9115,7 @@ BEGIN
     ORDER BY v.Periodo;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_ActualizarEstado] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_ActualizarEstado] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7544,7 +9130,7 @@ BEGIN
     UPDATE SolicitudCompra SET Estado = @Estado WHERE IdSolicitud = @IdSolicitud;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7569,7 +9155,7 @@ BEGIN
     SELECT CAST(SCOPE_IDENTITY() AS INT);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_ListarPendientes] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_ListarPendientes] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7590,7 +9176,7 @@ BEGIN
     ORDER BY Fecha ASC;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_ObtenerPorId] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[SolicitudCompra_ObtenerPorId] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7610,7 +9196,7 @@ BEGIN
     WHERE IdSolicitud = @IdSolicitud;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuario_ActualizarIdioma] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuario_ActualizarIdioma] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7627,7 +9213,7 @@ BEGIN
     WHERE IdUsuario = @IdUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuario_ObtenerIdioma] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuario_ObtenerIdioma] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7643,7 +9229,7 @@ BEGIN
     WHERE IdUsuario = @IdUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_ActualizarIntentos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_ActualizarIntentos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7660,7 +9246,7 @@ BEGIN
     WHERE NombreUsuario = @NombreUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7687,7 +9273,7 @@ BEGIN
     VALUES (@DNI, @Nombre, @Apellido, @Email, @NombreUsuario, @Contraseña, @Activo, @Bloqueado, @IntentosFallidos, @Rol, @IdPerfil, @NombreIdioma, @DebeCambiarContraseña);
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_Bloquear] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_Bloquear] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7704,7 +9290,7 @@ BEGIN
     WHERE NombreUsuario = @NombreUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_BloquearPorDNI] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_BloquearPorDNI] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7720,7 +9306,7 @@ BEGIN
     WHERE DNI = @DNI;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_CambiarContraseña] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_CambiarContraseña] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7737,7 +9323,7 @@ BEGIN
     WHERE IdUsuario = @IdUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_Desbloquear] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_Desbloquear] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7753,7 +9339,7 @@ BEGIN
     WHERE DNI = @DNI;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_Eliminar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_Eliminar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7767,7 +9353,7 @@ BEGIN
     DELETE FROM Usuarios WHERE IdUsuario = @IdUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_InvertirActivo] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_InvertirActivo] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7784,7 +9370,7 @@ BEGIN
     WHERE DNI = @DNI;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_Listar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_Listar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7799,7 +9385,7 @@ BEGIN
     FROM Usuarios;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_ListarActivos] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_ListarActivos] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7815,7 +9401,7 @@ BEGIN
     WHERE Activo = 1;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_Modificar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_Modificar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7839,7 +9425,7 @@ BEGIN
     WHERE IdUsuario = @IdUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Usuarios_ObtenerPorNombreUsuario] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Usuarios_ObtenerPorNombreUsuario] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7859,7 +9445,7 @@ BEGIN
     WHERE NombreUsuario = @NombreUsuario;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Venta_Agregar] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Venta_Agregar] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7891,7 +9477,7 @@ BEGIN
     SELECT @IdVenta;
 END
 GO
-/****** Objeto: StoredProcedure [dbo].[Venta_ObtenerPorId] Fecha de script: 03/11/2026 18:42:09 ******/
+/****** Objeto: StoredProcedure [dbo].[Venta_ObtenerPorId] Fecha de script: 16/11/2026 12:41:09 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -7912,6 +9498,71 @@ BEGIN
     WHERE IdVenta = @IdVenta;
 END
 GO
+/****** Objeto: Trigger [dbo].[TR_Producto_Cambios] Fecha de script: 16/11/2026 12:41:09 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 
-SET NOEXEC OFF
+CREATE   TRIGGER [dbo].[TR_Producto_Cambios]
+ON [dbo].[Producto]
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Cuando el cambio lo hace ProductoCambio_Restaurar no se registra nada: el propio procedimiento deja el historial acomodado
+    IF CONVERT(int, SESSION_CONTEXT(N'RestaurandoProducto')) = 1
+        RETURN;
+
+    DECLARE @Ahora datetime = GETDATE();
+
+    -- Altas y modificaciones. En una modificacion solo cuenta si cambio algun dato del producto:
+    -- si lo unico que cambia es el DV, no se genera version.
+    DECLARE @Versiones TABLE (
+        IdProducto int, Operacion char(1), IdMarca int, IdCategoria int,
+        Modelo varchar(50), Color varchar(30), Talle varchar(10), Precio decimal(18,2), Stock int);
+
+    INSERT INTO @Versiones (IdProducto, Operacion, IdMarca, IdCategoria, Modelo, Color, Talle, Precio, Stock)
+    SELECT i.IdProducto,
+           CASE WHEN d.IdProducto IS NULL THEN 'A' ELSE 'M' END,
+           i.IdMarca, i.IdCategoria, i.Modelo, i.Color, i.Talle, i.Precio, i.Stock
+    FROM inserted i
+    LEFT JOIN deleted d ON d.IdProducto = i.IdProducto
+    WHERE d.IdProducto IS NULL
+       OR NOT EXISTS (
+            SELECT i.IdMarca, i.IdCategoria,
+                   i.Modelo COLLATE Latin1_General_BIN2, i.Color COLLATE Latin1_General_BIN2, i.Talle COLLATE Latin1_General_BIN2,
+                   i.Precio, i.Stock
+            INTERSECT
+            SELECT d.IdMarca, d.IdCategoria,
+                   d.Modelo COLLATE Latin1_General_BIN2, d.Color COLLATE Latin1_General_BIN2, d.Talle COLLATE Latin1_General_BIN2,
+                   d.Precio, d.Stock);
+
+    -- La version anterior deja de ser la vigente y entra la nueva
+    UPDATE c
+    SET c.Vigente = 0
+    FROM dbo.ProductoCambio c
+    INNER JOIN @Versiones v ON v.IdProducto = c.IdProducto
+    WHERE c.Vigente = 1;
+
+    INSERT INTO dbo.ProductoCambio (IdProducto, FechaHora, Operacion, IdMarca, IdCategoria, Modelo, Color, Talle, Precio, Stock, Vigente)
+    SELECT v.IdProducto, @Ahora, v.Operacion, v.IdMarca, v.IdCategoria, v.Modelo, v.Color, v.Talle, v.Precio, v.Stock, 1
+    FROM @Versiones v;
+
+    -- Bajas: quedan guardados los ultimos datos del producto. Un producto eliminado no tiene version vigente.
+    UPDATE c
+    SET c.Vigente = 0
+    FROM dbo.ProductoCambio c
+    INNER JOIN deleted d ON d.IdProducto = c.IdProducto
+    WHERE c.Vigente = 1
+      AND NOT EXISTS (SELECT 1 FROM inserted i WHERE i.IdProducto = d.IdProducto);
+
+    INSERT INTO dbo.ProductoCambio (IdProducto, FechaHora, Operacion, IdMarca, IdCategoria, Modelo, Color, Talle, Precio, Stock, Vigente)
+    SELECT d.IdProducto, @Ahora, 'B', d.IdMarca, d.IdCategoria, d.Modelo, d.Color, d.Talle, d.Precio, d.Stock, 0
+    FROM deleted d
+    WHERE NOT EXISTS (SELECT 1 FROM inserted i WHERE i.IdProducto = d.IdProducto);
+END
+GO
+ALTER TABLE [dbo].[Producto] ENABLE TRIGGER [TR_Producto_Cambios]
 GO

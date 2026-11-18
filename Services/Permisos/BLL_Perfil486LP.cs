@@ -15,8 +15,6 @@ namespace Services
         private BLL_Patente486LP _bllPatente = new BLL_Patente486LP();
         private BLL_Bitacora486LP _bllBitacora = new BLL_Bitacora486LP();
 
-        // Patentes mínimas que todo perfil debe conservar (igual que las familias): sin ellas el usuario
-        // no podría cambiar su contraseña ni cerrar sesión.
         private readonly string[] _patentesBase = { "CAMBIAR_CONTRASENA_ACEPTAR", "CAMBIAR_CONTRASENA_SALIR", "CERRAR_SESION_ACEPTAR", "CERRAR_SESION_CANCELAR" };
 
         public List<Perfil486LP> ObtenerPerfiles()

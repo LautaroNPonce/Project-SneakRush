@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobrar venta - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="cobrar-venta">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Venta › Cobrar venta</div>
+<h1>Cobrar venta</h1>
+<p class="bajada">Buscás el carrito guardado de un cliente por su DNI, elegís cómo paga y cobrás. Al cobrar se registra la venta, se descuenta el stock y se genera un comprobante en PDF.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Venta › Cobrar venta</b></span><span class="chip">Lo usa: <b>Administrador, Cajero</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/cobrar-venta.png" alt="Pantalla Cobrar venta de SneakRush con el DNI del cliente, el detalle de la venta, el método de pago, el total y los botones Cobrar, Ver comprobante y Cancelar" width="740" height="510">
+<button type="button" class="hs" data-n="1" aria-label="DNI del cliente" style="left:13.514%;top:11.373%;width:16.216%;height:4.314%"><span class="pin">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Seleccionar" style="left:30.405%;top:11.176%;width:14.459%;height:4.706%"><span class="pin der">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Detalle de la venta" style="left:2.568%;top:22.745%;width:94.189%;height:28.039%"><span class="pin der">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Método de pago" style="left:2.568%;top:54.118%;width:27.027%;height:19.216%"><span class="pin aba">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Datos de la tarjeta" style="left:32.162%;top:54.118%;width:64.865%;height:19.216%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Total" style="left:3.108%;top:83.333%;width:22.973%;height:5.098%"><span class="pin der">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Cobrar" style="left:2.432%;top:90.784%;width:22.027%;height:6.275%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Ver comprobante" style="left:26.622%;top:90.784%;width:22.027%;height:6.275%"><span class="pin aba">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Cancelar" style="left:75.000%;top:90.784%;width:22.027%;height:6.275%"><span class="pin aba">9</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>DNI del cliente</b><span>Documento del cliente que va a pagar: 7 u 8 números, sin puntos ni espacios.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Seleccionar</b><span>Busca el carrito guardado de ese cliente y lo muestra abajo. Si el cliente no está registrado, te lleva a registrarlo antes de seguir.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Detalle de la venta</b><span>Lo que lleva el cliente: marca, modelo, color, talle, cantidad, precio y subtotal. Es de solo lectura: si hay que cambiar algo se hace en Cargar carrito.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Método de pago</b><span>Efectivo, Tarjeta o Transferencia. Se habilita cuando hay un carrito listo para cobrar.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Datos de la tarjeta</b><span>Solo se usan si el pago es con tarjeta: número de 16 dígitos, vencimiento en formato MM/AA y CVV de 3 dígitos. Los separadores se agregan solos.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Total</b><span>Lo que se le cobra al cliente: la suma de todos los subtotales.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Cobrar</b><span>Registra el pago y la venta. Está gris hasta que haya un carrito seleccionado con cliente registrado y stock suficiente.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Ver comprobante</b><span>Abre el PDF de la venta ya cobrada para mostrarlo o imprimirlo. Solo se habilita después de cobrar.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Cancelar</b><span>Con un carrito seleccionado, lo cancela (pide confirmación). Sin carrito, o después de cobrar, simplemente cierra la pantalla.</span></div></li>
+</ul>
+<h2>Otras vistas de esta pantalla</h2>
+<figure class="extra"><img src="img/cobrar-venta-extra1.png" alt="Cobrar venta con el método de pago Tarjeta elegido y los datos de la tarjeta habilitados" width="740" height="510" loading="lazy"><figcaption><b>Pago con tarjeta.</b> Al elegir Tarjeta se habilitan el número, el vencimiento y el CVV. Si cambiás a otro método, esos datos se borran.</figcaption></figure>
+<figure class="extra"><img src="img/cobrar-venta-extra2.png" alt="Aviso: Ese cliente no tiene un carrito activo para cobrar" width="330" height="150" loading="lazy"><figcaption><b>Cliente sin carrito.</b> Si el DNI no tiene un carrito guardado, el sistema avisa. Primero hay que armarlo en Cargar carrito y tocar Finalizar carga.</figcaption></figure>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Cobrar un carrito</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Cliente que todavía no está registrado</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Cancelar un carrito</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Escribí el <span class="btn">DNI del cliente</span> y tocá <span class="btn">Seleccionar</span>.</li><li>Revisá el detalle y el Total.</li><li>Elegí el método de pago. Si es <span class="btn">Tarjeta</span>, completá número, vencimiento y CVV.</li><li>Tocá <span class="btn naranja">Cobrar</span>.</li><li>Con tarjeta o transferencia aparece &quot;Procesando pago...&quot; unos segundos mientras se confirma con el banco.</li><li>Aparece &quot;Venta registrada correctamente&quot; y se genera el comprobante. Tocá <span class="btn">Ver comprobante</span> para abrirlo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> El stock se descuenta recién al cobrar. Hasta ese momento el carrito no reserva zapatillas.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Al tocar <span class="btn">Seleccionar</span>, el sistema avisa que el cliente no está registrado.</li><li>Se abre la pantalla de clientes con el DNI ya cargado. Completá los datos y guardá.</li><li>Si queda registrado, el cobro continúa. Si no, el carrito queda sin cobrar: podés volver a tocar <span class="btn">Seleccionar</span> para intentarlo otra vez o <span class="btn">Cancelar</span> para descartar el carrito.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Seleccioná el carrito del cliente.</li><li>Tocá <span class="btn rojo">Cancelar</span> y confirmá.</li><li>El carrito queda en estado Cancelado y la pantalla se cierra.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Un carrito cancelado no se puede volver a cobrar.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">13</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo error">Error</span>DNI incorrecto. Debe tener 7 u 8 dígitos numéricos (sin puntos ni espacios).</td><td>Corregí el DNI.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Ese cliente no tiene un carrito activo para cobrar.</td><td>Armá el carrito en Cargar carrito y guardalo con Finalizar carga.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El cliente con DNI (número) no está registrado. Debe registrarlo para continuar con el cobro.</td><td>Se abre el alta de clientes con ese DNI.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El cliente con DNI (número) sigue sin estar registrado, por lo que no se puede cobrar.</td><td>Registralo tocando Seleccionar de nuevo, o cancelá el carrito.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No se puede cobrar: no hay stock suficiente de los siguientes productos: (lista).</td><td>Alguna zapatilla ya no tiene el stock pedido. Ajustá el carrito en Cargar carrito.</td></tr>
+<tr><td><span class="tipo error">Error</span>El número de tarjeta debe tener 16 dígitos.</td><td>Revisá el número.</td></tr>
+<tr><td><span class="tipo error">Error</span>El vencimiento debe tener el formato MM/AA.</td><td>Por ejemplo 08/29.</td></tr>
+<tr><td><span class="tipo error">Error</span>La tarjeta está vencida.</td><td>Pedí otra tarjeta u otro medio de pago.</td></tr>
+<tr><td><span class="tipo error">Error</span>El CVV debe tener 3 dígitos.</td><td>Revisá el código del dorso.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No se registró la venta porque el stock cambió mientras se procesaba el pago. Revise el carrito y vuelva a intentar.</td><td>Alguien más vendió ese producto en el medio. Revisá el stock.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Venta registrada correctamente.</td><td>El pago quedó registrado y el stock descontado.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La transacción se registró, pero no se pudo generar el comprobante. Puede intentarlo de nuevo con &quot;Ver comprobante&quot;.</td><td>La venta está hecha; solo falta el PDF.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Confirma la cancelación del carrito del cliente con DNI (número)? El carrito quedará en estado Cancelado.</td><td>Sí cancela el carrito; No lo deja como está.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">7</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo se cobra un carrito guardado en estado Activo. Los carritos se arman en Cargar carrito.</li><li>El cliente tiene que estar registrado antes de cobrar.</li><li>Si cobrás en efectivo el pago se confirma al instante. Con tarjeta o transferencia el sistema espera la confirmación del banco unos segundos.</li><li>Al cobrar se registra la venta, se descuenta el stock y el movimiento queda en la bitácora.</li><li>El comprobante es un PDF que se guarda en la carpeta Comprobantes, junto al programa.</li><li>Cada botón depende de los permisos de tu perfil: Seleccionar, Cobrar, Ver comprobante y Cancelar se pueden habilitar por separado.</li><li>Después de cobrar, la pantalla queda bloqueada con esa venta: para cobrar otra, cerrala y volvela a abrir.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-carrito.html">Cargar carrito</a><a href="gestion-clientes.html">Procesar clientes</a><a href="consultar-producto.html">Consultar productos</a><a href="reporte-ventas.html">Clientes frecuentes</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Cobrar venta. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

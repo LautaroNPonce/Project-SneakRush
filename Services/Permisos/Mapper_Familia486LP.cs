@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    /// Habla con SQL para la entidad Familia. Reemplaza a DAL_Familia486LP.
-    /// UBICACION TRANSITORIA en Mappers (no en Services) - mismo motivo que Mapper_Permiso486LP e Idioma, ver Entrada 6 del CHANGELOG.
-
     public class Mapper_Familia486LP : MapperBase486LP
     {
         // Lista todas las familias.
@@ -32,7 +29,6 @@ namespace Services
             }
         }
 
-        // Da de alta una familia. Actualiza f.Id con el generado.
         public bool Agregar(Familia486LP f, out string mensaje)
         {
             mensaje = "";
@@ -61,10 +57,6 @@ namespace Services
             }
         }
 
-        // Modifica el nombre de una familia.
-        // NOTA: no se compara el conteo de filas de ExecuteNonQuery para decidir exito -
-        // en este entorno no siempre refleja el resultado real. Se confia en la ausencia
-        // de excepcion, igual que Mapper_Cliente486LP/Mapper_Carrito486LP.
         public bool Modificar(Familia486LP f, out string mensaje)
         {
             mensaje = "";
@@ -86,8 +78,6 @@ namespace Services
             }
         }
 
-        // Elimina una familia. Antes borra sus vinculos (Perfil_Familia y Familia_Permiso) para no violar las foreign keys - todo en una
-        // sola transaccion, agrupando 3 SPs atomicos (mismo patron que Carrito). Mismo criterio que Modificar: no se compara conteo de filas.
         public bool Eliminar(int id, out string mensaje)
         {
             mensaje = "";
@@ -128,11 +118,6 @@ namespace Services
             }
         }
 
-        // Verifica si el permiso ya esta asignado a la familia. Se usa TANTO antes de actuar (para
-        // dar un mensaje claro si ya estaba en el estado pedido) COMO despues de actuar (para
-        // confirmar el resultado real - en este entorno el conteo de filas que devuelve
-        // ExecuteNonQuery no siempre refleja si el INSERT/DELETE realmente tuvo efecto,
-        // asi que no se usa ese conteo para decidir exito o fracaso).
         private bool TienePermiso(int idFamilia, int idPermiso)
         {
             SqlCommand cmd = new SqlCommand("Familia_TienePermiso");
@@ -144,7 +129,6 @@ namespace Services
             return resultado != null && resultado != DBNull.Value && Convert.ToInt32(resultado) > 0;
         }
 
-        // Asigna un permiso (patente) a una familia.
         public bool AsignarPermiso(int idFamilia, int idPermiso, out string mensaje)
         {
             mensaje = "";
@@ -162,8 +146,6 @@ namespace Services
                 cmd.Parameters.Add(new SqlParameter("@IdPermiso", idPermiso));
                 Conexion486LP.EjecutarNoConsulta(cmd);
 
-                // Se confirma el resultado real releyendo, en vez de confiar en el conteo de
-                // filas de ExecuteNonQuery.
                 if (TienePermiso(idFamilia, idPermiso))
                 {
                     mensaje = "Permiso asignado correctamente.";
@@ -179,7 +161,6 @@ namespace Services
             }
         }
 
-        // Quita un permiso (patente) de una familia.
         public bool QuitarPermiso(int idFamilia, int idPermiso, out string mensaje)
         {
             mensaje = "";
@@ -212,7 +193,6 @@ namespace Services
             }
         }
 
-        // Lista los permisos (patentes) asignados a una familia.
         public List<Permiso486LP> ListarPermisosDeFamilia(int idFamilia)
         {
             try
@@ -230,8 +210,6 @@ namespace Services
             }
         }
 
-        // Indica si la familia esta asignada a algun perfil (para no dejarla
-        // borrar mientras este en uso, si la BLL decide validar eso).
         public bool EstaAsignadaAPerfil(int idFamilia)
         {
             try

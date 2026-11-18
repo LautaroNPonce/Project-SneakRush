@@ -92,7 +92,6 @@ namespace Sistema_SneakRush
             Consultar();
         }
 
-        // Si la ventana ya estaba abierta y se vuelve a entrar desde el menu, se recargan marcas y versiones
         public void Refrescar()
         {
             if (!_cargado) return;

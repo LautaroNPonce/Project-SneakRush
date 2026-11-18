@@ -10,9 +10,6 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    /// Habla con SQL para la entidad Perfil. Reemplaza a DAL_Perfil486LP.
-    /// UBICACION TRANSITORIA en Mappers (no en Services) - mismo motivo que Mapper_Permiso486LP, Idioma y Familia. Ver Entrada 6 del CHANGELOG.
-
     public class Mapper_Perfil486LP : MapperBase486LP
     {
         // Lista todos los perfiles.
@@ -32,9 +29,6 @@ namespace Services
             }
         }
 
-        // Da de alta un perfil. NOTA: igual que el original, no devuelve el Id generado (el DAL viejo tampoco lo hacia).
-        // Tampoco se compara el conteo de filas de ExecuteNonQuery para decidir exito - en este entorno no siempre refleja el resultado real. Se confia en la ausencia de excepcion,
-        // igual que Mapper_Cliente486LP/Mapper_Carrito486LP.
         public bool Agregar(Perfil486LP p, out string mensaje)
         {
             mensaje = "";
@@ -55,7 +49,6 @@ namespace Services
             }
         }
 
-        // Modifica el nombre de un perfil. Mismo criterio que Agregar: no se compara conteo de filas.
         public bool Modificar(Perfil486LP p, out string mensaje)
         {
             mensaje = "";
@@ -77,8 +70,6 @@ namespace Services
             }
         }
 
-        // Elimina un perfil. NOTA: igual que el original, no borra antes los vinculos de Perfil_Familia/Perfil_Permiso (se replica el mismo
-        // comportamiento tal cual estaba, sin agregar logica nueva). Mismo criterio que Agregar/Modificar: no se compara conteo de filas.
         public bool Eliminar(int id, out string mensaje)
         {
             mensaje = "";
@@ -99,7 +90,6 @@ namespace Services
             }
         }
 
-        // Indica si hay usuarios usando este perfil.
         public bool TieneUsuarios(int idPerfil)
         {
             try
@@ -116,11 +106,6 @@ namespace Services
             }
         }
 
-        // Verifica si el perfil ya tiene la familia asignada. Se usa TANTO antes de actuar
-        // (mensaje claro si ya estaba en el estado pedido) COMO despues de actuar (para
-        // confirmar el resultado real - en este entorno el conteo de filas que devuelve
-        // ExecuteNonQuery no siempre refleja si el INSERT/DELETE realmente tuvo efecto,
-        // asi que no se usa ese conteo para decidir exito o fracaso).
         private bool TieneFamilia(int idPerfil, int idFamilia)
         {
             SqlCommand cmd = new SqlCommand("Perfil_TieneFamilia");
@@ -132,7 +117,6 @@ namespace Services
             return resultado != null && resultado != DBNull.Value && Convert.ToInt32(resultado) > 0;
         }
 
-        // Verifica si el perfil ya tiene el permiso suelto asignado. Mismo criterio que TieneFamilia.
         private bool TienePermiso(int idPerfil, int idPermiso)
         {
             SqlCommand cmd = new SqlCommand("Perfil_TienePermiso");
@@ -144,7 +128,6 @@ namespace Services
             return resultado != null && resultado != DBNull.Value && Convert.ToInt32(resultado) > 0;
         }
 
-        // Asigna una familia a un perfil.
         public bool AsignarFamilia(int idPerfil, int idFamilia, out string mensaje)
         {
             mensaje = "";
@@ -177,7 +160,6 @@ namespace Services
             }
         }
 
-        // Quita una familia de un perfil.
         public bool QuitarFamilia(int idPerfil, int idFamilia, out string mensaje)
         {
             mensaje = "";
@@ -210,7 +192,6 @@ namespace Services
             }
         }
 
-        // Asigna un permiso (patente) suelto a un perfil.
         public bool AsignarPermiso(int idPerfil, int idPermiso, out string mensaje)
         {
             mensaje = "";
@@ -243,7 +224,6 @@ namespace Services
             }
         }
 
-        // Quita un permiso (patente) suelto de un perfil.
         public bool QuitarPermiso(int idPerfil, int idPermiso, out string mensaje)
         {
             mensaje = "";
@@ -276,7 +256,6 @@ namespace Services
             }
         }
 
-        // Lista las familias asignadas a un perfil.
         public List<Familia486LP> ListarFamiliasDePerfil(int idPerfil)
         {
             try
@@ -294,7 +273,6 @@ namespace Services
             }
         }
 
-        // Lista los permisos (patentes) sueltos asignados a un perfil.
         public List<Permiso486LP> ListarPermisosDePerfil(int idPerfil)
         {
             try
@@ -312,8 +290,6 @@ namespace Services
             }
         }
 
-        // Nombres de permisos (directos + via familias) de un rol/perfil por nombre.
-        // Devuelve solo strings sueltos, no una entidad - se lee directo del DataTable.
         public List<string> ObtenerNombresPermisosPorRol(string nombreRol)
         {
             List<string> permisos = new List<string>();

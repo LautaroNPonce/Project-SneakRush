@@ -11,13 +11,8 @@ using System.Threading.Tasks;
 namespace Services
 {
 
-    /// Habla con SQL para la entidad Usuario. Reemplaza a DAL_Usuarios486LP.
-    /// Es la ultima entidad de seguridad que se migra (la mas critica: login, bloqueo, contraseña). UBICACION TRANSITORIA en Mappers (no en Services)
-    /// - mismo motivo que las 4 anteriores, ver Entrada 6 del CHANGELOG.
-
     public class Mapper_Usuarios486LP : MapperBase486LP
     {
-        // Devuelve todos los usuarios (Activos + Inactivos).
         public List<Usuario486LP> Listar()
         {
             try
@@ -34,7 +29,6 @@ namespace Services
             }
         }
 
-        // Devuelve solo los usuarios activos (para el filtro "Activos" del formulario).
         public List<Usuario486LP> ListarActivos()
         {
             try
@@ -51,7 +45,6 @@ namespace Services
             }
         }
 
-        // Busca un usuario por su nombre de usuario (para el login). Null si no existe.
         public Usuario486LP ObtenerPorNombreUsuario(string nombreUsuario)
         {
             try
@@ -69,11 +62,6 @@ namespace Services
             }
         }
 
-        // Da de alta un usuario. La contraseña llega YA hasheada desde la BLL.
-        // NOTA: no se compara el conteo de filas de ExecuteNonQuery para decidir exito -
-        // en este entorno no siempre refleja el resultado real (confirmado con casos reales
-        // donde el alta funcionaba en la base pero el conteo indicaba lo contrario). Se
-        // confia en la ausencia de excepcion, igual que Mapper_Cliente486LP/Mapper_Carrito486LP.
         public bool Agregar(Usuario486LP obj, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -104,8 +92,6 @@ namespace Services
                 return false;
             }
         }
-
-        // Modifica los datos de un usuario (no toca contraseña ni intentos/bloqueo).
         public bool Modificar(Usuario486LP obj, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -131,8 +117,6 @@ namespace Services
                 return false;
             }
         }
-
-        // Desbloquea un usuario (lo hace el administrador) y lo obliga a cambiar contraseña.
         public bool Desbloquear(string dni, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -152,7 +136,6 @@ namespace Services
             }
         }
 
-        // Bloquear manual por el Administrador (usa DNI, consistente con Desbloquear).
         public bool BloquearPorDNI(string dni, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -172,7 +155,6 @@ namespace Services
             }
         }
 
-        // Activar / Desactivar (invierte el bit).
         public bool InvertirActivo(string dni, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -192,7 +174,6 @@ namespace Services
             }
         }
 
-        // Cambia la contraseña (ya hasheada, la BLL hace el hash antes de llamar).
         public bool CambiarContraseña(int idUsuario, string nuevaContraseña, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -213,7 +194,6 @@ namespace Services
             }
         }
 
-        // Actualiza el contador de intentos fallidos de login.
         public bool ActualizarIntentos(string nombreUsuario, int intentos, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -234,7 +214,6 @@ namespace Services
             }
         }
 
-        // Bloquea al usuario (se llama cuando IntentosFallidos llega a 3).
         public bool Bloquear(string nombreUsuario, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -254,7 +233,6 @@ namespace Services
             }
         }
 
-        // Baja fisica de un usuario.
         public bool Eliminar(int idUsuario, out string Mensaje)
         {
             Mensaje = string.Empty;

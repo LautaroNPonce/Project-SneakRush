@@ -30,7 +30,7 @@ namespace Services
                 Encoding encoding = Encoding.UTF8;
                 byte[] result = hash.ComputeHash(encoding.GetBytes(texto));
                 foreach (byte b in result)
-                    br.Append(b.ToString("X2"));   // Hex MAYÚSCULA
+                    br.Append(b.ToString("X2"));   // Hex MAYuSCULA
             }
             return br.ToString();
         }

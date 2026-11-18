@@ -388,13 +388,28 @@ namespace Services
             return conProblemas;
         }
 
-        // Inconsistencias de varias tablas juntas (para mostrar todas en la grilla de reparación).
+        // Inconsistencias de varias tablas juntas (para mostrar todas en la grilla de reparación)
         public List<InconsistenciaDV486LP> ObtenerInconsistenciasDeTablas(List<string> tablas)
         {
             List<InconsistenciaDV486LP> todas = new List<InconsistenciaDV486LP>();
             foreach (string tabla in tablas)
                 todas.AddRange(ObtenerInconsistencias(tabla));
             return todas;
+        }
+
+        // Recalcula los DV de todas las tablas protegidas sin escribir en la bitacora.
+        // Es el unico paso que usa el instalador para los digitos verificadores.
+        public bool RecalcularTodas(out string mensaje)
+        {
+            mensaje = "";
+            foreach (string tabla in _tablasProtegidas)
+            {
+                if (!RecalcularDV(tabla, false, out mensaje))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public bool RecalcularTablas(List<string> tablas, out string mensaje)

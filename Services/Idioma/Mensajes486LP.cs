@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    // Da acceso a los mensajes de negocio (los que devuelven las BLL) en el idioma activo.
-    // Los textos viven en la seccion "Mensajes" de Idiomas/es.json, en.json y pt.json, y se leen con el mismo LanguageManager que usan los formularios.
-    // Program.cs le pasa el LanguageManager al iniciar la aplicacion.
     public static class Mensajes486LP
     {
         private const string SECCION = "Mensajes";
@@ -19,7 +16,6 @@ namespace Services
             _idioma = idioma;
         }
 
-        // Devuelve el mensaje de la clave en el idioma actual. Si el texto lleva {0}, {1}... se reemplazan con los argumentos.
         public static string Obtener(string clave, params object[] argumentos)
         {
             string texto = clave;

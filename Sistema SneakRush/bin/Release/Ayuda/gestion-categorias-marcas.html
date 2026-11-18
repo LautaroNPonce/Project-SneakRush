@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procesar categorías y marcas - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-categorias-marcas">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Maestro › Procesar categorías y marcas</div>
+<h1>Procesar categorías y marcas</h1>
+<p class="bajada">Antes de cargar un producto tienen que existir su marca y su categoría. En esta pantalla se mantienen ambas listas: la categoría a la izquierda y la marca a la derecha, con los mismos botones en cada lado.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Maestro › Procesar categorías y marcas</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-categorias-marcas.png" alt="Pantalla Procesar categorías y marcas de SneakRush con el formulario de categoría a la izquierda y el de marca a la derecha" width="890" height="465">
+<button type="button" class="hs" data-n="1" aria-label="Nombre de la categoría" style="left:15.955%;top:18.065%;width:27.528%;height:4.731%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Agregar categoría" style="left:3.034%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Modificar categoría" style="left:14.157%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Eliminar categoría" style="left:25.281%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Limpiar categoría" style="left:36.292%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Categorías registradas" style="left:3.146%;top:47.312%;width:43.596%;height:40.430%"><span class="pin der">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Nombre de la marca" style="left:66.292%;top:18.065%;width:27.528%;height:4.731%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Agregar marca" style="left:53.483%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Modificar marca" style="left:64.494%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Eliminar marca" style="left:75.618%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Limpiar marca" style="left:86.742%;top:31.828%;width:10.449%;height:7.957%"><span class="pin">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Marcas registradas" style="left:53.596%;top:47.312%;width:43.596%;height:40.430%"><span class="pin der">12</span></button>
+<button type="button" class="hs" data-n="13" aria-label="Cerrar" style="left:85.506%;top:90.753%;width:11.685%;height:6.882%"><span class="pin aba">13</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Nombre de la categoría</b><span>Escribí el nombre del tipo de calzado, por ejemplo Running. Admite letras, números, espacios y los signos . &amp; &#x27; - hasta 50 caracteres.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Agregar categoría</b><span>Registra una categoría nueva con el nombre escrito.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Modificar categoría</b><span>Cambia el nombre de la categoría elegida en la lista.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Eliminar categoría</b><span>Borra la categoría elegida, con confirmación. No se puede si algún producto la usa.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Limpiar categoría</b><span>Vacía el campo y deja de seleccionar la categoría.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Categorías registradas</b><span>Todas las categorías existentes. Tocá una para modificarla o eliminarla.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Nombre de la marca</b><span>Escribí el nombre de la marca, por ejemplo New Balance. Mismas reglas que la categoría.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Agregar marca</b><span>Registra una marca nueva.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Modificar marca</b><span>Cambia el nombre de la marca elegida.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Eliminar marca</b><span>Borra la marca elegida. No se puede si algún producto la usa.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Limpiar marca</b><span>Vacía el campo y deja de seleccionar la marca.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Marcas registradas</b><span>Todas las marcas existentes. Tocá una para modificarla o eliminarla.</span></div></li>
+<li data-n="13"><span class="n">13</span><div><b>Cerrar</b><span>Cierra esta pantalla y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Agregar una marca o una categoría</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Corregir un nombre</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Eliminar</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Escribí el nombre en el campo del lado que corresponda (categoría a la izquierda, marca a la derecha).</li><li>Tocá <span class="btn naranja">Agregar</span> de ese mismo lado.</li><li>Aparece el aviso de éxito y el nombre se suma a la lista.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Si hay un nombre elegido en la lista, el sistema pide tocar Limpiar antes de agregar uno nuevo.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Tocá el elemento en la lista: su nombre pasa al campo.</li><li>Escribí el nombre correcto.</li><li>Tocá <span class="btn">Modificar</span>. El cambio se refleja en todos los productos que lo usan.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Tocá el elemento en la lista.</li><li>Tocá <span class="btn rojo">Eliminar</span> y confirmá.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> No se puede eliminar una categoría o marca que tenga productos asociados. Primero hay que cambiar o dar de baja esos productos.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">9</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Ingrese el nombre de la categoría / de la marca.</td><td>El campo está vacío.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El nombre solo admite letras, números, espacios y los signos . &amp; &#x27; - (máximo 50 caracteres)</td><td>Quitá símbolos no permitidos o acortá el nombre.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Ya existe una categoría / marca con ese nombre</td><td>No se repiten nombres.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Hay una categoría / marca elegida en la grilla. Presione Limpiar antes de agregar una nueva.</td><td>Tocá Limpiar de ese lado y volvé a intentar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione una categoría / marca de la grilla para modificar / eliminar.</td><td>Elegí primero el elemento en la lista.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Confirma la eliminación de la categoría / marca ...?</td><td>Sí elimina, No cancela.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No se puede eliminar la categoría / marca: tiene productos asociados</td><td>Está en uso por algún producto.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>La categoría / marca ya no existe. Actualice la lista y vuelva a intentar</td><td>Alguien la eliminó. Volvé a abrir la pantalla.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Categoría / Marca registrada, modificada o eliminada correctamente</td><td>La operación se guardó.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">3</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede usar esta pantalla.</li><li>Los nombres no se repiten dentro de cada lista.</li><li>Las categorías y marcas que cargues aparecen enseguida en los desplegables de Procesar productos.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-productos.html">Procesar productos</a><a href="importar-productos.html">Importar y exportar productos (XML)</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Procesar categorías y marcas. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

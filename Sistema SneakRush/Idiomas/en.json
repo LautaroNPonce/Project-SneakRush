@@ -1188,6 +1188,7 @@
     "Importacion.XmlMalFormado": "The file is not a valid XML (error at line {0}, position {1}).",
     "Importacion.XmlNoPermitido": "The file contains a DTD declaration or entities, which are not allowed for security reasons.",
     "Importacion.EstructuraInvalida": "The file does not have the expected structure: it must be a delivery note (remito) with at least one item line.",
+    "Importacion.EsCatalogo": "The file is a catalog of products for sale exported from the system, not a delivery note (remito). Only supplier delivery notes can be imported.",
     "Importacion.RemitoInvalido": "The delivery note number is required, accepts letters, numbers and the signs - _ / . and up to 30 characters.",
     "Importacion.ProveedorNoCoincide": "The CUIT in the file ({0}) does not match the selected supplier ({1}).",
     "Importacion.DemasiadasLineas": "The file exceeds the maximum of {0} lines per delivery note.",

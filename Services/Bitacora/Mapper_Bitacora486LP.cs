@@ -19,8 +19,6 @@ namespace Services
                 SqlCommand cmd = new SqlCommand("BitacoraEvento_Registrar");
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                // Misma validacion de rango que tenia el DAL original: datetime
-                // minimo de SQL Server es 1/1/1753, si viene por debajo se usa "ahora".
                 DateTime fecha = registro.Fecha < new DateTime(1753, 1, 1) ? DateTime.Now : registro.Fecha;
 
                 cmd.Parameters.Add(new SqlParameter("@Fecha", fecha));

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estado de stock - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="reporte-stock">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Reporte › Estado de stock</div>
+<h1>Estado de stock</h1>
+<p class="bajada">Muestra todo el inventario con su valor y lo clasifica: sin stock, stock bajo o normal. Sirve para decidir qué comprar. Cuando hay productos para reponer, el menú Reporte muestra un triángulo rojo y al iniciar sesión el sistema avisa.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Reporte › Estado de stock</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/reporte-stock.png" alt="Pantalla Estado de stock y reposición de SneakRush con los filtros, la tabla de productos con su estado y el gráfico por estado" width="1440" height="665">
+<button type="button" class="hs" data-n="1" aria-label="Marca" style="left:6.667%;top:11.579%;width:9.028%;height:3.308%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Talle" style="left:20.000%;top:11.579%;width:5.694%;height:3.308%"><span class="pin aba">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Estado" style="left:30.903%;top:11.579%;width:8.333%;height:3.308%"><span class="pin aba">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Solo productos a reponer" style="left:41.042%;top:11.729%;width:11.458%;height:2.707%"><span class="pin der">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Generar" style="left:1.875%;top:19.850%;width:11.875%;height:4.812%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Limpiar" style="left:14.444%;top:19.850%;width:9.861%;height:4.812%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Exportar PDF" style="left:24.931%;top:19.850%;width:11.250%;height:4.812%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Cerrar" style="left:92.014%;top:19.850%;width:7.222%;height:4.812%"><span class="pin aba">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Tabla de productos" style="left:1.944%;top:27.368%;width:46.736%;height:66.466%"><span class="pin der">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Gráfico por estado" style="left:49.167%;top:27.068%;width:50.069%;height:66.917%"><span class="pin">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Resumen" style="left:2.083%;top:95.639%;width:27.778%;height:2.707%"><span class="pin der">11</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Marca</b><span>Mostrá solo una marca. &quot;Todos&quot; muestra todas.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Talle</b><span>Mostrá solo un talle. &quot;Todos&quot; muestra todos.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Estado</b><span>Filtrá por Sin stock, Stock bajo o Normal.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Solo productos a reponer</b><span>Si la tildás, deja solamente lo que hay que comprar: los productos sin stock y los de stock bajo.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Generar</b><span>Arma el reporte con los filtros elegidos.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Limpiar</b><span>Deja los filtros como al principio y vacía el reporte.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Exportar PDF</b><span>Guarda el reporte en PDF. Primero hay que generarlo.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Cerrar</b><span>Cierra el reporte y vuelve al menú principal.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Tabla de productos</b><span>Una fila por producto: marca, modelo, color, talle, stock, precio, valor del stock (precio por unidades) y estado. Rojo: Sin stock. Naranja: Stock bajo. Verde: Normal.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Gráfico por estado</b><span>Cuántos productos hay en cada estado, de un vistazo.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Resumen</b><span>Total de productos, unidades y valor total del stock según los filtros aplicados.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Ver qué hay que comprar</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Saber cuánto vale el inventario</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Exportar a PDF</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Tildá <span class="btn">Solo productos a reponer</span>.</li><li>Tocá <span class="btn naranja">Generar</span>.</li><li>La tabla muestra los productos sin stock y con stock bajo. Con esa lista armás la solicitud de compra.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Un producto cuenta como stock bajo cuando le quedan 5 unidades o menos.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Dejá los filtros en Todos.</li><li>Tocá <span class="btn naranja">Generar</span>.</li><li>Mirá el resumen de abajo: productos, unidades y valor total del stock.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Generá el reporte.</li><li>Tocá <span class="btn">Exportar PDF</span> y elegí dónde guardarlo.</li></ol>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">5</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>No hay productos que cumplan con los filtros elegidos.</td><td>Cambiá o sacá algún filtro.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Primero generá el reporte con al menos un producto para poder exportarlo.</td><td>Tocá Generar antes de exportar.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>PDF exportado correctamente: (ruta)</td><td>El archivo quedó guardado.</td></tr>
+<tr><td><span class="tipo error">Error</span>Error al exportar PDF: (motivo)</td><td>Cerrá el archivo si estaba abierto o elegí otra carpeta.</td></tr>
+<tr><td><span class="tipo error">Error</span>No se pudo generar el reporte. El error quedó registrado en la bitácora.</td><td>Avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">5</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede ver este reporte.</li><li>Sin stock: 0 unidades. Stock bajo: de 1 a 5 unidades. Normal: más de 5.</li><li>Al iniciar sesión, si hay productos a reponer, el sistema lo avisa y te ofrece abrir este reporte. También aparece un triángulo rojo en el menú Reporte, junto a Estado de stock, mientras haya algo para reponer.</li><li>El valor del stock de cada producto es su precio por las unidades disponibles.</li><li>El reporte es de consulta: no modifica ningún dato.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="generar-solicitud.html">Generar solicitud de compra</a><a href="gestion-productos.html">Procesar productos</a><a href="reporte-inteligente.html">Reporte inteligente</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Estado de stock. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestión de Familias - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-familias">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Administrador › Gestión de Familias</div>
+<h1>Gestión de Familias</h1>
+<p class="bajada">Una familia es un grupo de permisos que se arma una sola vez y se reutiliza en varios perfiles. Acá creás, renombrás y eliminás familias, y elegís qué permisos tiene cada una.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Administrador › Gestión de perfiles › Gestión de Familias</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-familias.png" alt="Pantalla Gestión de Familias de SneakRush con la lista de familias, los permisos disponibles y los permisos asignados" width="1130" height="534">
+<button type="button" class="hs" data-n="1" aria-label="Nombre de la familia" style="left:2.035%;top:14.045%;width:26.372%;height:4.494%"><span class="pin aba">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Lista de familias" style="left:2.035%;top:20.412%;width:26.372%;height:62.921%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Crear" style="left:2.035%;top:84.457%;width:12.389%;height:5.805%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Modificar" style="left:16.018%;top:84.457%;width:12.389%;height:5.805%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Eliminar" style="left:2.035%;top:91.199%;width:12.389%;height:5.805%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Cancelar" style="left:16.018%;top:91.199%;width:12.389%;height:5.805%"><span class="pin">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Filtro por módulo" style="left:31.770%;top:14.045%;width:26.372%;height:4.494%"><span class="pin aba">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Permisos disponibles" style="left:31.770%;top:20.412%;width:26.372%;height:62.921%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Agregar a familia" style="left:31.770%;top:84.457%;width:26.372%;height:5.805%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Permisos asignados" style="left:61.504%;top:18.165%;width:28.053%;height:65.356%"><span class="pin">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Quitar permiso seleccionado" style="left:61.504%;top:84.457%;width:28.053%;height:5.805%"><span class="pin">11</span></button>
+<button type="button" class="hs" data-n="12" aria-label="Salir" style="left:90.354%;top:2.247%;width:7.611%;height:5.618%"><span class="pin aba">12</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Nombre de la familia</b><span>Escribí acá el nombre de una familia nueva, o cambiá el nombre de la que tengas seleccionada. Hasta 50 caracteres.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Lista de familias</b><span>Muestra todas las familias que existen. Al tocar una, se carga su nombre arriba y sus permisos en el panel de la derecha.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Crear</b><span>Crea una familia nueva con el nombre que escribiste. Empieza sin permisos: se los agregás después.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Modificar</b><span>Cambia el nombre de la familia seleccionada por el que escribiste en el campo.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Eliminar</b><span>Borra la familia seleccionada. Si está en uso, antes te avisa qué va a pasar y te pide confirmar.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Cancelar</b><span>Limpia la pantalla: vacía el nombre, deja de seleccionar la familia y vuelve a cargar las listas.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Filtro por módulo</b><span>Filtra los permisos disponibles por módulo (Usuarios, Compra, Venta...). &quot;Todos&quot; muestra la lista completa.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Permisos disponibles</b><span>Los permisos que todavía no tiene la familia seleccionada. Elegí uno para poder agregarlo.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Agregar a familia</b><span>Suma a la familia seleccionada el permiso que elegiste en la lista de disponibles.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Permisos asignados</b><span>Los permisos que tiene hoy la familia seleccionada. Arriba dice de qué familia se trata (&quot;Permisos de: ...&quot;).</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Quitar permiso seleccionado</b><span>Le saca a la familia el permiso que elegiste en la lista de asignados.</span></div></li>
+<li data-n="12"><span class="n">12</span><div><b>Salir</b><span>Cierra esta pantalla y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Crear una familia</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Cambiar el nombre</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Agregar o quitar permisos</button>
+<button role="tab" id="tab-3" aria-controls="pn-3" aria-selected="false" tabindex="-1">Eliminar una familia</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Por ejemplo, una familia &quot;Caja&quot; con todo lo que necesita quien cobra.</p>
+<ol class="pasos"><li>Escribí el nombre en el campo de arriba a la izquierda.</li><li>Tocá <span class="btn naranja">Crear</span>. Aparece el aviso &quot;Familia creada correctamente&quot;.</li><li>Elegí la familia nueva en la lista.</li><li>En Permisos disponibles elegí un permiso y tocá <span class="btn naranja">Agregar a familia</span>. Repetí con cada permiso que necesite.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Una familia sola no da acceso a nada: tiene que estar incluida en un perfil (ver Gestión de Perfiles).</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Elegí la familia en la lista.</li><li>Corregí el nombre en el campo.</li><li>Tocá <span class="btn">Modificar</span>.</li></ol>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Elegí la familia en la lista de la izquierda.</li><li>Para sumar: usá el filtro por módulo si te ayuda, elegí el permiso en Permisos disponibles y tocá <span class="btn naranja">Agregar a familia</span>.</li><li>Para sacar: elegí el permiso en Permisos asignados y tocá <span class="btn rojo">Quitar permiso seleccionado</span>.</li><li>Si la familia ya la usa algún perfil, el sistema te avisa que esos perfiles ganan o pierden el permiso. Confirmá si estás de acuerdo.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Los permisos &quot;Cambiar contraseña&quot; y &quot;Cerrar sesión&quot; son obligatorios: no se pueden quitar, así nadie queda sin poder salir ni proteger su cuenta.</div>
+</div>
+<div role="tabpanel" id="pn-3" aria-labelledby="tab-3" hidden>
+<ol class="pasos"><li>Elegí la familia en la lista.</li><li>Tocá <span class="btn rojo">Eliminar</span>.</li><li>Leé el aviso: si la familia está en perfiles o tiene permisos, te dice que se van a quitar. Tocá Sí solo si estás seguro.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Eliminar no se puede deshacer. Si la familia forma parte de tu propio perfil, vas a perder ese acceso vos mismo.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">12</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar una Familia.</td><td>Tocaste Modificar, Eliminar, Agregar o Quitar sin elegir una familia en la lista. Elegí una y repetí.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe ingresar un nombre. / Debe ingresar un nombre válido.</td><td>El campo del nombre está vacío. Escribilo y volvé a intentar.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El nombre no puede superar los 50 caracteres.</td><td>Acortá el nombre.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ya existe una Familia con ese nombre.</td><td>Los nombres no se pueden repetir. Usá otro o modificá la familia existente.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Debe seleccionar un Permiso. / Debe seleccionar un Permiso para quitar.</td><td>Falta elegir el permiso en la lista de disponibles (para agregar) o de asignados (para quitar).</td></tr>
+<tr><td><span class="tipo error">Error</span>El componente ya pertenece a este elemento.</td><td>Ese permiso ya está en la familia, no hace falta agregarlo de nuevo.</td></tr>
+<tr><td><span class="tipo error">Error</span>Esta patente es obligatoria en todas las familias (cambiar contraseña y cerrar sesión) y no se puede quitar.</td><td>Esos permisos no se pueden quitar de ninguna familia.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>La familia está asignada a uno o más perfiles. Si la elimina, se quitará de esos perfiles.</td><td>Los usuarios con esos perfiles pierden lo que daba la familia. Confirmá solo si es lo que querés.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>La familia tiene permisos asignados. Si la elimina, se quitarán todos los permisos asociados.</td><td>Se borra la familia y sus asignaciones de permisos.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>Esta familia forma parte de su propio perfil...</td><td>Si seguís (al eliminar o quitar un permiso), vos mismo perdés ese acceso.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Está seguro que desea eliminar la familia seleccionada?</td><td>Confirmación de una familia sin uso.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Familia creada / modificada / eliminada correctamente. Permiso asignado / quitado correctamente.</td><td>La operación se guardó.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador puede entrar a esta pantalla.</li><li>Cada botón depende de los permisos del perfil: si alguno aparece gris, tu perfil no tiene ese permiso.</li><li>Un permiso no puede estar dos veces en la misma familia.</li><li>Los cambios en una familia afectan a todos los perfiles que la usan, al instante para quienes inicien sesión después.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="gestion-perfiles.html">Gestión de perfiles</a><a href="gestion-usuarios.html">Gestión de usuarios</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Gestión de Familias. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

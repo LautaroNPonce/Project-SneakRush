@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Procesar clientes - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="gestion-clientes">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Maestro › Procesar clientes</div>
+<h1>Procesar clientes</h1>
+<p class="bajada">Acá se cargan los datos de las personas que compran en SneakRush. El DNI identifica a cada cliente: con él se arma el carrito y se cobra la venta. Esta pantalla también se abre sola desde Cobrar venta cuando el DNI del carrito todavía no está registrado.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Maestro › Procesar clientes</b></span><span class="chip">Lo usa: <b>Administrador, Cajero</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/gestion-clientes.png" alt="Pantalla Procesar clientes de SneakRush con el formulario de datos del cliente y la lista de clientes registrados" width="950" height="440">
+<button type="button" class="hs" data-n="1" aria-label="DNI" style="left:14.947%;top:19.091%;width:21.789%;height:5.000%"><span class="pin">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Nombre" style="left:14.947%;top:27.727%;width:21.789%;height:5.000%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Apellido" style="left:14.947%;top:36.364%;width:21.789%;height:5.000%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Correo" style="left:14.947%;top:45.000%;width:21.789%;height:5.000%"><span class="pin">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Teléfono (opcional)" style="left:14.947%;top:53.636%;width:21.789%;height:5.000%"><span class="pin">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Clientes registrados" style="left:41.579%;top:16.591%;width:55.789%;height:69.318%"><span class="pin der">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Agregar" style="left:2.842%;top:77.727%;width:10.947%;height:8.409%"><span class="pin">7</span></button>
+<button type="button" class="hs" data-n="8" aria-label="Modificar" style="left:14.421%;top:77.727%;width:10.947%;height:8.409%"><span class="pin">8</span></button>
+<button type="button" class="hs" data-n="9" aria-label="Eliminar" style="left:26.000%;top:77.727%;width:10.947%;height:8.409%"><span class="pin">9</span></button>
+<button type="button" class="hs" data-n="10" aria-label="Limpiar" style="left:2.842%;top:87.273%;width:34.105%;height:7.273%"><span class="pin aba">10</span></button>
+<button type="button" class="hs" data-n="11" aria-label="Cerrar" style="left:86.421%;top:87.273%;width:10.947%;height:7.273%"><span class="pin aba">11</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>DNI</b><span>Documento del cliente: 7 u 8 números, sin puntos. Es la clave que lo identifica, por eso no se repite ni se puede cambiar una vez creado.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Nombre</b><span>Solo letras, espacios, guiones y apóstrofes (por ejemplo María José o D&#x27;Angelo). Hasta 50 caracteres.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Apellido</b><span>Igual que el nombre: letras, espacios, guiones y apóstrofes. Hasta 50 caracteres.</span></div></li>
+<li data-n="4"><span class="n">4</span><div><b>Correo</b><span>Dirección de email con formato usuario@dominio.com. Hasta 100 caracteres.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Teléfono (opcional)</b><span>Podés dejarlo vacío. Si lo completás: números, espacios, +, - y paréntesis, con entre 8 y 15 dígitos.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Clientes registrados</b><span>Lista de todos los clientes con DNI, nombre, apellido y teléfono. Tocá uno para cargar sus datos en el formulario y poder modificarlo o eliminarlo.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Agregar</b><span>Guarda un cliente nuevo con los datos del formulario.</span></div></li>
+<li data-n="8"><span class="n">8</span><div><b>Modificar</b><span>Guarda los cambios del cliente que elegiste en la lista. El DNI queda fijo.</span></div></li>
+<li data-n="9"><span class="n">9</span><div><b>Eliminar</b><span>Da de baja al cliente elegido, después de pedirte confirmación. No se puede si ya tiene ventas.</span></div></li>
+<li data-n="10"><span class="n">10</span><div><b>Limpiar</b><span>Vacía el formulario y deja de seleccionar al cliente, así podés cargar uno nuevo.</span></div></li>
+<li data-n="11"><span class="n">11</span><div><b>Cerrar</b><span>Cierra esta pantalla y vuelve al menú principal.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Registrar un cliente nuevo</button>
+<button role="tab" id="tab-1" aria-controls="pn-1" aria-selected="false" tabindex="-1">Corregir los datos de un cliente</button>
+<button role="tab" id="tab-2" aria-controls="pn-2" aria-selected="false" tabindex="-1">Dar de baja a un cliente</button>
+<button role="tab" id="tab-3" aria-controls="pn-3" aria-selected="false" tabindex="-1">Cuando se abre desde Cobrar venta</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Completá DNI, Nombre, Apellido y Correo. El teléfono es opcional.</li><li>Tocá <span class="btn naranja">Agregar</span>.</li><li>Aparece &quot;Cliente registrado correctamente&quot; y el cliente ya figura en la lista.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Los campos con asterisco (*) son obligatorios.</div>
+</div>
+<div role="tabpanel" id="pn-1" aria-labelledby="tab-1" hidden>
+<ol class="pasos"><li>Tocá al cliente en la lista: sus datos pasan al formulario.</li><li>Cambiá lo que haga falta. El DNI no se puede editar.</li><li>Tocá <span class="btn">Modificar</span>.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Si el DNI estuvo mal cargado, hay que dar de baja al cliente y crearlo de nuevo (solo posible si no tiene ventas).</div>
+</div>
+<div role="tabpanel" id="pn-2" aria-labelledby="tab-2" hidden>
+<ol class="pasos"><li>Tocá al cliente en la lista.</li><li>Tocá <span class="btn rojo">Eliminar</span> y confirmá con Sí.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Un cliente con ventas registradas no se puede eliminar: el historial de ventas necesita sus datos.</div>
+</div>
+<div role="tabpanel" id="pn-3" aria-labelledby="tab-3" hidden>
+<p class="intro">Si el carrito trae un DNI que no está registrado, el sistema avisa y abre esta pantalla para poder seguir con el cobro.</p>
+<ol class="pasos"><li>La pantalla se abre con el DNI ya cargado y bloqueado.</li><li>Completá nombre, apellido y correo, y tocá <span class="btn naranja">Agregar</span>.</li><li>La pantalla se cierra sola y volvés a Cobrar venta con el cliente listo.</li></ol>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">12</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>Complete los campos obligatorios (DNI, Nombre, Apellido y Correo).</td><td>Falta alguno de esos cuatro datos.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El DNI debe tener 7 u 8 dígitos numéricos.</td><td>Revisá que no tenga puntos, espacios ni letras.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El nombre / apellido solo admite letras, espacios, guiones y apóstrofes (máximo 50 caracteres).</td><td>Sacá números o símbolos del campo.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El correo no tiene un formato válido. Debe ser del tipo usuario@dominio.com</td><td>Revisá que tenga @ y un dominio completo.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>El teléfono solo admite números, espacios, +, - y paréntesis, y debe tener entre 8 y 15 dígitos</td><td>Corregí el número o dejalo vacío.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Ya existe un cliente registrado con ese DNI</td><td>El cliente ya está cargado. Buscalo en la lista.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No existe un cliente con ese DNI para modificar / eliminar</td><td>El cliente fue borrado desde otro lugar. Actualizá la lista.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un cliente de la grilla para eliminar.</td><td>Tocá primero al cliente en la lista.</td></tr>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Confirma la eliminación del cliente con DNI ...?</td><td>Sí lo da de baja, No cancela.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>No se puede eliminar el cliente: tiene ventas asociadas</td><td>Se conserva para no perder el historial de ventas.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Cliente registrado / modificado / eliminado correctamente</td><td>La operación se guardó.</td></tr>
+<tr><td><span class="tipo error">Error</span>Ocurrió un error inesperado. El detalle quedó registrado en la bitácora</td><td>Avisale al administrador: puede ver el detalle en la Bitácora de eventos.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>El Administrador y el Cajero pueden usar esta pantalla.</li><li>El DNI es único por cliente y no se puede modificar.</li><li>Altas, modificaciones y bajas quedan registradas en la Bitácora (módulo Maestros).</li><li>Cada botón depende de los permisos del perfil: si aparece gris, tu perfil no lo tiene.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="cobrar-venta.html">Cobrar venta</a><a href="gestion-carrito.html">Cargar carrito</a><a href="reporte-ventas.html">Clientes frecuentes</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Procesar clientes. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

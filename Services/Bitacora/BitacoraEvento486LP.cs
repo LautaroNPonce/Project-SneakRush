@@ -24,9 +24,6 @@ namespace Services
         [ColumnaTabla486LP]
         public string NombreUsuario { get; set; }
 
-        // Nombre/Apellido NO son columnas de BitacoraEvento: vienen del JOIN con Usuarios en Listar()/Filtrar(). Igual llevan el atributo porque el SP
-        // las devuelve con esos nombres exactos y el mapeo es por nombre de columna del resultado, no por tabla de origen.
-
         [ColumnaTabla486LP]
         public string Nombre { get; set; }
         [ColumnaTabla486LP]
@@ -35,7 +32,6 @@ namespace Services
         // Constructores
         public BitacoraEvento486LP() { }
 
-        // Lo uso para REGISTRAR un evento nuevo en la BD (En BLL_Usuarios)
         public BitacoraEvento486LP(string modulo, string descripcion, int criticidad, string dni, string nombreUsuario = "")
         {
             Fecha = DateTime.Now;

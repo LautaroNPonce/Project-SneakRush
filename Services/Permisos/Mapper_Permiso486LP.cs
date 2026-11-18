@@ -10,11 +10,6 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    /// Habla con SQL para la entidad Permiso (patentes). Reemplaza a DAL_Patente486LP.
-    /// UBICACION TRANSITORIA: vive en Mappers (no en Services) porque hoy DAL todavia depende de Services (por los DAL_Xxx.cs de seguridad que faltan
-    /// migrar: Idioma, Familia, Perfil, Usuario), lo que impide que Services ependa de Mappers sin generar un ciclo. Cuando se termine de migrar TODA
-    /// la seguridad y se pueda sacar la referencia DAL->Services, este archivo (y los Mappers de Idioma/Familia/Perfil/Usuario) se mudan juntos a
-    /// Services, en un solo paso - ver CHANGELOG_Refactor_Arquitectura.md.
     public class Mapper_Permiso486LP : MapperBase486LP
     {
         // Lista todos los permisos (patentes).

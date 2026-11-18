@@ -50,6 +50,7 @@
     <Compile Include="BLL_Factura486LP.cs" />
     <Compile Include="BLL_ImportacionProducto486LP.cs" />
     <Compile Include="BLL_Inicializador486LP.cs" />
+    <Compile Include="BLL_Instalacion486LP.cs" />
     <Compile Include="BLL_Marca486LP.cs" />
     <Compile Include="BLL_OrdenCompra486LP.cs" />
     <Compile Include="BLL_Producto486LP.cs" />

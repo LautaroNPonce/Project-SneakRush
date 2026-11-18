@@ -13,7 +13,6 @@ namespace Services
         private Mapper_Usuarios486LP ObjetoMapper = new Mapper_Usuarios486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
-        // Valida que la contraseña cumpla la política de seguridad (mínimo 8 caracteres, al menos una mayúscula y una minúscula)
         public bool ValidarContraseña(string contraseña, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -207,6 +206,97 @@ namespace Services
             {
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Error en BLL_Usuarios.Agregar(): {ex.Message}", Criticidad486LP.MuyAlta, "Sistema", "Sistema"));
                 Mensaje = "Msg.BLL.ErrorInesperadoAgregar"; // Ocurrió un error inesperado al agregar el usuario.
+                return false;
+            }
+        }
+
+        public bool ValidarAdministradorInicial(string dni, string nombre, string apellido, string email, out string Mensaje)
+        {
+            Mensaje = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(dni) || !System.Text.RegularExpressions.Regex.IsMatch(dni.Trim(), @"^\d{7,8}$"))
+            {
+                Mensaje = "El DNI debe tener 7 u 8 dígitos numéricos.";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                Mensaje = "El nombre es obligatorio.";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(apellido))
+            {
+                Mensaje = "El apellido es obligatorio.";
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(email) || !System.Text.RegularExpressions.Regex.IsMatch(email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                Mensaje = "El correo no tiene un formato válido.";
+                return false;
+            }
+            return true;
+        }
+
+        public bool CrearAdministradorInicial(string dni, string nombre, string apellido, string email, out string nombreUsuario, out string contraseñaInicial, out string Mensaje)
+        {
+            nombreUsuario = string.Empty;
+            contraseñaInicial = string.Empty;
+
+            if (!ValidarAdministradorInicial(dni, nombre, apellido, email, out Mensaje))
+            {
+                return false;
+            }
+
+            dni = dni.Trim();
+            nombre = nombre.Trim();
+            apellido = apellido.Trim();
+            email = email.Trim();
+
+            try
+            {
+                if (ObjetoMapper.Listar().Count > 0)
+                {
+                    Mensaje = "La base ya tiene usuarios cargados.";
+                    return false;
+                }
+
+                Perfil486LP perfilAdmin = new BLL_Perfil486LP().ObtenerPerfiles().FirstOrDefault(p => p.Nombre == "Administrador");
+                if (perfilAdmin == null)
+                {
+                    Mensaje = "No se encontró el perfil Administrador en la base.";
+                    return false;
+                }
+
+                // mismo criterio que el alta de usuarios: el login se arma con nombre y apellido
+                nombreUsuario = nombre + "." + apellido;
+                contraseñaInicial = apellido + dni;
+
+                Usuario486LP admin = new Usuario486LP
+                {
+                    DNI = dni,
+                    Nombre = nombre,
+                    Apellido = apellido,
+                    Email = email,
+                    NombreUsuario = nombreUsuario,
+                    Contraseña = Encriptacion486LP.GenerarHash(contraseñaInicial),
+                    Activo = true,
+                    Bloqueado = false,
+                    IntentosFallidos = 0,
+                    Rol = perfilAdmin.Nombre,
+                    IdPerfil = perfilAdmin.IdPerfil
+                };
+
+                if (!ObjetoMapper.Agregar(admin, out Mensaje))
+                {
+                    return false;
+                }
+
+                ObjBitacora.Registrar(new BitacoraEvento486LP("Gestión Usuarios", $"Usuario creado: {nombreUsuario} (DNI: {dni}). Administrador inicial de la instalación.", Criticidad486LP.Alta, "Sistema", "Sistema"));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Mensaje = ex.Message;
                 return false;
             }
         }
@@ -426,8 +516,6 @@ namespace Services
             }
         }
 
-        // CORREGIDO: antes instanciaba DAL_Bitacora486LP directo (acceso directo a otra "DAL"). Ese archivo ya no existe (se elimino al migrar Bitacora),
-        // asi que ahora usa ObjBitacora (BLL_Bitacora486LP), que ya tenia como campo - una BLL habla con otra BLL, nunca con el Mapper ajeno directo.
         public void Logout(string dni, out string mensaje)
         {
             mensaje = string.Empty;

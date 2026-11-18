@@ -377,7 +377,7 @@ namespace BLL
             }
         }
 
-
+        // Estos codigos son devueltos por el mapper cuando se intenta restaurar un cambio de producto, para indicar el motivo del error
         private const int RESTAURAR_OK = 0;
         private const int RESTAURAR_NO_EXISTE = 1;
         private const int RESTAURAR_YA_VIGENTE = 2;
@@ -409,7 +409,6 @@ namespace BLL
             }
         }
 
-        // La pantalla lo llama antes de pedir la confirmacion, asi no se le advierte al usuario de algo que despues no se puede hacer
         public bool ValidarRestauracion(ProductoCambio486LP cambio, out string mensaje)
         {
             mensaje = "";

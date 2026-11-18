@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cerrar sesión - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="cerrar-sesion">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Usuario › Cerrar sesión</div>
+<h1>Cerrar sesión</h1>
+<p class="bajada">Termina tu sesión y te devuelve a la pantalla de ingreso. Hacelo siempre que dejes de usar el sistema o cuando otra persona vaya a usar la computadora.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Usuario › Cerrar sesión</b></span><span class="chip">Lo usa: <b>Todos los usuarios</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/cerrar-sesion.png" alt="Pantalla de confirmación de Cerrar sesión de SneakRush" width="330" height="185">
+<button type="button" class="hs" data-n="1" aria-label="Pregunta de confirmación" style="left:7.879%;top:37.297%;width:82.424%;height:12.973%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Aceptar" style="left:10.606%;top:64.324%;width:35.455%;height:19.459%"><span class="pin">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Cancelar" style="left:53.030%;top:64.324%;width:35.455%;height:19.459%"><span class="pin">3</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Pregunta de confirmación</b><span>Te pregunta si estás seguro de querer cerrar sesión, para evitar que salgas por error.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Aceptar</b><span>Cierra tu sesión, cierra el menú principal y abre la pantalla de ingreso para que entre otra persona o vos mismo.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Cancelar</b><span>Te quedás en el sistema, sin cerrar nada.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Cerrar mi sesión</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<p class="intro">Para terminar de trabajar o cambiar de usuario.</p>
+<ol class="pasos"><li>Guardá lo que estés haciendo en las otras pantallas.</li><li>Abrí el menú <span class="btn">Usuario</span> y elegí Cerrar sesión.</li><li>Tocá <span class="btn naranja">Aceptar</span>.</li><li>Vas a ver la pantalla de ingreso. Ya podés entrar con otro usuario o cerrar el programa.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> Si querés seguir trabajando, tocá Cancelar: no pasa nada.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">2</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo pregunta">Confirmación</span>¿Está seguro que desea cerrar sesión?</td><td>Aceptar cierra la sesión; Cancelar te deja donde estabas.</td></tr>
+<tr><td><span class="tipo error">Error</span>Error (con el motivo técnico)</td><td>No se pudo registrar el cierre de sesión en la base de datos. Igual vas a volver a la pantalla de ingreso. Avisale al administrador.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">3</span></summary><div class="cuerpo"><ul class="reglas"><li>Podés tener una sola sesión abierta por vez. Para entrar con otro usuario primero hay que cerrar la actual.</li><li>Cerrar sesión cierra también el menú principal y todas las pantallas que tuvieras abiertas.</li><li>El cierre de sesión queda registrado en la Bitácora de eventos.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="inicio-sesion.html">Iniciar sesión</a><a href="cambiar-contrasena.html">Cambiar contraseña</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Cerrar sesión. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

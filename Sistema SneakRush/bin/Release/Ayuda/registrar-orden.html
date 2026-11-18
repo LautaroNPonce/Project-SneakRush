@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registrar orden de compra - Ayuda de SneakRush</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body data-tema="registrar-orden">
+<header class="barra">
+  <button class="menu-btn" id="menu-btn" aria-label="Abrir el menú de temas" aria-expanded="false">Temas</button>
+  <a class="marca" href="index.html">SneakRush <small>Ayuda del sistema</small></a>
+  <div class="buscador">
+    <input id="buscar" type="search" placeholder="Buscá una pantalla o una acción (tecla /)" autocomplete="off" aria-label="Buscar en la ayuda">
+    <div class="resultados" id="resultados" role="listbox"></div>
+  </div>
+</header>
+<div class="estructura">
+<nav class="lateral" id="lateral" aria-label="Temas de ayuda"></nav>
+<main class="contenido"><div class="hoja">
+
+<div class="migas"><a href="index.html">Inicio</a> › Compra › Registrar orden de compra</div>
+<h1>Registrar orden de compra</h1>
+<p class="bajada">Elegís una solicitud pendiente, el proveedor al que le vas a comprar y el costo de cada producto. Al confirmar queda registrada la orden, lista para recibir la mercadería.</p>
+<div class="datos"><span class="chip">Dónde está: <b>Compra › Registrar orden de compra</b></span><span class="chip">Lo usa: <b>Administrador</b></span><span class="chip">Atajo: <kbd>F1</kbd></span></div>
+<section class="captura" aria-label="Captura interactiva">
+<div class="captura-cab"><div class="ayuda-uso"><b>Pasá el mouse</b> por encima de cualquier botón o campo de la pantalla para ver qué hace.</div><button type="button" class="interruptor" id="marcas" aria-pressed="true">Mostrar números</button></div>
+<div class="pantalla">
+<img src="img/registrar-orden.png" alt="Pantalla Registrar orden de compra de SneakRush con las solicitudes pendientes, el proveedor, el detalle de la orden con su costo y el costo total" width="830" height="480">
+<button type="button" class="hs" data-n="1" aria-label="Solicitudes pendientes" style="left:2.289%;top:11.667%;width:84.096%;height:22.292%"><span class="pin der">1</span></button>
+<button type="button" class="hs" data-n="2" aria-label="Proveedor" style="left:13.012%;top:40.417%;width:29.277%;height:4.583%"><span class="pin der">2</span></button>
+<button type="button" class="hs" data-n="3" aria-label="Detalle de la orden" style="left:2.289%;top:51.875%;width:95.422%;height:29.583%"><span class="pin">3</span></button>
+<button type="button" class="hs" data-n="4" aria-label="Costo" style="left:70.964%;top:52.292%;width:11.446%;height:29.583%"><span class="pin der">4</span></button>
+<button type="button" class="hs" data-n="5" aria-label="Costo total" style="left:2.771%;top:84.583%;width:28.916%;height:4.583%"><span class="pin der">5</span></button>
+<button type="button" class="hs" data-n="6" aria-label="Confirmar orden" style="left:2.169%;top:91.458%;width:21.446%;height:6.667%"><span class="pin aba">6</span></button>
+<button type="button" class="hs" data-n="7" aria-label="Cancelar" style="left:64.940%;top:91.458%;width:21.446%;height:6.667%"><span class="pin aba">7</span></button>
+<div class="globo" role="tooltip" aria-live="polite"></div>
+</div></section>
+<h2>Qué hace cada elemento</h2>
+<ul class="elementos">
+<li data-n="1"><span class="n">1</span><div><b>Solicitudes pendientes</b><span>Las solicitudes de compra que todavía no tienen orden. Al abrir la pantalla queda elegida la primera; tocá otra fila para cambiar.</span></div></li>
+<li data-n="2"><span class="n">2</span><div><b>Proveedor</b><span>A quién se le hace la compra. La lista trae los proveedores cargados en Procesar proveedores.</span></div></li>
+<li data-n="3"><span class="n">3</span><div><b>Detalle de la orden</b><span>Los productos de la solicitud elegida: marca, modelo, color, talle y cantidad. &quot;Último costo&quot; muestra lo que se pagó la última vez por ese producto, como referencia.</span></div></li>
+<li data-n="4" data-nota="El costo tiene que ser mayor a cero y no pasar de $10.000.000."><span class="n">4</span><div><b>Costo</b><span>Lo que cuesta cada par. Es obligatorio y se completa a mano: hacé doble clic en la celda y escribilo. El subtotal se calcula solo.</span></div></li>
+<li data-n="5"><span class="n">5</span><div><b>Costo total</b><span>Suma de todos los subtotales de la orden.</span></div></li>
+<li data-n="6"><span class="n">6</span><div><b>Confirmar orden</b><span>Registra la orden con ese proveedor y esos costos. Después la pantalla se cierra.</span></div></li>
+<li data-n="7"><span class="n">7</span><div><b>Cancelar</b><span>Cierra la pantalla sin registrar nada.</span></div></li>
+</ul>
+<h2>Cómo hacerlo</h2>
+<div class="tareas"><div role="tablist" aria-label="Tareas">
+<button role="tab" id="tab-0" aria-controls="pn-0" aria-selected="true" tabindex="0">Registrar una orden</button>
+</div>
+<div role="tabpanel" id="pn-0" aria-labelledby="tab-0">
+<ol class="pasos"><li>Elegí la solicitud en <span class="btn">Solicitudes pendientes</span>.</li><li>Elegí el <span class="btn">Proveedor</span>.</li><li>Hacé doble clic en el <span class="btn">Costo</span> de cada producto y escribí cuánto cuesta cada par. Tocá <kbd>Enter</kbd>.</li><li>Si hace falta, también podés cambiar la cantidad pedida (entre 1 y 9999).</li><li>Revisá el Costo total y tocá <span class="btn naranja">Confirmar orden</span>. Aparece &quot;Orden de compra registrada correctamente&quot;.</li></ol>
+<div class="aviso"><b>Tené en cuenta:</b> No se puede confirmar si algún producto quedó sin costo.</div>
+</div>
+</div>
+<h2>Para saber más</h2>
+<details class="pliegue"><summary>Mensajes que puede mostrar el sistema <span class="conteo">8</span></summary><div class="cuerpo">
+<table class="msj"><thead><tr><th>Mensaje</th><th>Qué significa y qué hacer</th></tr></thead><tbody>
+<tr><td><span class="tipo aviso">Aviso</span>No hay solicitudes pendientes.</td><td>Primero hay que generar una solicitud en Generar solicitud de compra. La pantalla se cierra sola.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione una solicitud de compra.</td><td>Tocá una fila de la lista de arriba.</td></tr>
+<tr><td><span class="tipo aviso">Aviso</span>Seleccione un proveedor.</td><td>Elegí uno en la lista Proveedor.</td></tr>
+<tr><td><span class="tipo error">Error</span>Complete el costo unitario de todos los productos.</td><td>Falta el costo de al menos un producto.</td></tr>
+<tr><td><span class="tipo error">Error</span>El costo unitario debe ser mayor a cero y no puede superar $10.000.000.</td><td>Corregí el costo; vuelve a quedar en cero hasta que cargues uno válido.</td></tr>
+<tr><td><span class="tipo error">Error</span>La cantidad debe estar entre 1 y 9999.</td><td>Corregí la cantidad.</td></tr>
+<tr><td><span class="tipo error">Error</span>El valor ingresado no es un número válido.</td><td>En costo y cantidad solo van números.</td></tr>
+<tr><td><span class="tipo ok">Listo</span>Orden de compra registrada correctamente.</td><td>La orden quedó lista para registrar su recepción.</td></tr>
+</tbody></table></div></details>
+<details class="pliegue"><summary>Reglas a tener en cuenta <span class="conteo">4</span></summary><div class="cuerpo"><ul class="reglas"><li>Solo el Administrador registra órdenes de compra.</li><li>Una orden se arma siempre a partir de una solicitud pendiente.</li><li>El proveedor se elige una sola vez para toda la orden.</li><li>Cada botón depende de los permisos del perfil.</li></ul></div></details>
+<details class="pliegue"><summary>Temas relacionados</summary><div class="cuerpo"><div class="relacionados"><a href="generar-solicitud.html">Generar solicitud de compra</a><a href="gestion-proveedores.html">Procesar proveedores</a><a href="registrar-recepcion.html">Registrar recepción de mercadería</a><a href="registrar-factura.html">Registrar factura y pago de compra</a></div></div></details>
+<div class="pie">SneakRush &middot; Ayuda del sistema &middot; Registrar orden de compra. Podés abrir esta ayuda desde cualquier pantalla con la tecla <kbd>F1</kbd>.</div>
+</div></main>
+</div>
+<script src="temas.js"></script>
+<script src="ayuda.js"></script>
+</body>
+</html>

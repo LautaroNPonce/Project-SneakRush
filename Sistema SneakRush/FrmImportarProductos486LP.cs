@@ -39,6 +39,20 @@ namespace Sistema_SneakRush
             EstiloBotonHabilitacion(btnExportar);
             Program.LanguageManager.Agregar(this);
             this.FormClosing += FrmImportarProductos486LP_FormClosing;
+
+            // Si cambia el archivo o el proveedor, la vista previa que quedó en pantalla ya no corresponde
+            txtArchivo.TextChanged += (s, e) => DescartarVistaPrevia();
+            cmbProveedor.SelectedIndexChanged += (s, e) => DescartarVistaPrevia();
+        }
+
+        private void DescartarVistaPrevia()
+        {
+            if (_resultado != null || _vistaPrevia == null) return;
+
+            _vistaPrevia = null;
+            _remitoVistaPrevia = "";
+            MostrarGrilla();
+            ActualizarBotones();
         }
 
         private static void EstiloBotonHabilitacion(Button boton)
@@ -131,13 +145,13 @@ namespace Sistema_SneakRush
             dgvLineas.AutoGenerateColumns = false;
             dgvLineas.Columns.Clear();
 
-            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colLinea", Width = 50 });
-            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colMarca", Width = 80 });
+            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colLinea", Width = 55 });
+            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colMarca", Width = 90 });
             dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colModelo", Width = 130 });
             dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colColor", Width = 80 });
-            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colTalle", Width = 50 });
-            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colCantidad", Width = 65 });
-            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colResultado", Width = 100 });
+            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colTalle", Width = 55 });
+            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colCantidad", Width = 80 });
+            dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colResultado", Width = 110 });
             dgvLineas.Columns.Add(new DataGridViewTextBoxColumn { Name = "colDetalle", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
 
             AplicarEncabezadosColumnas();
@@ -174,23 +188,19 @@ namespace Sistema_SneakRush
             }
         }
 
-        // Muestra en la grilla todas las lineas del XML elegido, sin importar nada (para revisar el archivo antes de tocar "Importar")
         private void btnVer_Click(object sender, EventArgs e)
         {
             var lm = Program.LanguageManager;
 
-            if (string.IsNullOrWhiteSpace(txtArchivo.Text))
-            {
-                MostrarAviso(lm.ObtenerTexto(f, "Frm.ImportarProductos.Msg.ArchivoObligatorio", "Seleccione el archivo XML del remito con el botón Examinar."));
-                btnExaminar.Focus();
-                return;
-            }
+            // La vista previa tambien necesita el proveedor: con el se controla el CUIT y si el remito ya se importo
+            if (!ValidarEntrada()) return;
 
+            int idProveedor = (int)cmbProveedor.SelectedValue;
             string nroRemito;
             List<LineaImportacion486LP> lineas;
             string mensaje;
 
-            if (!_bllImportacion.Previsualizar(txtArchivo.Text.Trim(), out nroRemito, out lineas, out mensaje))
+            if (!_bllImportacion.Previsualizar(idProveedor, txtArchivo.Text.Trim(), out nroRemito, out lineas, out mensaje))
             {
                 MostrarAviso(mensaje);
                 return;
