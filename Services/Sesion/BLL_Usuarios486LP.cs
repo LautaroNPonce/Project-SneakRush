@@ -13,6 +13,7 @@ namespace Services
         private Mapper_Usuarios486LP ObjetoMapper = new Mapper_Usuarios486LP();
         private BLL_Bitacora486LP ObjBitacora = new BLL_Bitacora486LP();
 
+        // Valida que la contraseña cumpla la política de seguridad (mínimo 8 caracteres, al menos una mayúscula y una minúscula)
         public bool ValidarContraseña(string contraseña, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -84,11 +85,13 @@ namespace Services
                     if (intentos >= 3)
                     {
                         ObjetoMapper.Bloquear(nombreUsuario, out msg);
+                        ActualizarDVUsuario(u.IdUsuario);
                         ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Usuario {nombreUsuario} bloqueado por 3 intentos fallidos.", Criticidad486LP.MuyAlta, u.DNI, u.NombreUsuario));
                         Mensaje = "Usuario bloqueado por 3 intentos fallidos. Contacte al administrador.";
                         return -3;
                     }
 
+                    ActualizarDVUsuario(u.IdUsuario);
                     ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Intento fallido {intentos}/3 para {nombreUsuario}.", Criticidad486LP.MuyAlta, u.DNI, u.NombreUsuario));
                     Mensaje = $"Contraseña incorrecta. Intentos fallidos: {intentos}/3.";
                     return -1;
@@ -96,6 +99,7 @@ namespace Services
 
                 string mensaje;
                 ObjetoMapper.ActualizarIntentos(nombreUsuario, 0, out mensaje);
+                if (u.IntentosFallidos != 0) ActualizarDVUsuario(u.IdUsuario);
                 ObjBitacora.Registrar(new BitacoraEvento486LP("Login", $"Inicio de sesión exitoso: {nombreUsuario}.", Criticidad486LP.MuyAlta, u.DNI, u.NombreUsuario));
                 usuarioLogueado = u;
                 return 1;
@@ -106,6 +110,13 @@ namespace Services
                 Mensaje = "Ocurrió un error inesperado al iniciar sesión.";
                 return 0;
             }
+        }
+
+        // El login modifica la fila del usuario (intentos fallidos o bloqueo) y tiene que dejar su dígito verificador al día
+        private void ActualizarDVUsuario(int idUsuario)
+        {
+            string mensajeDV;
+            new BLL_DV486LP().RegistrarDVDeFilaNueva("Usuarios", idUsuario, out mensajeDV);
         }
 
         public List<Usuario486LP> Listar()
@@ -210,6 +221,7 @@ namespace Services
             }
         }
 
+        // Validaciones del administrador inicial (las mismas reglas del alta de usuarios: DNI de 7 u 8 digitos, correo con formato valido, nombre y apellido obligatorios)
         public bool ValidarAdministradorInicial(string dni, string nombre, string apellido, string email, out string Mensaje)
         {
             Mensaje = string.Empty;
@@ -237,6 +249,8 @@ namespace Services
             return true;
         }
 
+        // Alta del administrador que se carga durante la instalacion: perfil Administrador (todas las patentes), contraseña inicial Apellido + DNI
+        // y cambio obligatorio en el primer ingreso. Solo se permite si todavia no hay usuarios cargados.
         public bool CrearAdministradorInicial(string dni, string nombre, string apellido, string email, out string nombreUsuario, out string contraseñaInicial, out string Mensaje)
         {
             nombreUsuario = string.Empty;
@@ -516,6 +530,8 @@ namespace Services
             }
         }
 
+        // CORREGIDO: antes instanciaba DAL_Bitacora486LP directo (acceso directo a otra "DAL"). Ese archivo ya no existe (se elimino al migrar Bitacora),
+        // asi que ahora usa ObjBitacora (BLL_Bitacora486LP), que ya tenia como campo - una BLL habla con otra BLL, nunca con el Mapper ajeno directo.
         public void Logout(string dni, out string mensaje)
         {
             mensaje = string.Empty;
